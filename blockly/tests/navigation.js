@@ -543,4 +543,8 @@ function getCurrentNode() {
     return currentNode;
 }
 
+function addComment(){
+	Blockly.selected.setCommentText('');
+}
+
 //#endregion

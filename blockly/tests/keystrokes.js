@@ -145,10 +145,9 @@ document.onkeydown = document.onkeyup = function(e){
 		}
 		
 		else if(map[67]){ //C
+			//Add a comment
 			console.log("C key pressed.");
-			keyboardState= 'typingMode';
-			e.preventDefault;
-			keyboardState= 'hotkeyMode'; //This needs to be at the end of the comment function
+			addComment();
 		}
 		
 		else if(map[69]){ //E
@@ -166,6 +165,12 @@ document.onkeydown = document.onkeyup = function(e){
 		else if(map[78]){ //N
 			console.log("N key pressed.");
 			//Initiate a navigate search function
+		}
+		
+		else if(map[79]){ //O
+			console.log("O key pressed.");
+			//Trial variable for collapsing a block
+			
 		}
 		
 		else if(map[82]){ //R
