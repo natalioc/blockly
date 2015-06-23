@@ -514,7 +514,9 @@ function updateSelection() {
         return;
     }
 
-    Blockly.Block.getById(parseInt(currentNode.getAttribute('id')), workspace).select()
+    Blockly.Block.getById(parseInt(currentNode.getAttribute('id')), workspace).select();
+
+    infoBoxFill(currentNode);
 }
 
 /**

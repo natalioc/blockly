@@ -152,6 +152,7 @@ document.onkeydown = document.onkeyup = function(e){
 		
 		else if(map[69]){ //E
 			console.log("E key pressed.");
+			getImportantBlocks();
 			//Edit block of code or edit comment
 		}
 		
@@ -189,7 +190,6 @@ document.onkeydown = document.onkeyup = function(e){
 		
 		else if(map[82]){ //R
 			console.log("R key pressed.");
-			getImportantBlocks();
 			//Return to top of the code
 		}
 		
