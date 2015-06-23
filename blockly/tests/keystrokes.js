@@ -177,12 +177,14 @@ document.onkeydown = document.onkeyup = function(e){
 			console.log("P key pressed.");
 			//Trial variable for enabling or disabling a block
 			toggleDisable();
+			updateXmlSelection();
 		}
 		
 		else if(map[81]){ //Q
 			console.log("Q key pressed.");
 			//Trial variable for duplicating a block
 			duplicateSelected();
+			updateXmlSelection();
 		}
 		
 		else if(map[82]){ //R

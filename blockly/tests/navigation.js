@@ -547,7 +547,9 @@ function getCurrentNode() {
  * Adds a comment to a block
  */
 function addComment(){
-	Blockly.selected.setCommentText('');
+	if(!Blockly.selected.comment){
+		Blockly.selected.setCommentText('');
+	}	
 }
 
 /**
