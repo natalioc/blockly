@@ -575,4 +575,8 @@ function duplicateSelected(){
 	Blockly.selected.duplicate_();
 }
 
+function helpSelectedBlock(){
+	Blockly.selected.showHelp_();
+}
+
 //#endregion

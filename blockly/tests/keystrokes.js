@@ -163,6 +163,12 @@ document.onkeydown = document.onkeyup = function(e){
 			//Alternatively goto the comment that is connected to the currently selected block
 		}
 		
+		else if(map[72]){ //H
+			console.log("H key pressed.");
+			helpSelectedBlock();
+			//Link to the help page for the selected block
+		}
+		
 		else if(map[78]){ //N
 			console.log("N key pressed.");
 			//Initiate a navigate search function
@@ -189,8 +195,9 @@ document.onkeydown = document.onkeyup = function(e){
 		}
 		
 		else if(map[82]){ //R
+			//Jumps to the top of the currently selected container
 			console.log("R key pressed.");
-			//Return to top of the code
+			jumpToTopOfSection();
 		}
 		
 		else if(map[13]){ //Enter
