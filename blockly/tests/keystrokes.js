@@ -169,8 +169,20 @@ document.onkeydown = document.onkeyup = function(e){
 		
 		else if(map[79]){ //O
 			console.log("O key pressed.");
-			//Trial variable for collapsing a block
-			
+			//Trial variable for collapsing or expanding a block
+			toggleCollapse();
+		}
+		
+		else if(map[80]){ //P
+			console.log("P key pressed.");
+			//Trial variable for enabling or disabling a block
+			toggleDisable();
+		}
+		
+		else if(map[81]){ //Q
+			console.log("Q key pressed.");
+			//Trial variable for duplicating a block
+			duplicateSelected();
 		}
 		
 		else if(map[82]){ //R

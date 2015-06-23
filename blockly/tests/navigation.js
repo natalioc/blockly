@@ -543,8 +543,32 @@ function getCurrentNode() {
     return currentNode;
 }
 
+/**
+ * Adds a comment to a block
+ */
 function addComment(){
 	Blockly.selected.setCommentText('');
+}
+
+/**
+ * Expands a block if it is collapsed or collapses a block
+ */
+function toggleCollapse(){
+	Blockly.selected.setCollapsed(!Blockly.selected.collapsed_);
+}
+
+/**
+ * Enables a block if it is disabled or disables a block
+ */
+function toggleDisable(){
+	Blockly.selected.setDisabled(!Blockly.selected.disabled);
+}
+
+/**
+ * Duplicates the selected block
+ */
+function duplicateSelected(){
+	Blockly.selected.duplicate_();
 }
 
 //#endregion
