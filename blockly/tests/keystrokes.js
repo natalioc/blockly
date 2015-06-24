@@ -195,6 +195,7 @@ document.onkeydown = document.onkeyup = function(e){
 		
 		else if(map[78]){ //N
 			console.log("N key pressed.");
+			getInfoBox();//currenly placed here until button is found to hide and show the infobox
 			//Initiate a navigate search function
 		}
 		

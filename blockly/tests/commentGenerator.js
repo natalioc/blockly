@@ -327,5 +327,12 @@ function infoBoxFill(currentNode){
 	document.getElementById('infoBox').appendChild(prefixP);
 }
 
-
+function getInfoBox(){
+	if(document.getElementById('infoBox').style.visibility == 'visible'){
+		document.getElementById('infoBox').style.visibility='hidden';
+	}
+	else{
+		document.getElementById('infoBox').style.visibility='visible';
+	}
+}
 
