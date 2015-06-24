@@ -25,6 +25,7 @@ var keyboardState = 'hotkeyMode';
 document.onmouseup = function(e){
 	console.log('Mouse Up');
 	updateXmlSelection();
+	callImportantBlocks();
 };
 
 /**

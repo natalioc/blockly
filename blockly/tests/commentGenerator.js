@@ -1,5 +1,4 @@
 'use strict';
-
 /**
  * @license
  * Visual Blocks Editor
@@ -28,9 +27,27 @@
 /**
  * gets all of the blocks that aren't conditionals and calls get indent on the array list it generates
  */
+
+Blockly.BlockSvg.prototype.defaultFireChangeEvent = Blockly.BlockSvg.prototype.fireChangeEvent;
+
 var perfectArr = [];
 var prefixArr = [];
-var parentArr = []
+var parentArr = [];
+var stateChange = false;
+
+Blockly.WorkspaceSvg.prototype.fireChangeEvent = function() {
+  if (this.rendered && this.svgBlockCanvas_) {
+    Blockly.fireUiEvent(this.svgBlockCanvas_, 'blocklyWorkspaceChange');
+    stateChange = true;
+  }
+};
+
+function callImportantBlocks() {
+	if(stateChange == true) {
+		getImportantBlocks();
+		stateChange = false;
+	}
+}
 
 function getImportantBlocks(){
 	//check if the workspace is empty
