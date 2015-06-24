@@ -501,7 +501,8 @@ function findContainers() {
             containers.splice(i, 1);
         }
     }
-
+    console.log("This is containers");
+    console.log(containers);
     return containers;
 }
 
