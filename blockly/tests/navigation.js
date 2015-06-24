@@ -199,7 +199,6 @@ function updateXmlSelection(noSelect) {
         undoStack.push(prevXml);
         redoStack = [];
     }
-    getImportantBlocks();
 };
 
 /**
