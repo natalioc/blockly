@@ -34,7 +34,6 @@ goog.require('goog.math.Coordinate');
 goog.require('goog.Timer');
 
 
-
 /**
  * Class for a block's SVG representation.
  * @extends {Blockly.Block}
@@ -108,7 +107,6 @@ Blockly.BlockSvg.prototype.initSvg = function() {
  * Select this block.  Highlight it visually.
  */
 Blockly.BlockSvg.prototype.select = function() {
-    this.workspace.playAudio("click");
     if (Blockly.selected) {
     // Unselect any previously selected block.
     Blockly.selected.unselect();
