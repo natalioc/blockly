@@ -602,6 +602,7 @@ Blockly.WorkspaceSvg.prototype.loadAudio_ = function(filenames, name) {
   }
   if (sound && sound.play) {
     this.SOUNDS_[name] = sound;
+    window.alert(this.SOUNDS_[name]);
   }
 };
 
