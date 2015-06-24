@@ -104,6 +104,29 @@ document.onkeydown = document.onkeyup = function(e){
 			e.preventDefault();
 		}
 		
+		else if(map[18] && map[16] && map[67]){ //Alt Shift C
+			console.log("Alt Shift C keys pressed.");
+			//Keystroke for collapsing or expanding a block
+			toggleCollapse();
+			e.preventDefault();
+		}
+		
+		else if(map[18] && map[16] && map[69]){ //Alt Shift E
+			console.log("Alt Shift E keys pressed.");
+			//Keystroke for enabling or disabling a block
+			toggleDisable();
+			e.preventDefault();
+			updateXmlSelection();
+		}
+		
+		else if(map[18] && map[16] && map[68]){ //Alt Shift D
+			console.log("Alt Shift D keys pressed.");
+			//Duplicate a block
+			duplicateSelected();
+			e.preventDefault();
+			updateXmlSelection();
+		}
+		
 		else if(map[9] && map[16]){ //Tab Shift
 			console.log("Tab Shift pressed.");
 			e.preventDefault();
@@ -173,26 +196,6 @@ document.onkeydown = document.onkeyup = function(e){
 		else if(map[78]){ //N
 			console.log("N key pressed.");
 			//Initiate a navigate search function
-		}
-		
-		else if(map[79]){ //O
-			console.log("O key pressed.");
-			//Trial variable for collapsing or expanding a block
-			toggleCollapse();
-		}
-		
-		else if(map[80]){ //P
-			console.log("P key pressed.");
-			//Trial variable for enabling or disabling a block
-			toggleDisable();
-			updateXmlSelection();
-		}
-		
-		else if(map[81]){ //Q
-			console.log("Q key pressed.");
-			//Trial variable for duplicating a block
-			duplicateSelected();
-			updateXmlSelection();
 		}
 		
 		else if(map[82]){ //R
