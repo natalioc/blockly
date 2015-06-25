@@ -16,7 +16,7 @@
 *limitations under the License.
 */
 
-goog.require(Blockly.Blocks);
+goog.require('Blockly.Blocks');
 
 var map = [];
 var keyboardState = 'hotkeyMode';
@@ -227,11 +227,8 @@ document.onkeydown = document.onkeyup = function(e){
 			traverseDown();    
 		}
 
-		else if(map[80])
-		{
-
-			var here=getCurrentNode();
-			var now=here.
+		else if(map[84]){
+			clickAudio();
 		}
 		//End of development block
 	}

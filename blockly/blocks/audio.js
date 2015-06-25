@@ -50,5 +50,9 @@ Blockly.Blocks['beep'] = {
     this.setPreviousStatement(true, "null");
     this.setNextStatement(true, "null");
     this.setTooltip('Beeps');
+  },
+
+  returnAudio: function() {
+      return 'delete';
   }
 };

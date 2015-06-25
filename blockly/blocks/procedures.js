@@ -323,7 +323,11 @@ Blockly.Blocks['procedures_defnoreturn'] = {
       }
     }
   },
-  callType_: 'procedures_callnoreturn'
+  callType_: 'procedures_callnoreturn',
+
+  returnAudio: function() {
+      return 'delete';
+  }
 };
 
 Blockly.Blocks['procedures_defreturn'] = {
@@ -391,6 +395,10 @@ Blockly.Blocks['procedures_mutatorcontainer'] = {
         .appendField(new Blockly.FieldCheckbox('TRUE'), 'STATEMENTS');
     this.setTooltip(Blockly.Msg.PROCEDURES_MUTATORCONTAINER_TOOLTIP);
     this.contextMenu = false;
+  },
+
+  returnAudio: function() {
+      return 'delete';
   }
 };
 
@@ -421,6 +429,10 @@ Blockly.Blocks['procedures_mutatorarg'] = {
   validator_: function(newVar) {
     newVar = newVar.replace(/[\s\xa0]+/g, ' ').replace(/^ | $/g, '');
     return newVar || null;
+  },
+
+  returnAudio: function() {
+      return 'delete';
   }
 };
 
@@ -650,6 +662,10 @@ Blockly.Blocks['procedures_callnoreturn'] = {
       def && def.select();
     };
     options.push(option);
+  },
+
+  returnAudio: function() {
+      return 'delete';
   }
 };
 
@@ -678,7 +694,11 @@ Blockly.Blocks['procedures_callreturn'] = {
   mutationToDom: Blockly.Blocks['procedures_callnoreturn'].mutationToDom,
   domToMutation: Blockly.Blocks['procedures_callnoreturn'].domToMutation,
   renameVar: Blockly.Blocks['procedures_callnoreturn'].renameVar,
-  customContextMenu: Blockly.Blocks['procedures_callnoreturn'].customContextMenu
+  customContextMenu: Blockly.Blocks['procedures_callnoreturn'].customContextMenu,
+
+  returnAudio: function() {
+      return 'delete';
+  }
 };
 
 Blockly.Blocks['procedures_ifreturn'] = {
@@ -763,5 +783,9 @@ Blockly.Blocks['procedures_ifreturn'] = {
     } else {
       this.setWarningText(Blockly.Msg.PROCEDURES_IFRETURN_WARNING);
     }
+  },
+
+  returnAudio: function() {
+      return 'delete';
   }
 };

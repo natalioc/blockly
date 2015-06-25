@@ -581,4 +581,10 @@ function helpSelectedBlock(){
 	Blockly.selected.showHelp_();
 }
 
+function clickAudio(){
+    var here=getCurrentNode();
+    var now=here.getAttribute('type');
+    workspace.playAudio(Blockly.Blocks[now].returnAudio());
+}
+
 //#endregion
