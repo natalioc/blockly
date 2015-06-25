@@ -125,7 +125,7 @@ Blockly.Blocks['controls_for'] = {
     this.setNextStatement(true);
     this.setInputsInline(true);
     // Assign 'this' to a variable for use in the tooltip closure below.
-    var thisBlock = this;
+    var thisBlock = this;    
     this.setTooltip(function() {
       return Blockly.Msg.CONTROLS_FOR_TOOLTIP.replace('%1',
           thisBlock.getFieldValue('VAR'));
