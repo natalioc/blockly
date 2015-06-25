@@ -6,6 +6,13 @@
  * Licensed under the MIT license.
  */
 /*globals timbre */
+
+//Getting the required files
+google.require('libs.timbrejs.timbre');
+
+//creating a namespace for the file
+goog.provide('libs.timbrejs.soundfont');
+
 (function () {
 	'use strict';
 

@@ -3,7 +3,12 @@
   <head>
     <script src="closure-library/closure/goog/base.js"></script>
     <script src="hello.js"></script>
+    <script src="timbre.js"></script>
+	<script>
+ 	 	T("sin", {freq:880, mul:0.5}).play();
+	</script>
   </head>
   <body onload="sayHi()">
+  	<button style="width:40px">Play</button>
   </body>
 </html>

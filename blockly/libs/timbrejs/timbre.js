@@ -1,6 +1,12 @@
 /**
  * T("timbre.js") - A JavaScript library for objective sound programming
  */
+
+//creating a namespace for the file
+goog.provide(libs.timbrejs.timbre);
+
+
+
 (function(undefined) {
     "use strict";
 

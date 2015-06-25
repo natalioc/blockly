@@ -1,5 +1,7 @@
 "use strict"; // strict mode syntax
 
+goog.provide('javascript.ArrayCollection');
+
 // Takes an array of arrays and constructs an ArrayCollection with multiple ArrayInfo objects
 function ArrayCollection(array){
   this.collection = [];
