@@ -49,6 +49,10 @@ Blockly.Blocks['controls_repeat'] = {
     this.setPreviousStatement(true);
     this.setNextStatement(true);
     this.setTooltip(Blockly.Msg.CONTROLS_REPEAT_TOOLTIP);
+  },
+
+  returnAudio: function() {
+      return 'delete';
   }
 };
 
@@ -69,6 +73,10 @@ Blockly.Blocks['controls_repeat_ext'] = {
     this.setNextStatement(true);
     this.setInputsInline(true);
     this.setTooltip(Blockly.Msg.CONTROLS_REPEAT_TOOLTIP);
+  },
+
+  returnAudio: function() {
+      return 'delete';
   }
 };
 
@@ -100,6 +108,10 @@ Blockly.Blocks['controls_whileUntil'] = {
       };
       return TOOLTIPS[op];
     });
+  },
+
+  returnAudio: function() {
+      return 'delete';
   }
 };
 
@@ -168,6 +180,10 @@ Blockly.Blocks['controls_for'] = {
       option.callback = Blockly.ContextMenu.callbackFactory(this, xmlBlock);
       options.push(option);
     }
+  },
+
+  returnAudio: function() {
+      return 'delete';
   }
 };
 
@@ -220,7 +236,11 @@ Blockly.Blocks['controls_forEach'] = {
       this.setFieldValue(newName, 'VAR');
     }
   },
-  customContextMenu: Blockly.Blocks['controls_for'].customContextMenu
+  customContextMenu: Blockly.Blocks['controls_for'].customContextMenu,
+
+  returnAudio: function() {
+      return 'delete';
+  }
 };
 
 Blockly.Blocks['controls_flow_statements'] = {
@@ -277,5 +297,9 @@ Blockly.Blocks['controls_flow_statements'] = {
     } else {
       this.setWarningText(Blockly.Msg.CONTROLS_FLOW_STATEMENTS_WARNING);
     }
+  },
+
+  returnAudio: function() {
+      return 'delete';
   }
 };

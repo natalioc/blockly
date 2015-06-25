@@ -43,6 +43,10 @@ Blockly.Blocks['colour_picker'] = {
         .appendField(new Blockly.FieldColour('#ff0000'), 'COLOUR');
     this.setOutput(true, 'Colour');
     this.setTooltip(Blockly.Msg.COLOUR_PICKER_TOOLTIP);
+  },
+
+  returnAudio: function() {
+      return 'delete';
   }
 };
 
@@ -58,6 +62,10 @@ Blockly.Blocks['colour_random'] = {
         .appendField(Blockly.Msg.COLOUR_RANDOM_TITLE);
     this.setOutput(true, 'Colour');
     this.setTooltip(Blockly.Msg.COLOUR_RANDOM_TOOLTIP);
+  },
+
+  returnAudio: function() {
+      return 'delete';
   }
 };
 
@@ -84,6 +92,10 @@ Blockly.Blocks['colour_rgb'] = {
         .appendField(Blockly.Msg.COLOUR_RGB_BLUE);
     this.setOutput(true, 'Colour');
     this.setTooltip(Blockly.Msg.COLOUR_RGB_TOOLTIP);
+  },
+
+  returnAudio: function() {
+      return 'delete';
   }
 };
 
@@ -110,5 +122,9 @@ Blockly.Blocks['colour_blend'] = {
         .appendField(Blockly.Msg.COLOUR_BLEND_RATIO);
     this.setOutput(true, 'Colour');
     this.setTooltip(Blockly.Msg.COLOUR_BLEND_TOOLTIP);
+  },
+
+  returnAudio: function() {
+      return 'delete';
   }
 };

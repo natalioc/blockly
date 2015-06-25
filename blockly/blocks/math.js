@@ -44,6 +44,10 @@ Blockly.Blocks['math_number'] = {
         Blockly.FieldTextInput.numberValidator), 'NUM');
     this.setOutput(true, 'Number');
     this.setTooltip(Blockly.Msg.MATH_NUMBER_TOOLTIP);
+  },
+
+  returnAudio: function() {
+      return 'delete';
   }
 };
 
@@ -81,6 +85,10 @@ Blockly.Blocks['math_arithmetic'] = {
       };
       return TOOLTIPS[mode];
     });
+  },
+
+  returnAudio: function() {
+      return 'delete';
   }
 };
 
@@ -120,6 +128,10 @@ Blockly.Blocks['math_single'] = {
       };
       return TOOLTIPS[mode];
     });
+  },
+
+  returnAudio: function() {
+      return 'delete';
   }
 };
 
@@ -156,6 +168,10 @@ Blockly.Blocks['math_trig'] = {
       };
       return TOOLTIPS[mode];
     });
+  },
+
+  returnAudio: function() {
+      return 'delete';
   }
 };
 
@@ -178,6 +194,10 @@ Blockly.Blocks['math_constant'] = {
     this.appendDummyInput()
         .appendField(new Blockly.FieldDropdown(CONSTANTS), 'CONSTANT');
     this.setTooltip(Blockly.Msg.MATH_CONSTANT_TOOLTIP);
+  },
+
+  returnAudio: function() {
+      return 'delete';
   }
 };
 
@@ -246,6 +266,10 @@ Blockly.Blocks['math_number_property'] = {
     } else if (inputExists) {
       this.removeInput('DIVISOR');
     }
+  },
+
+  returnAudio: function() {
+      return 'delete';
   }
 };
 
@@ -292,6 +316,10 @@ Blockly.Blocks['math_change'] = {
     if (Blockly.Names.equals(oldName, this.getFieldValue('VAR'))) {
       this.setFieldValue(newName, 'VAR');
     }
+  },
+
+  returnAudio: function() {
+      return 'delete';
   }
 };
 
@@ -312,6 +340,10 @@ Blockly.Blocks['math_round'] = {
         .setCheck('Number')
         .appendField(new Blockly.FieldDropdown(OPERATORS), 'OP');
     this.setTooltip(Blockly.Msg.MATH_ROUND_TOOLTIP);
+  },
+
+  returnAudio: function() {
+      return 'delete';
   }
 };
 
@@ -360,6 +392,10 @@ Blockly.Blocks['math_on_list'] = {
       };
       return TOOLTIPS[mode];
     });
+  },
+
+  returnAudio: function() {
+      return 'delete';
   }
 };
 
@@ -378,6 +414,10 @@ Blockly.Blocks['math_modulo'] = {
                         Blockly.ALIGN_RIGHT);
     this.setInputsInline(true);
     this.setTooltip(Blockly.Msg.MATH_MODULO_TOOLTIP);
+  },
+
+  returnAudio: function() {
+      return 'delete';
   }
 };
 
@@ -397,6 +437,10 @@ Blockly.Blocks['math_constrain'] = {
                         Blockly.ALIGN_RIGHT);
     this.setInputsInline(true);
     this.setTooltip(Blockly.Msg.MATH_CONSTRAIN_TOOLTIP);
+  },
+
+  returnAudio: function() {
+      return 'delete';
   }
 };
 
@@ -415,6 +459,10 @@ Blockly.Blocks['math_random_int'] = {
                         Blockly.ALIGN_RIGHT);
     this.setInputsInline(true);
     this.setTooltip(Blockly.Msg.MATH_RANDOM_INT_TOOLTIP);
+  },
+
+  returnAudio: function() {
+      return 'delete';
   }
 };
 
@@ -430,5 +478,9 @@ Blockly.Blocks['math_random_float'] = {
     this.appendDummyInput()
         .appendField(Blockly.Msg.MATH_RANDOM_FLOAT_TITLE_RANDOM);
     this.setTooltip(Blockly.Msg.MATH_RANDOM_FLOAT_TOOLTIP);
+  },
+
+  returnAudio: function() {
+      return 'delete';
   }
 };
