@@ -298,6 +298,24 @@ color: black;
 #typeButtons{
   text-align: center;
 }
+#infoBox{
+	border: 1px solid black;
+	position: fixed;
+	margin-left: 37.9%;
+	width: 15%;
+	height: 29%;
+	background-color: white;
+	font-size: 36px;
+	overflow: auto;
+	white-space: nowrap;
+	min-height: 100px;
+	resize: vertical;
+	visibility: hidden;
+}
+#infoBox p{
+	margin: 6px;
+
+}
 </style>
 </head>
 <body onload="start()">
@@ -521,6 +539,9 @@ color: black;
     <category name="Functions" custom="PROCEDURE"></category>
   </xml>
     
+    <div id="infoBox"></div>
+
+
     <div class="commentDiv" tabindex="-1">
         <h1 tabindex="-1" align="center">Blockly Playground</h1>
         <select onchange="changeFontDD()" id= "fontDD" role="menu" aria-haspopup="true" aria-hidden="true" tabindex="-1">
@@ -549,12 +570,13 @@ color: black;
     
     <textarea id="importExport">Program Output is here</textarea>
   <hr>
-
+<!--
   <p>
     Stress test:
     <input type="button" value="Airstrike!" onclick="airstrike(100)">
     <input type="button" value="Spaghetti!" onclick="spaghetti(8)">
   </p>
+  -->
   </div>
   <!-- Realtime setup buttons. -->
 

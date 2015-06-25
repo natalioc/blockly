@@ -1,5 +1,4 @@
 'use strict';
-
 /**
  * @license
  * Visual Blocks Editor
@@ -28,7 +27,27 @@
 /**
  * gets all of the blocks that aren't conditionals and calls get indent on the array list it generates
  */
+
+Blockly.BlockSvg.prototype.defaultFireChangeEvent = Blockly.BlockSvg.prototype.fireChangeEvent;
+
 var perfectArr = [];
+var prefixArr = [];
+var parentArr = [];
+var stateChange = false;
+
+Blockly.WorkspaceSvg.prototype.fireChangeEvent = function() {
+  if (this.rendered && this.svgBlockCanvas_) {
+    Blockly.fireUiEvent(this.svgBlockCanvas_, 'blocklyWorkspaceChange');
+    stateChange = true;
+  }
+};
+
+function callImportantBlocks() {
+	if(stateChange == true) {
+		getImportantBlocks();
+		stateChange = false;
+	}
+}
 
 function getImportantBlocks(){
 	//check if the workspace is empty
@@ -96,7 +115,7 @@ function getIndent(perfectArr){
 	var idOfBlock;
 	var miniXml;
 	var i;
-	var parentArr = [];
+	parentArr = [];
 
 	for(i = 0; i < perfectArr.length; i++){
 
@@ -125,7 +144,7 @@ function commentPrefix(perfectArr, parentArr){
 	var zeroCount = 1;
     var allCount = 0;
     var prefixStringPrev;
-    var prefixArr = [];
+    prefixArr = [];
 
     for (var i = 0; i < parentArr.length; i++) {
 
@@ -249,6 +268,7 @@ function commentOrBlockJump(){
     		jumpToID(blockId);
     	}
     	else {
+    		//jump from comment to block
     		var highlightedBlock = getCurrentNode();
 			for (var i = 0; i < perfectArr.length; i++) {
 	    		if(perfectArr[i].getAttribute('id') == highlightedBlock.getAttribute('id')) {
@@ -261,3 +281,58 @@ function commentOrBlockJump(){
 
     }
 }
+
+function infoBoxFill(currentNode){
+	//erases any pre-existing text in the div
+	document.getElementById("infoBox").innerHTML = "";
+	var sectionStr = '';
+	var depthStr = '';
+	var prefixStr = '';
+	var sectionP = document.createElement('p');
+	var depthP = document.createElement('p');
+	var prefixP = document.createElement('p');
+
+	//Build String to put in box
+	for (var i = 0; i < perfectArr.length; i++) {
+		if(currentNode.getAttribute('id') == perfectArr[i].getAttribute('id')){	
+			var indexOfPeriod = prefixArr[i].indexOf(".");
+			if(indexOfPeriod == -1){
+				var prefixLength = prefixArr[i].length;
+				if(prefixLength == 2){
+					sectionStr = "Section " + prefixArr[i].substring(1, 2);
+				}
+				else{
+					sectionStr = "Section " + prefixArr[i].substring(1, 3);
+				}
+			}
+			else if(indexOfPeriod == 2){
+				sectionStr = "Section " + prefixArr[i].substring(1, 2);
+			}
+			else if(indexOfPeriod == 3){
+				sectionStr = "Section " + prefixArr[i].substring(1, 3);
+			}
+			depthStr = "Depth " + (parentArr[i] + 1);
+			prefixStr = prefixArr[i].substring(1, prefixArr[i].length+1);
+		}
+	}
+	//puts the text onto the page and in the div
+	var sectionTextNode = document.createTextNode(sectionStr);
+	var depthTextNode = document.createTextNode(depthStr);
+	var prefixTextNode = document.createTextNode(prefixStr);
+	sectionP.appendChild(sectionTextNode);
+	depthP.appendChild(depthTextNode);
+	prefixP.appendChild(prefixTextNode);
+	document.getElementById('infoBox').appendChild(sectionP);
+	document.getElementById('infoBox').appendChild(depthP);
+	document.getElementById('infoBox').appendChild(prefixP);
+}
+
+function getInfoBox(){
+	if(document.getElementById('infoBox').style.visibility == 'visible'){
+		document.getElementById('infoBox').style.visibility='hidden';
+	}
+	else{
+		document.getElementById('infoBox').style.visibility='visible';
+	}
+}
+

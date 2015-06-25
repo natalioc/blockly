@@ -1,7 +1,7 @@
 'use strict';
 
 /**
-*Copyright [2015] [Luna Meier]
+*Copyright [2015] [Luna Meier, Rachael Bosley]
 *
 *Licensed under the Apache License, Version 2.0 (the "License");
 *you may not use this file except in compliance with the License.
@@ -514,7 +514,9 @@ function updateSelection() {
         return;
     }
 
-    Blockly.Block.getById(parseInt(currentNode.getAttribute('id')), workspace).select()
+    Blockly.Block.getById(parseInt(currentNode.getAttribute('id')), workspace).select();
+
+    infoBoxFill(currentNode);
 }
 
 /**
@@ -548,4 +550,38 @@ function playAudioBlock() {
     var now=here.getAttribute('type');
     workspace.playAudio(Blockly.Blocks[now].returnAudio());
 }
+/**
+ * Adds a comment to a block
+ */
+function addComment(){
+	if(!Blockly.selected.comment){
+		Blockly.selected.setCommentText('');
+	}	
+}
+
+/**
+ * Expands a block if it is collapsed or collapses a block
+ */
+function toggleCollapse(){
+	Blockly.selected.setCollapsed(!Blockly.selected.collapsed_);
+}
+
+/**
+ * Enables a block if it is disabled or disables a block
+ */
+function toggleDisable(){
+	Blockly.selected.setDisabled(!Blockly.selected.disabled);
+}
+
+/**
+ * Duplicates the selected block
+ */
+function duplicateSelected(){
+	Blockly.selected.duplicate_();
+}
+
+function helpSelectedBlock(){
+	Blockly.selected.showHelp_();
+}
+
 //#endregion

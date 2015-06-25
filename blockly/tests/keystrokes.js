@@ -27,6 +27,7 @@ var keyboardState = 'hotkeyMode';
 document.onmouseup = function(e){
 	console.log('Mouse Up');
 	updateXmlSelection();
+	callImportantBlocks();
 };
 
 /**
@@ -105,6 +106,29 @@ document.onkeydown = document.onkeyup = function(e){
 			e.preventDefault();
 		}
 		
+		else if(map[18] && map[16] && map[67]){ //Alt Shift C
+			console.log("Alt Shift C keys pressed.");
+			//Keystroke for collapsing or expanding a block
+			toggleCollapse();
+			e.preventDefault();
+		}
+		
+		else if(map[18] && map[16] && map[69]){ //Alt Shift E
+			console.log("Alt Shift E keys pressed.");
+			//Keystroke for enabling or disabling a block
+			toggleDisable();
+			e.preventDefault();
+			updateXmlSelection();
+		}
+		
+		else if(map[18] && map[16] && map[68]){ //Alt Shift D
+			console.log("Alt Shift D keys pressed.");
+			//Duplicate a block
+			duplicateSelected();
+			e.preventDefault();
+			updateXmlSelection();
+		}
+		
 		else if(map[9] && map[16]){ //Tab Shift
 			console.log("Tab Shift pressed.");
 			e.preventDefault();
@@ -147,14 +171,14 @@ document.onkeydown = document.onkeyup = function(e){
 		}
 		
 		else if(map[67]){ //C
+			//Add a comment
 			console.log("C key pressed.");
-			keyboardState= 'typingMode';
-			e.preventDefault;
-			keyboardState= 'hotkeyMode'; //This needs to be at the end of the comment function
+			addComment();
 		}
 		
 		else if(map[69]){ //E
 			console.log("E key pressed.");
+			getImportantBlocks();
 			//Edit block of code or edit comment
 		}
 		
@@ -165,15 +189,22 @@ document.onkeydown = document.onkeyup = function(e){
 			//Alternatively goto the comment that is connected to the currently selected block
 		}
 		
+		else if(map[72]){ //H
+			console.log("H key pressed.");
+			helpSelectedBlock();
+			//Link to the help page for the selected block
+		}
+		
 		else if(map[78]){ //N
 			console.log("N key pressed.");
+			getInfoBox();//currenly placed here until button is found to hide and show the infobox
 			//Initiate a navigate search function
 		}
 		
 		else if(map[82]){ //R
+			//Jumps to the top of the currently selected container
 			console.log("R key pressed.");
-			getImportantBlocks();
-			//Return to top of the code
+			jumpToTopOfSection();
 		}
 		
 		else if(map[13]){ //Enter
