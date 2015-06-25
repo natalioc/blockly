@@ -220,7 +220,7 @@ document.onkeydown = document.onkeyup = function(e){
 		}
 		
 		else if(map[40] || map[83]){ //down arrow or S
-			traverseDown();
+			traverseDown();    
 		}
 		//End of development block
 	}
