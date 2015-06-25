@@ -34,7 +34,7 @@ goog.require('goog.events');
 goog.require('goog.math.Rect');
 goog.require('goog.userAgent');
 
-
+var menuBlocksArr = [];
 /**
  * Class for a flyout.
  * @param {!Object} workspaceOptions Dictionary of options for the workspace.
@@ -375,11 +375,11 @@ Blockly.Flyout.prototype.show = function(xmlList) {
         var block = Blockly.Xml.domToBlock(
             /** @type {!Blockly.Workspace} */ (this.workspace_), xml);
         blocks.push(block);
+        menuBlocksArr.push(block);
         gaps.push(margin * 3);
       }
     }
   }
-
   // Lay out the blocks vertically.
   var cursorY = margin;
   for (var i = 0, block; block = blocks[i]; i++) {

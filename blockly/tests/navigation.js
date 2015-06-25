@@ -21,6 +21,13 @@ var currentNode = null;
 
 var undoStack = [];
 var redoStack = [];
+var tabCount;
+var curLocation;
+//variables for toolbox navigation
+var flyoutArr = [];
+var tempSize;
+var oldLength = 0;
+var loopStart = 0;
 
 //#region XML_UPDATING
 
@@ -30,7 +37,8 @@ Blockly.Block.prototype.defaultInitialize = Blockly.Block.prototype.initialize;
 Blockly.BlockSvg.prototype.defaultDispose = Blockly.BlockSvg.prototype.dispose;
 Blockly.Connection.prototype.defaultConnect = Blockly.Connection.prototype.connect;
 Blockly.Connection.prototype.defaultDisconnect = Blockly.Connection.prototype.disconnect;
-
+Blockly.Flyout.prototype.defaultShow = Blockly.Flyout.prototype.show;
+Blockly.Toolbox.TreeControl.prototype.defaultSetSelectedItem =Blockly.Toolbox.TreeControl.prototype.setSelectedItem;
 /**
  * Select this block.  Highlight it visually.
  */
@@ -121,11 +129,11 @@ Blockly.Toolbox.TreeNode.prototype.onKeyDown = function(e) {
       if (this.hasChildren() && this.isUserCollapsible_) {
         this.setExpanded(true);
         this.select();
-      } else {
+      } 
+      else{
         this.select();
       }
       break;
-
     case goog.events.KeyCodes.LEFT:
       if (e.altKey) {
         break;
@@ -133,7 +141,6 @@ Blockly.Toolbox.TreeNode.prototype.onKeyDown = function(e) {
       this.setExpanded(false);
       this.getTree().setSelectedItem(null);
       break;
-
     default:
       handled = false;
   }
@@ -584,4 +591,52 @@ function helpSelectedBlock(){
 	Blockly.selected.showHelp_();
 }
 
+//#endregion
+
+
+//#================================================NAVIGATING THE MENU REGION=========================================================
+
+//called when the flyout opens
+Blockly.Flyout.prototype.show = function(xmlList){
+    this.defaultShow(xmlList);
+    console.log(flyoutArr);
+    flyoutArr = menuBlocksArr;
+}
+
+//Navigate through the menu currently using the ENTER key(!KEY WILL CHANGE ASAP)
+function menuNav(){
+    //handle when a new category opens
+    if(tabCount == oldLength && oldLength != flyoutArr.length){  
+        flyoutArr[tabCount].addSelect();  
+        loopStart = tabCount;  
+    }
+    //handle looping through menus
+    else if(tabCount >= flyoutArr.length)
+    {
+        var prevCount1 = tabCount-1;
+        flyoutArr[prevCount1].removeSelect();
+        tabCount = loopStart;
+        flyoutArr[tabCount].addSelect();
+    }
+    //go to next item
+    else{
+    //erase the first select (needed for opening a new category) 
+    var prevCount2 = tabCount -1;
+    flyoutArr[prevCount2].removeSelect();
+    oldLength = flyoutArr.length;
+
+    flyoutArr[tabCount].removeSelect();     //Deselect current
+    flyoutArr[tabCount].addSelect();        //Select next
+}
+    tabCount++;
+}
+
+//when the flyout is opened, the array of blocks in the toolbox increases, even if you open the same tab twice in a row
+//therefore we have to get to the beginning of the expanded array each time it is opened
+Blockly.Toolbox.TreeControl.prototype.setSelectedItem = function(node){
+    this.defaultSetSelectedItem(node);      
+
+    tabCount = oldLength;
+    
+}
 //#endregion

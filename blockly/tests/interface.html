@@ -189,7 +189,7 @@ var spaghettiXml = [
 
 
 
-//========change the comment box font size dynamically=========
+//========change the boxes font size dynamically=========
 function changeFontDD(){
   var e = document.getElementById("fontDD");
   var selectedSize = e.options[e.selectedIndex].value;
@@ -198,6 +198,9 @@ function changeFontDD(){
  
   var outputBox = document.getElementById("importExport");
   outputBox.style.fontSize = selectedSize+"px";
+
+  var infoBox = document.getElementById("infoBox");
+  infoBox.style.fontSize = selectedSize+"px";
 
 }
 
@@ -549,7 +552,7 @@ color: black;
             <option value='14'>14</option>
             <option value='18'>18</option>
             <option value='24'>24</option>
-            <option value='36'>36</option>
+            <option selected="selected" value='36'>36</option>
             <option value='48'>48</option> 
             <option value='72'>72</option>
         </select>

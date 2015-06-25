@@ -129,7 +129,6 @@ document.onkeydown = document.onkeyup = function(e){
 		
 		else if(map[9] && map[16]){ //Tab Shift
 			console.log("Tab Shift pressed.");
-			e.preventDefault();
 			//Go backwards through the same level of code
 		}
 		
@@ -208,6 +207,8 @@ document.onkeydown = document.onkeyup = function(e){
 		else if(map[13]){ //Enter
 			console.log('Enter key pressed.');
 			updateXmlSelection();
+			//temporarily navigates menu
+			menuNav();
 		}
 		
 		//Arrow keys for development purposes.  Switch as needed for proper usage.
@@ -226,6 +227,7 @@ document.onkeydown = document.onkeyup = function(e){
 		
 		else if(map[40] || map[83]){ //down arrow or S
 			traverseDown();
+
 		}
 		//End of development block
 	}
