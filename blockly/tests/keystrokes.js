@@ -29,6 +29,8 @@ document.onmouseup = function(e){
 	updateXmlSelection();
 };
 
+//The struggle is real. 
+
 /**
  * Take care of keypresses for accessibility
  */
