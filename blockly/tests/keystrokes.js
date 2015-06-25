@@ -16,6 +16,8 @@
 *limitations under the License.
 */
 
+goog.require(Blockly.Blocks);
+
 var map = [];
 var keyboardState = 'hotkeyMode';
 
@@ -221,6 +223,13 @@ document.onkeydown = document.onkeyup = function(e){
 		
 		else if(map[40] || map[83]){ //down arrow or S
 			traverseDown();    
+		}
+
+		else if(map[80])
+		{
+
+			var here=getCurrentNode();
+			var now=here.
 		}
 		//End of development block
 	}
