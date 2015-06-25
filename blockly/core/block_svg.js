@@ -107,6 +107,7 @@ Blockly.BlockSvg.prototype.initSvg = function() {
  * Select this block.  Highlight it visually.
  */
 Blockly.BlockSvg.prototype.select = function() {
+  this.workspace.playAudio('delete');
     if (Blockly.selected) {
     // Unselect any previously selected block.
     Blockly.selected.unselect();
@@ -380,7 +381,7 @@ Blockly.BlockSvg.prototype.onMouseDown_ = function(e) {
   this.select();
   Blockly.hideChaff();
   if (Blockly.isRightButton(e)) {
-    // Right-click.
+    // Right-.
     this.showContextMenu_(e);
   } else if (!this.isMovable()) {
     // Allow unmovable blocks to be selected and context menued, but not
@@ -1019,8 +1020,7 @@ Blockly.BlockSvg.prototype.dispose = function(healStack, animate,
  * Play some UI effects (sound, animation) when disposing of a block.
  */
 Blockly.BlockSvg.prototype.disposeUiEffect = function() {
-  this.workspace.playAudio('delete');
-
+  this.workspace.playAudio('beep2');
   var xy = Blockly.getSvgXY_(/** @type {!Element} */ (this.svgGroup_));
   // Deeply clone the current block.
   var clone = this.svgGroup_.cloneNode(true);
@@ -1066,7 +1066,6 @@ Blockly.BlockSvg.disposeUiStep_ = function(clone, rtl) {
  */
 Blockly.BlockSvg.prototype.connectionUiEffect = function() {
   this.workspace.playAudio('click');
-
   // Determine the absolute coordinates of the inferior block.
   var xy = Blockly.getSvgXY_(/** @type {!Element} */ (this.svgGroup_));
   // Offset the coordinates based on the two connection types.

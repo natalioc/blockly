@@ -49,6 +49,10 @@ Blockly.Blocks['controls_repeat'] = {
     this.setPreviousStatement(true);
     this.setNextStatement(true);
     this.setTooltip(Blockly.Msg.CONTROLS_REPEAT_TOOLTIP);
+  },
+
+  returnAudio: function() {
+    return "delete";
   }
 };
 
@@ -69,6 +73,10 @@ Blockly.Blocks['controls_repeat_ext'] = {
     this.setNextStatement(true);
     this.setInputsInline(true);
     this.setTooltip(Blockly.Msg.CONTROLS_REPEAT_TOOLTIP);
+  },
+
+  returnAudio: function() {
+    return "delete";
   }
 };
 
@@ -100,6 +108,10 @@ Blockly.Blocks['controls_whileUntil'] = {
       };
       return TOOLTIPS[op];
     });
+  },
+
+  returnAudio: function() {
+    return "click";
   }
 };
 
@@ -108,7 +120,9 @@ Blockly.Blocks['controls_for'] = {
    * Block for 'for' loop.
    * @this Blockly.Block
    */
+
   init: function() {
+    var audio='delete';
     this.setHelpUrl(Blockly.Msg.CONTROLS_FOR_HELPURL);
     this.setColour(Blockly.Blocks.loops.HUE);
     this.appendDummyInput()
@@ -156,6 +170,7 @@ Blockly.Blocks['controls_for'] = {
    * @param {!Array} options List of menu options to add to.
    * @this Blockly.Block
    */
+
   customContextMenu: function(options) {
     if (!this.isCollapsed()) {
       var option = {enabled: true};
@@ -168,6 +183,10 @@ Blockly.Blocks['controls_for'] = {
       option.callback = Blockly.ContextMenu.callbackFactory(this, xmlBlock);
       options.push(option);
     }
+  },
+
+  returnAudio: function() {
+    return "delete";
   }
 };
 
@@ -207,6 +226,10 @@ Blockly.Blocks['controls_forEach'] = {
    */
   getVars: function() {
     return [this.getFieldValue('VAR')];
+  },
+
+  returnAudio: function() {
+    return "delete";
   },
   /**
    * Notification that a variable is renaming.
@@ -277,5 +300,9 @@ Blockly.Blocks['controls_flow_statements'] = {
     } else {
       this.setWarningText(Blockly.Msg.CONTROLS_FLOW_STATEMENTS_WARNING);
     }
+  },
+
+  returnAudio: function() {
+    return "delete";
   }
 };

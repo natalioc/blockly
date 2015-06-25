@@ -208,6 +208,10 @@ Blockly.Blocks['controls_if'] = {
       clauseBlock = clauseBlock.nextConnection &&
           clauseBlock.nextConnection.targetBlock();
     }
+  },
+
+  returnAudio: function() {
+    return "delete";
   }
 };
 
@@ -217,12 +221,17 @@ Blockly.Blocks['controls_if_if'] = {
    * @this Blockly.Block
    */
   init: function() {
+ //   this.audioCue='delete';
     this.setColour(Blockly.Blocks.logic.HUE);
     this.appendDummyInput()
         .appendField(Blockly.Msg.CONTROLS_IF_IF_TITLE_IF);
     this.appendStatementInput('STACK');
     this.setTooltip(Blockly.Msg.CONTROLS_IF_IF_TOOLTIP);
     this.contextMenu = false;
+  },
+
+  returnAudio: function() {
+    return "delete";
   }
 };
 
@@ -239,6 +248,10 @@ Blockly.Blocks['controls_if_elseif'] = {
     this.setNextStatement(true);
     this.setTooltip(Blockly.Msg.CONTROLS_IF_ELSEIF_TOOLTIP);
     this.contextMenu = false;
+  },
+
+  returnAudio: function() {
+    return "delete";
   }
 };
 
@@ -254,6 +267,10 @@ Blockly.Blocks['controls_if_else'] = {
     this.setPreviousStatement(true);
     this.setTooltip(Blockly.Msg.CONTROLS_IF_ELSE_TOOLTIP);
     this.contextMenu = false;
+  },
+
+  returnAudio: function() {
+    return "delete";
   }
 };
 
@@ -327,6 +344,10 @@ Blockly.Blocks['logic_compare'] = {
     }
     this.prevBlocks_[0] = blockA;
     this.prevBlocks_[1] = blockB;
+  },
+
+  returnAudio: function() {
+    return "delete";
   }
 };
 
@@ -358,6 +379,10 @@ Blockly.Blocks['logic_operation'] = {
       };
       return TOOLTIPS[op];
     });
+  },
+
+  returnAudio: function() {
+    return "delete";
   }
 };
 
@@ -374,6 +399,10 @@ Blockly.Blocks['logic_negate'] = {
                         ['BOOL', 'Boolean', Blockly.ALIGN_RIGHT],
                         Blockly.ALIGN_RIGHT);
     this.setTooltip(Blockly.Msg.LOGIC_NEGATE_TOOLTIP);
+  },
+
+  returnAudio: function() {
+    return "delete";
   }
 };
 
@@ -392,6 +421,10 @@ Blockly.Blocks['logic_boolean'] = {
     this.appendDummyInput()
         .appendField(new Blockly.FieldDropdown(BOOLEANS), 'BOOL');
     this.setTooltip(Blockly.Msg.LOGIC_BOOLEAN_TOOLTIP);
+  },
+
+  returnAudio: function() {
+    return "delete";
   }
 };
 
@@ -407,6 +440,10 @@ Blockly.Blocks['logic_null'] = {
     this.appendDummyInput()
         .appendField(Blockly.Msg.LOGIC_NULL);
     this.setTooltip(Blockly.Msg.LOGIC_NULL_TOOLTIP);
+  },
+
+  returnAudio: function() {
+    return "delete";
   }
 };
 
@@ -458,5 +495,9 @@ Blockly.Blocks['logic_ternary'] = {
       }
     }
     this.prevParentConnection_ = parentConnection;
+  },
+
+  returnAudio: function() {
+    return "delete";
   }
 };

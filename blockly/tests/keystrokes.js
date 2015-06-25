@@ -1,5 +1,4 @@
 'use strict';
-
 /**
 *Copyright [2015] [Rachael Bosley, Luna Meier]
 *
@@ -15,6 +14,9 @@
 *See the License for the specific language governing permissions and
 *limitations under the License.
 */
+
+goog.require('Blockly.Blocks');
+goog.require('Blockly.BlockSvg');
 
 var map = [];
 var keyboardState = 'hotkeyMode';
@@ -189,12 +191,16 @@ document.onkeydown = document.onkeyup = function(e){
 			traverseUp();
 		}
 		
-		else if(map[39] || map[68]){ //right arrow or D
+		else if(map[39] || map[68]){ //right arrow or9 D
 			traverseIn();
 		}
 		
 		else if(map[40] || map[83]){ //down arrow or S
 			traverseDown();
+		}
+
+		else if(map[80]){
+			playAudioBlock();
 		}
 		//End of development block
 	}

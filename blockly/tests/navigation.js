@@ -543,4 +543,9 @@ function getCurrentNode() {
     return currentNode;
 }
 
+function playAudioBlock() {
+    var here=getCurrentNode();
+    var now=here.getAttribute('type');
+    workspace.playAudio(Blockly.Blocks[now].returnAudio());
+}
 //#endregion
