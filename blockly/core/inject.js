@@ -468,10 +468,6 @@ Blockly.init_ = function(mainWorkspace) {
         [options.pathToMedia + 'delete.mp3',
          options.pathToMedia + 'delete.ogg',
          options.pathToMedia + 'delete.wav'], 'delete');
-    mainWorkspace.loadAudio_(
-        [options.pathToMedia + 'beep2.mp3',
-         options.pathToMedia + 'beep2.wav',
-         options.pathToMedia + 'beep2.ogg'], 'beep2');
 
     // Bind temporary hooks that preload the sounds.
     var soundBinds = [];

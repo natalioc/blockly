@@ -43,10 +43,6 @@ Blockly.Blocks['lists_create_empty'] = {
     this.appendDummyInput()
         .appendField(Blockly.Msg.LISTS_CREATE_EMPTY_TITLE);
     this.setTooltip(Blockly.Msg.LISTS_CREATE_EMPTY_TOOLTIP);
-  },
-
-  returnAudio: function() {
-    return "delete";
   }
 };
 
@@ -171,10 +167,6 @@ Blockly.Blocks['lists_create_with'] = {
         }
       }
     }
-  },
-
-  returnAudio: function() {
-    return "delete";
   }
 };
 
@@ -190,10 +182,6 @@ Blockly.Blocks['lists_create_with_container'] = {
     this.appendStatementInput('STACK');
     this.setTooltip(Blockly.Msg.LISTS_CREATE_WITH_CONTAINER_TOOLTIP);
     this.contextMenu = false;
-  },
-
-  returnAudio: function() {
-    return "delete";
   }
 };
 
@@ -210,10 +198,6 @@ Blockly.Blocks['lists_create_with_item'] = {
     this.setNextStatement(true);
     this.setTooltip(Blockly.Msg.LISTS_CREATE_WITH_ITEM_TOOLTIP);
     this.contextMenu = false;
-  },
-
-  returnAudio: function() {
-    return "delete";
   }
 };
 
@@ -231,10 +215,6 @@ Blockly.Blocks['lists_repeat'] = {
                         ['NUM', 'Number', Blockly.ALIGN_RIGHT],
                         Blockly.ALIGN_RIGHT);
     this.setTooltip(Blockly.Msg.LISTS_REPEAT_TOOLTIP);
-  },
-
-  returnAudio: function() {
-    return "delete";
   }
 };
 
@@ -251,10 +231,6 @@ Blockly.Blocks['lists_length'] = {
                         Blockly.ALIGN_RIGHT);
     this.setOutput(true, 'Number');
     this.setTooltip(Blockly.Msg.LISTS_LENGTH_TOOLTIP);
-  },
-
-  returnAudio: function() {
-    return "delete";
   }
 };
 
@@ -272,10 +248,6 @@ Blockly.Blocks['lists_isEmpty'] = {
     this.setInputsInline(true);
     this.setOutput(true, 'Boolean');
     this.setTooltip(Blockly.Msg.LISTS_TOOLTIP);
-  },
-
-  returnAudio: function() {
-    return "delete";
   }
 };
 
@@ -298,10 +270,6 @@ Blockly.Blocks['lists_indexOf'] = {
         .appendField(new Blockly.FieldDropdown(OPERATORS), 'END');
     this.setInputsInline(true);
     this.setTooltip(Blockly.Msg.LISTS_INDEX_OF_TOOLTIP);
-  },
-
-  returnAudio: function() {
-    return "delete";
   }
 };
 
@@ -434,10 +402,6 @@ Blockly.Blocks['lists_getIndex'] = {
     if (Blockly.Msg.LISTS_GET_INDEX_TAIL) {
       this.moveInputBefore('TAIL', null);
     }
-  },
-
-  returnAudio: function() {
-    return "delete";
   }
 };
 
@@ -540,10 +504,6 @@ Blockly.Blocks['lists_setIndex'] = {
     }
 
     this.getInput('AT').appendField(menu, 'WHERE');
-  },
-
-  returnAudio: function() {
-    return "delete";
   }
 };
 
@@ -649,10 +609,6 @@ Blockly.Blocks['lists_getSublist'] = {
     if (Blockly.Msg.LISTS_GET_SUBLIST_TAIL) {
       this.moveInputBefore('TAIL', null);
     }
-  },
-
-  returnAudio: function() {
-    return "delete";
   }
 };
 
@@ -695,9 +651,5 @@ Blockly.Blocks['lists_split'] = {
       }
       throw 'Unknown mode: ' + mode;
     });
-  },
-
-  returnAudio: function() {
-    return "delete";
   }
 };

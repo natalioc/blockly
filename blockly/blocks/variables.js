@@ -84,10 +84,6 @@ Blockly.Blocks['variables_get'] = {
     xmlBlock.setAttribute('type', this.contextMenuType_);
     option.callback = Blockly.ContextMenu.callbackFactory(this, xmlBlock);
     options.push(option);
-  },
-
-  returnAudio: function() {
-    return "delete";
   }
 };
 
@@ -132,9 +128,5 @@ Blockly.Blocks['variables_set'] = {
       this.setFieldValue(newName, 'VAR');
     }
   },
-  customContextMenu: Blockly.Blocks['variables_get'].customContextMenu,
-
-  returnAudio: function() {
-    return "delete";
-  }
+  customContextMenu: Blockly.Blocks['variables_get'].customContextMenu
 };

@@ -60,10 +60,6 @@ Blockly.Blocks['text'] = {
       var file = 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAwAAAAKCAQAAAAqJXdxAAAAn0lEQVQI1z3OMa5BURSF4f/cQhAKjUQhuQmFNwGJEUi0RKN5rU7FHKhpjEH3TEMtkdBSCY1EIv8r7nFX9e29V7EBAOvu7RPjwmWGH/VuF8CyN9/OAdvqIXYLvtRaNjx9mMTDyo+NjAN1HNcl9ZQ5oQMM3dgDUqDo1l8DzvwmtZN7mnD+PkmLa+4mhrxVA9fRowBWmVBhFy5gYEjKMfz9AylsaRRgGzvZAAAAAElFTkSuQmCC';
     }
     return new Blockly.FieldImage(file, 12, 12, '"');
-  },
-
-  returnAudio: function() {
-    return "delete";
   }
 };
 
@@ -190,11 +186,7 @@ Blockly.Blocks['text_join'] = {
       }
     }
   },
-  newQuote_: Blockly.Blocks['text'].newQuote_,
-
-  returnAudio: function() {
-    return "delete";
-  }
+  newQuote_: Blockly.Blocks['text'].newQuote_
 };
 
 Blockly.Blocks['text_create_join_container'] = {
@@ -209,10 +201,6 @@ Blockly.Blocks['text_create_join_container'] = {
     this.appendStatementInput('STACK');
     this.setTooltip(Blockly.Msg.TEXT_CREATE_JOIN_TOOLTIP);
     this.contextMenu = false;
-  },
-
-  returnAudio: function() {
-    return "delete";
   }
 };
 
@@ -229,10 +217,6 @@ Blockly.Blocks['text_create_join_item'] = {
     this.setNextStatement(true);
     this.setTooltip(Blockly.Msg.TEXT_CREATE_JOIN_ITEM_TOOLTIP);
     this.contextMenu = false;
-  },
-
-  returnAudio: function() {
-    return "delete";
   }
 };
 
@@ -277,10 +261,6 @@ Blockly.Blocks['text_append'] = {
     if (Blockly.Names.equals(oldName, this.getFieldValue('VAR'))) {
       this.setFieldValue(newName, 'VAR');
     }
-  },
-
-  returnAudio: function() {
-    return "delete";
   }
 };
 
@@ -297,10 +277,6 @@ Blockly.Blocks['text_length'] = {
                         Blockly.ALIGN_RIGHT);
     this.setOutput(true, 'Number');
     this.setTooltip(Blockly.Msg.TEXT_LENGTH_TOOLTIP);
-  },
-
-  returnAudio: function() {
-    return "delete";
   }
 };
 
@@ -317,10 +293,6 @@ Blockly.Blocks['text_isEmpty'] = {
                         Blockly.ALIGN_RIGHT);
     this.setOutput(true, 'Boolean');
     this.setTooltip(Blockly.Msg.TEXT_ISEMPTY_TOOLTIP);
-  },
-
-  returnAudio: function() {
-    return "delete";
   }
 };
 
@@ -347,10 +319,6 @@ Blockly.Blocks['text_indexOf'] = {
     }
     this.setInputsInline(true);
     this.setTooltip(Blockly.Msg.TEXT_INDEXOF_TOOLTIP);
-  },
-
-  returnAudio: function() {
-    return "delete";
   }
 };
 
@@ -437,10 +405,6 @@ Blockly.Blocks['text_charAt'] = {
       return undefined;
     });
     this.getInput('AT').appendField(menu, 'WHERE');
-  },
-
-  returnAudio: function() {
-    return "delete";
   }
 };
 
@@ -546,10 +510,6 @@ Blockly.Blocks['text_getSubstring'] = {
     if (n == 1) {
       this.moveInputBefore('AT1', 'AT2');
     }
-  },
-
-  returnAudio: function() {
-    return "delete";
   }
 };
 
@@ -570,10 +530,6 @@ Blockly.Blocks['text_changeCase'] = {
         .appendField(new Blockly.FieldDropdown(OPERATORS), 'CASE');
     this.setOutput(true, 'String');
     this.setTooltip(Blockly.Msg.TEXT_CHANGECASE_TOOLTIP);
-  },
-
-  returnAudio: function() {
-    return "delete";
   }
 };
 
@@ -594,10 +550,6 @@ Blockly.Blocks['text_trim'] = {
         .appendField(new Blockly.FieldDropdown(OPERATORS), 'MODE');
     this.setOutput(true, 'String');
     this.setTooltip(Blockly.Msg.TEXT_TRIM_TOOLTIP);
-  },
-
-  returnAudio: function() {
-    return "delete";
   }
 };
 
@@ -615,10 +567,6 @@ Blockly.Blocks['text_print'] = {
     this.setPreviousStatement(true);
     this.setNextStatement(true);
     this.setTooltip(Blockly.Msg.TEXT_PRINT_TOOLTIP);
-  },
-
-  returnAudio: function() {
-    return "delete";
   }
 };
 
@@ -656,11 +604,7 @@ Blockly.Blocks['text_prompt'] = {
           Blockly.Msg.TEXT_PROMPT_TOOLTIP_NUMBER;
     });
   },
-  newQuote_: Blockly.Blocks['text'].newQuote_,
-
-  returnAudio: function() {
-    return "delete";
-  }
+  newQuote_: Blockly.Blocks['text'].newQuote_
 };
 
 Blockly.Blocks['text_prompt_ext'] = {
@@ -693,9 +637,5 @@ Blockly.Blocks['text_prompt_ext'] = {
           Blockly.Msg.TEXT_PROMPT_TOOLTIP_TEXT :
           Blockly.Msg.TEXT_PROMPT_TOOLTIP_NUMBER;
     });
-  },
-
-  returnAudio: function() {
-    return "delete";
   }
 };
