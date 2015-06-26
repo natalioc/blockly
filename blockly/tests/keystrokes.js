@@ -15,13 +15,15 @@
 *See the License for the specific language governing permissions and
 *limitations under the License.
 */
-
 goog.require('Blockly.Blocks');
+//goog.require('meSpeak');
+//var meSpeak=require("mespeak");
 
 
 var map = [];
 var keyboardState = 'hotkeyMode';
-
+meSpeak.loadConfig("mespeak_config.json");
+meSpeak.loadVoice("voices/en/en-us.json");
 /**
  * When a mouseup event happens, update the XML selection
  */
@@ -227,6 +229,9 @@ document.onkeydown = document.onkeyup = function(e){
 		}
 
 		else if(map[84]){
+			speakAudio();
+		}
+		else if(map[89]){
 			clickAudio();
 			try{
 				nestLevel(getCurrentNode());

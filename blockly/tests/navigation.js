@@ -587,4 +587,10 @@ function clickAudio(){
     workspace.playAudio(Blockly.Blocks[now].returnAudio());
 }
 
+function speakAudio(){
+    var here=getCurrentNode();
+    var now=here.getAttribute('type');
+    meSpeak.speak(now);
+}
+
 //#endregion
