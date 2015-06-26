@@ -80,6 +80,7 @@ function getImportantBlocks(){
 
     getIndent(perfectArr);
 
+
 }//end of getImportantBlocks
 
 /**
@@ -98,12 +99,13 @@ function getIndent(perfectArr){
 	var idOfBlock;
 	var miniXml;
 	var i;
+    var currNode;
 	parentArr = [];
 
 	for(i = 0; i < perfectArr.length; i++){
 
-		currentNode = perfectArr[i];
-		idOfBlock = currentNode.getAttribute('id');
+		currNode = perfectArr[i];
+		idOfBlock = currNode.getAttribute('id');
 		indexOfId = currentXml.indexOf('id="'+idOfBlock+'"');
 		miniXml = currentXml.substring(0, indexOfId);
 		openStatementCnt = (miniXml.match(/<statement/g) || []).length;
@@ -199,9 +201,10 @@ function createComments(perfectArr, parentArr){
   var commentStr;
   var prefixes = commentPrefix(perfectArr, parentArr);
   var indent;
+  var currNode;
   for(var i = 0; i < perfectArr.length; i++){
     commentStr = '';
-    currentNode = perfectArr[i];
+    currNode = perfectArr[i];
     pTag = document.createElement("p");
     pTag.setAttribute("tabindex", 0);
     pTag.setAttribute("id", i);
@@ -220,8 +223,8 @@ function createComments(perfectArr, parentArr){
     else{
     	//if the block has a comment it will be shown otherwise it will print no comment
         var parentsId = perfectArr[i].getElementsByTagName("comment")[0].parentNode.getAttribute('id');
-        if(parentsId == currentNode.getAttribute('id')){
-          var htmlComment = currentNode.getElementsByTagName("comment")[0].innerHTML;
+        if(parentsId == currNode.getAttribute('id')){
+          var htmlComment = currNode.getElementsByTagName("comment")[0].innerHTML;
           commentStr += " " + htmlComment;
         }
         else{
@@ -278,6 +281,7 @@ function infoBoxFill(currentNode){
 	//Build String to put in box
 	for (var i = 0; i < perfectArr.length; i++) {
 		if(currentNode.getAttribute('id') == perfectArr[i].getAttribute('id')){	
+
 			var indexOfPeriod = prefixArr[i].indexOf(".");
 			if(indexOfPeriod == -1){
 				var prefixLength = prefixArr[i].length;
@@ -311,4 +315,49 @@ function infoBoxFill(currentNode){
 }
 
 
+/**
+* Function that takes in the current node, gets its id attribute, finds the element's position
+* in the perfectArr array, and uses that position to identify the current node's level
+* of nesting in the parentArr array and returns it.
+* @param nesting level
+* Added by: Wil Merchant (6/26/15)
+*/
+function nestLevel(currentNode){
 
+    //var currNode = getCurrentNode();
+    
+    var arrLength = perfectArr.length; //The length of the parentArr and perfectArr arrays
+    var nodeDepth=0;
+    for (var i = 0; i < arrLength; i++) {
+
+        if(currentNode.getAttribute('id') == perfectArr[i].getAttribute('id')){
+        /* 
+            var indexOfPeriod = prefixArr[i].indexOf(".");
+            if(indexOfPeriod == -1){
+                var prefixLength = prefixArr[i].length;
+                if(prefixLength == 2){
+                    sectionStr = "Section " + prefixArr[i].substring(1, 2);
+                }
+                else{
+                    sectionStr = "Section " + prefixArr[i].substring(1, 3);
+                }
+            }
+            else if(indexOfPeriod == 2){
+                sectionStr = "Section " + prefixArr[i].substring(1, 2);
+            }
+            else if(indexOfPeriod == 3){
+                sectionStr = "Section " + prefixArr[i].substring(1, 3);
+            }
+            */
+            nodeDepth = parentArr[i] + 1;
+            break;
+            /*
+            depthStr = "Depth " + (parentArr[i] + 1);
+            prefixStr = prefixArr[i].substring(1, prefixArr[i].length+1);
+            */
+        }
+    }
+    window.alert(currentNode.getAttribute('id'));
+    window.alert(nodeDepth);
+    //return nodeDepth;
+}; 

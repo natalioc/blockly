@@ -18,6 +18,7 @@
 
 goog.require('Blockly.Blocks');
 
+
 var map = [];
 var keyboardState = 'hotkeyMode';
 
@@ -28,8 +29,6 @@ document.onmouseup = function(e){
 	console.log('Mouse Up');
 	updateXmlSelection();
 };
-
-//The struggle is real. 
 
 /**
  * Take care of keypresses for accessibility
@@ -229,6 +228,17 @@ document.onkeydown = document.onkeyup = function(e){
 
 		else if(map[84]){
 			clickAudio();
+			try{
+				nestLevel(getCurrentNode());
+			}catch(err){
+				window.alert(err);
+			}
+			
+
+
+
+			//var x = new Instrument(32);
+			//x.playSingleNote(42);
 		}
 		//End of development block
 	}

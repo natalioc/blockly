@@ -1,15 +1,16 @@
 
 //Requiring the soundfont file
-goog.require('libs.timbrejs.soundfont');
-//goog.require('javascript.ArrayCollection');
+////goog.require('javascript.ArrayCollection');
 
 //Creating a namespace for the Instrument file 
-goog.provide('libs.timbrejs.Instrument');
+goog.provide('timbrejs.Instrument');
+
+//Requiring the soundfont file because its needed
+goog.require('timbrejs.soundfont');
 
 
-
-//require(["libs/timbrejs/soundfont.js"]);
 //Make an instrument object with a given instrument number
+
 function Instrument(number){
 	this.number = number;
 	this.bpm = 120;	//Default tempo

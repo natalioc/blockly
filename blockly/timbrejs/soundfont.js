@@ -8,6 +8,11 @@
 /*globals timbre */
 
 //Getting the required files
+//require(["../timbrejs/timbre.js"]);
+//require(["../timbrejs/audio-jsonp.js"]);
+//require(["../timbrejs/jsmad.js"]);
+//require(["../timbrejs/mpe_decode.js"]);
+
 goog.require('libs.timbrejs.timbre');
 goog.require('libs.timbrejs.audiojsonp');
 goog.require('libs.timbrejs.jsmad');
