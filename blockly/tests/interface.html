@@ -44,19 +44,21 @@
 <script src="../blocks/variables.js"></script>
 <script src="../blocks/procedures.js"></script>
 <script src="../blocks/audio.js"></script>
+<script src="../mespeak/mespeak.js"></script>
+<script src="../mespeak/msie_flashFallback/flashFallback.js"></script>
 <!-- Load the Google Drive SDK Realtime libraries. -->
 <script src="https://apis.google.com/js/api.js"></script>
 <script src="loadxml.js"></script>
 <script src="debug.js"></script>
 <script src="navigation-block-info.js"></script>
 <script src="commentGenerator.js"></script>
+<script src="http://code.responsivevoice.org/responsivevoice.js"></script>
 <script type="text/javascript">
 'use strict';
 // Depending on the URL argument, render as LTR or RTL.
 var rtl = (document.location.search == '?rtl');
 var block = null;
 var workspace = null;
-
 //Contains the code after exporting to javascript
 var code;
 
@@ -118,6 +120,7 @@ function airstrike(n) {
   var prototypes = [];
   var toolbox = document.getElementById('toolbox');
   var blocks = toolbox.getElementsByTagName('block');
+  responsiveVoice.speak("hello world");
   for (var i = 0, block; block = blocks[i]; i++) {
     prototypes.push(block.getAttribute('type'));
   }

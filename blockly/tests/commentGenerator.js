@@ -41,7 +41,7 @@ function getImportantBlocks(){
     //add all blocks to the blockArr
      var blockArr = xmlDoc.getElementsByTagName('BLOCK');
 
-    perfectArr = [];
+     perfectArr = [];
 
     //adding any blocks which can stand on their own to perfectArr
     for(var i=0; i < blockArr.length; i++){
@@ -98,12 +98,13 @@ function getIndent(perfectArr){
 	var idOfBlock;
 	var miniXml;
 	var i;
+    var currnode;
 	parentArr = [];
 
 	for(i = 0; i < perfectArr.length; i++){
 
-		currentNode = perfectArr[i];
-		idOfBlock = currentNode.getAttribute('id');
+		currnode = perfectArr[i];
+		idOfBlock = currnode.getAttribute('id');
 		indexOfId = currentXml.indexOf('id="'+idOfBlock+'"');
 		miniXml = currentXml.substring(0, indexOfId);
 		openStatementCnt = (miniXml.match(/<statement/g) || []).length;
@@ -199,9 +200,10 @@ function createComments(perfectArr, parentArr){
   var commentStr;
   var prefixes = commentPrefix(perfectArr, parentArr);
   var indent;
+  var currnode;
   for(var i = 0; i < perfectArr.length; i++){
     commentStr = '';
-    currentNode = perfectArr[i];
+    currnode = perfectArr[i];
     pTag = document.createElement("p");
     pTag.setAttribute("tabindex", 0);
     pTag.setAttribute("id", i);
@@ -220,8 +222,8 @@ function createComments(perfectArr, parentArr){
     else{
     	//if the block has a comment it will be shown otherwise it will print no comment
         var parentsId = perfectArr[i].getElementsByTagName("comment")[0].parentNode.getAttribute('id');
-        if(parentsId == currentNode.getAttribute('id')){
-          var htmlComment = currentNode.getElementsByTagName("comment")[0].innerHTML;
+        if(parentsId == currnode.getAttribute('id')){
+          var htmlComment = currnode.getElementsByTagName("comment")[0].innerHTML;
           commentStr += " " + htmlComment;
         }
         else{
