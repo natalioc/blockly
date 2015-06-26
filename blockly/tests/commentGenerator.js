@@ -115,11 +115,12 @@ function getIndent(perfectArr){
 	var idOfBlock;
 	var miniXml;
 	var i;
+	var currNode;
 	parentArr = [];
 
 	for(i = 0; i < perfectArr.length; i++){
 
-		currentNode = perfectArr[i];
+		currNode = perfectArr[i];
 		idOfBlock = currentNode.getAttribute('id');
 		indexOfId = currentXml.indexOf('id="'+idOfBlock+'"');
 		miniXml = currentXml.substring(0, indexOfId);
@@ -216,9 +217,10 @@ function createComments(perfectArr, parentArr){
   var commentStr;
   var prefixes = commentPrefix(perfectArr, parentArr);
   var indent;
+  var currNode;
   for(var i = 0; i < perfectArr.length; i++){
     commentStr = '';
-    currentNode = perfectArr[i];
+    currNode = perfectArr[i];
     pTag = document.createElement("p");
     pTag.setAttribute("tabindex", 0);
     pTag.setAttribute("id", i);
@@ -237,8 +239,8 @@ function createComments(perfectArr, parentArr){
     else{
     	//if the block has a comment it will be shown otherwise it will print no comment
         var parentsId = perfectArr[i].getElementsByTagName("comment")[0].parentNode.getAttribute('id');
-        if(parentsId == currentNode.getAttribute('id')){
-          var htmlComment = currentNode.getElementsByTagName("comment")[0].innerHTML;
+        if(parentsId == currNode.getAttribute('id')){
+          var htmlComment = currNode.getElementsByTagName("comment")[0].innerHTML;
           commentStr += " " + htmlComment;
         }
         else{
