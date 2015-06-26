@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Notepad</title>
+<script src="closure-library/closure/goog/base.js"></script>
+<script src="notepad.js"></script>
+<script src="libs/timbrejs/timbre.js"></script>
+  <script src="libs/timbrejs/audio-jsonp.js"></script>
+  <script src="libs/timbrejs/jsmad.js"></script>
+  <script src="libs/timbrejs/mp3_decode.js"></script>
+  <script src="libs/timbrejs/soundfont.js"></script>
+  <script src="libs/timbrejs/Instrument.js"></script>
+  <script src="libs/timbrejs/WaveForm.js"></script>
+</head>
+<body>
+<div id="notes">
+</div>
+
+<script>
+function main() {
+  var noteData = [
+    {'title': 'Note 1', 'content': 'Content of Note 1'},
+    {'title': 'Note 2', 'content': 'Content of Note 2'}];
+
+  var noteListElement = document.getElementById('notes');
+  var notes = tutorial.notepad.makeNotes(noteData, noteListElement);
+}
+main();
+</script>
+</body>
+</html>
