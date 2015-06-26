@@ -1,62 +1,79 @@
 <!DOCTYPE html>
 <html>
-
 <head>
-<title>Loops</title>
-<link rel="stylesheet" type="text/css" href="quick_reference.css">
+	<title>Loops</title>
+	<link rel="stylesheet" type="text/css" href="quick_reference.css">
 </head>
-
 <body>
 	<h1>Blockly Quick Reference</h1>
-	    <a href="#contentStart"><div id="skipButton" role="button" aria-required="true">Skip to Content</div></a>
-		<ul id="navigation">
-			<li><a href="logic.html">Logic</a></li>
-			<li><a href="loops.html">Loops</a></li>
-			<li><a href="math.html">Math</a></li>
-			<li><a href="text.html">Text</a></li>
-			<li><a href="lists.html">Lists</a></li>
-			<li><a href="colour.html">Colour</a></li>
-			<li><a href="variables.html">Variables</a></li>
-			<li><a href="functions.html">Functions</a></li>
-		</ul>
-
+	<a href="#contentStart">
+		<div id="skipButton" role="button" aria-required="true">Skip to Content</div>
+	</a>
+	<ul id="navigation">
+		<li><a href="logic.html">Logic</a></li>
+		<li><a href="loops.html">Loops</a></li>
+		<li><a href="math.html">Math</a></li>
+		<li><a href="text.html">Text</a></li>
+		<li><a href="lists.html">Lists</a></li>
+		<li><a href="colour.html">Colour</a></li>
+		<li><a href="variables.html">Variables</a></li>
+		<li><a href="functions.html">Functions</a></li>
+	</ul>
 	<h2 id="contentStart" tabindex="0">Loops</h2>
-		<div class="container">
+	<div class="container">
 		<h3 tabindex="0">Repeat</h3>
-
-			<p tabindex="0">The simple repeat block runs the code in its body the specified number of times. For example, the below block will print "Hello" ten times.
-			<img src="media/repeat.png" alt="Simple repeat block Example" height="82" width="194"></p>
-		</div>
-
-		<div class="container">
+		<p tabindex="0">The simple repeat block runs the code in its body the specified number of times. For example, the below block will print "Hello" ten times.
+			<img src="media/repeat.png" alt="Simple repeat block Example" height="82" width="194">
+		</p>
+	</div>
+	<div class="container">
+		<a name="controls_repeat_ext">
+			<h3 tabindex="0">Repeat</h3>
+		</a>
+		<p tabindex="0">The simple repeat block runs the code in its body the specified number of times. For example, the below block will print "Hello" ten times.
+			<img src="media/repeat.png" alt="Simple repeat block Example" height="82" width="194">
+		</p>
+	</div>
+	<div class="container">
+		<a name="controls_whileUntil">
 			<h3 tabindex="0">Repeat While</h3>
-				<p tabindex="0">The repeat while block will run the code in its body while the condition is true. For example, the below block group will print "Hello" one time.
-				<img src="media/repeat_while.png" alt="Repeat while block example" height="149" width="305"></p>
-
-			<h3 tabindex="0">Repeat Until</h3>
-				<p tabindex="0">Another option available on the repeat while block is repeat until. Repeat until loops are similiar to repeat while loops except that they repeat their bodies until some condition is true. The following blocks are equivalent to the previous example except for changing the block mode from while to until. This example using repeat until will not print anything.
-				<img src="media/repeat_until.png" alt="Repeat until block example" height="152" width="300"></p>
-		</div>
-		<div class="container">
+		</a>
+		<p tabindex="0">The repeat while block will run the code in its body while the condition is true. For example, the below block group will print "Hello" one time.
+			<img src="media/repeat_while.png" alt="Repeat while block example" height="149" width="305">
+		</p>
+		<h3 tabindex="0">Repeat Until</h3>
+		<p tabindex="0">Another option available on the repeat while block is repeat until. Repeat until loops are similiar to repeat while loops except that they repeat their bodies until some condition is true. The following blocks are equivalent to the previous example except for changing the block mode from while to until. This example using repeat until will not print anything.
+			<img src="media/repeat_until.png" alt="Repeat until block example" height="152" width="300">
+		</p>
+	</div>
+	<div class="container">
+		<a name="controls_for">
 			<h3 tabindex="0">Count With</h3>
-				<p tabindex="0">The count with block, which is called a for loop in most programming languages, advances a variable from the first value to the second value by the increment amount (or third value). The body is run one time for each passed value. For example, the following program prints the numbers 1, 3, and 5.
-				<img src="media/count_with.png" alt="Count with block example" height="80" width="371"></p>
-		</div>
-		<div class="container">
+		</a>
+		<p tabindex="0">The count with block, which is called a for loop in most programming languages, advances a variable from the first value to the second value by the increment amount (or third value). The body is run one time for each passed value. For example, the following program prints the numbers 1, 3, and 5.
+			<img src="media/count_with.png" alt="Count with block example" height="80" width="371">
+		</p>
+	</div>
+	<div class="container">
+		<a name="controls_forEach">
 			<h3 tabindex="0">For Each</h3>
-				<p tabindex="0">The for each block is similiar to a for loop, except instead of giving the loop variable values in a numeric sequence, it uses values from a list. The following example prints each element of the list a single time. The output is "alpha", "beta", "gamma".
-				<img src="media/for_each.png" alt="For each block example" height="122" width="476"></p>
-		</div>
-		<div class="container">
+		</a>
+		<p tabindex="0">The for each block is similiar to a for loop, except instead of giving the loop variable values in a numeric sequence, it uses values from a list. The following example prints each element of the list a single time. The output is "alpha", "beta", "gamma".
+			<img src="media/for_each.png" alt="For each block example" height="122" width="476">
+		</p>
+	</div>
+	<div class="container">
+		<a name="controls_flow_statements">
 			<h3 tabindex="0">Break Out of Loop</h3>
-				<p tabindex="0">The break out of loop block provides an early exit from a loop. The following example prints "alpha" on the first interation and breaks out of the loop on the second iteration when the loop variable is equal to "beta". The third item in the list is never reached.
-				<img src="media/break_out_of_loop.png" alt="Break out of loop example" height="195" width="476"></p>
-
-			<h3 tabindex="0">Continue with next iteration</h3>
-				<p tabindex="0">The break out of loop has another mode, continue with next iteration. The continue with next iteration causes the remaining code in the body to be skipped and for the next iteration (pass) of the loop to begin. The example is the same as the break out of loop example but the break out of loop has been replaced with a continue with next iteration loop. Unlike the previous example, the following example will print "alpha", "beta", "gamma".
-				<img src="media/continue_with_next_iteration.png" alt="Continue with next iteration example" height="195" width="476"></p>
-		</div>
-
-		<div id="to_top"><a href="loops.html">To Top</a></div>
+		</a>
+		<p tabindex="0">The break out of loop block provides an early exit from a loop. The following example prints "alpha" on the first interation and breaks out of the loop on the second iteration when the loop variable is equal to "beta". The third item in the list is never reached.
+			<img src="media/break_out_of_loop.png" alt="Break out of loop example" height="195" width="476">
+		</p>
+		<h3 tabindex="0">Continue with next iteration</h3>
+		<p tabindex="0">The break out of loop has another mode, continue with next iteration. The continue with next iteration causes the remaining code in the body to be skipped and for the next iteration (pass) of the loop to begin. The example is the same as the break out of loop example but the break out of loop has been replaced with a continue with next iteration loop. Unlike the previous example, the following example will print "alpha", "beta", "gamma".
+			<img src="media/continue_with_next_iteration.png" alt="Continue with next iteration example" height="195" width="476">
+		</p>
+	</div>
+	<div id="to_top"><a href="loops.html">To Top</a></div>
 </body>
 </html>
