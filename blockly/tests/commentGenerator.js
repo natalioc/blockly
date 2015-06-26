@@ -121,7 +121,7 @@ function getIndent(perfectArr){
 	for(i = 0; i < perfectArr.length; i++){
 
 		currNode = perfectArr[i];
-		idOfBlock = currentNode.getAttribute('id');
+		idOfBlock = currNode.getAttribute('id');
 		indexOfId = currentXml.indexOf('id="'+idOfBlock+'"');
 		miniXml = currentXml.substring(0, indexOfId);
 		openStatementCnt = (miniXml.match(/<statement/g) || []).length;
