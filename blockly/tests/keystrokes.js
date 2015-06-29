@@ -127,6 +127,12 @@ document.onkeydown = document.onkeyup = function(e){
 			updateXmlSelection();
 		}
 		
+		else if(map[18] && map[16] &&map[72]){ //Alt Shift H
+			console.log("Alt Shift H keys pressed.");
+			helpSelectedBlock();
+			//Link to the help page for the selected block
+		}
+		
 		else if(map[9] && map[16]){ //Tab Shift
 			console.log("Tab Shift pressed.");
 			//Go backwards through the same level of code
@@ -184,13 +190,7 @@ document.onkeydown = document.onkeyup = function(e){
 			commentOrBlockJump();
 			//Goto the block the comment that is currently selected is from
 			//Alternatively goto the comment that is connected to the currently selected block
-		}
-		
-		else if(map[72]){ //H
-			console.log("H key pressed.");
-			helpSelectedBlock();
-			//Link to the help page for the selected block
-		}
+		}	
 		
 		else if(map[78]){ //N
 			console.log("N key pressed.");
