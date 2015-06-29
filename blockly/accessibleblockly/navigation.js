@@ -55,7 +55,7 @@ Blockly.BlockSvg.prototype.select = function () {
 
     console.log(getBlockNodeById(this.id));
     if (getBlockNodeById(this.id)) {
-        currentNode = getBlockNodeById(this.id);
+        currentNode = Blockly.Accessibility.Navigation.getBlockNodeById(this.id);
         console.log(this.id);
     }
 };
@@ -73,7 +73,7 @@ Blockly.BlockSvg.prototype.dispose = function (healStack, animate,
                                               opt_dontRemoveFromWorkspace) {
     this.defaultDispose(healStack, animate, opt_dontRemoveFromWorkspace);
 
-    updateXmlSelection(true);
+    Blockly.Accessibility.Navigation.updateXmlSelection(true);
 };
 
 Array.prototype.contains = function(element) {
@@ -110,7 +110,7 @@ Blockly.Accessibility.Navigation.updateXmlSelection = function(noSelect) {
         xmlDoc = Blockly.Xml.workspaceToDom(Blockly.mainWorkspace);
 
         idDifference = parseInt(findContainers()[0].getAttribute('id')) - idDifference;
-        jumpToID(pastId + idDifference);
+        Blockly.Accessibility.Navigation.jumpToID(pastId + idDifference);
     }
         // Otherwise this is a non-issue
     else {
@@ -142,7 +142,7 @@ Blockly.Accessibility.Navigation.undo = function() {
     // Go back to the previous, keep track of stuff in case you want to redo, and update the scene.
     redoStack.push(xmlDoc);
     xmlDoc = undoStack.pop();
-    updateBlockSelection();
+    Blockly.Accessibility.Navigation.updateBlockSelection();
 }
 
 /**
@@ -156,7 +156,7 @@ Blockly.Accessibility.Navigation.redo = function () {
     // Go back to the previous, keep track of stuff in case you want to redo, and update the scene.
     undoStack.push(xmlDoc);
     xmlDoc = redoStack.pop();
-    updateBlockSelection();
+    Blockly.Accessibility.Navigation.updateBlockSelection();
 }
 
 
@@ -166,7 +166,7 @@ Blockly.Accessibility.Navigation.redo = function () {
 Blockly.Accessibility.Navigation.updateBlockSelection = function () {
     Blockly.Workspace.prototype.clear();
     Blockly.Xml.domToWorkspace(Blockly.mainWorkspace, xmlDoc);
-    updateXmlSelection();
+    Blockly.Accessibility.Navigation.updateXmlSelection();
 }
 
 //#region JUMP_FUNCTIONS
@@ -184,7 +184,7 @@ Blockly.Accessibility.Navigation.jumpToTopOfSection = function() {
     console.log('Jumping to top of section.');
     currentNode = findTop(currentNode);
     console.log('Going to ' + currentNode.nodeName + ' with id ' + currentNode.getAttribute('id') + ' via cycle.');
-    updateSelection();
+    Blockly.Accessibility.Navigation.updateSelection();
 }
 
 /**
@@ -200,7 +200,7 @@ Blockly.Accessibility.Navigation.jumpToBottomOfSection = function () {
     console.log('Jumping to bottom of section.');
     currentNode = findTop(currentNode);
     console.log('Going to ' + currentNode.nodeName + ' with id ' + currentNode.getAttribute('id') + ' via cycle.');
-    updateSelection();
+    Blockly.Accessibility.Navigation.updateSelection();
 }
 
 /**
@@ -216,7 +216,7 @@ Blockly.Accessibility.Navigation.jumpToContainer = function(containerNumber) {
     if (containers[containerNumber]) {
         currentNode = containers[containerNumber];
         console.log('Going to ' + currentNode.nodeName + ' with id ' + currentNode.getAttribute('id'));
-        updateSelection();
+        Blockly.Accessibility.Navigation.updateSelection();
         return;
     }
 
@@ -229,11 +229,11 @@ Blockly.Accessibility.Navigation.jumpToContainer = function(containerNumber) {
  */
 Blockly.Accessibility.Navigation.jumpToID = function(id) {
     console.log('Jumping to block with id ' + id);
-    var jumpTo = getBlockNodeById(id);
+    var jumpTo = Blockly.Accessibility.Navigation.getBlockNodeById(id);
     if (jumpTo) {
         currentNode = jumpTo;
         console.log('Going to ' + currentNode.nodeName + ' with id ' + currentNode.getAttribute('id'));
-        updateSelection();
+        Blockly.Accessibility.Navigation.updateSelection();
         return;
     }
 
@@ -261,7 +261,7 @@ Blockly.Accessibility.Navigation.traverseOut = function() {
     if (findTop(currentNode).parentNode.nodeName.toUpperCase() == 'STATEMENT') {
         currentNode = findTop(currentNode).parentNode.parentNode;
         console.log('Going to ' + currentNode.nodeName + ' with id ' + currentNode.getAttribute('id'));
-        updateSelection();
+        Blockly.Accessibility.Navigation.updateSelection();
         return;
     }
     // If it's not, then do nothing, you cannot go in.
@@ -288,7 +288,7 @@ Blockly.Accessibility.Navigation.traverseIn = function() {
         if (children[i].nodeName.toUpperCase() == 'STATEMENT') {
             currentNode = children[i].getElementsByTagName('BLOCK')[0];
             console.log('Going to ' + currentNode.nodeName + ' with id ' + currentNode.getAttribute('id'));
-            updateSelection();
+            Blockly.Accessibility.Navigation.updateSelection();
             return;
         }
     }
@@ -313,7 +313,7 @@ Blockly.Accessibility.Navigation.traverseUp = function() {
     if (currentNode.parentNode.nodeName.toUpperCase() == 'NEXT') {
         currentNode = currentNode.parentNode.parentNode;
         console.log('Going to ' + currentNode.nodeName + ' with id ' + currentNode.getAttribute('id'));
-        updateSelection();
+        Blockly.Accessibility.Navigation.updateSelection();
         return;
     }
 
@@ -323,7 +323,7 @@ Blockly.Accessibility.Navigation.traverseUp = function() {
     if (doCycle) {
         currentNode = findBottom(currentNode);
         console.log('Going to ' + currentNode.nodeName + ' with id ' + currentNode.getAttribute('id') + ' via cycle.');
-        updateSelection();
+        Blockly.Accessibility.Navigation.updateSelection();
         return;
     }
 
@@ -352,7 +352,7 @@ Blockly.Accessibility.Navigation.traverseDown = function() {
         if (children[i].nodeName.toUpperCase() == 'NEXT') {
             currentNode = children[i].getElementsByTagName('BLOCK')[0];
             console.log('Going to ' + currentNode.nodeName + ' with id ' + currentNode.getAttribute('id'));
-            updateSelection();
+            Blockly.Accessibility.Navigation.updateSelection();
             return;
         }
     }
@@ -362,7 +362,7 @@ Blockly.Accessibility.Navigation.traverseDown = function() {
     if (doCycle) {
         currentNode = findTop(currentNode);
         console.log('Going to ' + currentNode.nodeName + ' with id ' + currentNode.getAttribute('id') + ' via cycle.');
-        updateSelection();
+        Blockly.Accessibility.Navigation.updateSelection();
         return;
     }
 
