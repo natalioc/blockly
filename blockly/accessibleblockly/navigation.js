@@ -1,7 +1,7 @@
 'use strict';
 
 /**
-*Copyright [2015] [Luna Meier, Rachael Bosley]
+*Copyright 2015 Luna Meier, Rachael Bosley
 *
 *Licensed under the Apache License, Version 2.0 (the "License");
 *you may not use this file except in compliance with the License.
@@ -15,6 +15,16 @@
 *See the License for the specific language governing permissions and
 *limitations under the License.
 */
+
+/**
+ * @fileoverview Core navigation library for Accessible Blockly Plugin.
+ * Allows for traversal around blocks, as well as keeping things up to date.
+ * @author lunalovecraft@gmail.com (Luna Meier)
+ */
+
+goog.provide('Blockly.Accessibility.Navigation');
+
+goog.require('Blockly.Accessibility');
 
 var xmlDoc = null;
 var currentNode = null;
@@ -33,10 +43,7 @@ var loopStart = 0;
 
 // Default functions for our hooks.
 Blockly.BlockSvg.prototype.defaultSelect = Blockly.BlockSvg.prototype.select;
-Blockly.Block.prototype.defaultInitialize = Blockly.Block.prototype.initialize;
 Blockly.BlockSvg.prototype.defaultDispose = Blockly.BlockSvg.prototype.dispose;
-Blockly.Connection.prototype.defaultConnect = Blockly.Connection.prototype.connect;
-Blockly.Connection.prototype.defaultDisconnect = Blockly.Connection.prototype.disconnect;
 Blockly.Flyout.prototype.defaultShow = Blockly.Flyout.prototype.show;
 Blockly.Toolbox.TreeControl.prototype.defaultSetSelectedItem =Blockly.Toolbox.TreeControl.prototype.setSelectedItem;
 /**
@@ -51,16 +58,6 @@ Blockly.BlockSvg.prototype.select = function () {
         currentNode = getBlockNodeById(this.id);
         console.log(this.id);
     }
-};
-
-/**
- * Initialization for one block.
- * @param {!Blockly.Workspace} workspace The new block's workspace.
- * @param {?string} prototypeName Name of the language object containing
- *     type-specific functions for this block.
- */
-Blockly.Block.prototype.initialize = function (workspace, prototypeName) {
-    this.defaultInitialize(workspace, prototypeName);
 };
 
 /**
@@ -79,84 +76,9 @@ Blockly.BlockSvg.prototype.dispose = function (healStack, animate,
     updateXmlSelection(true);
 };
 
-/**
- * Connect this connection to another connection.
- * @param {!Blockly.Connection} otherConnection Connection to connect to.
- */
-Blockly.Connection.prototype.connect = function (otherConnection) {
-    this.defaultConnect(otherConnection);
-}
-
-/**
- * Disconnect this connection.
- */
-Blockly.Connection.prototype.disconnect = function () {
-    this.defaultDisconnect();
-};
-
 Array.prototype.contains = function(element) {
     return this.indexOf(element) > -1;
 }
-
- /**
- * Initialize accessibility properties
- * @override
- */
-Blockly.Toolbox.TreeNode.prototype.initAccessibility = function() {
-  goog.ui.tree.BaseNode.prototype.initAccessibility.call(this);
-  
-  var el = this.getElement();
-  el.setAttribute('tabIndex', 0);
-  
-  //Register the onKeyDown handler because nothing else does
-  Blockly.bindEvent_(el, 'keydown', this, this.onKeyDown);
-};
-
-/**
- * Handles a key down event.
- * @param {!goog.events.BrowserEvent} e The browser event.
- * @return {boolean} The handled value.
- * @override
- */
-Blockly.Toolbox.TreeNode.prototype.onKeyDown = function(e) {
-  var handled = true;
-  switch (e.keyCode) {
-    case goog.events.KeyCodes.RIGHT:
-      if (e.altKey) {
-        break;
-      }
-      // Expand icon.
-      if (this.hasChildren() && this.isUserCollapsible_) {
-        this.setExpanded(true);
-        this.select();
-      } 
-      else{
-        this.select();
-      }
-      break;
-    case goog.events.KeyCodes.LEFT:
-      if (e.altKey) {
-        break;
-      }
-      this.setExpanded(false);
-      this.getTree().setSelectedItem(null);
-      break;
-    default:
-      handled = false;
-  }
-
-  if (handled) {
-    e.preventDefault();
-    var t = this.getTree();
-    if (t) {
-      // clear type ahead buffer as user navigates with arrow keys
-      t.clearTypeAhead();
-    }
-    this.updateRow();
-  }
-
-  return handled;
-};
 
 //#endregion
 
@@ -165,7 +87,7 @@ Blockly.Toolbox.TreeNode.prototype.onKeyDown = function(e) {
  * Loads the xmldoc based on the current blockly setting.
  * @param {boolean} Optional paramater.  If true, then don't select a block after updating the xml.
  */
-function updateXmlSelection(noSelect) {
+Blockly.Accessibility.Navigation.updateXmlSelection = function(noSelect) {
 	
     var prevXml = xmlDoc;
 
@@ -211,7 +133,7 @@ function updateXmlSelection(noSelect) {
 /**
  * Undo the previous action
  */
-function undo() {
+Blockly.Accessibility.Navigation.undo = function() {
     if(undoStack.length <= 1)
     {
         return;
@@ -226,7 +148,7 @@ function undo() {
 /**
  * Undo your undo.
  */
-function redo() {
+Blockly.Accessibility.Navigation.redo = function () {
     if (redoStack.length == 0) {
         return;
     }
@@ -241,7 +163,7 @@ function redo() {
 /**
  * Import the xml into the file, and update the xml in case of id changes.
  */
-function updateBlockSelection() {
+Blockly.Accessibility.Navigation.updateBlockSelection = function () {
     Blockly.Workspace.prototype.clear();
     Blockly.Xml.domToWorkspace(Blockly.mainWorkspace, xmlDoc);
     updateXmlSelection();
@@ -252,7 +174,7 @@ function updateBlockSelection() {
 /**
  * Sets the current node to the one at the top of this section of blocks
  */
-function jumpToTopOfSection() {
+Blockly.Accessibility.Navigation.jumpToTopOfSection = function() {
 
     if (!currentNode) {
         console.log('Nothing Selected.')
@@ -268,7 +190,7 @@ function jumpToTopOfSection() {
 /**
  * Sets the current node to the one at the bottom of this section of blocks
  */
-function jumpToBottompOfSection() {
+Blockly.Accessibility.Navigation.jumpToBottomOfSection = function () {
 
     if (!currentNode) {
         console.log('Nothing Selected.')
@@ -285,7 +207,7 @@ function jumpToBottompOfSection() {
  * Jumps between containers (the very outside of block groups).
  * @param {int} The container's number that you are jumping to
  */
-function jumpToContainer(containerNumber) {
+Blockly.Accessibility.Navigation.jumpToContainer = function(containerNumber) {
 
     console.log('Jumping to container ' + containerNumber);
     var containers = findContainers();
@@ -305,7 +227,7 @@ function jumpToContainer(containerNumber) {
  * Jump to a specific id.
  * @param {int} The id of the block that you are jumping to
  */
-function jumpToID(id) {
+Blockly.Accessibility.Navigation.jumpToID = function(id) {
     console.log('Jumping to block with id ' + id);
     var jumpTo = getBlockNodeById(id);
     if (jumpTo) {
@@ -325,7 +247,7 @@ function jumpToID(id) {
 /**
  * Goes out of a block to go up a level
  */
-function traverseOut() {
+Blockly.Accessibility.Navigation.traverseOut = function() {
 
     if (!currentNode) {
         console.log('Nothing Selected.')
@@ -349,7 +271,7 @@ function traverseOut() {
 /** 
  * Goes inside of one block to go down a level
  */
-function traverseIn() {
+Blockly.Accessibility.Navigation.traverseIn = function() {
 
     if (!currentNode) {
         console.log('Nothing Selected.')
@@ -377,7 +299,7 @@ function traverseIn() {
 /**
  * Goes from one block to the next above it (no travel between layers)
  */
-function traverseUp() {
+Blockly.Accessibility.Navigation.traverseUp = function() {
 
     if (!currentNode) {
         console.log('Nothing Selected.')
@@ -413,7 +335,7 @@ function traverseUp() {
 /**
  * Goes from one block to the next below it (no travel between layers)
  */
-function traverseDown() {
+Blockly.Accessibility.Navigation.traverseDown = function() {
 
     if (!currentNode) {
         console.log('Nothing Selected.')
@@ -458,7 +380,7 @@ function traverseDown() {
  * @param {myNode} Any node to be navigated from
  * @return {myNode} The top node in the level
  */
-function findTop(myNode) {
+Blockly.Accessibility.Navigation.findTop = function(myNode) {
     // If the block's parent is a next node, that means it's below another.  Recursively go up.
     if (myNode.parentNode.nodeName.toUpperCase() == 'NEXT') {
         myNode = myNode.parentNode.parentNode;
@@ -473,7 +395,7 @@ function findTop(myNode) {
  * @param {node} Any node to be navigated from
  * @return {node} The bottom node in the level
  */
-function findBottom(myNode) {
+Blockly.Accessibility.Navigation.findBottom = function(myNode) {
 
     // Grab the children nodes of the current node, and see if any of them are a next.
     var children = myNode.childNodes;
@@ -492,7 +414,7 @@ function findBottom(myNode) {
 /**
  * Finds all of the containers in the current xmlstring and returns them.
  */
-function findContainers() {
+Blockly.Accessibility.Navigation.findContainers = function() {
 
 
     // There is something weird going on with the xml parent child relationship.  For some reason I can't directly 
@@ -514,7 +436,7 @@ function findContainers() {
 /**
  * Selects the block that you are currently on the node of
  */
-function updateSelection() {
+Blockly.Accessibility.Navigation.updateSelection = function() {
 
     if (!currentNode) {
         console.log('Nothing Selected.')
@@ -531,7 +453,7 @@ function updateSelection() {
  * @param {int} the block id number 
  * @return {node} the block node
  */
-function getBlockNodeById(id) {
+Blockly.Accessibility.Navigation.getBlockNodeById = function(id) {
 
     if (!xmlDoc || !xmlDoc.getElementsByTagName('BLOCK')) {
         return null;
@@ -548,47 +470,14 @@ function getBlockNodeById(id) {
     return null;
 }
 
-function getCurrentNode() {
+Blockly.Accessibility.Navigation.getCurrentNode = function() {
     return currentNode;
 }
 
-function playAudioBlock() {
+Blockly.Accessibility.Navigation.playAudioBlock = function() {
     var here=getCurrentNode();
     var now=here.getAttribute('type');
     workspace.playAudio(Blockly.Blocks[now].returnAudio());
-}
-/**
- * Adds a comment to a block
- */
-function addComment(){
-	if(!Blockly.selected.comment){
-		Blockly.selected.setCommentText('');
-	}	
-}
-
-/**
- * Expands a block if it is collapsed or collapses a block
- */
-function toggleCollapse(){
-	Blockly.selected.setCollapsed(!Blockly.selected.collapsed_);
-}
-
-/**
- * Enables a block if it is disabled or disables a block
- */
-function toggleDisable(){
-	Blockly.selected.setDisabled(!Blockly.selected.disabled);
-}
-
-/**
- * Duplicates the selected block
- */
-function duplicateSelected(){
-	Blockly.selected.duplicate_();
-}
-
-function helpSelectedBlock(){
-	Blockly.selected.showHelp_();
 }
 
 //#endregion
@@ -604,7 +493,7 @@ Blockly.Flyout.prototype.show = function(xmlList){
 }
 
 //Navigate through the menu currently using the ENTER key(!KEY WILL CHANGE ASAP)
-function menuNav(){
+Blockly.Accessibility.Navigation.menuNav = function(){
     //handle when a new category opens
     if(tabCount == oldLength && oldLength != flyoutArr.length){  
         flyoutArr[tabCount].addSelect();  

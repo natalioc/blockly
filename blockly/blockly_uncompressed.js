@@ -1536,7 +1536,8 @@ goog.addDependency("../../third_party/closure/goog/mochikit/async/deferred.js", 
 goog.addDependency("../../third_party/closure/goog/mochikit/async/deferredlist.js", ['goog.async.DeferredList'], ['goog.async.Deferred']);
 goog.addDependency("../../third_party/closure/goog/osapi/osapi.js", ['goog.osapi'], []);
 goog.addDependency("../../third_party/closure/goog/svgpan/svgpan.js", ['svgpan.SvgPan'], ['goog.Disposable', 'goog.events', 'goog.events.EventType', 'goog.events.MouseWheelHandler']);
-goog.addDependency("../../../" + dir + "/tests/navigation.js", ['Accessibility.Navigation'], ['Blockly.BlockSvg', 'Blockly.Block', 'Blockly.Connection', 'Blockly.FieldColour', 'Blockly.FieldTextInput', 'Blockly.FieldDropdown', 'Blockly.FieldCheckbox']);
+goog.addDependency("../../../" + dir + "/accessibleblockly/accessibility.js", ['Blockly.Accessibility'], []);
+goog.addDependency("../../../" + dir + "/accessibleblockly/navigation.js", ['Blockly.Accessibility.Navigation'], ['Blockly.BlockSvg', 'Blockly.Block', 'Blockly.Connection', 'Blockly.FieldColour', 'Blockly.FieldTextInput', 'Blockly.FieldDropdown', 'Blockly.FieldCheckbox']);
 
 // Load Blockly.
 goog.require('Blockly');
@@ -1582,7 +1583,8 @@ goog.require('Blockly.Xml');
 goog.require('Blockly.inject');
 goog.require('Blockly.utils');
 goog.require('rtclient');
-goog.require('Accessibility.Navigation');
+goog.require('Blockly.Accessibility');
+goog.require('Blockly.Accessibility.Navigation');
 
 delete window.BLOCKLY_DIR;
 delete window.BLOCKLY_BOOT;
