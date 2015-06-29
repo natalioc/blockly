@@ -125,7 +125,9 @@ Blockly.Variables.flyoutCategory = function(blocks, gaps, margin, workspace) {
       setBlock && setBlock.setFieldValue(variableList[i], 'VAR');
     }
     setBlock && blocks.push(setBlock);
+    menuBlocksArr.push(setBlock);
     getBlock && blocks.push(getBlock);
+    menuBlocksArr.push(getBlock);
     if (getBlock && setBlock) {
       gaps.push(margin, margin * 3);
     } else {

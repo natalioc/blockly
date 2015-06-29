@@ -175,18 +175,24 @@ Blockly.Procedures.flyoutCategory = function(blocks, gaps, margin, workspace) {
     block.initSvg();
     blocks.push(block);
     gaps.push(margin * 2);
+    //added for blockly navigation.js
+    menuBlocksArr.push(block);
+
   }
   if (Blockly.Blocks['procedures_defreturn']) {
     var block = Blockly.Block.obtain(workspace, 'procedures_defreturn');
     block.initSvg();
     blocks.push(block);
     gaps.push(margin * 2);
+    menuBlocksArr.push(block);
+
   }
   if (Blockly.Blocks['procedures_ifreturn']) {
     var block = Blockly.Block.obtain(workspace, 'procedures_ifreturn');
     block.initSvg();
     blocks.push(block);
     gaps.push(margin * 2);
+    menuBlocksArr.push(block);
   }
   if (gaps.length) {
     // Add slightly larger gap between system blocks and user calls.
