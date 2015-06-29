@@ -1,33 +1,40 @@
 <!DOCTYPE html>
 <html>
-
 <head>
-<title>Variables</title>
-<link rel="stylesheet" type="text/css" href="quick_reference.css">
+	<title>Variables</title>
+	<link rel="stylesheet" type="text/css" href="quick_reference.css">
 </head>
-
 <body>
 	<h1>Blockly Quick Reference</h1>
-<a href="#contentStart">
+	<a href="#contentStart">
 		<div id="skipButton" role="button" aria-required="true">Skip to Content</div>
 	</a>
-		<ul id="navigation">
-			<li><a href="logic.html">Logic</a></li>
-			<li><a href="loops.html">Loops</a></li>
-			<li><a href="math.html">Math</a></li>
-			<li><a href="text.html">Text</a></li>
-			<li><a href="lists.html">Lists</a></li>
-			<li><a href="colour.html">Colour</a></li>
-			<li><a href="variables.html">Variables</a></li>
-			<li><a href="functions.html">Functions</a></li>
-		</ul>
-
+	<ul id="navigation">
+		<li><a href="logic.html">Logic</a></li>
+		<li><a href="loops.html">Loops</a></li>
+		<li><a href="math.html">Math</a></li>
+		<li><a href="text.html">Text</a></li>
+		<li><a href="lists.html">Lists</a></li>
+		<li><a href="colour.html">Colour</a></li>
+		<li><a href="variables.html">Variables</a></li>
+		<li><a href="functions.html">Functions</a></li>
+	</ul>
 	<h2 id="contentStart" tabindex="0">Variables</h2>
-		<div class="container">
-		<h3 tabindex="0">Repeat</h3>
-
-			<p tabindex="0">The simple repeat block runs the code in its body the specified number of times. For example, the below block will print "Hello" ten times.
-			<img src="media/repeat.png" alt="Simple repeat block Example" height="82" width="194"></p>
-		</div>
+	<div class="container">
+		<a name="variables_set">
+			<h3 tabindex="0">Set Variable</h3>
+		</a>
+		<p tabindex="0">The set variable block assigns a value to a variable, creating the variable if it doesn't already exist. The default name for a blockly variable is item, this can be changed within the dropdown menu. The example below, sets the value of the variable named "age" to 12.
+			<img src="media/set_variable.png" alt="Set Variable Example" height="30" width="156">
+		</p>
+	</div>
+	<div class="container">
+		<a name="variables_get">
+			<h3 tabindex="0">Get Variable</h3>
+		</a>
+		<p tabindex="0">The get variable block provides the value stored in a variable, without changing it. The image below shows a simple get variable block.
+			<img src="media/get_variable.png" alt="Get Variable Block" height="26" width="67">
+		</p>
+	</div>
 </body>
 </html>

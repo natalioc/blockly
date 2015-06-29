@@ -1,33 +1,56 @@
 <!DOCTYPE html>
 <html>
-
 <head>
-<title>Colour</title>
-<link rel="stylesheet" type="text/css" href="quick_reference.css">
+	<title>Colour</title>
+	<link rel="stylesheet" type="text/css" href="quick_reference.css">
 </head>
-
 <body>
 	<h1>Blockly Quick Reference</h1>
-<a href="#contentStart">
+	<a href="#contentStart">
 		<div id="skipButton" role="button" aria-required="true">Skip to Content</div>
 	</a>
-		<ul id="navigation">
-			<li><a href="logic.html">Logic</a></li>
-			<li><a href="loops.html">Loops</a></li>
-			<li><a href="math.html">Math</a></li>
-			<li><a href="text.html">Text</a></li>
-			<li><a href="lists.html">Lists</a></li>
-			<li><a href="colour.html">Colour</a></li>
-			<li><a href="variables.html">Variables</a></li>
-			<li><a href="functions.html">Functions</a></li>
-		</ul>
-
+	<ul id="navigation">
+		<li><a href="logic.html">Logic</a></li>
+		<li><a href="loops.html">Loops</a></li>
+		<li><a href="math.html">Math</a></li>
+		<li><a href="text.html">Text</a></li>
+		<li><a href="lists.html">Lists</a></li>
+		<li><a href="colour.html">Colour</a></li>
+		<li><a href="variables.html">Variables</a></li>
+		<li><a href="functions.html">Functions</a></li>
+	</ul>
 	<h2 id="contentStart" tabindex="0">Colour</h2>
-		<div class="container">
-		<h3 tabindex="0">Repeat</h3>
-
-			<p tabindex="0">
-			<img src="media/repeat.png" alt="Simple repeat block Example" height="82" width="194"></p>
-		</div>
+	<div class="container">
+		<a name="colour_picker">
+			<h3 tabindex="0">Colour Picker</h3>
+		</a>
+		<p tabindex="0">The colour picker block is the simplest way to get a colour. It appears as a rounded rectangle with the color you choose within the rectangle. When opened a palette of colours appears, any color may be chosen. The block will then return that colour.
+			<img src="media/colour_picker.png" alt="Colour Picker Block with colour palette open" height="174" width="142">
+		</p>
+	</div>
+	<div class="container">
+		<a name="colour_random">
+			<h3 tabindex="0">Random Colour</h3>
+		</a>
+		<p tabindex="0">The random colour block generates colours at random. Specifically, each of the red, green, and blue components is a number from 0 to 255 (inclusive), with equal likelihood.
+			<img src="media/random_colour.png" alt="Random Colour Block" height="27" width="122">
+		</p>
+	</div>
+	<div class="container">
+		<a name="colour_rgb">
+			<h3 tabindex="0">Colour RGB</h3>
+		</a>
+		<p tabindex="0">The colour rgb block allows you to specify the desired percent of red, green, and blue. A range from 0 to 100 (inclusive) is used for each component. The example block below, builds a colour with the maximum amounts of red and blue and no green (making purple).
+			<img src="media/colour_rgb.png" alt="Colour RGB Block Example" height="117" width="346">
+		</p>
+	</div>
+	<div class="container">
+		<a name="colour_blend">
+			<h3 tabindex="0">Colour Blend</h3>
+		</a>
+		<p tabindex="0">The colour blend block allows for two colors to be blended. This block also requires a ratio between (0.0 and 1.0) to be specified. If you provide a ratio of 0.0 the result would be all of the second colour and none of the first. Similiarly, if you provide a ratio of 1.0 the result will be all of the first colour and none of the second colour. The below example shows how the colour blend block would be used.
+			<img src="media/colour_blend.png" alt="Colour Blend Block Example" height="99" width="349">
+		</p>
+	</div>
 </body>
 </html>
