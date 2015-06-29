@@ -13,14 +13,14 @@
 //require(["../timbrejs/jsmad.js"]);
 //require(["../timbrejs/mpe_decode.js"]);
 
-goog.require('libs.timbrejs.timbre');
-goog.require('libs.timbrejs.audiojsonp');
-goog.require('libs.timbrejs.jsmad');
-goog.require('libs.timbrejs.mp3');
+//goog.require('libs.timbrejs.timbre');
+//goog.require('libs.timbrejs.audiojsonp');
+//goog.require('libs.timbrejs.jsmad');
+//goog.require('libs.timbrejs.mp3');
 
 
 //creating a namespace for the file
-goog.provide('libs.timbrejs.soundfont');
+goog.provide('Soundfont');
 
 (function () {
 	'use strict';

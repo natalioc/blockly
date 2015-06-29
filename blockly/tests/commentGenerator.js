@@ -99,22 +99,12 @@ function getIndent(perfectArr){
 	var idOfBlock;
 	var miniXml;
 	var i;
-<<<<<<< HEAD
     var currNode;
-=======
-    var currnode;
->>>>>>> c2060d66c875caf5a39d1348ce9ec17e58a1f5f8
 	parentArr = [];
-
 	for(i = 0; i < perfectArr.length; i++){
 
-<<<<<<< HEAD
 		currNode = perfectArr[i];
 		idOfBlock = currNode.getAttribute('id');
-=======
-		currnode = perfectArr[i];
-		idOfBlock = currnode.getAttribute('id');
->>>>>>> c2060d66c875caf5a39d1348ce9ec17e58a1f5f8
 		indexOfId = currentXml.indexOf('id="'+idOfBlock+'"');
 		miniXml = currentXml.substring(0, indexOfId);
 		openStatementCnt = (miniXml.match(/<statement/g) || []).length;
@@ -210,17 +200,10 @@ function createComments(perfectArr, parentArr){
   var commentStr;
   var prefixes = commentPrefix(perfectArr, parentArr);
   var indent;
-<<<<<<< HEAD
   var currNode;
   for(var i = 0; i < perfectArr.length; i++){
     commentStr = '';
     currNode = perfectArr[i];
-=======
-  var currnode;
-  for(var i = 0; i < perfectArr.length; i++){
-    commentStr = '';
-    currnode = perfectArr[i];
->>>>>>> c2060d66c875caf5a39d1348ce9ec17e58a1f5f8
     pTag = document.createElement("p");
     pTag.setAttribute("tabindex", 0);
     pTag.setAttribute("id", i);
@@ -239,13 +222,8 @@ function createComments(perfectArr, parentArr){
     else{
     	//if the block has a comment it will be shown otherwise it will print no comment
         var parentsId = perfectArr[i].getElementsByTagName("comment")[0].parentNode.getAttribute('id');
-<<<<<<< HEAD
         if(parentsId == currNode.getAttribute('id')){
           var htmlComment = currNode.getElementsByTagName("comment")[0].innerHTML;
-=======
-        if(parentsId == currnode.getAttribute('id')){
-          var htmlComment = currnode.getElementsByTagName("comment")[0].innerHTML;
->>>>>>> c2060d66c875caf5a39d1348ce9ec17e58a1f5f8
           commentStr += " " + htmlComment;
         }
         else{
@@ -378,6 +356,7 @@ function nestLevel(currentNode){
             */
         }
     }
+    return(nodeDepth);
     window.alert(currentNode.getAttribute('id'));
     window.alert(nodeDepth);
     //return nodeDepth;

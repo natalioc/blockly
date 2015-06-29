@@ -15,6 +15,13 @@
 *See the License for the specific language governing permissions and
 *limitations under the License.
 */
+/*
+try{
+    goog.require('Instrument');
+}catch(err){
+    window.alert(err);
+}
+*/
 
 var xmlDoc = null;
 var currentNode = null;
@@ -592,5 +599,19 @@ function speakAudio(){
     var now=here.getAttribute('type');
     meSpeak.speak(now);
 }
+
+function depthAudio(){
+    var t = T("sin");
+    t.play();
+}
+
+
+/*
+function depthAudio(dlevel){
+    var depthSound = new Instrument(dlevel);
+    depthSound.playSingleNote(64);
+}
+*/
+
 
 //#endregion

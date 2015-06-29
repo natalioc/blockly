@@ -233,15 +233,12 @@ document.onkeydown = document.onkeyup = function(e){
 		}
 		else if(map[89]){
 			clickAudio();
+			var d = nestLevel(getCurrentNode());
 			try{
-				nestLevel(getCurrentNode());
+				depthAudio();
 			}catch(err){
 				window.alert(err);
 			}
-			
-
-
-
 			//var x = new Instrument(32);
 			//x.playSingleNote(42);
 		}
