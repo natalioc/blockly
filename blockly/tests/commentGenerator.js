@@ -322,42 +322,28 @@ function infoBoxFill(currentNode){
 * Added by: Wil Merchant (6/26/15)
 */
 function nestLevel(currentNode){
-
-    //var currNode = getCurrentNode();
     
     var arrLength = perfectArr.length; //The length of the parentArr and perfectArr arrays
-    var nodeDepth=0;
+    var nodeDepth = 0; //How deeply nested the selected block is
+    var nodeSection = 0; //The overall section of code that the selected block is in.
     for (var i = 0; i < arrLength; i++) {
 
         if(currentNode.getAttribute('id') == perfectArr[i].getAttribute('id')){
-        /* 
-            var indexOfPeriod = prefixArr[i].indexOf(".");
-            if(indexOfPeriod == -1){
-                var prefixLength = prefixArr[i].length;
-                if(prefixLength == 2){
-                    sectionStr = "Section " + prefixArr[i].substring(1, 2);
-                }
-                else{
-                    sectionStr = "Section " + prefixArr[i].substring(1, 3);
-                }
-            }
-            else if(indexOfPeriod == 2){
-                sectionStr = "Section " + prefixArr[i].substring(1, 2);
-            }
-            else if(indexOfPeriod == 3){
-                sectionStr = "Section " + prefixArr[i].substring(1, 3);
-            }
-            */
+
+            var nestInfo = prefixArr[i].substring(1);
+            var nestArray = nestInfo.split(".");
+            
+            window.alert(currentNode.getAttribute('id'));
+            window.alert(nestArray);
+
+            nodeSection = nestInfo[0];
             nodeDepth = parentArr[i] + 1;
+            
+            window.alert("Section: " + nodeSection);
+            window.alert("Depth: " + nodeDepth);
+            
+            return(nestArray);
             break;
-            /*
-            depthStr = "Depth " + (parentArr[i] + 1);
-            prefixStr = prefixArr[i].substring(1, prefixArr[i].length+1);
-            */
         }
     }
-    return(nodeDepth);
-    window.alert(currentNode.getAttribute('id'));
-    window.alert(nodeDepth);
-    //return nodeDepth;
 }; 

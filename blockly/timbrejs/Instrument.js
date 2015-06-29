@@ -2,6 +2,7 @@
 //Requiring the soundfont file
 ////goog.require('javascript.ArrayCollection');
 
+/*
 //Creating a namespace for the Instrument file 
 try{
   goog.provide('Instrument');
@@ -12,15 +13,15 @@ try{
 
 //Requiring the soundfont file because its needed
 try{
-  goog.require('Soundfont');
+  goog.require('soundfont');
 }catch(err){
   window.alert(err);
 }
+*/
 
 
 //Make an instrument object with a given instrument number
-
-var Instrument = function (number){
+function Instrument (number){
 	this.number = number;
 	this.bpm = 120;	//Default tempo
 	this.makeSoundFont(number);

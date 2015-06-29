@@ -1,5 +1,5 @@
 //provide a namespace
-goog.provide('libs.timbrejs.audiojsonp');
+//goog.provide('libs.timbrejs.audiojsonp');
 
 
 (function(T) {

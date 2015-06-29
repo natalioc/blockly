@@ -3,7 +3,7 @@
  */
 
 //creating a namespace for the file
-goog.provide('libs.timbrejs.timbre');
+//goog.provide('libs.timbrejs.timbre');
 
 
 

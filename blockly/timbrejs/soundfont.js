@@ -20,7 +20,7 @@
 
 
 //creating a namespace for the file
-goog.provide('Soundfont');
+//goog.provide('soundfont');
 
 (function () {
 	'use strict';

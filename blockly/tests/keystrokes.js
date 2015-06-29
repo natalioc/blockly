@@ -232,15 +232,18 @@ document.onkeydown = document.onkeyup = function(e){
 			speakAudio();
 		}
 		else if(map[89]){
-			clickAudio();
-			var d = nestLevel(getCurrentNode());
-			try{
-				depthAudio();
+			//clickAudio();
+			//var d = nestLevel(getCurrentNode());
+			depthAudio();
+			/*
+			//try{
+				var x = new Instrument(25);
+				x.playSingleNote(42);
+				//depthAudio();
 			}catch(err){
-				window.alert(err);
+				window.alert(err + err.lineNumber);
 			}
-			//var x = new Instrument(32);
-			//x.playSingleNote(42);
+			*/
 		}
 		//End of development block
 	}

@@ -6,7 +6,7 @@
  * Licensed under the MIT license.
  */
 //provide namespace
-goog.provide('libs.timbrejs.mp3');
+//goog.provide('libs.timbrejs.mp3');
 
 
 /*globals timbre, Mad, Float32Array */

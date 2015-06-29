@@ -601,8 +601,13 @@ function speakAudio(){
 }
 
 function depthAudio(){
+    var x = new Instrument(25);
+    x.playSingleNote(42);
+
+    /*
     var t = T("sin");
     t.play();
+    */
 }
 
 

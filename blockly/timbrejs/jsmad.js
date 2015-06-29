@@ -6,7 +6,7 @@
  */
 
 //provide namespace
-goog.provide('libs.timbrejs.jsmad');
+//goog.provide('libs.timbrejs.jsmad');
 
 
 /* Namespaces */
