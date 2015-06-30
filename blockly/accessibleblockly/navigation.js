@@ -34,10 +34,9 @@ var redoStack = [];
 var tabCount;
 var curLocation;
 //variables for toolbox navigation
-var flyoutArr = [];
-var tempSize;
-var oldLength = 0;
-var loopStart = 0;
+var flyoutArr = []; //everytime the flyout opens the blocks in it are added to this array
+var oldLength = 0;  //size of the array before a new tab opened 
+var loopStart = 0;  //where the loop for that tab ends(updated every time a new category is chosen)
 
 //#region XML_UPDATING
 
@@ -488,7 +487,6 @@ Blockly.Accessibility.Navigation.playAudioBlock = function() {
 //called when the flyout opens
 Blockly.Flyout.prototype.show = function(xmlList){
     this.defaultShow(xmlList);
-    console.log(flyoutArr);
     flyoutArr = menuBlocksArr;
 };
 
@@ -524,8 +522,6 @@ Blockly.Accessibility.Navigation.menuNav = function(){
 //therefore we have to get to the beginning of the expanded array each time it is opened
 Blockly.Toolbox.TreeControl.prototype.setSelectedItem = function(node){
     this.defaultSetSelectedItem(node);      
-
     tabCount = oldLength;
-    
 };
 //#endregion

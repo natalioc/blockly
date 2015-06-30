@@ -50,6 +50,7 @@ Blockly.Toolbox.TreeNode.prototype.onKeyDown = function(e) {
   var handled = true;
   switch (e.keyCode) {
     case goog.events.KeyCodes.RIGHT:
+    case goog.events.KeyCodes.ENTER:
       if (e.altKey) {
         break;
       }

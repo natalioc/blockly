@@ -1,7 +1,7 @@
 'use strict';
 
 /**
-*Copyright [2015] [Rachael Bosley, Luna Meier]
+*Copyright [2015] [Rachael Bosley, Luna Meier, Mary Spencer]
 *
 *Licensed under the Apache License, Version 2.0 (the "License");
 *you may not use this file except in compliance with the License.
@@ -27,6 +27,7 @@ document.onmouseup = function(e){
 	Blockly.Accessibility.Navigation.updateXmlSelection();
 	Blockly.Accessibility.TreeView.callImportantBlocks();
 };
+
 
 /**
  * Take care of keypresses for accessibility
@@ -90,27 +91,41 @@ document.onkeydown = document.onkeyup = function(e){
 	}
 
 	if(keyboardState=='hotkeyMode'){	
-		if (map[17] && map[90]){ //Ctrl Z
-			console.log("Control Z pressed.");
-		    //Need to implement Undo
-			Blockly.Accessibility.Navigation.undo();
-			e.preventDefault();
-		}
-		
-		else if(map[17] && map[89]){ //Ctrl Y
-			console.log("Control Y pressed.");
-		    //Need to implement Redo
-			Blockly.Accessibility.Navigation.redo();
-			e.preventDefault();
-		}
-		
-		else if(map[18] && map[16] && map[67]){ //Alt Shift C
+
+	    if(map[18] && map[16] && map[67]){ //Alt Shift C
 			console.log("Alt Shift C keys pressed.");
 			//Keystroke for collapsing or expanding a block
 			Blockly.Accessibility.toggleCollapse();
 			e.preventDefault();
 		}
+
+		else if(map[18] && map[16] &&map[72]){ //Alt Shift H
+			console.log("Alt Shift H keys pressed.");
+			Blockly.Accessibility.helpSelectedBlock();//Link to the help page for the selected block
+			//resets the map in order to fix the bug where every key becomes this key
+			map = [];
+		}
+		//Arrow keys for development purposes.  Switch as needed for proper usage.
 		
+		else if(map[37] || map[65]){ //left arrow or A
+			Blockly.Accessibility.Navigation.traverseOut();
+		}
+		
+		else if(map[38] || map[87]){ //up arrow or W
+			e.preventDefault();
+			Blockly.Accessibility.Navigation.traverseUp();
+		}
+		
+		else if(map[39] || map[68]){ //right arrow or D
+			Blockly.Accessibility.Navigation.traverseIn();
+		}
+		
+		else if(map[40] || map[83]){ //down arrow or S
+			e.preventDefault();
+			Blockly.Accessibility.Navigation.traverseDown();
+			Blockly.Accessibility.Navigation.menuNav();
+		}
+
 		else if(map[18] && map[16] && map[69]){ //Alt Shift E
 			console.log("Alt Shift E keys pressed.");
 			//Keystroke for enabling or disabling a block
@@ -126,18 +141,6 @@ document.onkeydown = document.onkeyup = function(e){
 			e.preventDefault();
 			Blockly.Accessibility.Navigation.updateXmlSelection();
 		}
-		
-		else if(map[18] && map[16] &&map[72]){ //Alt Shift H
-			console.log("Alt Shift H keys pressed.");
-			Blockly.Accessibility.helpSelectedBlock();
-			//Link to the help page for the selected block
-		}
-		
-		else if(map[9] && map[16]){ //Tab Shift
-			console.log("Tab Shift pressed.");
-			//Go backwards through the same level of code
-		}
-		
 		else if(map[9]){ //Tab
 			console.log("Tab key pressed.");
 			//Go through the same level of code
@@ -208,26 +211,6 @@ document.onkeydown = document.onkeyup = function(e){
 			console.log('Enter key pressed.');
 			Blockly.Accessibility.Navigation.updateXmlSelection();
 			//temporarily navigates menu
-			Blockly.Accessibility.Navigation.menuNav();
-		}
-		
-		//Arrow keys for development purposes.  Switch as needed for proper usage.
-		
-		else if(map[37] || map[65]){ //left arrow or A
-			Blockly.Accessibility.Navigation.traverseOut();
-		}
-		
-		else if(map[38] || map[87]){ //up arrow or W
-			Blockly.Accessibility.Navigation.traverseUp();
-		}
-		
-		else if(map[39] || map[68]){ //right arrow or D
-			Blockly.Accessibility.Navigation.traverseIn();
-		}
-		
-		else if(map[40] || map[83]){ //down arrow or S
-			Blockly.Accessibility.Navigation.traverseDown();
-
 		}
 		//End of development block
 	}
