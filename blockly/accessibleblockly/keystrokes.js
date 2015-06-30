@@ -214,19 +214,19 @@ document.onkeydown = document.onkeyup = function(e){
 		//Arrow keys for development purposes.  Switch as needed for proper usage.
 		
 		else if(map[37] || map[65]){ //left arrow or A
-			traverseOut();
+			Blockly.Accessibility.Navigation.traverseOut();
 		}
 		
 		else if(map[38] || map[87]){ //up arrow or W
-			traverseUp();
+			Blockly.Accessibility.Navigation.traverseUp();
 		}
 		
 		else if(map[39] || map[68]){ //right arrow or D
-			traverseIn();
+			Blockly.Accessibility.Navigation.traverseIn();
 		}
 		
 		else if(map[40] || map[83]){ //down arrow or S
-			traverseDown();
+			Blockly.Accessibility.Navigation.traverseDown();
 
 		}
 		//End of development block

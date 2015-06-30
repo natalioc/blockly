@@ -182,7 +182,7 @@ Blockly.Accessibility.Navigation.jumpToTopOfSection = function() {
     }
 
     console.log('Jumping to top of section.');
-    currentNode = findTop(currentNode);
+    currentNode = Blockly.Accessibility.Navigation.findTop(currentNode);
     console.log('Going to ' + currentNode.nodeName + ' with id ' + currentNode.getAttribute('id') + ' via cycle.');
     Blockly.Accessibility.Navigation.updateSelection();
 };
@@ -198,7 +198,7 @@ Blockly.Accessibility.Navigation.jumpToBottomOfSection = function () {
     }
 
     console.log('Jumping to bottom of section.');
-    currentNode = findTop(currentNode);
+    currentNode = Blockly.Accessibility.Navigation.findTop(currentNode);
     console.log('Going to ' + currentNode.nodeName + ' with id ' + currentNode.getAttribute('id') + ' via cycle.');
     Blockly.Accessibility.Navigation.updateSelection();
 };
@@ -258,8 +258,8 @@ Blockly.Accessibility.Navigation.traverseOut = function() {
     console.log('Attempting to leave ' + currentNode.nodeName + ' with id ' + currentNode.getAttribute('id'));
 	
     // If this is within other blocks, then its parent will be a statement.
-    if (findTop(currentNode).parentNode.nodeName.toUpperCase() == 'STATEMENT') {
-        currentNode = findTop(currentNode).parentNode.parentNode;
+    if (Blockly.Accessibility.Navigation.findTop(currentNode).parentNode.nodeName.toUpperCase() == 'STATEMENT') {
+        currentNode = Blockly.Accessibility.Navigation.findTop(currentNode).parentNode.parentNode;
         console.log('Going to ' + currentNode.nodeName + ' with id ' + currentNode.getAttribute('id'));
         Blockly.Accessibility.Navigation.updateSelection();
         return;
@@ -360,7 +360,7 @@ Blockly.Accessibility.Navigation.traverseDown = function() {
 
     // Cycle back to the top node if cycle is enabled
     if (doCycle) {
-        currentNode = findTop(currentNode);
+        currentNode = Blockly.Accessibility.Navigation.findTop(currentNode);
         console.log('Going to ' + currentNode.nodeName + ' with id ' + currentNode.getAttribute('id') + ' via cycle.');
         Blockly.Accessibility.Navigation.updateSelection();
         return;
@@ -384,7 +384,7 @@ Blockly.Accessibility.Navigation.findTop = function(myNode) {
     // If the block's parent is a next node, that means it's below another.  Recursively go up.
     if (myNode.parentNode.nodeName.toUpperCase() == 'NEXT') {
         myNode = myNode.parentNode.parentNode;
-        return findTop(myNode);
+        return Blockly.Accessibility.Navigation.findTop(myNode);
     }
     // If it's not the child of a next node, then it's the top node.
     return myNode;
