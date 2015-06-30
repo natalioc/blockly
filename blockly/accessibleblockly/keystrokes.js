@@ -181,13 +181,13 @@ document.onkeydown = document.onkeyup = function(e){
 		
 		else if(map[69]){ //E
 			console.log("E key pressed.");
-			getImportantBlocks();
+			Blockly.Accessibility.TreeView.getImportantBlocks();
 			//Edit block of code or edit comment
 		}
 		
 		else if(map[71]){ //G
 			console.log("G key pressed.");
-			commentOrBlockJump();
+			Blockly.Accessibility.TreeView.commentOrBlockJump();
 			//Goto the block the comment that is currently selected is from
 			//Alternatively goto the comment that is connected to the currently selected block
 		}	

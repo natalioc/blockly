@@ -78,7 +78,7 @@ Blockly.BlockSvg.prototype.dispose = function (healStack, animate,
 
 Array.prototype.contains = function(element) {
     return this.indexOf(element) > -1;
-}
+};
 
 //#endregion
 
@@ -143,7 +143,7 @@ Blockly.Accessibility.Navigation.undo = function() {
     redoStack.push(xmlDoc);
     xmlDoc = undoStack.pop();
     Blockly.Accessibility.Navigation.updateBlockSelection();
-}
+};
 
 /**
  * Undo your undo.
@@ -157,7 +157,7 @@ Blockly.Accessibility.Navigation.redo = function () {
     undoStack.push(xmlDoc);
     xmlDoc = redoStack.pop();
     Blockly.Accessibility.Navigation.updateBlockSelection();
-}
+};
 
 
 /**
@@ -167,7 +167,7 @@ Blockly.Accessibility.Navigation.updateBlockSelection = function () {
     Blockly.Workspace.prototype.clear();
     Blockly.Xml.domToWorkspace(Blockly.mainWorkspace, xmlDoc);
     Blockly.Accessibility.Navigation.updateXmlSelection();
-}
+};
 
 //#region JUMP_FUNCTIONS
 
@@ -185,7 +185,7 @@ Blockly.Accessibility.Navigation.jumpToTopOfSection = function() {
     currentNode = findTop(currentNode);
     console.log('Going to ' + currentNode.nodeName + ' with id ' + currentNode.getAttribute('id') + ' via cycle.');
     Blockly.Accessibility.Navigation.updateSelection();
-}
+};
 
 /**
  * Sets the current node to the one at the bottom of this section of blocks
@@ -201,7 +201,7 @@ Blockly.Accessibility.Navigation.jumpToBottomOfSection = function () {
     currentNode = findTop(currentNode);
     console.log('Going to ' + currentNode.nodeName + ' with id ' + currentNode.getAttribute('id') + ' via cycle.');
     Blockly.Accessibility.Navigation.updateSelection();
-}
+};
 
 /**
  * Jumps between containers (the very outside of block groups).
@@ -221,7 +221,7 @@ Blockly.Accessibility.Navigation.jumpToContainer = function(containerNumber) {
     }
 
     console.log('Container does not exist.');
-}
+};
 
 /**
  * Jump to a specific id.
@@ -238,7 +238,7 @@ Blockly.Accessibility.Navigation.jumpToID = function(id) {
     }
 
     console.log('Block with id ' + id + ' not found.');
-}
+};
 
 //#endregion
 
@@ -256,7 +256,7 @@ Blockly.Accessibility.Navigation.traverseOut = function() {
 
     console.log('traverseOut called.');
     console.log('Attempting to leave ' + currentNode.nodeName + ' with id ' + currentNode.getAttribute('id'));
-
+	
     // If this is within other blocks, then its parent will be a statement.
     if (findTop(currentNode).parentNode.nodeName.toUpperCase() == 'STATEMENT') {
         currentNode = findTop(currentNode).parentNode.parentNode;
@@ -266,7 +266,7 @@ Blockly.Accessibility.Navigation.traverseOut = function() {
     }
     // If it's not, then do nothing, you cannot go in.
     console.log('Cannot traverse outwards from here.');
-}
+};
 
 /** 
  * Goes inside of one block to go down a level
@@ -294,7 +294,7 @@ Blockly.Accessibility.Navigation.traverseIn = function() {
     }
     // If you don't, then do nothing, you cannot go in.
     console.log('Cannot traverse inwards from here.');
-}
+};
 
 /**
  * Goes from one block to the next above it (no travel between layers)
@@ -330,7 +330,7 @@ Blockly.Accessibility.Navigation.traverseUp = function() {
     // Otherwise just end.
     //  Otherwise just report that you've hit the bottom.
     console.log('Cannot traverse up, top of list');
-}
+};
 
 /**
  * Goes from one block to the next below it (no travel between layers)
@@ -368,7 +368,7 @@ Blockly.Accessibility.Navigation.traverseDown = function() {
 
     //  Otherwise just report that you've hit the bottom.
     console.log('Cannot traverse down, end of list');
-}
+};
 
 //#endregion
 
@@ -388,7 +388,7 @@ Blockly.Accessibility.Navigation.findTop = function(myNode) {
     }
     // If it's not the child of a next node, then it's the top node.
     return myNode;
-}
+};
 
 /** 
  * Navigates to the bottom of a section of blocks.
@@ -409,7 +409,7 @@ Blockly.Accessibility.Navigation.findBottom = function(myNode) {
     // If you can't find a next, you're at the bottom.
     return myNode;
 
-}
+};
 
 /**
  * Finds all of the containers in the current xmlstring and returns them.
@@ -431,7 +431,7 @@ Blockly.Accessibility.Navigation.findContainers = function() {
     }
 
     return containers;
-}
+};
 
 /**
  * Selects the block that you are currently on the node of
@@ -445,8 +445,8 @@ Blockly.Accessibility.Navigation.updateSelection = function() {
 
     Blockly.Block.getById(parseInt(currentNode.getAttribute('id')), workspace).select();
 
-    infoBoxFill(currentNode);
-}
+    Blockly.Accessibility.TreeView.infoBoxFill(currentNode);
+};
 
 /**
  * Gets a specific node based on the block id.
@@ -458,7 +458,7 @@ Blockly.Accessibility.Navigation.getBlockNodeById = function(id) {
     if (!xmlDoc || !xmlDoc.getElementsByTagName('BLOCK')) {
         return null;
     }
-
+	
     // Go through every block until you find the one with the right id
     var myBlocks = xmlDoc.getElementsByTagName('BLOCK');
     for (var i = 0; i < myBlocks.length; i++) {
@@ -468,17 +468,17 @@ Blockly.Accessibility.Navigation.getBlockNodeById = function(id) {
     }
     // If you don't hit it return null.
     return null;
-}
+};
 
 Blockly.Accessibility.Navigation.getCurrentNode = function() {
     return currentNode;
-}
+};
 
 Blockly.Accessibility.Navigation.playAudioBlock = function() {
     var here=getCurrentNode();
     var now=here.getAttribute('type');
     workspace.playAudio(Blockly.Blocks[now].returnAudio());
-}
+};
 
 //#endregion
 
@@ -490,7 +490,7 @@ Blockly.Flyout.prototype.show = function(xmlList){
     this.defaultShow(xmlList);
     console.log(flyoutArr);
     flyoutArr = menuBlocksArr;
-}
+};
 
 //Navigate through the menu currently using the ENTER key(!KEY WILL CHANGE ASAP)
 Blockly.Accessibility.Navigation.menuNav = function(){
@@ -516,9 +516,9 @@ Blockly.Accessibility.Navigation.menuNav = function(){
 
     flyoutArr[tabCount].removeSelect();     //Deselect current
     flyoutArr[tabCount].addSelect();        //Select next
-}
+	}
     tabCount++;
-}
+};
 
 //when the flyout is opened, the array of blocks in the toolbox increases, even if you open the same tab twice in a row
 //therefore we have to get to the beginning of the expanded array each time it is opened
@@ -527,5 +527,5 @@ Blockly.Toolbox.TreeControl.prototype.setSelectedItem = function(node){
 
     tabCount = oldLength;
     
-}
+};
 //#endregion
