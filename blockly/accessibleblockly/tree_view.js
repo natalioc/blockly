@@ -24,6 +24,8 @@
  * @author Amber Libby, Alex Bowen, Mary Costa, Rachael Bosley, Luna Meier
  */
 
+goog.provide('Blockly.Accessibility.TreeView');
+
 /**
  * gets all of the blocks that aren't conditionals and calls get indent on the array list it generates
  */

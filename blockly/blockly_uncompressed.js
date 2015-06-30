@@ -1538,6 +1538,7 @@ goog.addDependency("../../third_party/closure/goog/osapi/osapi.js", ['goog.osapi
 goog.addDependency("../../third_party/closure/goog/svgpan/svgpan.js", ['svgpan.SvgPan'], ['goog.Disposable', 'goog.events', 'goog.events.EventType', 'goog.events.MouseWheelHandler']);
 goog.addDependency("../../../" + dir + "/accessibleblockly/accessibility.js", ['Blockly.Accessibility'], []);
 goog.addDependency("../../../" + dir + "/accessibleblockly/navigation.js", ['Blockly.Accessibility.Navigation'], ['Blockly.BlockSvg', 'Blockly.Block', 'Blockly.Connection', 'Blockly.FieldColour', 'Blockly.FieldTextInput', 'Blockly.FieldDropdown', 'Blockly.FieldCheckbox']);
+goog.addDependency("../../../" + dir + "/accessibleblockly/tree_view.js", ['Blockly.Accessibility.TreeView'], []);
 
 // Load Blockly.
 goog.require('Blockly');
@@ -1585,6 +1586,7 @@ goog.require('Blockly.utils');
 goog.require('rtclient');
 goog.require('Blockly.Accessibility');
 goog.require('Blockly.Accessibility.Navigation');
+goog.require('Blockly.Accessibility.TreeView');
 
 delete window.BLOCKLY_DIR;
 delete window.BLOCKLY_BOOT;
