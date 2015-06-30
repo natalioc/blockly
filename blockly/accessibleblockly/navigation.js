@@ -53,8 +53,8 @@ Blockly.BlockSvg.prototype.select = function () {
 
     this.defaultSelect();
 
-    console.log(getBlockNodeById(this.id));
-    if (getBlockNodeById(this.id)) {
+    console.log(Blockly.Accessibility.Navigation.getBlockNodeById(this.id));
+    if (Blockly.Accessibility.Navigation.getBlockNodeById(this.id)) {
         currentNode = Blockly.Accessibility.Navigation.getBlockNodeById(this.id);
         console.log(this.id);
     }

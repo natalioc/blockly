@@ -24,8 +24,8 @@ var keyboardState = 'hotkeyMode';
  */
 document.onmouseup = function(e){
 	console.log('Mouse Up');
-	updateXmlSelection();
-	callImportantBlocks();
+	Blockly.Accessibility.Navigation.updateXmlSelection();
+	Blockly.Accessibility.TreeView.callImportantBlocks();
 };
 
 /**
@@ -40,7 +40,7 @@ document.onkeydown = document.onkeyup = function(e){
 		if(map[13]){ //Enter
 			console.log('Enter key pressed.');
 			keyboardState = 'hotkeyMode';
-			updateXmlSelection();
+			Blockly.Accessibility.Navigation.updateXmlSelection();
 		}
 		return;
 	}	
@@ -93,43 +93,43 @@ document.onkeydown = document.onkeyup = function(e){
 		if (map[17] && map[90]){ //Ctrl Z
 			console.log("Control Z pressed.");
 		    //Need to implement Undo
-			undo();
+			Blockly.Accessibility.Navigation.undo();
 			e.preventDefault();
 		}
 		
 		else if(map[17] && map[89]){ //Ctrl Y
 			console.log("Control Y pressed.");
 		    //Need to implement Redo
-			redo();
+			Blockly.Accessibility.Navigation.redo();
 			e.preventDefault();
 		}
 		
 		else if(map[18] && map[16] && map[67]){ //Alt Shift C
 			console.log("Alt Shift C keys pressed.");
 			//Keystroke for collapsing or expanding a block
-			toggleCollapse();
+			Blockly.Accessibility.toggleCollapse();
 			e.preventDefault();
 		}
 		
 		else if(map[18] && map[16] && map[69]){ //Alt Shift E
 			console.log("Alt Shift E keys pressed.");
 			//Keystroke for enabling or disabling a block
-			toggleDisable();
+			Blockly.Accessibility.toggleDisable();
 			e.preventDefault();
-			updateXmlSelection();
+			Blockly.Accessibility.Navigation.updateXmlSelection();
 		}
 		
 		else if(map[18] && map[16] && map[68]){ //Alt Shift D
 			console.log("Alt Shift D keys pressed.");
 			//Duplicate a block
-			duplicateSelected();
+			Blockly.Accessibility.duplicateSelected();
 			e.preventDefault();
-			updateXmlSelection();
+			Blockly.Accessibility.Navigation.updateXmlSelection();
 		}
 		
 		else if(map[18] && map[16] &&map[72]){ //Alt Shift H
 			console.log("Alt Shift H keys pressed.");
-			helpSelectedBlock();
+			Blockly.Accessibility.helpSelectedBlock();
 			//Link to the help page for the selected block
 		}
 		
@@ -156,7 +156,7 @@ document.onkeydown = document.onkeyup = function(e){
 		else if(map[46]){ //Delete
 			console.log("Delete key pressed.");
 			//Delete the currently selected item
-			updateXmlSelection();
+			Blockly.Accessibility.Navigation.updateXmlSelection();
 			e.preventDefault();
 		}
 		
@@ -176,7 +176,7 @@ document.onkeydown = document.onkeyup = function(e){
 		else if(map[67]){ //C
 			//Add a comment
 			console.log("C key pressed.");
-			addComment();
+			Blockly.Accessibility.addComment();
 		}
 		
 		else if(map[69]){ //E
@@ -194,21 +194,21 @@ document.onkeydown = document.onkeyup = function(e){
 		
 		else if(map[78]){ //N
 			console.log("N key pressed.");
-			getInfoBox();//currenly placed here until button is found to hide and show the infobox
+			Blockly.Accessibility.TreeView.getInfoBox();//currently placed here until button is found to hide and show the infobox
 			//Initiate a navigate search function
 		}
 		
 		else if(map[82]){ //R
 			//Jumps to the top of the currently selected container
 			console.log("R key pressed.");
-			jumpToTopOfSection();
+			Blockly.Accessibility.Navigation.jumpToTopOfSection();
 		}
 		
 		else if(map[13]){ //Enter
 			console.log('Enter key pressed.');
-			updateXmlSelection();
+			Blockly.Accessibility.Navigation.updateXmlSelection();
 			//temporarily navigates menu
-			menuNav();
+			Blockly.Accessibility.Navigation.menuNav();
 		}
 		
 		//Arrow keys for development purposes.  Switch as needed for proper usage.
