@@ -105,11 +105,11 @@ Blockly.Accessibility.Navigation.updateXmlSelection = function(noSelect) {
     if (currentNode) {
         //console.log('Maintaining Position');
         var pastId = parseInt(currentNode.getAttribute('id'));
-        var idDifference = parseInt(findContainers()[0].getAttribute('id'));
+        var idDifference = parseInt(Blockly.Accessibility.Navigation.findContainers()[0].getAttribute('id'));
 
         xmlDoc = Blockly.Xml.workspaceToDom(Blockly.mainWorkspace);
 
-        idDifference = parseInt(findContainers()[0].getAttribute('id')) - idDifference;
+        idDifference = parseInt(Blockly.Accessibility.Navigation.findContainers()[0].getAttribute('id')) - idDifference;
         Blockly.Accessibility.Navigation.jumpToID(pastId + idDifference);
     }
         // Otherwise this is a non-issue
@@ -210,7 +210,7 @@ Blockly.Accessibility.Navigation.jumpToBottomOfSection = function () {
 Blockly.Accessibility.Navigation.jumpToContainer = function(containerNumber) {
 
     console.log('Jumping to container ' + containerNumber);
-    var containers = findContainers();
+    var containers = Blockly.Accessibility.Navigation.findContainers();
 
     // Jump to the appropriate section.
     if (containers[containerNumber]) {
