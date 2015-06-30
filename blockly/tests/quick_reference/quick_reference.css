@@ -41,7 +41,9 @@ h3{
 	margin-right: auto;
 	margin-left: auto;
 	font-size: 30px;
-
+}
+h4{
+	font-size: 23px;
 }
 p{
 	font-size: 20px;
@@ -73,26 +75,21 @@ p > img{
 	text-decoration: none;
 	font-size: 20px;
 }
-
 #skipButton{
 	height: 1px;
 	width: 1px;
 	overflow: hidden;
 }
-
  a:visited #skipButton{
 	height: 1px;
 	width: 1px;
 	overflow: hidden;
-
 }
 a:focus #skipButton{
 	height:100%;
 	width: 100%;
 	color: black;
-
-	}
+}
 a{
 	text-decoration: none;
 }
-
