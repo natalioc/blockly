@@ -31,13 +31,13 @@ goog.provide('Blockly.Accessibility.TreeView');
  */
 Blockly.BlockSvg.prototype.defaultFireChangeEvent = Blockly.BlockSvg.prototype.fireChangeEvent;
 
-var perfectArr = []; //WHAT IS THIS?
-var prefixArr = []; //WHAT IS THIS?
-var parentArr = []; //WHAT IS THIS?
+var commentableBlockArr = []; //an array of the blocks we will be checking for comments
+var prefixArr = []; //an array containing the prefix for the comment generation
+var indentationArr = []; //an array that stores the depth of the blocks for indentation
 var stateChange = false;
 
 /**
- * NEEDS A COMMENT
+ * Whenever the workspace is modified it updates the state so that we better know when to call the comment generation
  */
 Blockly.WorkspaceSvg.prototype.fireChangeEvent = function() {
   if (this.rendered && this.svgBlockCanvas_) {
@@ -47,7 +47,7 @@ Blockly.WorkspaceSvg.prototype.fireChangeEvent = function() {
 };
 
 /**
- * NEEDS A COMMENT
+ * If the state has changed in the workspace it updates the comments to match the new xml
  */
 Blockly.Accessibility.TreeView.callImportantBlocks = function() {
 	if(stateChange == true) {
@@ -57,7 +57,7 @@ Blockly.Accessibility.TreeView.callImportantBlocks = function() {
 };
 
 /**
- * NEEDS A COMMENT
+ * 
  */
 Blockly.Accessibility.TreeView.getImportantBlocks = function(){
 	//Check if the workspace is empty
@@ -65,50 +65,49 @@ Blockly.Accessibility.TreeView.getImportantBlocks = function(){
 		console.log("nothings here");
         return null;
     }
-    //Add all blocks to blockArr 
-     var blockArr = xmlDoc.getElementsByTagName('BLOCK'); //BLOCKARR IS WHAT?
+    //Add all xml blocks to blockArr 
+     var blockArr = xmlDoc.getElementsByTagName('BLOCK');
 
-    perfectArr = []; //CALL AGAIN??
+    commentableBlockArr = []; //empty the list from the last time it was called so that 
 
-    //adding any blocks which can stand on their own to perfectArr 
-    for(var i=0; i < blockArr.length; i++){ //THIS SHOULD BE CONDENSED
-
-		var strType = blockArr[i].getAttribute('type'); //WHAT IS THIS FOR?
-
+    //adding any blocks which can stand on their own to commentableBlockArr 
+    for(var i=0; i < blockArr.length; i++) {
+		var strType = blockArr[i].getAttribute('type'); //gets the type of blocks so that we can check if 
+		//they are important blocks 
 		if(strType.match(/controls/g)){
-			perfectArr.push(blockArr[i]);
+			commentableBlockArr.push(blockArr[i]);
 		}
 		else if(strType.match(/procedures/g)){
-			perfectArr.push(blockArr[i]);
+			commentableBlockArr.push(blockArr[i]);
 		}
 		else if(strType == "beep"){
-			perfectArr.push(blockArr[i]);
+			commentableBlockArr.push(blockArr[i]);
 		}
 		else if(strType == "math_change") {
-			perfectArr.push(blockArr[i]);
+			commentableBlockArr.push(blockArr[i]);
 		}
 		else if(strType == "text_append") {
-			perfectArr.push(blockArr[i]);
+			commentableBlockArr.push(blockArr[i]);
 		}
 		else if(strType == "text_print") {
-			perfectArr.push(blockArr[i]);
+			commentableBlockArr.push(blockArr[i]);
 		}
 		else if(strType == "list_setIndex") {
-			perfectArr.push(blockArr[i]);
+			commentableBlockArr.push(blockArr[i]);
 		}
 		else if(strType == "variables_set") {
-			perfectArr.push(blockArr[i]);
+			commentableBlockArr.push(blockArr[i]);
 		}
 	}
-    Blockly.Accessibility.TreeView.getIndent(perfectArr);
+    Blockly.Accessibility.TreeView.getIndent(commentableBlockArr);
 };
 
 /**
  * Gets how deeply indented all the provided blocks are and passes that array into 
- * the commentPrefix along with the perfectArr
- * @param {array} perfectArr is the array of blocks that we are checking their indentation ****THIS IS IMPORTANT****
+ * the commentPrefix along with the commentableBlockArr
+ * @param {array} commentableBlockArr is the array of blocks that we are checking their indentation
  */
-Blockly.Accessibility.TreeView.getIndent = function(perfectArr){
+Blockly.Accessibility.TreeView.getIndent = function(commentableBlockArr){
 
 	//the string format of the current XML Doc
 	var currentXml = Blockly.Xml.domToPrettyText(Blockly.Xml.workspaceToDom(Blockly.mainWorkspace));
@@ -117,47 +116,47 @@ Blockly.Accessibility.TreeView.getIndent = function(perfectArr){
 	var closeStatementCnt;
 	var indexOfId;
 	var idOfBlock;
-	var miniXml; //WHAT IS THIS?
+	var miniXml;
 	var i;
 	var currNode;
-	parentArr = [];
+	indentationArr = [];
 
-	for(i = 0; i < perfectArr.length; i++){
-		currNode = perfectArr[i];
+	for(i = 0; i < commentableBlockArr.length; i++){
+		currNode = commentableBlockArr[i];
 		idOfBlock = currNode.getAttribute('id');
 		indexOfId = currentXml.indexOf('id="'+idOfBlock+'"');
 		miniXml = currentXml.substring(0, indexOfId);
 		openStatementCnt = (miniXml.match(/<statement/g) || []).length;
 		closeStatementCnt = (miniXml.match(/statement>/g) || []).length;
-		parentArr[i] = openStatementCnt - closeStatementCnt;
-		parentArr.push(parentArr[i]);
+		indentationArr[i] = openStatementCnt - closeStatementCnt;
+		indentationArr.push(indentationArr[i]);
 	}
-	parentArr.splice(i);
-	Blockly.Accessibility.TreeView.createComments(perfectArr, parentArr);
+	indentationArr.splice(i);
+	Blockly.Accessibility.TreeView.createComments(commentableBlockArr, indentationArr);
 };
 
 /**
  * Based on how the comments are placed this will generate their prefixes correctly to display them
  * in the proper order based on their indentation depth.
- * @param {array} perfectArr is the array of blocks that potentially have comments ***THIS IS A PROBLEM BECAUSE ANY BLOCK CAN HAVE A COMMENT****
- * @param {array} parentArr is an array that tracks how deeply nested the blocks are
+ * @param {array} commentableBlockArr is the array of blocks that potentially have comments
+ * @param {array} indentationArr is an array that tracks how deeply nested the blocks are
  * @return {array} prefixArr is an array of the prefixes built for each block indent
  */
-Blockly.Accessibility.TreeView.commentPrefix = function(perfectArr, parentArr){
+Blockly.Accessibility.TreeView.commentPrefix = function(commentableBlockArr, indentationArr){
 	var zeroCount = 1;
     var allCount = 0;
-    var prefixStringPrev; //WHAT IS THIS?
-    prefixArr = []; //WHAT IS THIS?
+    var prefixStringPrev; //prefix of the previous node
+    prefixArr = []; //prefix arr to store all the prefix to comments
 
-    for (var i = 0; i < parentArr.length; i++) {
-        if(parentArr[i].toString() == "0"){
+    for (var i = 0; i < indentationArr.length; i++) {
+        if(indentationArr[i].toString() == "0"){
             prefixArr[i] = "*" + zeroCount.toString();
             zeroCount++;
             //console.log("this is level 0");
         }
         else{
-            var currentIndent = parentArr[i];
-            var prevIndent = parentArr[i-1];
+            var currentIndent = indentationArr[i];
+            var prevIndent = indentationArr[i-1];
 
             if(currentIndent == prevIndent){
                 //at the same indent level
@@ -207,25 +206,25 @@ Blockly.Accessibility.TreeView.commentPrefix = function(perfectArr, parentArr){
  * Generates the comments and places them into the div in the HTML to display the comments on the page
  * with the right format of prefixes. It puts all the comment blocks into <p> tags so they properly
  * display on the web.
- * @param {array} perfectArr is the array of blocks that potentially have comments
- * @param {array} parentArr is an array that tracks how deeply nested the blocks are
+ * @param {array} commentableBlockArr is the array of blocks that potentially have comments
+ * @param {array} indentationArr is an array that tracks how deeply nested the blocks are
  */
-Blockly.Accessibility.TreeView.createComments = function(perfectArr, parentArr){
+Blockly.Accessibility.TreeView.createComments = function(commentableBlockArr, indentationArr){
   //clears the comment div of old data
   document.getElementById("comment").innerHTML = "";
 
   var pTag; 
   var commentStr;
-  var prefixes = Blockly.Accessibility.TreeView.commentPrefix(perfectArr, parentArr);
+  var prefixes = Blockly.Accessibility.TreeView.commentPrefix(commentableBlockArr, indentationArr);
   var indent;
   var currNode;
-  for(var i = 0; i < perfectArr.length; i++){
+  for(var i = 0; i < commentableBlockArr.length; i++){
     commentStr = '';
-    currNode = perfectArr[i];
+    currNode = commentableBlockArr[i];
     pTag = document.createElement("p");
     pTag.setAttribute("tabindex", 0);
     pTag.setAttribute("id", i);
-    indent = parentArr[i];
+    indent = indentationArr[i];
     //checks how many indents a comment is going to have
     while(indent != 0) {
       commentStr += "---";
@@ -233,13 +232,13 @@ Blockly.Accessibility.TreeView.createComments = function(perfectArr, parentArr){
     }
     commentStr += " " + prefixes[i];
 
-    if(perfectArr[i].getElementsByTagName("comment")[0] == undefined){
+    if(commentableBlockArr[i].getElementsByTagName("comment")[0] == undefined){
       commentStr += " No comment";
     } 
 
     else{
     	//if the block has a comment it will be shown otherwise it will print no comment
-        var parentsId = perfectArr[i].getElementsByTagName("comment")[0].parentNode.getAttribute('id');
+        var parentsId = commentableBlockArr[i].getElementsByTagName("comment")[0].parentNode.getAttribute('id');
         if(parentsId == currNode.getAttribute('id')){
           var htmlComment = currNode.getElementsByTagName("comment")[0].innerHTML;
           commentStr += " " + htmlComment;
@@ -263,18 +262,17 @@ Blockly.Accessibility.TreeView.commentOrBlockJump = function(){
 	console.log(document.activeElement);
 	
     if(getCurrentNode() != null && document.activeElement.id != "importExport") {
-
     	//jump from block to comment 
     	if(document.activeElement.id) {
     		var eleId = document.activeElement.id;
-    		var blockId = perfectArr[eleId].getAttribute('id');
+    		var blockId = commentableBlockArr[eleId].getAttribute('id');
     		jumpToID(blockId);
     	}
     	else {
     		//jump from comment to block
     		var highlightedBlock = getCurrentNode();
-			for (var i = 0; i < perfectArr.length; i++) {
-	    		if(perfectArr[i].getAttribute('id') == highlightedBlock.getAttribute('id')) {
+			for (var i = 0; i < commentableBlockArr.length; i++) {
+	    		if(commentableBlockArr[i].getAttribute('id') == highlightedBlock.getAttribute('id')) {
 	    			document.getElementById(i).focus();
 	    		}
 	    	}
@@ -283,7 +281,8 @@ Blockly.Accessibility.TreeView.commentOrBlockJump = function(){
 };
 
 /**
- * NEEDS A COMMENT
+ * Generates the information in the info box based on the block you are on.
+ * (@param int) the id of the current node we are on
  */
 Blockly.Accessibility.TreeView.infoBoxFill = function(currentNode){
 	//erases any pre-existing text in the div
@@ -296,8 +295,8 @@ Blockly.Accessibility.TreeView.infoBoxFill = function(currentNode){
 	var prefixP = document.createElement('p');
 
 	//Build String to put in box
-	for (var i = 0; i < perfectArr.length; i++) {
-		if(currentNode.getAttribute('id') == perfectArr[i].getAttribute('id')){	
+	for (var i = 0; i < commentableBlockArr.length; i++) {
+		if(currentNode.getAttribute('id') == commentableBlockArr[i].getAttribute('id')){	
 			var indexOfPeriod = prefixArr[i].indexOf(".");
 			if(indexOfPeriod == -1){
 				var prefixLength = prefixArr[i].length;
@@ -314,7 +313,7 @@ Blockly.Accessibility.TreeView.infoBoxFill = function(currentNode){
 			else if(indexOfPeriod == 3){
 				sectionStr = "Section " + prefixArr[i].substring(1, 3);
 			}
-			depthStr = "Depth " + (parentArr[i] + 1);
+			depthStr = "Depth " + (indentationArr[i] + 1);
 			prefixStr = prefixArr[i].substring(1, prefixArr[i].length+1);
 		}
 	}
@@ -331,7 +330,7 @@ Blockly.Accessibility.TreeView.infoBoxFill = function(currentNode){
 };
 
 /**
- * NEEDS A COMMENT
+ * Will toggle the information box visible or invisible
  */
 Blockly.Accessibility.TreeView.getInfoBox = function(){
 	if(document.getElementById('infoBox').style.visibility == 'visible'){
