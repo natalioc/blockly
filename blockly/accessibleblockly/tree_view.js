@@ -57,7 +57,7 @@ Blockly.Accessibility.TreeView.callImportantBlocks = function() {
 };
 
 /**
- * 
+ * Adds the important blocks to an array for an easily constructed tree view 
  */
 Blockly.Accessibility.TreeView.getImportantBlocks = function(){
 	//Check if the workspace is empty
