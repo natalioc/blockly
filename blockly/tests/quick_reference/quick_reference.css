@@ -92,4 +92,5 @@ a:focus #skipButton{
 }
 a{
 	text-decoration: none;
+	color: black;
 }

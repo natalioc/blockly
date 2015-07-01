@@ -5,11 +5,12 @@
 	<link rel="stylesheet" type="text/css" href="quick_reference.css">
 </head>
 <body>
-	<h1>Blockly Quick Reference</h1>
+	<h1><a href="index.html">Blockly Quick Reference</a></h1>
 	<a href="#contentStart">
 		<div id="skipButton" role="button" aria-required="true">Skip to Content</div>
 	</a>
 	<ul id="navigation">
+		<li><a href="index.html">Home</a></li>
 		<li><a href="logic.html">Logic</a></li>
 		<li><a href="loops.html">Loops</a></li>
 		<li><a href="math.html">Math</a></li>
@@ -18,6 +19,7 @@
 		<li><a href="colour.html">Colour</a></li>
 		<li><a href="variables.html">Variables</a></li>
 		<li><a href="functions.html">Functions</a></li>
+		<li><a href="hotkeys.html">Hot Keys</a></li>
 	</ul>
 	<h2 id="contentStart" tabindex="0">Lists</h2>
 	<div class="container">
@@ -73,21 +75,18 @@
 			<h3 tabindex="0">Get an item from a list</h3>
 		</a>
 		<p tabindex="0">The get an item from a list block has a lot of different options. We will start with getting a single item from a list then getting and removing. This section finishes with removing an item from a list.</p>
-
 		<h4 tabindex="0">Get a single item</h4>
-			<p tabindex="0">Using this block with get mode there is the option of choosing which item from the list you would like to retrieve. You may provide a number index or a number index from the end of the list (counting backwards). Or you can simply choose the first, last, or a random item from the list. Below is an example that gets the second item from the list "numbers" and returns the item.
-			<img src="media/get_an_item_from_a_list1.png" alt="Get # 2 item from a list " height="42" width="313"></p>
+		<p tabindex="0">Using this block with get mode there is the option of choosing which item from the list you would like to retrieve. You may provide a number index or a number index from the end of the list (counting backwards). Or you can simply choose the first, last, or a random item from the list. Below is an example that gets the second item from the list "numbers" and returns the item.
+			<img src="media/get_an_item_from_a_list1.png" alt="Get # 2 item from a list " height="42" width="313">
+		</p>
 		<h4 tabindex="0">Getting and removing an item</h4>
-			<p tabindex="0">A dropdown menu on the get an item from a list block has the option to change get to get and remove. Get and remove has the same options as getting a single item. You can provide the number index you want to get and remove or a number index from the end of the list. Or you can choose the first, last, or a random item from the list to get and remove. Getting and removing an item will remove the item from the list and return the item. For the example below assume the list numbers contains one, two and three in that order. First, a random item from the list is removed and then returned. Then, the randomly selected item is set to a new variable randomNumber.
-				<img src="media/get_an_item_from_a_list2.png" alt="Get and remove a random item, then set equal to a variable" height="55" width="586">
-			</p>
-
+		<p tabindex="0">A dropdown menu on the get an item from a list block has the option to change get to get and remove. Get and remove has the same options as getting a single item. You can provide the number index you want to get and remove or a number index from the end of the list. Or you can choose the first, last, or a random item from the list to get and remove. Getting and removing an item will remove the item from the list and return the item. For the example below assume the list numbers contains one, two and three in that order. First, a random item from the list is removed and then returned. Then, the randomly selected item is set to a new variable randomNumber.
+			<img src="media/get_an_item_from_a_list2.png" alt="Get and remove a random item, then set equal to a variable" height="55" width="586">
+		</p>
 		<h4 tabindex="0">Removing an item</h4>
-			<p tabindex="0">On the first dropdown for this block select "remove". When remove is selected the plug on the left of the block disappears and the block will no longer return anything. You are still able to choose which item should be removed by using the index, index from end, first, last, or random. Look at the example below that removes a random item from a list called numbers.
-				<img src="media/get_an_item_from_a_list3.png" alt="Remove a random item from list numbers" height="44" width="303">
-			</p>
-
-			
+		<p tabindex="0">On the first dropdown for this block select "remove". When remove is selected the plug on the left of the block disappears and the block will no longer return anything. You are still able to choose which item should be removed by using the index, index from end, first, last, or random. Look at the example below that removes a random item from a list called numbers.
+			<img src="media/get_an_item_from_a_list3.png" alt="Remove a random item from list numbers" height="44" width="303">
+		</p>
 	</div>
 	<div class="container">
 		<a name="lists_setIndex">
@@ -96,8 +95,8 @@
 		<p tabindex="0">The in list...set block replaces the item at a specified location in a list with a different item. This block requires a list to be provided. There are several options to specify which item in the list you would like to replace: an index, index from the end, first, last, or random. In the example below the list "words" is create and filled with "very" three times. Then the in list...set block is used to set the third item in the list as "good". The result is the list words is now holding ["very", "very", "good"].
 			<img src="media/in_list_set.png" alt="Example: In list words set number 3 as good" height="82" width="530">
 		</p>
-			<h3 tabindex="0">In List...Insert at</h3>
-			<p tabindex="0">The in list...insert at block is a different mode than the in list...set block. Choose "insert at" from the drop-down menu instead of the default. It inserts a new item into the list at the specified location, before the item previously at that location. The following example is similar to the previous example but has added functionality (See above for reference). In this example the in list...insert at block is used to insert at index number one the string "You're". The resulting value of words is ["You're", "very", "very", "good"].
+		<h3 tabindex="0">In List...Insert at</h3>
+		<p tabindex="0">The in list...insert at block is a different mode than the in list...set block. Choose "insert at" from the drop-down menu instead of the default. It inserts a new item into the list at the specified location, before the item previously at that location. The following example is similar to the previous example but has added functionality (See above for reference). In this example the in list...insert at block is used to insert at index number one the string "You're". The resulting value of words is ["You're", "very", "very", "good"].
 			<img src="media/in_list_insert_at.png" alt="in list...insert at Example - insert You're as index number one" height="121" width="530">
 		</p>
 	</div>
