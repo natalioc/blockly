@@ -7,10 +7,10 @@
 <body>
 	<h1><a href="index.html">Blockly Quick Reference</a></h1>
 	<a href="#contentStart">
-		<div id="skipButton" role="button" aria-required="true">Skip to Content</div>
+		<div id="skipButton" role="button">Skip to Content</div>
 	</a>
 	<ul id="navigation">
-		<li><a href="index.html">Home</a></li>
+		<li><a href="variables.html">Home</a></li>
 		<li><a href="logic.html">Logic</a></li>
 		<li><a href="loops.html">Loops</a></li>
 		<li><a href="math.html">Math</a></li>
@@ -23,20 +23,21 @@
 	</ul>
 	<h2 id="contentStart" tabindex="0">Variables</h2>
 	<div class="container">
-		<a name="variables_set">
+		<a id="variables_set">
 			<h3 tabindex="0">Set Variable</h3>
 		</a>
-		<p tabindex="0">The set variable block assigns a value to a variable, creating the variable if it doesn't already exist. The default name for a blockly variable is item, this can be changed within the dropdown menu. The example below, sets the value of the variable named "age" to 12.
-			<img src="media/set_variable.png" alt="Set Variable Example" height="30" width="156">
+		<p tabindex="0" role="article">The set variable block assigns a value to a variable, creating the variable if it doesn't already exist. The default name for a blockly variable is item, this can be changed within the dropdown menu. The example below, sets the value of the variable named "age" to 12.
+			<img role="presentation" src="media/set_variable.png" alt="Set Variable Example" height="30" width="156">
 		</p>
 	</div>
 	<div class="container">
-		<a name="variables_get">
+		<a id="variables_get">
 			<h3 tabindex="0">Get Variable</h3>
 		</a>
-		<p tabindex="0">The get variable block provides the value stored in a variable, without changing it. The image below shows a simple get variable block.
-			<img src="media/get_variable.png" alt="Get Variable Block" height="26" width="67">
+		<p tabindex="0" role="article">The get variable block provides the value stored in a variable, without changing it. The image below shows a simple get variable block.
+			<img role="presentation" src="media/get_variable.png" alt="Get Variable Block" height="26" width="67">
 		</p>
 	</div>
+	<div id="to_top"><a href="variables.html">To Top</a></div>
 </body>
 </html>

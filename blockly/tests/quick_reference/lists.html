@@ -7,7 +7,7 @@
 <body>
 	<h1><a href="index.html">Blockly Quick Reference</a></h1>
 	<a href="#contentStart">
-		<div id="skipButton" role="button" aria-required="true">Skip to Content</div>
+		<div id="skipButton" role="button">Skip to Content</div>
 	</a>
 	<ul id="navigation">
 		<li><a href="index.html">Home</a></li>
@@ -23,103 +23,104 @@
 	</ul>
 	<h2 id="contentStart" tabindex="0">Lists</h2>
 	<div class="container">
-		<a name="lists_create_empty">
+		<a id="lists_create_empty">
 			<h3 tabindex="0">Create Empty List</h3>
 		</a>
-		<p tabindex="0">The create empty list block will simply create an empty list.
-			<img src="media/create_empty_list.png" alt="Create Empty List Block" height="26" width="136">
+		<p tabindex="0" role="article">The create empty list block will simply create an empty list.
+			<img role="presentation" src="media/create_empty_list.png" alt="Create Empty List Block" height="26" width="136">
 		</p>
 	</div>
 	<div class="container">
-		<a name="lists_create_with">
+		<a id="lists_create_with">
 			<h3 tabindex="0">Create List With</h3>
 		</a>
-		<p tabindex="0">The create list with block allows the user to specify the initial values in a new list. The create list block comes with a default of 3 list values but you are able to add as many values to the list as needed. It is most common to create a list with values of the same type (String, Integer, Colour, etc.) but it is possible to create a list with values of different types as well. The simple example below shows a list called numbers being created with three numbers in the list, ["1", "2", "3"].
-			<img src="media/create_list_with.png" alt="Create List With Block Example" height="89" width="307">
+		<p tabindex="0" role="article">The create list with block allows the user to specify the initial values in a new list. The create list block comes with a default of 3 list values but you are able to add as many values to the list as needed. It is most common to create a list with values of the same type (String, Integer, Colour, etc.) but it is possible to create a list with values of different types as well. The simple example below shows a list called numbers being created with three numbers in the list, ["1", "2", "3"].
+			<img role="presentation" src="media/create_list_with.png" alt="Create List With Block Example" height="89" width="307">
 		</p>
 	</div>
 	<div class="container">
-		<a name="lists_repeat">
+		<a id="lists_repeat">
 			<h3 tabindex="0">Create List with Item</h3>
 		</a>
-		<p tabindex="0">The create list with item block allows you to create a list that has the specified number of copies of an item. For example, the following blocks set the variable, named "words", to the list containing ["very", "very", "very"].
-			<img src="media/create_list_with_item.png" alt="Create List with Item Block" height="43" width="529">
+		<p tabindex="0" role="article">The create list with item block allows you to create a list that has the specified number of copies of an item. For example, the following blocks set the variable, named "words", to the list containing ["very", "very", "very"].
+			<img role="presentation" src="media/create_list_with_item.png" alt="Create List with Item Block" height="43" width="529">
 		</p>
 	</div>
 	<div class="container">
-		<a name="lists_length">
+		<a id="lists_length">
 			<h3 tabindex="0">Length Of</h3>
 		</a>
-		<p tabindex="0">The value of the length of block is the number of elements in the list used as an input. For example, the value of the following blocks would be 3 because the list "numbers" has 3 items in it.  
-			<img src="media/length_of.png" alt="Length of Block Example" height="29" width="188">
+		<p tabindex="0" role="article">The value of the length of block is the number of elements in the list used as an input. For example, the value of the following blocks would be 3 because the list "numbers" has 3 items in it.  
+			<img role="presentation" src="media/length_of.png" alt="Length of Block Example" height="29" width="188">
 		</p>
 	</div>
 	<div class="container">
-		<a name="lists_isEmpty">
+		<a id="lists_isEmpty">
 			<h3 tabindex="0">Is Empty</h3>
 		</a>
-		<p tabindex="0">The value of an empty block is true if its input is the empty list and false if it is anything else (including a non-list). The value of the example below would be false because the variable numbers is not empty: it has three items.
-			<img src="media/is_empty.png" alt="Is Empty Block Example" height="42" width="200">
+		<p tabindex="0" role="article">The value of an empty block is true if its input is the empty list and false if it is anything else (including a non-list). The value of the example below would be false because the variable numbers is not empty: it has three items.
+			<img role="presentation" src="media/is_empty.png" alt="Is Empty Block Example" height="42" width="200">
 		</p>
 	</div>
 	<div class="container">
-		<a name="lists_indexOf">
+		<a id="lists_indexOf">
 			<h3 tabindex="0">Find item in a list</h3>
 		</a>
-		<p tabindex="0">The find item in a list block, finds the position of an item in a list. With this block you can search a list and find either the first or last occurrence of the item you are searching for. This block requires you to choose between mode first or last. Also you must provide an item to search for in the list. If the item is nowhere to be found in the list the result is 0. For this example assume the list "words" contains the same word "very" three times. This block returns a value of 1 because the first appearance of "very" is in the beginning of the words list. 
-			<img src="media/find_item_in_a_list.png" alt="Find item in a list block example" height="39" width="509">
+		<p tabindex="0" role="article">The find item in a list block, finds the position of an item in a list. With this block you can search a list and find either the first or last occurrence of the item you are searching for. This block requires you to choose between mode first or last. Also you must provide an item to search for in the list. If the item is nowhere to be found in the list the result is 0. For this example assume the list "words" contains the same word "very" three times. This block returns a value of 1 because the first appearance of "very" is in the beginning of the words list. 
+			<img role="presentation" src="media/find_item_in_a_list.png" alt="Find item in a list block example" height="39" width="509">
 		</p>
 	</div>
 	<div class="container">
-		<a name="lists_getIndex">
+		<a id="lists_getIndex">
 			<h3 tabindex="0">Get an item from a list</h3>
 		</a>
-		<p tabindex="0">The get an item from a list block has a lot of different options. We will start with getting a single item from a list then getting and removing. This section finishes with removing an item from a list.</p>
+		<p tabindex="0" role="article">The get an item from a list block has a lot of different options. We will start with getting a single item from a list then getting and removing. This section finishes with removing an item from a list.</p>
 		<h4 tabindex="0">Get a single item</h4>
-		<p tabindex="0">Using this block with get mode there is the option of choosing which item from the list you would like to retrieve. You may provide a number index or a number index from the end of the list (counting backwards). Or you can simply choose the first, last, or a random item from the list. Below is an example that gets the second item from the list "numbers" and returns the item.
-			<img src="media/get_an_item_from_a_list1.png" alt="Get # 2 item from a list " height="42" width="313">
+		<p tabindex="0" role="article">Using this block with get mode there is the option of choosing which item from the list you would like to retrieve. You may provide a number index or a number index from the end of the list (counting backwards). Or you can simply choose the first, last, or a random item from the list. Below is an example that gets the second item from the list "numbers" and returns the item.
+			<img role="presentation" src="media/get_an_item_from_a_list1.png" alt="Get # 2 item from a list " height="42" width="313">
 		</p>
 		<h4 tabindex="0">Getting and removing an item</h4>
-		<p tabindex="0">A dropdown menu on the get an item from a list block has the option to change get to get and remove. Get and remove has the same options as getting a single item. You can provide the number index you want to get and remove or a number index from the end of the list. Or you can choose the first, last, or a random item from the list to get and remove. Getting and removing an item will remove the item from the list and return the item. For the example below assume the list numbers contains one, two and three in that order. First, a random item from the list is removed and then returned. Then, the randomly selected item is set to a new variable randomNumber.
-			<img src="media/get_an_item_from_a_list2.png" alt="Get and remove a random item, then set equal to a variable" height="55" width="586">
+		<p tabindex="0" role="article">A dropdown menu on the get an item from a list block has the option to change get to get and remove. Get and remove has the same options as getting a single item. You can provide the number index you want to get and remove or a number index from the end of the list. Or you can choose the first, last, or a random item from the list to get and remove. Getting and removing an item will remove the item from the list and return the item. For the example below assume the list numbers contains one, two and three in that order. First, a random item from the list is removed and then returned. Then, the randomly selected item is set to a new variable randomNumber.
+			<img role="presentation" src="media/get_an_item_from_a_list2.png" alt="Get and remove a random item, then set equal to a variable" height="55" width="586">
 		</p>
 		<h4 tabindex="0">Removing an item</h4>
-		<p tabindex="0">On the first dropdown for this block select "remove". When remove is selected the plug on the left of the block disappears and the block will no longer return anything. You are still able to choose which item should be removed by using the index, index from end, first, last, or random. Look at the example below that removes a random item from a list called numbers.
-			<img src="media/get_an_item_from_a_list3.png" alt="Remove a random item from list numbers" height="44" width="303">
+		<p tabindex="0" role="article">On the first dropdown for this block select "remove". When remove is selected the plug on the left of the block disappears and the block will no longer return anything. You are still able to choose which item should be removed by using the index, index from end, first, last, or random. Look at the example below that removes a random item from a list called numbers.
+			<img role="presentation" src="media/get_an_item_from_a_list3.png" alt="Remove a random item from list numbers" height="44" width="303">
 		</p>
 	</div>
 	<div class="container">
-		<a name="lists_setIndex">
+		<a id="lists_setIndex">
 			<h3 tabindex="0">In List...Set</h3>
 		</a>
-		<p tabindex="0">The in list...set block replaces the item at a specified location in a list with a different item. This block requires a list to be provided. There are several options to specify which item in the list you would like to replace: an index, index from the end, first, last, or random. In the example below the list "words" is create and filled with "very" three times. Then the in list...set block is used to set the third item in the list as "good". The result is the list words is now holding ["very", "very", "good"].
-			<img src="media/in_list_set.png" alt="Example: In list words set number 3 as good" height="82" width="530">
+		<p tabindex="0" role="article">The in list...set block replaces the item at a specified location in a list with a different item. This block requires a list to be provided. There are several options to specify which item in the list you would like to replace: an index, index from the end, first, last, or random. In the example below the list "words" is create and filled with "very" three times. Then the in list...set block is used to set the third item in the list as "good". The result is the list words is now holding ["very", "very", "good"].
+			<img role="presentation" src="media/in_list_set.png" alt="Example: In list words set number 3 as good" height="82" width="530">
 		</p>
 		<h3 tabindex="0">In List...Insert at</h3>
-		<p tabindex="0">The in list...insert at block is a different mode than the in list...set block. Choose "insert at" from the drop-down menu instead of the default. It inserts a new item into the list at the specified location, before the item previously at that location. The following example is similar to the previous example but has added functionality (See above for reference). In this example the in list...insert at block is used to insert at index number one the string "You're". The resulting value of words is ["You're", "very", "very", "good"].
-			<img src="media/in_list_insert_at.png" alt="in list...insert at Example - insert You're as index number one" height="121" width="530">
+		<p tabindex="0" role="article">The in list...insert at block is a different mode than the in list...set block. Choose "insert at" from the drop-down menu instead of the default. It inserts a new item into the list at the specified location, before the item previously at that location. The following example is similar to the previous example but has added functionality (See above for reference). In this example the in list...insert at block is used to insert at index number one the string "You're". The resulting value of words is ["You're", "very", "very", "good"].
+			<img role="presentation" src="media/in_list_insert_at.png" alt="in list...insert at Example - insert You're as index number one" height="121" width="530">
 		</p>
 	</div>
 	<div class="container">
-		<a name="lists_getSublist">
+		<a id="lists_getSublist">
 			<h3 tabindex="0">Get sublist</h3>
 		</a>
-		<p tabindex="0">The get sublist block is similar to the "get an item from a list block" except that it extracts a sublist, rather than an individual item. Keep in mind this block does not modify the original list. There are several options for how the start of the sublist can be specified: an index, index from the end, or the first item. Similar options for how the end of the sublist can specified: an index, index from the end, or the last item. The example below starts with the creation of the list letters adding "alpha", "beta", and "gamma". Then a new list called "first letters" is created. The get sublist block adds the two elements "alpha" and "beta" to "first letters".
-			<img src="media/get_sublist.png" alt="Example: get a sub-list from first to number 2 and set to a new variable" height="128" width="580">
+		<p tabindex="0" role="article">The get sublist block is similar to the "get an item from a list block" except that it extracts a sublist, rather than an individual item. Keep in mind this block does not modify the original list. There are several options for how the start of the sublist can be specified: an index, index from the end, or the first item. Similar options for how the end of the sublist can specified: an index, index from the end, or the last item. The example below starts with the creation of the list letters adding "alpha", "beta", and "gamma". Then a new list called "first letters" is created. The get sublist block adds the two elements "alpha" and "beta" to "first letters".
+			<img role="presentation" src="media/get_sublist.png" alt="Example: get a sub-list from first to number 2 and set to a new variable" height="128" width="580">
 		</p>
 	</div>
 	<div class="container">
-		<a name="lists_split">
+		<a id="lists_split">
 			<h3 tabindex="0">Splitting strings and joining</h3>
 		</a>
 		<h4 tabindex="0">Make List from Text</h4>
-		<p tabindex="0">The make list from text block splits the given text into pieces using a delimiter. In this example a dash is used for the delimiter. Each time, in the provided string "311-555-2368" , the delimiter in found a new item for the list is created. This block returns a new list containing three pieces of text: "311", "555", "2368".
-			<img src="media/make_list_from_text.png" alt="Make List from Text Example" height="37" width="523">
+		<p tabindex="0" role="article">The make list from text block splits the given text into pieces using a delimiter. In this example a dash is used for the delimiter. Each time, in the provided string "311-555-2368" , the delimiter in found a new item for the list is created. This block returns a new list containing three pieces of text: "311", "555", "2368".
+			<img role="presentation" src="media/make_list_from_text.png" alt="Make List from Text Example" height="37" width="523">
 		</p>
 		<h4 tabindex="0">Make Text from List</h4>
-		<p tabindex="0">The make text from list block joins a list into a single text using a delimiter. In this block you need to provide a list and the delimiter you would like to be used for your end result. The make text from list block will join them with the delimiter you specify and return the resulting string. View the example below.
-			<img src="media/make_text_from_list.png" alt="Make Text from List Example" height="89" width="613">
+		<p tabindex="0" role="article">The make text from list block joins a list into a single text using a delimiter. In this block you need to provide a list and the delimiter you would like to be used for your end result. The make text from list block will join them with the delimiter you specify and return the resulting string. View the example below.
+			<img role="presentation" src="media/make_text_from_list.png" alt="Make Text from List Example" height="89" width="613">
 		</p>
 	</div>
+	<div id="to_top"><a href="lists.html">To Top</a></div>
 </body>
 </html>
