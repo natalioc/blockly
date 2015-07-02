@@ -594,20 +594,20 @@ function clickAudio(){
     workspace.playAudio(Blockly.Blocks[now].returnAudio());
 }
 
-function speakAudio(){
+function speakAudio(speedSpeak){
     var here=getCurrentNode();
     var now=here.getAttribute('type');
-    meSpeak.speak(now);
+    meSpeak.speak(now, {speed: speedSpeak});
 }
 
 function depthAudio(){
-    var x = new Instrument(25);
-    x.playSingleNote(42);
-
-    /*
-    var t = T("sin");
-    t.play();
-    */
+    try{
+        var x = new Instrument(25);
+        x.playSingleNote(42);
+    }
+    catch(err){
+        window.alert(err);
+    }
 }
 
 

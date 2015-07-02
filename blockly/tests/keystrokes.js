@@ -24,6 +24,10 @@ var map = [];
 var keyboardState = 'hotkeyMode';
 meSpeak.loadConfig("mespeak_config.json");
 meSpeak.loadVoice("voices/en/en-us.json");
+var speedSpeak = 175;
+var audioSelection = 'normal';
+//var speedSpeak = 175;
+
 /**
  * When a mouseup event happens, update the XML selection
  */
@@ -229,22 +233,41 @@ document.onkeydown = document.onkeyup = function(e){
 		}
 
 		else if(map[84]){
-			speakAudio();
+			speakAudio(speedSpeak);
 		}
 		else if(map[89]){
-			//clickAudio();
-			//var d = nestLevel(getCurrentNode());
 			depthAudio();
-			/*
-			//try{
-				var x = new Instrument(25);
-				x.playSingleNote(42);
-				//depthAudio();
-			}catch(err){
-				window.alert(err + err.lineNumber);
-			}
-			*/
 		}
-		//End of development block
+		else if(map[90]){
+			try{
+				nestLevel(getCurrentNode());
+			}
+			catch(err){
+				alert(err+err.lineNumber);
+			}
+		}
+		else if(map[61]){ //+
+			speedSpeak+=20;
+		}
+		else if(map[173]){//-
+			speedSpeak-=20;
+		}
+
+		else if(map[32]){//space
+			switch(audioSelection)
+			{
+				case 'normal':
+					audioSelection='earcon';
+					break;
+				case 'earcon':
+					audioSelection='spearcon';
+					break;
+				case 'spearcon':
+					audioSelection='normal';
+					break;
+				default:
+					;
+			}
+		}
 	}
 };

@@ -322,28 +322,22 @@ function infoBoxFill(currentNode){
 * Added by: Wil Merchant (6/26/15)
 */
 function nestLevel(currentNode){
-    
-    var arrLength = perfectArr.length; //The length of the parentArr and perfectArr arrays
-    var nodeDepth = 0; //How deeply nested the selected block is
-    var nodeSection = 0; //The overall section of code that the selected block is in.
-    for (var i = 0; i < arrLength; i++) {
-
-        if(currentNode.getAttribute('id') == perfectArr[i].getAttribute('id')){
-
-            var nestInfo = prefixArr[i].substring(1);
-            var nestArray = nestInfo.split(".");
-            
-            window.alert(currentNode.getAttribute('id'));
-            window.alert(nestArray);
-
-            nodeSection = nestInfo[0];
-            nodeDepth = parentArr[i] + 1;
-            
-            window.alert("Section: " + nodeSection);
-            window.alert("Depth: " + nodeDepth);
-            
-            return(nestArray);
-            break;
+    if(currentNode!=null){
+       var arrLength = perfectArr.length; //The length of the parentArr and perfectArr arrays
+       for (var i = 0; i < arrLength; i++) {
+            if(currentNode.getAttribute('id') == perfectArr[i].getAttribute('id')){
+               var nestInfo = prefixArr[i].substring(1);
+               var nestArray = nestInfo.split(".");
+               playNestAudio(nestArray);
+               return 0;
+            }
         }
     }
 }; 
+/*
+function playNestAudio(pitch)
+{
+    var x=new Instrument(1);
+    //x.setCollection(pitch);
+    x.playDataSet(,0,pitch.length);
+}*/
