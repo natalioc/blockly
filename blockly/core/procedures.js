@@ -174,18 +174,21 @@ Blockly.Procedures.flyoutCategory = function(blocks, gaps, margin, workspace) {
     var block = Blockly.Block.obtain(workspace, 'procedures_defnoreturn');
     block.initSvg();
     blocks.push(block);
+    menuBlocksArr.push(block);//added for blockly navigation.js
     gaps.push(margin * 2);
   }
   if (Blockly.Blocks['procedures_defreturn']) {
     var block = Blockly.Block.obtain(workspace, 'procedures_defreturn');
     block.initSvg();
     blocks.push(block);
+    menuBlocksArr.push(block);//added for blockly navigation.js
     gaps.push(margin * 2);
   }
   if (Blockly.Blocks['procedures_ifreturn']) {
     var block = Blockly.Block.obtain(workspace, 'procedures_ifreturn');
     block.initSvg();
     blocks.push(block);
+    menuBlocksArr.push(block);//added for blockly navigation.js
     gaps.push(margin * 2);
   }
   if (gaps.length) {

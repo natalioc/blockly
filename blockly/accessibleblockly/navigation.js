@@ -31,12 +31,12 @@ var currentNode = null;
 
 var undoStack = [];
 var redoStack = [];
-var tabCount;
-var curLocation;
+
 //variables for toolbox navigation
-var flyoutArr = []; //everytime the flyout opens the blocks in it are added to this array
-var oldLength = 0;  //size of the array before a new tab opened 
-var loopStart = 0;  //where the loop for that tab ends(updated every time a new category is chosen)
+var flyoutArr = [];   //everytime the flyout opens the blocks in it are added to this array
+var oldLength = 0;    //size of the array before a new tab opened 
+var tabCount  = 0;    //current position in array/toolbox
+var lastTabCount = 0; //last position for switching up and down
 
 //#region XML_UPDATING
 
@@ -44,7 +44,6 @@ var loopStart = 0;  //where the loop for that tab ends(updated every time a new 
 Blockly.BlockSvg.prototype.defaultSelect = Blockly.BlockSvg.prototype.select;
 Blockly.BlockSvg.prototype.defaultDispose = Blockly.BlockSvg.prototype.dispose;
 Blockly.Flyout.prototype.defaultShow = Blockly.Flyout.prototype.show;
-Blockly.Toolbox.TreeControl.prototype.defaultSetSelectedItem =Blockly.Toolbox.TreeControl.prototype.setSelectedItem;
 /**
  * Select this block.  Highlight it visually.
  */
@@ -486,42 +485,77 @@ Blockly.Accessibility.Navigation.playAudioBlock = function() {
 
 //called when the flyout opens
 Blockly.Flyout.prototype.show = function(xmlList){
-    this.defaultShow(xmlList);
+
+    oldLength = flyoutArr.length; //update the length of the last array 
+
+    if(oldLength>0){              //ignore first case
+        tabCount  = oldLength;
+    }
+
+    this.defaultShow(xmlList);    //call default and update flyoutArr
     flyoutArr = menuBlocksArr;
 };
 
-//Navigate through the menu currently using the ENTER key(!KEY WILL CHANGE ASAP)
-Blockly.Accessibility.Navigation.menuNav = function(){
-    //handle when a new category opens
-    if(tabCount == oldLength && oldLength != flyoutArr.length){  
-        flyoutArr[tabCount].addSelect();  
-        loopStart = tabCount;  
-    }
-    //handle looping through menus
-    else if(tabCount >= flyoutArr.length)
-    {
-        var prevCount1 = tabCount-1;
-        flyoutArr[prevCount1].removeSelect();
-        tabCount = loopStart;
-        flyoutArr[tabCount].addSelect();
-    }
-    //go to next item
-    else{
-    //erase the first select (needed for opening a new category) 
-    var prevCount2 = tabCount -1;
-    flyoutArr[prevCount2].removeSelect();
-    oldLength = flyoutArr.length;
+//Navigate down through the menu using down arrow
+Blockly.Accessibility.Navigation.menuNavDown = function(){
 
-    flyoutArr[tabCount].removeSelect();     //Deselect current
-    flyoutArr[tabCount].addSelect();        //Select next
-	}
+    //remove last select if not the first
+    if(tabCount-1 >= 0 && tabCount!= oldLength){
+        flyoutArr[tabCount-1].removeSelect();
+    }
+
+    //handle loops
+    // if tabcount too high       || in variables menu                 || switching directions at the bottom of the menu
+    if(tabCount>=flyoutArr.length || (flyoutArr.length-oldLength == 2) || (lastTabCount == tabCount+1 && tabCount+2>=flyoutArr.length)){
+        tabCount = oldLength;
+        lastTabCount=flyoutArr.length-1; 
+        flyoutArr[lastTabCount].removeSelect();
+    }
+
+   //handle switching from up to down
+   // if normal switch scenario  && not in variable menu
+   if(lastTabCount == tabCount+1 && flyoutArr.length-oldLength!=2){
+        flyoutArr[lastTabCount].removeSelect();
+        tabCount+=2;
+    }
+
+
+    //select next -> save last -> increase count 
+    flyoutArr[tabCount].addSelect(); 
+    lastTabCount = tabCount; 
     tabCount++;
+
 };
 
-//when the flyout is opened, the array of blocks in the toolbox increases, even if you open the same tab twice in a row
-//therefore we have to get to the beginning of the expanded array each time it is opened
-Blockly.Toolbox.TreeControl.prototype.setSelectedItem = function(node){
-    this.defaultSetSelectedItem(node);      
-    tabCount = oldLength;
+
+
+
+//traverse up through the menu using up arrow
+Blockly.Accessibility.Navigation.menuNavUp = function(){
+    
+    //remove last select if possible also remove select that gets stuck on 1 after switching directions
+    if((flyoutArr[lastTabCount] != undefined && tabCount!=oldLength) || lastTabCount==oldLength+1)
+    {
+        flyoutArr[lastTabCount].removeSelect();
+    }
+    //handle loops 
+    //if tabcount is too low   || In variables menu (only 2 blocks)   || In audio menu (only 1 block)        || trying to switch directions at the top of the menu
+    if(tabCount <= oldLength-1 || (flyoutArr.length - oldLength == 2) || (flyoutArr.length - oldLength == 1) || (lastTabCount == tabCount-1 && tabCount-2<oldLength)){
+        lastTabCount = oldLength;
+        tabCount = flyoutArr.length-1;
+        flyoutArr[lastTabCount].removeSelect();
+    }
+
+    //handle switching from down to up
+    //normal switch scenario       && not the first block  && not in the variables menu
+    if(lastTabCount == tabCount-1  && tabCount!=oldLength  && (flyoutArr.length-oldLength!=2)){
+        flyoutArr[lastTabCount].removeSelect();
+        tabCount-=2;
+    }
+    //select next -> save last -> decrease count 
+    flyoutArr[tabCount].addSelect(); 
+    lastTabCount = tabCount;         
+    tabCount--;
 };
+
 //#endregion

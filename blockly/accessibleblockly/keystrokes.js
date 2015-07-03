@@ -114,6 +114,7 @@ document.onkeydown = document.onkeyup = function(e){
 		else if(map[38] || map[87]){ //up arrow or W
 			e.preventDefault();
 			Blockly.Accessibility.Navigation.traverseUp();
+			Blockly.Accessibility.Navigation.menuNavUp(); //navigate up through the menu
 		}
 		
 		else if(map[39] || map[68]){ //right arrow or D
@@ -123,7 +124,7 @@ document.onkeydown = document.onkeyup = function(e){
 		else if(map[40] || map[83]){ //down arrow or S
 			e.preventDefault();
 			Blockly.Accessibility.Navigation.traverseDown();
-			Blockly.Accessibility.Navigation.menuNav();
+			Blockly.Accessibility.Navigation.menuNavDown();
 		}
 
 		else if(map[18] && map[16] && map[69]){ //Alt Shift E
