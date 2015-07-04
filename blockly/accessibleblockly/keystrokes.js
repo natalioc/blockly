@@ -107,25 +107,7 @@ document.onkeydown = document.onkeyup = function(e){
 		}
 		//Arrow keys for development purposes.  Switch as needed for proper usage.
 		
-		else if(map[37] || map[65]){ //left arrow or A
-			Blockly.Accessibility.Navigation.traverseOut();
-		}
 		
-		else if(map[38] || map[87]){ //up arrow or W
-			e.preventDefault();
-			Blockly.Accessibility.Navigation.traverseUp();
-			Blockly.Accessibility.Navigation.menuNavUp(); //navigate up through the menu
-		}
-		
-		else if(map[39] || map[68]){ //right arrow or D
-			Blockly.Accessibility.Navigation.traverseIn();
-		}
-		
-		else if(map[40] || map[83]){ //down arrow or S
-			e.preventDefault();
-			Blockly.Accessibility.Navigation.traverseDown();
-			Blockly.Accessibility.Navigation.menuNavDown();
-		}
 
 		else if(map[18] && map[16] && map[69]){ //Alt Shift E
 			console.log("Alt Shift E keys pressed.");
@@ -212,6 +194,26 @@ document.onkeydown = document.onkeyup = function(e){
 			console.log('Enter key pressed.');
 			Blockly.Accessibility.Navigation.updateXmlSelection();
 			//temporarily navigates menu
+		}
+		
+		else if(map[37] || map[65]){ //left arrow or A
+			Blockly.Accessibility.Navigation.traverseOut();
+		}
+		
+		else if(map[38] || map[87]){ //up arrow or W
+			e.preventDefault();
+			Blockly.Accessibility.Navigation.traverseUp();
+			Blockly.Accessibility.Navigation.menuNavUp(); //navigate up through the menu
+		}
+		
+		else if(map[39] || map[68]){ //right arrow or D
+			Blockly.Accessibility.Navigation.traverseIn();
+		}
+		
+		else if(map[40] || map[83]){ //down arrow or S
+			e.preventDefault();
+			Blockly.Accessibility.Navigation.traverseDown();
+			Blockly.Accessibility.Navigation.menuNavDown();
 		}
 		//End of development block
 	}
