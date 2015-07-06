@@ -330,6 +330,7 @@ function nestLevel(currentNode,speakSpeed){
             if(currentNode.getAttribute('id') == perfectArr[i].getAttribute('id')){
                var nestInfo = prefixArr[i].substring(1);
                var nestArray = nestInfo.split(".");
+
                for(var j=0;j<nestArray.length;j++){
                     if(j===0){
                         speakLevel="Section "+ nestArray[j];
@@ -477,4 +478,8 @@ function playNestAudio(pitch)
     var x=new Instrument(1);
     //x.setCollection(pitch);
     x.playDataSet(,0,pitch.length);
+<<<<<<< HEAD
+}*/
+=======
 };*/
+>>>>>>> 7b6e497d57a8581d1dfe20d3afcafe3177816bc9
