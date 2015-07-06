@@ -77,7 +77,9 @@ Blockly.Blocks['controls_repeat_ext'] = {
 
   returnAudio: function() {
       return 'delete';
-  }
+  },
+
+  returnTxt: Blockly.Msg.CONTROLS_REPEAT_TITLE
 };
 
 Blockly.Blocks['controls_whileUntil'] = {

@@ -430,3 +430,68 @@ function playNestAudio(pitch)
     //x.setCollection(pitch);
     x.playDataSet(,0,pitch.length);
 };*/
+
+
+
+
+function blockLister(){
+    //check if the workspace is empty
+    if (!xmlDoc || !xmlDoc.getElementsByTagName('BLOCK')) {
+        console.log("nothings here");
+        return null;
+    }
+    //add all blocks to the blockArr
+     var blockList = xmlDoc.getElementsByTagName('BLOCK');
+     var listLen = blockList.length;
+     var idList = [];
+     window.alert(listLen);
+     for(var i = 0; i<listLen; i++){
+        idList[i] = blockList[i].getAttribute('type');
+     };
+
+     window.alert(idList);
+     
+     var currentXml = Blockly.Xml.domToPrettyText(Blockly.Xml.workspaceToDom(Blockly.mainWorkspace));
+     window.alert(currentXml);
+     //perfectArr = [];
+
+     /*
+    //adding any blocks which can stand on their own to perfectArr
+    for(var i=0; i < blockArr.length; i++){
+
+        var strType = blockArr[i].getAttribute('type');
+
+        if(strType.match(/controls/g)){
+            perfectArr.push(blockArr[i]);
+        }
+        else if(strType.match(/procedures/g)){
+            perfectArr.push(blockArr[i]);
+        }
+        else if(strType == "beep"){
+            perfectArr.push(blockArr[i]);
+        }
+        else if(strType == "math_change") {
+            perfectArr.push(blockArr[i]);
+        }
+        else if(strType == "text_append") {
+            perfectArr.push(blockArr[i]);
+        }
+        else if(strType == "text_print") {
+            perfectArr.push(blockArr[i]);
+        }
+        else if(strType == "list_setIndex") {
+            perfectArr.push(blockArr[i]);
+        }
+        else if(strType == "variables_set") {
+            perfectArr.push(blockArr[i]);
+        }
+        else{
+            
+        }
+
+    }//end of for
+
+    //getIndent(perfectArr);
+    */
+    
+}//end of getImportantBlocks
