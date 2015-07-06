@@ -385,7 +385,6 @@ function spearNestLevel(currentNode){
         }
     }
 };
-
 function earNestLevel(currentNode){
     if(currentNode!=null){
         var speakLevel="";
@@ -393,26 +392,69 @@ function earNestLevel(currentNode){
         for (var i = 0; i < arrLength; i++) {
             if(currentNode.getAttribute('id') === perfectArr[i].getAttribute('id')){
                 var nestInfo = prefixArr[i].substring(1);
-                var nestArray = nestInfo.split(".");
+                var initialArray = nestInfo.split(".");
+                var nestArray=[];
+                for(var j=0;j<initialArray.length;j++){
+                    for(var k=0;k<initialArray[j];k++){
+                        nestArray.push(initialArray[j]);
+                    }
+                    nestArray.push("-1");
+                }
                 for(var j=0;j<nestArray.length;j++){
-                   playNotes(nestArray[j]);
+                    switch (nestArray[j])
+                    {
+                        case "-1": nestArray[j]=-1; break;
+                        case "1": nestArray[j]=1;break;
+                        case "2": nestArray[j]=9;break;
+                        case "3": nestArray[j]=25;break;
+                        case "4": nestArray[j]=33;break;
+                        case "5": nestArray[j]=42;break;
+                        default: nestArray[j]=73;break;
+                    }
+                }  
+                var tempNotes=[];
+                for(var j=0;j<nestArray.length;j++){
+                    if(nestArray[j]===-1){
+                        var speed=tempNotes.length;
+                        playNotes(tempNotes,speed);
+                        tempNotes=[];
+                    }
+                    else{
+                        tempNotes.push(nestArray[j]);
+                    }
                 }
                 break;
             }
         }
     }
 };
-
-function playNotes(noteToPlay){
-    var start=0;
+var play=false;
+var t;
+function playNotes(noteToPlay,speed){
+    if(play===true){
+        setTimeout(function() {
+            playNotes(noteToPlay,speed);
+        }, 100);
+        return;
+    }
+    if(t)
+        t.stop();
+    play=true;
+    var i=0;
     var toggle = false;
-    var t = T("interval", {interval:"L4",timeout:"55sec"},function(){
-        if(start>noteToPlay){
+    newSpeed=780/speed;
+    t = T("interval", {interval:newSpeed,timeout:"55sec"},function(){
+        if(i>noteToPlay.length-1||noteToPlay[i]===undefined){
             this.stop();
+            play=false;
         }
         if(!toggle){
-            T.soundfont.play(noteToPlay);
-            start++;
+            if(!noteToPlay[i]){
+                this.stop();
+                play = false;
+            }
+            T.soundfont.play(noteToPlay[i]);
+            i++;
             toggle = !toggle;
         }
         else{
@@ -420,8 +462,14 @@ function playNotes(noteToPlay){
         }
     }).on("ended",function(){
         this.stop();
+        play=false;
     }).start();
+    return;
 };
+
+//function switchPlay(){
+  //    play=false;
+//}
 
 /*
 function playNestAudio(pitch)

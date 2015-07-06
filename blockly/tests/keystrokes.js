@@ -236,12 +236,17 @@ document.onkeydown = document.onkeyup = function(e){
 			speakAudio(speedSpeak);
 		}
 		else if(map[89]){
+			try{
 			if(audioSelection==='normal')
 				nestLevel(getCurrentNode(),speedSpeak);
 			else if(audioSelection==='earcon')
 				earNestLevel(getCurrentNode());
 			else if(audioSelection==='spearcon')
 				spearNestLevel(getCurrentNode());
+			}
+			catch(err){
+				window.alert(err+err.lineNumber);
+			}
 		}
 		else if(map[61]){ //+
 			speedSpeak+=20;
