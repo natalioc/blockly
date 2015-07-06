@@ -236,15 +236,12 @@ document.onkeydown = document.onkeyup = function(e){
 			speakAudio(speedSpeak);
 		}
 		else if(map[89]){
-			depthAudio();
-		}
-		else if(map[90]){
-			try{
-				nestLevel(getCurrentNode());
-			}
-			catch(err){
-				alert(err+err.lineNumber);
-			}
+			if(audioSelection==='normal')
+				nestLevel(getCurrentNode(),speedSpeak);
+			else if(audioSelection==='earcon')
+				earNestLevel(getCurrentNode());
+			else if(audioSelection==='spearcon')
+				spearNestLevel(getCurrentNode());
 		}
 		else if(map[61]){ //+
 			speedSpeak+=20;
@@ -266,8 +263,9 @@ document.onkeydown = document.onkeyup = function(e){
 					audioSelection='normal';
 					break;
 				default:
-					;
+					break;
 			}
+			meSpeak.speak(audioSelection);
 		}
 	}
 };

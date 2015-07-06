@@ -321,24 +321,117 @@ function infoBoxFill(currentNode){
 * @param nesting level
 * Added by: Wil Merchant (6/26/15)
 */
-function nestLevel(currentNode){
+function nestLevel(currentNode,speakSpeed){
     if(currentNode!=null){
-       var arrLength = perfectArr.length; //The length of the parentArr and perfectArr arrays
-       for (var i = 0; i < arrLength; i++) {
+        var speakLevel="";
+        var addition="";
+        var arrLength = perfectArr.length; //The length of the parentArr and perfectArr arrays
+        for (var i = 0; i < arrLength; i++) {
             if(currentNode.getAttribute('id') == perfectArr[i].getAttribute('id')){
                var nestInfo = prefixArr[i].substring(1);
                var nestArray = nestInfo.split(".");
-               //window.alert(nestArray);
-               playNestAudio(nestArray);
-               return 0;
+
+               for(var j=0;j<nestArray.length;j++){
+                    if(j===0){
+                        speakLevel="Section "+ nestArray[j];
+                  //      meSpeak.speak(speakLevel, {speed: spearSpeed});
+                    }
+                    else if(j===1){
+                        addition="Depth "+nestArray[j];
+                        speakLevel+=addition;
+                    //    meSpeak.speak(speakLevel, {speed: spearSpeed});
+                    }
+                    else{
+                        addition="Subsection "+nestArray[j];
+                        speakLevel+=addition;
+                     //   meSpeak.speak(now, {speed: spearSpeed});
+                    }
+                }
+                meSpeak.speak(speakLevel, {speed: speakSpeed});
+                break;
             }
         }
     }
 }; 
+
+function spearNestLevel(currentNode){
+    if(currentNode!=null){
+        var spearSpeed=500;
+        var speakLevel="";
+        var addition="";
+        var arrLength = perfectArr.length; //The length of the parentArr and perfectArr arrays
+        for (var i = 0; i < arrLength; i++) {
+            if(currentNode.getAttribute('id') == perfectArr[i].getAttribute('id')){
+                var nestInfo = prefixArr[i].substring(1);
+                var nestArray = nestInfo.split(".");
+                for(var j=0;j<nestArray.length;j++){
+                    if(j===0){
+                        speakLevel="Section "+ nestArray[j];
+                  //      meSpeak.speak(speakLevel, {speed: spearSpeed});
+                    }
+                    else if(j===1){
+                        addition="Depth "+nestArray[j];
+                        speakLevel+=addition;
+                    //    meSpeak.speak(speakLevel, {speed: spearSpeed});
+                    }
+                    else{
+                        addition="Subsection "+nestArray[j];
+                        speakLevel+=addition;
+                     //   meSpeak.speak(now, {speed: spearSpeed});
+                    }
+                }
+                meSpeak.speak(speakLevel, {speed: spearSpeed});
+                break;
+            }
+        }
+    }
+};
+
+function earNestLevel(currentNode){
+    if(currentNode!=null){
+        var speakLevel="";
+        var arrLength = perfectArr.length; //The length of the parentArr and perfectArr arrays
+        for (var i = 0; i < arrLength; i++) {
+            if(currentNode.getAttribute('id') === perfectArr[i].getAttribute('id')){
+                var nestInfo = prefixArr[i].substring(1);
+                var nestArray = nestInfo.split(".");
+                for(var j=0;j<nestArray.length;j++){
+                   playNotes(nestArray[j]);
+                }
+                break;
+            }
+        }
+    }
+};
+
+function playNotes(noteToPlay){
+    var start=0;
+    var toggle = false;
+    var t = T("interval", {interval:"L4",timeout:"55sec"},function(){
+        if(start>noteToPlay){
+            this.stop();
+        }
+        if(!toggle){
+            T.soundfont.play(noteToPlay);
+            start++;
+            toggle = !toggle;
+        }
+        else{
+            toggle = !toggle;
+        }
+    }).on("ended",function(){
+        this.stop();
+    }).start();
+};
+
 /*
 function playNestAudio(pitch)
 {
     var x=new Instrument(1);
     //x.setCollection(pitch);
     x.playDataSet(,0,pitch.length);
+<<<<<<< HEAD
 }*/
+=======
+};*/
+>>>>>>> 7b6e497d57a8581d1dfe20d3afcafe3177816bc9
