@@ -328,6 +328,7 @@ function nestLevel(currentNode){
             if(currentNode.getAttribute('id') == perfectArr[i].getAttribute('id')){
                var nestInfo = prefixArr[i].substring(1);
                var nestArray = nestInfo.split(".");
+               //window.alert(nestArray);
                playNestAudio(nestArray);
                return 0;
             }
