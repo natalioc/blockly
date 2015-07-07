@@ -49,15 +49,6 @@ Blockly.Toolbox.TreeNode.prototype.initAccessibility = function() {
 Blockly.Toolbox.TreeNode.prototype.onKeyDown = function(e) {
   var handled = true;
   switch (e.keyCode) {
-    //prevent keys from skipping to categories
-    case 77:
-    case 76:
-    case 84:
-    case 67:
-    case 70:
-    case 86:
-          e.preventDefault();
-          break;
     case goog.events.KeyCodes.RIGHT:
     case goog.events.KeyCodes.ENTER:
       if (e.altKey) {
