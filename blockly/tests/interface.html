@@ -183,6 +183,45 @@ function question1(n){
   console.timeEnd('Question1Xml domToWorkspace');
 }
 
+function question2(n){
+  var xml =question2Xml;
+  for(var i = 0; i < n; i++) {
+    xml = xml.replace(/(<(statement|next)( name="DO0")?>)<\//g,
+        '$1' + question2Xml + '</');
+  }
+  xml = '<xml xmlns="http://www.w3.org/1999/xhtml">' + xml + '</xml>';
+  var dom = Blockly.Xml.textToDom(xml);
+  console.time('question2Xml domToWorkspace');
+  Blockly.Xml.domToWorkspace(Blockly.mainWorkspace, dom);
+  console.timeEnd('Question2Xml domToWorkspace');
+}
+
+function question3(n){
+  var xml =question3Xml;
+  for(var i = 0; i < n; i++) {
+    xml = xml.replace(/(<(statement|next)( name="DO0")?>)<\//g,
+        '$1' + question3Xml + '</');
+  }
+  xml = '<xml xmlns="http://www.w3.org/1999/xhtml">' + xml + '</xml>';
+  var dom = Blockly.Xml.textToDom(xml);
+  console.time('question3Xml domToWorkspace');
+  Blockly.Xml.domToWorkspace(Blockly.mainWorkspace, dom);
+  console.timeEnd('Question3Xml domToWorkspace');
+}
+
+function question4(n){
+  var xml =question4Xml;
+  for(var i = 0; i < n; i++) {
+    xml = xml.replace(/(<(statement|next)( name="DO0")?>)<\//g,
+        '$1' + question4Xml + '</');
+  }
+  xml = '<xml xmlns="http://www.w3.org/1999/xhtml">' + xml + '</xml>';
+  var dom = Blockly.Xml.textToDom(xml);
+  console.time('question4Xml domToWorkspace');
+  Blockly.Xml.domToWorkspace(Blockly.mainWorkspace, dom);
+  console.timeEnd('Question4Xml domToWorkspace');
+}
+
 var question1Xml = [
  ' <block type="variables_set" id="21" inline="true" x="138" y="113">'+
   '  <field name="VAR">x</field>'+
@@ -242,6 +281,216 @@ var question1Xml = [
   '  </next>'+
   '</block>'
 ].join('\n');
+
+var question2Xml = [
+  '<block type="variables_set" id="53" inline="true" x="88" y="113">'+
+    '<field name="VAR">item</field>'+
+    '<value name="VALUE">'+
+      '<block type="lists_create_with" id="129" inline="false">'+
+        '<mutation items="3"></mutation>'+
+        '<value name="ADD0">'+
+          '<block type="math_number" id="150">'+
+            '<field name="NUM">13</field>'+
+          '</block>'+
+        '</value>'+
+        '<value name="ADD1">'+
+          '<block type="math_number" id="169">'+
+            '<field name="NUM">21</field>'+
+          '</block>'+
+        '</value>'+
+        '<value name="ADD2">'+
+          '<block type="math_number" id="188">'+
+            '<field name="NUM">10</field>'+
+          '</block>'+
+        '</value>'+
+      '</block>'+
+    '</value>'+
+    '<next>'+
+      '<block type="variables_set" id="242" inline="true">'+
+        '<field name="VAR">greatest</field>'+
+        '<value name="VALUE">'+
+          '<block type="math_number" id="261">'+
+            '<field name="NUM">0</field>'+
+          '</block>'+
+        '</value>'+
+        '<next>'+
+          '<block type="controls_forEach" id="198" inline="false">'+
+            '<field name="VAR">i</field>'+
+            '<value name="LIST">'+
+              '<block type="variables_get" id="203">'+
+                '<field name="VAR">item</field>'+
+              '</block>'+
+            '</value>'+
+            '<statement name="DO">'+
+              '<block type="controls_if" id="211" inline="false">'+
+                '<value name="IF0">'+
+                  '<block type="logic_compare" id="269" inline="true">'+
+                    '<field name="OP">GT</field>'+
+                    '<value name="A">'+
+                      '<block type="variables_get" id="276">'+
+                        '<field name="VAR">i</field>'+
+                      '</block>'+
+                    '</value>'+
+                    '<value name="B">'+
+                      '<block type="variables_get" id="283">'+
+                        '<field name="VAR">greatest</field>'+
+                      '</block>'+
+                    '</value>'+
+                  '</block>'+
+                '</value>'+
+                '<statement name="DO0">'+
+                  '<block type="variables_set" id="290" inline="true">'+
+                    '<field name="VAR">greatest</field>'+
+                    '<value name="VALUE">'+
+                      '<block type="variables_get" id="297">'+
+                        '<field name="VAR">i</field>'+
+                      '</block>'+
+                    '</value>'+
+                  '</block>'+
+                '</statement>'+
+              '</block>'+
+            '</statement>'+
+          '</block>'+
+        '</next>'+
+      '</block>'+
+    '</next>'+
+  '</block>'
+].join('\n')
+
+var question3Xml= [
+  '<block type="variables_set" id="3" inline="true" x="38" y="238">'+
+    '<field name="VAR">text</field>'+
+    '<value name="VALUE">'+
+      '<block type="text_prompt_ext" id="24" inline="false">'+
+        '<field name="TYPE">TEXT</field>'+
+        '<value name="TEXT">'+
+          '<block type="text" id="58">'+
+            '<field name="TEXT">Enter text here.</field>'+
+          '</block>'+
+        '</value>'+
+      '</block>'+
+    '</value>'+
+    '<next>'+
+      '<block type="controls_if" id="81" inline="false">'+
+        '<mutation else="1"></mutation>'+
+        '<value name="IF0">'+
+          '<block type="logic_compare" id="102" inline="true">'+
+            '<field name="OP">GT</field>'+
+            '<value name="A">'+
+              '<block type="text_length" id="124" inline="false">'+
+                '<value name="VALUE">'+
+                  '<block type="variables_get" id="129">'+
+                    '<field name="VAR">text</field>'+
+                  '</block>'+
+                '</value>'+
+              '</block>'+
+            '</value>'+
+            '<value name="B">'+
+              '<block type="math_number" id="148">'+
+                '<field name="NUM">5</field>'+
+              '</block>'+
+            '</value>'+
+          '</block>'+
+        '</value>'+
+        '<statement name="DO0">'+
+          '<block type="text_print" id="166" inline="false">'+
+            '<value name="TEXT">'+
+              '<block type="text" id="184" collapsed="true">'+
+                '<field name="TEXT">Text is longer than 5 letters.</field>'+
+              '</block>'+
+            '</value>'+
+          '</block>'+
+        '</statement>'+
+        '<statement name="ELSE">'+
+          '<block type="text_print" id="217" inline="false">'+
+            '<value name="TEXT">'+
+              '<block type="text" id="235">'+
+                '<field name="TEXT">Text is less than 5 letters.</field>'+
+              '</block>'+
+            '</value>'+
+          '</block>'+
+        '</statement>'+
+      '</block>'+
+    '</next>'+
+  '</block>'
+].join('\n')
+
+var question4Xml = [
+  '<block type="variables_set" id="348" inline="true" x="137.99999999999994" y="262.0000000000003">'+
+    '<field name="VAR">sum</field>'+
+    '<value name="VALUE">'+
+      '<block type="math_number" id="367">'+
+        '<field name="NUM">0</field>'+
+      '</block>'+
+    '</value>'+
+    '<next>'+
+      '<block type="controls_repeat_ext" id="278" inline="true">'+
+        '<value name="TIMES">'+
+          '<block type="math_number" id="279">'+
+            '<field name="NUM">10</field>'+
+          '</block>'+
+        '</value>'+
+        '<statement name="DO">'+
+          '<block type="variables_set" id="301" inline="true">'+
+            '<field name="VAR">number</field>'+
+            '<value name="VALUE">'+
+              '<block type="math_random_int" id="341" inline="true">'+
+                '<value name="FROM">'+
+                  '<block type="math_number" id="342">'+
+                    '<field name="NUM">1</field>'+
+                  '</block>'+
+                '</value>'+
+                '<value name="TO">'+
+                  '<block type="math_number" id="343">'+
+                    '<field name="NUM">10</field>'+
+                  '</block>'+
+                '</value>'+
+              '</block>'+
+            '</value>'+
+            '<next>'+
+              '<block type="text_print" id="557" inline="false">'+
+                '<value name="TEXT">'+
+                  '<block type="variables_get" id="564">'+
+                    '<field name="VAR">number</field>'+
+                  '</block>'+
+                '</value>'+
+                '<next>'+
+                  '<block type="variables_set" id="453" inline="true">'+
+                    '<field name="VAR">sum</field>'+
+                    '<value name="VALUE">'+
+                      '<block type="math_arithmetic" id="472" inline="true">'+
+                        '<field name="OP">ADD</field>'+
+                        '<value name="A">'+
+                          '<block type="variables_get" id="479">'+
+                            '<field name="VAR">number</field>'+
+                          '</block>'+
+                        '</value>'+
+                        '<value name="B">'+
+                          '<block type="variables_get" id="496">'+
+                            '<field name="VAR">sum</field>'+
+                          '</block>'+
+                        '</value>'+
+                      '</block>'+
+                    '</value>'+
+                  '</block>'+
+                '</next>'+
+              '</block>'+
+            '</next>'+
+          '</block>'+
+        '</statement>'+
+        '<next>'+
+          '<block type="text_print" id="514" inline="false">'+
+            '<value name="TEXT">'+
+              '<block type="variables_get" id="539">'+
+                '<field name="VAR">sum</field>'+
+              '</block>'+
+            '</value>'+
+          '</block>'+
+        '</next>'+
+      '</block>'+
+    '</next>'+
+  '</block>'
+].join('\n')
 
 var spaghettiXml = [
   '  <block type="controls_if" inline="false" x="30" y="30">' +

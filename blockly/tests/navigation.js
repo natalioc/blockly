@@ -598,6 +598,8 @@ function speakAudio(speedSpeak){
     var here=getCurrentNode();
     var now=here.getAttribute('type');
     meSpeak.speak(now, {speed: speedSpeak});
+    var apple=here.getFieldName();
+    window.alert(here);
 }
 
 function depthAudio(){
@@ -610,13 +612,6 @@ function depthAudio(){
     }
 }
 
-function screenRead(){
-    var here = getCurrentNode();
-    var blockText = here.getAttribute('type');
-    var str = Blockly.Blocks[blockText].returnTxt;
-    responsiveVoice.speak(str);
-    //meSpeak.speak(str);
-}
 
 /*
 function depthAudio(dlevel){
