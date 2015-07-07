@@ -480,10 +480,6 @@ function playNestAudio(pitch)
 };*/
 
 
-};*/
-
-
-
 
 function blockLister(){
     //check if the workspace is empty
@@ -499,6 +495,15 @@ function blockLister(){
      for(var i = 0; i<listLen; i++){
         idList[i] = blockList[i].getAttribute('type');
      };
+
+    /*
+    var childList =[];
+    for (var i = 0 < listLen; i++){
+       childList[i]  = blockList[i].getChildren();
+    };
+
+    window.alert(childList);
+    */
 
      window.alert(idList);
      
