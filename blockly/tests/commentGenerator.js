@@ -443,7 +443,7 @@ function playNotes(noteToPlay,speed){
     play=true;
     var i=0;
     var toggle = false;
-    newSpeed=780/speed;
+    var newSpeed=780/speed;
     t = T("interval", {interval:newSpeed,timeout:"55sec"},function(){
         if(i>noteToPlay.length-1||noteToPlay[i]===undefined){
             this.stop();

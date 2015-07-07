@@ -275,8 +275,8 @@ document.onkeydown = document.onkeyup = function(e){
 
 		else if(map[73]){ //J Key
 			try{
-				//blockLister();
-				screenRead();
+				blockLister();
+				//screenRead();
 			}catch(err){
 				window.alert(err);
 			}

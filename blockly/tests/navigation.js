@@ -614,7 +614,8 @@ function screenRead(){
     var here = getCurrentNode();
     var blockText = here.getAttribute('type');
     var str = Blockly.Blocks[blockText].returnTxt;
-    meSpeak.speak(str);
+    responsiveVoice.speak(str);
+    //meSpeak.speak(str);
 }
 
 /*
