@@ -19,6 +19,8 @@ goog.require('Blockly.Blocks');
 //goog.require('meSpeak');
 //var meSpeak=require("mespeak");
 
+T.soundfont.preload([1,9,25,33,42]);
+
 
 var map = [];
 var keyboardState = 'hotkeyMode';
@@ -247,6 +249,13 @@ document.onkeydown = document.onkeyup = function(e){
 			catch(err){
 				window.alert(err+err.lineNumber);
 			}
+		}
+		else if(map[90]){
+			question1(1);
+			//var blockArr = xmlDoc.getElementsByTagName('BLOCK');
+			//var highlight = blockArr[0];
+		//	window.alert(highlight);
+			window.alert("hi");
 		}
 		else if(map[61]){ //+
 			speedSpeak+=20;
