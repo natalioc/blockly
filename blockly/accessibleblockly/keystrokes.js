@@ -59,13 +59,14 @@ document.onkeydown = document.onkeyup = function(e){
 			e.preventDefault();
 		}
 
-		else if(map[18] && map[16] &&map[72]){ //Alt Shift H
-			console.log('Alt Shift H keys pressed.');
-			Blockly.Accessibility.helpSelectedBlock();//Link to the help page for the selected block
-			//resets the map in order to fix the bug where every key becomes this key
-			map = [];
+		else if(map[18] && map[16] && map[68]){ //Alt Shift D
+			console.log('Alt Shift D keys pressed.');
+			//Duplicate a block
+			Blockly.Accessibility.duplicateSelected();
+			e.preventDefault();
+			Blockly.Accessibility.Navigation.updateXmlSelection();
 		}
-
+		
 		else if(map[18] && map[16] && map[69]){ //Alt Shift E
 			console.log('Alt Shift E keys pressed.');
 			//Keystroke for enabling or disabling a block
@@ -74,14 +75,21 @@ document.onkeydown = document.onkeyup = function(e){
 			Blockly.Accessibility.Navigation.updateXmlSelection();
 		}
 		
-		else if(map[18] && map[16] && map[68]){ //Alt Shift D
-			console.log('Alt Shift D keys pressed.');
-			//Duplicate a block
-			Blockly.Accessibility.duplicateSelected();
+		else if(map[18] && map[16] && map[72]){ //Alt Shift H
+			console.log('Alt Shift H keys pressed.');
+			Blockly.Accessibility.helpSelectedBlock();//Link to the help page for the selected block
+			//resets the map in order to fix the bug where every key becomes this key
 			e.preventDefault();
-			Blockly.Accessibility.Navigation.updateXmlSelection();
+			map = [];
 		}
-			
+
+		else if(map[18] && map[16] && map[73]){ //Alt Shift I
+			console.log('Alt Shift I keys pressed.');
+			//Toggle inline in a block
+			Blockly.Accessibility.toggleInline();
+			e.preventDefault();
+		}
+		
 		else if(map[188]){ //Comma
 			console.log('Comma key pressed.');
 			//Traverse forward within a block with fields

@@ -98,34 +98,41 @@ Blockly.Accessibility.addComment = function(){
 	if(!Blockly.selected.comment){
 		Blockly.selected.setCommentText('');
 	}	
-}
+};
 
 /**
  * Expands the selected block if it is collapsed or collapses the selected block if it isn't
  */
 Blockly.Accessibility.toggleCollapse = function(){
 	Blockly.selected.setCollapsed(!Blockly.selected.collapsed_);
-}
+};
 
 /**
  * Enables the selected block if it is disabled or disables the selected block if it is enabled
  */
 Blockly.Accessibility.toggleDisable = function(){
 	Blockly.selected.setDisabled(!Blockly.selected.disabled);
-}
+};
 
 /**
  * Duplicates the selected block
  */
 Blockly.Accessibility.duplicateSelected = function(){
 	Blockly.selected.duplicate_();
-}
+};
+
+/**
+ * Toggles inline for blocks so values are either external or internal
+ */
+Blockly.Accessibility.toggleInline = function(){
+	Blockly.selected.setInputsInline(!Blockly.selected.inputsInline);
+};
 
 /**
  * Calls the help function for the selected block
  */
 Blockly.Accessibility.helpSelectedBlock = function(){
 	Blockly.selected.showHelp_();
-}
+};
 
 //#endregion
