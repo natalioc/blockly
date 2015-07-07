@@ -281,5 +281,15 @@ document.onkeydown = document.onkeyup = function(e){
 			}
 			meSpeak.speak(audioSelection);
 		}
+
+		else if(map[73]){ //J Key
+			try{
+				//blockLister();
+				screenRead();
+			}catch(err){
+				window.alert(err);
+			}
+			
+		}
 	}
 };

@@ -610,6 +610,12 @@ function depthAudio(){
     }
 }
 
+function screenRead(){
+    var here = getCurrentNode();
+    var blockText = here.getAttribute('type');
+    var str = Blockly.Blocks[blockText].returnTxt;
+    meSpeak.speak(str);
+}
 
 /*
 function depthAudio(dlevel){
