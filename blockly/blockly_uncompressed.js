@@ -1539,6 +1539,7 @@ goog.addDependency("../../third_party/closure/goog/svgpan/svgpan.js", ['svgpan.S
 goog.addDependency("../../../" + dir + "/accessibleblockly/accessibility.js", ['Blockly.Accessibility'], []);
 goog.addDependency("../../../" + dir + "/accessibleblockly/navigation.js", ['Blockly.Accessibility.Navigation'], ['Blockly.BlockSvg', 'Blockly.Block', 'Blockly.Connection', 'Blockly.FieldColour', 'Blockly.FieldTextInput', 'Blockly.FieldDropdown', 'Blockly.FieldCheckbox']);
 goog.addDependency("../../../" + dir + "/accessibleblockly/tree_view.js", ['Blockly.Accessibility.TreeView'], []);
+goog.addDependency("../../../" + dir + "/accessibleblockly/keystrokes.js", ['Blockly.Accessibility.Keystrokes'], []);
 
 // Load Blockly.
 goog.require('Blockly');
@@ -1587,6 +1588,7 @@ goog.require('rtclient');
 goog.require('Blockly.Accessibility');
 goog.require('Blockly.Accessibility.Navigation');
 goog.require('Blockly.Accessibility.TreeView');
+goog.require('Blockly.Accessibility.Keystrokes');
 
 delete window.BLOCKLY_DIR;
 delete window.BLOCKLY_BOOT;
