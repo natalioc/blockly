@@ -173,12 +173,12 @@ document.onkeydown = document.onkeyup = function(e){
 			//Goto the block the comment that is currently selected is from
 			//Alternatively goto the comment that is connected to the currently selected block
 		}
-		
+		/*
 		else if(map[72]){ //H
 			console.log("H key pressed.");
 			helpSelectedBlock();
 			//Link to the help page for the selected block
-		}
+		}*/
 		
 		else if(map[78]){ //N
 			console.log("N key pressed.");
@@ -254,8 +254,10 @@ document.onkeydown = document.onkeyup = function(e){
 			question1(1);
 			//var blockArr = xmlDoc.getElementsByTagName('BLOCK');
 			//var highlight = blockArr[0];
-		//	window.alert(highlight);
-			window.alert("hi");
+			//window.alert(highlight);
+		}
+		else if(map[88]){
+			question2(1);
 		}
 		else if(map[61]){ //+
 			speedSpeak+=20;
@@ -280,16 +282,6 @@ document.onkeydown = document.onkeyup = function(e){
 					break;
 			}
 			meSpeak.speak(audioSelection);
-		}
-
-		else if(map[73]){ //J Key
-			try{
-				blockLister();
-				//screenRead();
-			}catch(err){
-				window.alert(err);
-			}
-			
 		}
 	}
 };

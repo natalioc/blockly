@@ -434,7 +434,7 @@ function playNotes(noteToPlay,speed){
     if(play===true){
         setTimeout(function() {
             playNotes(noteToPlay,speed);
-        }, 100);
+        }, 1000);
         return;
     }
     if(t)
@@ -479,8 +479,6 @@ function playNestAudio(pitch)
     x.playDataSet(,0,pitch.length);
 };*/
 
-
-
 function blockLister(){
     //check if the workspace is empty
     if (!xmlDoc || !xmlDoc.getElementsByTagName('BLOCK')) {
@@ -488,11 +486,11 @@ function blockLister(){
         return null;
     }
     //add all blocks to the blockArr
-     var blockList = xmlDoc.getElementsByTagName('BLOCK');
-     var listLen = blockList.length;
-     var idList = [];
-     window.alert(listLen);
-     for(var i = 0; i<listLen; i++){
+    var blockList = xmlDoc.getElementsByTagName('BLOCK');
+    var listLen = blockList.length;
+    var idList = [];
+    window.alert(listLen);
+    for(var i = 0; i<listLen; i++){
         idList[i] = blockList[i].getAttribute('type');
      };
 
@@ -545,9 +543,8 @@ function blockLister(){
             
         }
 
-    }//end of for
+    }*/
 
-    //getIndent(perfectArr);
-    */
-    
+    // var currentXml = Blockly.Xml.domToPrettyText(Blockly.Xml.workspaceToDom(Blockly.mainWorkspace));
+    // window.alert(currentXml);
 }//end of getImportantBlocks
