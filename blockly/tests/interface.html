@@ -170,6 +170,79 @@ function runCode(){
 	}
 }
 
+function question1(n){
+  var xml =question1Xml;
+  for(var i = 0; i < n; i++) {
+    xml = xml.replace(/(<(statement|next)( name="DO0")?>)<\//g,
+        '$1' + question1Xml + '</');
+  }
+  xml = '<xml xmlns="http://www.w3.org/1999/xhtml">' + xml + '</xml>';
+  var dom = Blockly.Xml.textToDom(xml);
+  console.time('question1Xml domToWorkspace');
+  Blockly.Xml.domToWorkspace(Blockly.mainWorkspace, dom);
+  console.timeEnd('Question1Xml domToWorkspace');
+}
+
+var question1Xml = [
+ ' <block type="variables_set" id="21" inline="true" x="138" y="113">'+
+  '  <field name="VAR">x</field>'+
+  '  <value name="VALUE">' +
+   '   <block type="math_number" id="42"> '+
+  '      <field name="NUM">0</field> '+
+  '    </block> '+
+  '  </value> '+
+  '  <next> '+
+  '    <block type="controls_whileUntil" id="52" inline="false"> '+
+  '      <field name="MODE">WHILE</field> '+
+  '      <value name="BOOL"> '+
+  '       <block type="logic_compare" id="60" inline="true">'+
+  '          <field name="OP">LT</field>'+
+  '          <value name="A">'+
+  '            <block type="variables_get" id="65">'+
+  '              <field name="VAR">x</field>'+
+  '            </block>'+
+  '          </value>'+
+  '          <value name="B">'+
+  '            <block type="math_number" id="84">'+
+  '              <field name="NUM">10</field>'+
+  '            </block>'+
+  '          </value>'+
+  '        </block>'+
+  '      </value>'+
+  '      <statement name="DO">'+
+  '        <block type="text_print" id="120" inline="false">'+
+  '          <value name="TEXT">'+
+  '            <block type="variables_get" id="143">'+
+  '              <field name="VAR">x</field>'+
+  '            </block>'+
+  '          </value>'+
+  '          <next>'+
+  '              <block type="variables_set" id="151" inline="true">'+
+  '              <field name="VAR">x</field>'+
+  '              <value name="VALUE">'+
+  '                <block type="math_arithmetic" id="170" inline="true">'+
+  '                  <field name="OP">ADD</field>'+
+  '                  <value name="A">'+
+  '                    <block type="variables_get" id="175">'+
+  '                      <field name="VAR">x</field>'+
+  '                    </block>'+
+  '                  </value>'+
+  '                  <value name="B">'+
+  '                    <block type="math_number" id="194">'+
+  '                      <field name="NUM">1</field>'+
+  '                    </block>'+
+  '                  </value>'+
+  '                </block>'+
+  '              </value>'+
+  '            </block>'+
+  '          </next>'+
+  '        </block>'+
+  '      </statement>'+
+  '    </block>'+
+  '  </next>'+
+  '</block>'
+].join('\n');
+
 var spaghettiXml = [
   '  <block type="controls_if" inline="false" x="30" y="30">' +
   '    <value name="IF0">' +
