@@ -492,8 +492,58 @@ function blockLister(){
     window.alert(listLen);
     for(var i = 0; i<listLen; i++){
         idList[i] = blockList[i].getAttribute('type');
+     };
+
+    /*
+    var childList =[];
+    for (var i = 0 < listLen; i++){
+       childList[i]  = blockList[i].getChildren();
     };
-    window.alert(idList);
+
+    window.alert(childList);
+    */
+
+     window.alert(idList);
+     
+     var currentXml = Blockly.Xml.domToPrettyText(Blockly.Xml.workspaceToDom(Blockly.mainWorkspace));
+     window.alert(currentXml);
+     //perfectArr = [];
+
+     /*
+    //adding any blocks which can stand on their own to perfectArr
+    for(var i=0; i < blockArr.length; i++){
+
+        var strType = blockArr[i].getAttribute('type');
+
+        if(strType.match(/controls/g)){
+            perfectArr.push(blockArr[i]);
+        }
+        else if(strType.match(/procedures/g)){
+            perfectArr.push(blockArr[i]);
+        }
+        else if(strType == "beep"){
+            perfectArr.push(blockArr[i]);
+        }
+        else if(strType == "math_change") {
+            perfectArr.push(blockArr[i]);
+        }
+        else if(strType == "text_append") {
+            perfectArr.push(blockArr[i]);
+        }
+        else if(strType == "text_print") {
+            perfectArr.push(blockArr[i]);
+        }
+        else if(strType == "list_setIndex") {
+            perfectArr.push(blockArr[i]);
+        }
+        else if(strType == "variables_set") {
+            perfectArr.push(blockArr[i]);
+        }
+        else{
+            
+        }
+
+    }*/
 
     // var currentXml = Blockly.Xml.domToPrettyText(Blockly.Xml.workspaceToDom(Blockly.mainWorkspace));
     // window.alert(currentXml);
