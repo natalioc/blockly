@@ -302,7 +302,7 @@ document.onkeydown = document.onkeyup = function(e){
 
 		else if(map[74]){ //J 
 			blockLister();
-
+		}	
 		else if(map[86])//v
 		{
 			jumpToID(1);
