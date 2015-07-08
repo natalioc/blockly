@@ -480,6 +480,66 @@ Blockly.Accessibility.Navigation.playAudioBlock = function() {
 
 //#endregion
 
+//#region NAVIGATING_WITHIN_BLOCK
+
+/**
+ * Contains the array that describes whether the selected block has values, fields, or statements.
+ */
+Blockly.Accessibility.Navigation.selectedBlockConnections = [];
+
+/**
+ * Contains the index of the currently selected value, field, or statement
+ */
+Blockly.Accessibility.Navigation.connectionsIndex = 0;
+
+/**
+ * Initializes all the information necessary to access a block. 
+ * @return {bool} Returns true if success, returns false if failure to enter block
+ */
+Blockly.Accessibility.Navigation.enterCurrentBlock = function () {
+
+    // Obtain the array from navigation-block-info
+    Blockly.Accessibility.Navigation.selectedBlockConnections =
+        blockInfo[currentNode.getAttribute('type')]
+    if (Blockly.Accessibility.Navigation.selectedBlockConnections == [])
+    {
+        return false;
+    }
+    Blockly.Accessibility.Navigation.connectionsIndex = 0;
+
+    return true;
+};
+
+/**
+ * Selects the next value or field within the current block
+ */
+Blockly.Accessibility.Navigation.inBlock_SelectNext = function () {
+
+};
+
+/**
+ * Selects the previous value or field within the current block
+ */
+Blockly.Accessibility.Navigation.inBlock_SelectPrev = function () {
+
+};
+
+/**
+ * Selects the current field if a field is selected, or selects
+ * the current block if a value or statement is selected
+ */
+Blockly.Accessibility.Navigation.inBlock_EnterSelected = function () {
+
+};
+
+/**
+ * If a value or statement is selected, add a block to it.
+ */
+Blockly.Accessibility.Navigation.inBlock_EnterSelected = function () {
+
+};
+//#endregion
+
 
 //#================================================NAVIGATING THE MENU REGION=========================================================
 
@@ -559,3 +619,4 @@ Blockly.Accessibility.Navigation.menuNavUp = function(){
 };
 
 //#endregion
+
