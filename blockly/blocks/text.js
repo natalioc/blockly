@@ -63,7 +63,7 @@ Blockly.Blocks['text'] = {
   },
 
   returnAudio: function() {
-      return 'delete';
+      return "text";
   }
 };
 
@@ -193,7 +193,7 @@ Blockly.Blocks['text_join'] = {
   newQuote_: Blockly.Blocks['text'].newQuote_,
 
   returnAudio: function() {
-      return 'delete';
+      return 'join text';
   }
 };
 
@@ -212,7 +212,7 @@ Blockly.Blocks['text_create_join_container'] = {
   },
 
   returnAudio: function() {
-      return 'delete';
+      return 'join text container';
   }
 };
 
@@ -232,7 +232,7 @@ Blockly.Blocks['text_create_join_item'] = {
   },
 
   returnAudio: function() {
-      return 'delete';
+      return 'add items';
   }
 };
 
@@ -280,7 +280,7 @@ Blockly.Blocks['text_append'] = {
   },
 
   returnAudio: function() {
-      return 'delete';
+      return 'append items';
   }
 };
 
@@ -300,7 +300,7 @@ Blockly.Blocks['text_length'] = {
   },
 
   returnAudio: function() {
-      return 'delete';
+      return 'length';
   }
 };
 
@@ -320,7 +320,7 @@ Blockly.Blocks['text_isEmpty'] = {
   },
 
   returnAudio: function() {
-      return 'delete';
+      return 'test empty';
   }
 };
 
@@ -350,7 +350,7 @@ Blockly.Blocks['text_indexOf'] = {
   },
 
   returnAudio: function() {
-      return 'delete';
+      return 'index of string';
   }
 };
 
@@ -440,7 +440,7 @@ Blockly.Blocks['text_charAt'] = {
   },
 
   returnAudio: function() {
-      return 'delete';
+      return 'location of character';
   }
 };
 
@@ -549,7 +549,7 @@ Blockly.Blocks['text_getSubstring'] = {
   },
 
   returnAudio: function() {
-      return 'delete';
+      return 'get substring';
   }
 };
 
@@ -573,7 +573,7 @@ Blockly.Blocks['text_changeCase'] = {
   },
 
   returnAudio: function() {
-      return 'delete';
+      return 'change case';
   }
 };
 
@@ -597,7 +597,7 @@ Blockly.Blocks['text_trim'] = {
   },
 
   returnAudio: function() {
-      return 'delete';
+      return 'trim string';
   }
 };
 
@@ -618,7 +618,7 @@ Blockly.Blocks['text_print'] = {
   },
 
   returnAudio: function() {
-      return 'delete';
+      return 'print text';
   }
 };
 
@@ -659,7 +659,7 @@ Blockly.Blocks['text_prompt'] = {
   newQuote_: Blockly.Blocks['text'].newQuote_,
 
   returnAudio: function() {
-      return 'delete';
+      return 'scan text';
   }
 };
 
@@ -696,6 +696,6 @@ Blockly.Blocks['text_prompt_ext'] = {
   },
 
   returnAudio: function() {
-      return 'delete';
+      return 'scan text';
   }
 };

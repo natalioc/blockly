@@ -87,7 +87,7 @@ Blockly.Blocks['variables_get'] = {
   },
 
   returnAudio: function() {
-      return 'delete';
+      return 'variable';
   }
 };
 
@@ -135,6 +135,6 @@ Blockly.Blocks['variables_set'] = {
   customContextMenu: Blockly.Blocks['variables_get'].customContextMenu,
 
   returnAudio: function() {
-      return 'delete';
+      return 'set variable';
   }
 };

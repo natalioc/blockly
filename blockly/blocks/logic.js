@@ -211,7 +211,7 @@ Blockly.Blocks['controls_if'] = {
   },
 
   returnAudio: function() {
-      return 'delete';
+      return 'if';
   }
 };
 
@@ -230,7 +230,7 @@ Blockly.Blocks['controls_if_if'] = {
   },
 
   returnAudio: function() {
-      return 'delete';
+      return 'if';
   }
 };
 
@@ -250,7 +250,7 @@ Blockly.Blocks['controls_if_elseif'] = {
   },
 
   returnAudio: function() {
-      return 'delete';
+      return 'else if';
   }
 };
 
@@ -269,7 +269,7 @@ Blockly.Blocks['controls_if_else'] = {
   },
 
   returnAudio: function() {
-      return 'delete';
+      return 'else';
   }
 };
 
@@ -345,8 +345,8 @@ Blockly.Blocks['logic_compare'] = {
     this.prevBlocks_[1] = blockB;
   },
 
-  returnAudio: function() {
-      return 'delete';
+  returnAudio: function(x) {
+    return "delete"; 
   }
 };
 
@@ -381,7 +381,7 @@ Blockly.Blocks['logic_operation'] = {
   },
 
   returnAudio: function() {
-      return 'delete';
+    "logic operation"
   }
 };
 
@@ -401,7 +401,7 @@ Blockly.Blocks['logic_negate'] = {
   },
 
   returnAudio: function() {
-      return 'delete';
+      return 'negate';
   }
 };
 
@@ -423,7 +423,7 @@ Blockly.Blocks['logic_boolean'] = {
   },
 
   returnAudio: function() {
-      return 'delete';
+      return 'boolean';
   }
 };
 
@@ -442,7 +442,7 @@ Blockly.Blocks['logic_null'] = {
   },
 
   returnAudio: function() {
-      return 'delete';
+      return 'null';
   }
 };
 
@@ -497,6 +497,6 @@ Blockly.Blocks['logic_ternary'] = {
   },
 
   returnAudio: function() {
-      return 'delete';
+      return 'ternary';
   }
 };

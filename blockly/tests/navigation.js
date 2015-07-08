@@ -603,7 +603,8 @@ function clickAudio(){
 function speakAudio(speedSpeak){
     var here=getCurrentNode();
     var now=here.getAttribute('type');
-    responsiveVoice.speak(now);
+    var play=Blockly.Blocks[now].returnAudio(here);
+    responsiveVoice.speak(play);
 }
 
 function depthAudio(){
