@@ -52,7 +52,7 @@ Blockly.Blocks['controls_repeat'] = {
   },
 
   returnAudio: function() {
-      return 'delete';
+      return 'repeat';
   }
 };
 
@@ -76,7 +76,7 @@ Blockly.Blocks['controls_repeat_ext'] = {
   },
 
   returnAudio: function() {
-      return 'delete';
+      return 'repeat';
   },
 
 
@@ -114,7 +114,7 @@ Blockly.Blocks['controls_whileUntil'] = {
   },
 
   returnAudio: function() {
-      return 'delete';
+      return 'do while';
   }
 };
 
@@ -186,7 +186,7 @@ Blockly.Blocks['controls_for'] = {
   },
 
   returnAudio: function() {
-      return 'delete';
+      return 'for loop';
   }
 };
 
@@ -242,7 +242,7 @@ Blockly.Blocks['controls_forEach'] = {
   customContextMenu: Blockly.Blocks['controls_for'].customContextMenu,
 
   returnAudio: function() {
-      return 'delete';
+      return 'for each in list';
   }
 };
 
@@ -303,6 +303,6 @@ Blockly.Blocks['controls_flow_statements'] = {
   },
 
   returnAudio: function() {
-      return 'delete';
+      return 'flow statement';
   }
 };

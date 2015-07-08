@@ -46,7 +46,7 @@ Blockly.Blocks['lists_create_empty'] = {
   },
 
   returnAudio: function() {
-      return 'delete';
+      return 'create empty list';
   }
 };
 
@@ -174,7 +174,7 @@ Blockly.Blocks['lists_create_with'] = {
   },
 
   returnAudio: function() {
-      return 'delete';
+      return 'create list with elements';
   }
 };
 
@@ -193,7 +193,7 @@ Blockly.Blocks['lists_create_with_container'] = {
   },
 
   returnAudio: function() {
-      return 'delete';
+      return 'create list with containers';
   }
 };
 
@@ -213,7 +213,7 @@ Blockly.Blocks['lists_create_with_item'] = {
   },
 
   returnAudio: function() {
-      return 'delete';
+      return 'create list with items';
   }
 };
 
@@ -234,7 +234,7 @@ Blockly.Blocks['lists_repeat'] = {
   },
 
   returnAudio: function() {
-      return 'delete';
+      return 'create a list with multiple elements';
   }
 };
 
@@ -254,7 +254,7 @@ Blockly.Blocks['lists_length'] = {
   },
 
   returnAudio: function() {
-      return 'delete';
+      return 'length of list';
   }
 };
 
@@ -275,7 +275,7 @@ Blockly.Blocks['lists_isEmpty'] = {
   },
 
   returnAudio: function() {
-      return 'delete';
+      return 'is list empty';
   }
 };
 
@@ -301,7 +301,7 @@ Blockly.Blocks['lists_indexOf'] = {
   },
 
   returnAudio: function() {
-      return 'delete';
+      return 'find index of element in list';
   }
 };
 
@@ -437,7 +437,7 @@ Blockly.Blocks['lists_getIndex'] = {
   },
 
   returnAudio: function() {
-      return 'delete';
+      return 'get index of item in list';
   }
 };
 
@@ -543,7 +543,7 @@ Blockly.Blocks['lists_setIndex'] = {
   },
 
   returnAudio: function() {
-      return 'delete';
+      return 'set index of item in list';
   }
 };
 
@@ -652,7 +652,7 @@ Blockly.Blocks['lists_getSublist'] = {
   },
 
   returnAudio: function() {
-      return 'delete';
+      return 'get sublist in list';
   }
 };
 
@@ -698,6 +698,6 @@ Blockly.Blocks['lists_split'] = {
   },
 
   returnAudio: function() {
-      return 'delete';
+      return 'split list';
   }
 };

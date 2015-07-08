@@ -47,7 +47,7 @@ Blockly.Blocks['math_number'] = {
   },
 
   returnAudio: function() {
-      return 'delete';
+      return "number";
   }
 };
 
@@ -88,7 +88,7 @@ Blockly.Blocks['math_arithmetic'] = {
   },
 
   returnAudio: function() {
-      return 'delete';
+      return 'arithmetic';
   }
 };
 
@@ -131,7 +131,7 @@ Blockly.Blocks['math_single'] = {
   },
 
   returnAudio: function() {
-      return 'delete';
+      return 'single';
   }
 };
 
@@ -171,7 +171,7 @@ Blockly.Blocks['math_trig'] = {
   },
 
   returnAudio: function() {
-      return 'delete';
+      return 'trig sign';
   }
 };
 
@@ -197,7 +197,7 @@ Blockly.Blocks['math_constant'] = {
   },
 
   returnAudio: function() {
-      return 'delete';
+      return 'constant';
   }
 };
 
@@ -269,7 +269,7 @@ Blockly.Blocks['math_number_property'] = {
   },
 
   returnAudio: function() {
-      return 'delete';
+      return 'number property';
   }
 };
 
@@ -319,7 +319,7 @@ Blockly.Blocks['math_change'] = {
   },
 
   returnAudio: function() {
-      return 'delete';
+      return 'add variable';
   }
 };
 
@@ -343,7 +343,7 @@ Blockly.Blocks['math_round'] = {
   },
 
   returnAudio: function() {
-      return 'delete';
+      return 'round';
   }
 };
 
@@ -395,7 +395,7 @@ Blockly.Blocks['math_on_list'] = {
   },
 
   returnAudio: function() {
-      return 'delete';
+      return 'evaluate list';
   }
 };
 
@@ -417,7 +417,7 @@ Blockly.Blocks['math_modulo'] = {
   },
 
   returnAudio: function() {
-      return 'delete';
+      return 'modulo';
   }
 };
 
@@ -440,7 +440,7 @@ Blockly.Blocks['math_constrain'] = {
   },
 
   returnAudio: function() {
-      return 'delete';
+      return 'constrain';
   }
 };
 
@@ -462,7 +462,7 @@ Blockly.Blocks['math_random_int'] = {
   },
 
   returnAudio: function() {
-      return 'delete';
+      return 'random number';
   }
 };
 
@@ -481,6 +481,6 @@ Blockly.Blocks['math_random_float'] = {
   },
 
   returnAudio: function() {
-      return 'delete';
+      return 'random decimal';
   }
 };

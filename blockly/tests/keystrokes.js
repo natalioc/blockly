@@ -238,16 +238,16 @@ document.onkeydown = document.onkeyup = function(e){
 			traverseDown();    
 		}
 
-		else if(map[84]){
+		else if(map[84]){//t
 			speakAudio(speedSpeak);
 		}
 		else if(map[89]){
 			try{
 			if(audioSelection==='normal')
 				nestLevel(getCurrentNode(),speedSpeak);
-			else if(audioSelection==='earcon')
+			else if(audioSelection==='ear con')
 				earNestLevel(getCurrentNode());
-			else if(audioSelection==='spearcon')
+			else if(audioSelection==='spear con')
 				spearNestLevel(getCurrentNode());
 			}
 			catch(err){
@@ -285,18 +285,18 @@ document.onkeydown = document.onkeyup = function(e){
 			switch(audioSelection)
 			{
 				case 'normal':
-					audioSelection='earcon';
+					audioSelection='ear con';
 					break;
-				case 'earcon':
-					audioSelection='spearcon';
+				case 'ear con':
+					audioSelection='spear con';
 					break;
-				case 'spearcon':
+				case 'spear con':
 					audioSelection='normal';
 					break;
 				default:
 					break;
 			}
-			meSpeak.speak(audioSelection);
+			responsiveVoice.speak(audioSelection);
 		}
 
 
@@ -305,8 +305,12 @@ document.onkeydown = document.onkeyup = function(e){
 		}	
 		else if(map[86])//v
 		{
-			jumpToID(1);
+			 var blockArr = xmlDoc.getElementsByTagName('BLOCK');
+			 var firstBlock=blockArr[0].getAttribute('ID');
+			 window.alert(firstBlock);
+			jumpToID(firstBlock);
 		}
+
 		else if(map[70]){//f
 			try{
 				question4(1);		

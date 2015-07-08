@@ -346,7 +346,7 @@ function nestLevel(currentNode,speakSpeed){
                      //   meSpeak.speak(now, {speed: spearSpeed});
                     }
                 }
-                meSpeak.speak(speakLevel, {speed: speakSpeed});
+                responsiveVoice.speak(speakLevel);
                 break;
             }
         }
@@ -355,7 +355,7 @@ function nestLevel(currentNode,speakSpeed){
 
 function spearNestLevel(currentNode){
     if(currentNode!=null){
-        var spearSpeed=500;
+        var spearSpeed=600;
         var speakLevel="";
         var addition="";
         var arrLength = perfectArr.length; //The length of the parentArr and perfectArr arrays
@@ -404,11 +404,11 @@ function earNestLevel(currentNode){
                     switch (nestArray[j])
                     {
                         case "-1": nestArray[j]=-1; break;
-                        case "1": nestArray[j]=1;break;
-                        case "2": nestArray[j]=9;break;
-                        case "3": nestArray[j]=25;break;
-                        case "4": nestArray[j]=33;break;
-                        case "5": nestArray[j]=42;break;
+                        case "1": nestArray[j]=41;break;
+                        case "2": nestArray[j]=42;break;
+                        case "3": nestArray[j]=43;break;
+                        case "4": nestArray[j]=44;break;
+                        case "5": nestArray[j]=45;break;
                         default: nestArray[j]=73;break;
                     }
                 }  
@@ -434,7 +434,7 @@ function playNotes(noteToPlay,speed){
     if(play===true){
         setTimeout(function() {
             playNotes(noteToPlay,speed);
-        }, 1000);
+        }, 300);
         return;
     }
     if(t)
@@ -442,7 +442,7 @@ function playNotes(noteToPlay,speed){
     play=true;
     var i=0;
     var toggle = false;
-    var newSpeed=780/speed;
+    var newSpeed=840/speed;
     t = T("interval", {interval:newSpeed,timeout:"55sec"},function(){
         if(i>noteToPlay.length-1||noteToPlay[i]===undefined){
             this.stop();
