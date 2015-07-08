@@ -35,7 +35,7 @@ var commentableBlockArr = []; //an array of the blocks we will be checking for c
 var prefixArr = []; //an array containing the prefix for the comment generation
 var indentationArr = []; //an array that stores the depth of the blocks for indentation
 var stateChange = false;
-var globalNextCount = 0;
+var bigCapital = false; //tracks if the outter most blocks have gone into double alphabetical
 /**
  * Whenever the workspace is modified it updates the state so that we better know when to call the comment generation
  */
@@ -132,7 +132,7 @@ Blockly.Accessibility.TreeView.getIndent = function(commentableBlockArr){
 		indentationArr.push(indentationArr[i]);
 	}
 	indentationArr.splice(i);
-	//return indentationArr;
+	return indentationArr;
 	Blockly.Accessibility.TreeView.createComments(commentableBlockArr, indentationArr);
 };
 
@@ -287,6 +287,13 @@ Blockly.Accessibility.TreeView.commentOrBlockJump = function(){
  */
 Blockly.Accessibility.TreeView.infoBoxFill = function(currentNode){
 	//erases any pre-existing text in the div
+	var map = Blockly.Accessibility.TreeView.getAllComments();
+	if (!xmlDoc || !xmlDoc.getElementsByTagName('BLOCK')) {
+		console.log("nothings here");
+        return null;
+    }
+    //Add all xml blocks to blockArr 
+    var blockArr = xmlDoc.getElementsByTagName('BLOCK');
 	document.getElementById("infoBox").innerHTML = "";
 	var sectionStr = '';
 	var depthStr = '';
@@ -296,8 +303,9 @@ Blockly.Accessibility.TreeView.infoBoxFill = function(currentNode){
 	var prefixP = document.createElement('p');
 
 	//Build String to put in box
-	for (var i = 0; i < commentableBlockArr.length; i++) {
-		if(currentNode.getAttribute('id') == commentableBlockArr[i].getAttribute('id')){	
+	for (var i = 0; i <= blockArr.length - 1; i++) {
+		/**
+		if(currentNode.getAttribute('id') == blockArr[i].getAttribute('id')){	
 			var indexOfPeriod = prefixArr[i].indexOf(".");
 			if(indexOfPeriod == -1){
 				var prefixLength = prefixArr[i].length;
@@ -317,6 +325,19 @@ Blockly.Accessibility.TreeView.infoBoxFill = function(currentNode){
 			depthStr = "Depth " + (indentationArr[i] + 1);
 			prefixStr = prefixArr[i].substring(1, prefixArr[i].length+1);
 		}
+		*/
+		if(bigCapital == true){
+			sectionStr = map[currentNode.getAttribute('id').toString()];
+			sectionStr = "Section: " + sectionStr.substring(0, 1);
+		}
+		else{
+			sectionStr = map[currentNode.getAttribute('id').toString()];
+			sectionStr = "Section: " + sectionStr.charAt(0);
+		}
+		depthStr = map[currentNode.getAttribute('id').toString()];
+		depthStr = "Depth: " + (depthStr.match(/./g).length / 2);
+		console.log(depthStr);
+		prefixStr = map[currentNode.getAttribute('id').toString()];
 	}
 	//puts the text onto the page and in the div
 	var sectionTextNode = document.createTextNode(sectionStr);
@@ -396,6 +417,9 @@ Blockly.Accessibility.TreeView.getAllComments = function() {
     		lowerAlphabet = 0;
      		emptyVisited = true;
      		blockIndex++;
+     		if(capitalAlphabet >= 26){
+     			bigCapital = true;
+     		}
      	}
      	//will handle blocks that have no children
      	if(blockArr[i].childNodes.length == 0){
@@ -425,10 +449,12 @@ Blockly.Accessibility.TreeView.getAllComments = function() {
 	 			oldPrefix = oldPrefix + Blockly.Accessibility.TreeView.getAlphabetical(lowerAlphabet);
 				map[blockArr[i].childNodes[j].childNodes[0].getAttribute('id').toString()] = oldPrefix;
 	 			lowerAlphabet++;
+	 			emptyVisited = true;
 	 		}
 	 		//if you have a statement or going to the right
 	 		else if(blockArr[i].childNodes[j].nodeName == 'STATEMENT'){
 	 			lowerAlphabet = 0;
+	 			emptyVisited = true;
 	 			oldPrefix = map[blockArr[i].childNodes[j].parentNode.getAttribute('id').toString()] + ".1";
 				map[blockArr[i].childNodes[j].childNodes[0].getAttribute('id').toString()] = oldPrefix;
 	 		}
