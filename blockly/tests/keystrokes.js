@@ -251,10 +251,11 @@ document.onkeydown = document.onkeyup = function(e){
 			}
 		}
 		else if(map[90]){
-			question1(1);
+			//question1(1);
 			//var blockArr = xmlDoc.getElementsByTagName('BLOCK');
 			//var highlight = blockArr[0];
 			//window.alert(highlight);
+			responsiveVoice.speak("Yoo");
 		}
 		else if(map[88]){
 			question2(1);
@@ -282,6 +283,10 @@ document.onkeydown = document.onkeyup = function(e){
 					break;
 			}
 			meSpeak.speak(audioSelection);
+		}
+
+		else if(map[74]){ //J 
+			blockLister();
 		}
 	}
 };
