@@ -298,7 +298,9 @@ document.onkeydown = document.onkeyup = function(e){
 			}
 			responsiveVoice.speak(audioSelection);
 		}
-
+		else if (map[73]){
+			codeReader();
+		}
 
 		else if(map[74]){ //J 
 			blockLister();

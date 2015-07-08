@@ -405,17 +405,19 @@ function earNestLevel(currentNode){
                     {
                         case "-1": nestArray[j]=-1; break;
                         case "1": nestArray[j]=41;break;
-                        case "2": nestArray[j]=42;break;
-                        case "3": nestArray[j]=43;break;
-                        case "4": nestArray[j]=44;break;
-                        case "5": nestArray[j]=45;break;
+                        case "2": nestArray[j]=41;break;
+                        case "3": nestArray[j]=41;break;
+                        case "4": nestArray[j]=41;break;
+                        case "5": nestArray[j]=41;break;
                         default: nestArray[j]=73;break;
                     }
-                }  
+                } 
+                window.alert(nestArray);
                 var tempNotes=[];
                 for(var j=0;j<nestArray.length;j++){
                     if(nestArray[j]===-1){
                         var speed=tempNotes.length;
+                        T.soundfont.preload(tempNotes);
                         playNotes(tempNotes,speed);
                         tempNotes=[];
                     }
@@ -434,7 +436,7 @@ function playNotes(noteToPlay,speed){
     if(play===true){
         setTimeout(function() {
             playNotes(noteToPlay,speed);
-        }, 50);
+        }, 200);
         return;
     }
     if(t)
@@ -494,6 +496,13 @@ function blockLister(){
         idList[i] = blockList[i].getAttribute('type');
      };
 
+
+
+     var parArrLen = parentArr.length;
+     for(var i = 0; i<parArrLen; i++){
+        window.alert(parentArr[i].toString());
+     }
+
     /*
     var childList =[];
     for (var i = 0 < listLen; i++){
@@ -501,10 +510,10 @@ function blockLister(){
     };
 
     window.alert(childList);
-    */
+   
 
-     window.alert(idList);
-     
+    window.alert(idList);
+     */
      var currentXml = Blockly.Xml.domToPrettyText(Blockly.Xml.workspaceToDom(Blockly.mainWorkspace));
      window.alert(currentXml);
      //perfectArr = [];
@@ -548,3 +557,11 @@ function blockLister(){
     // var currentXml = Blockly.Xml.domToPrettyText(Blockly.Xml.workspaceToDom(Blockly.mainWorkspace));
     // window.alert(currentXml);
 }//end of getImportantBlocks
+
+function codeReader(){
+    voicecollection.CHARACTER_LIMIT=200;
+    var array = "variable i equals 0. variable k equals 0. while i less than 2, increase k by 1, if i is equal to 0
+    increase k by 1, else decrease k by 1, increase i by 1, print k";
+
+        responsiveVoice.speak(array);
+};
