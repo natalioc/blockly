@@ -255,10 +255,11 @@ document.onkeydown = document.onkeyup = function(e){
 			}
 		}
 		else if(map[90]){
-			question1(1);
+			//question1(1);
 			//var blockArr = xmlDoc.getElementsByTagName('BLOCK');
 			//var highlight = blockArr[0];
 			//window.alert(highlight);
+			responsiveVoice.speak("Yoo");
 		}
 		else if(map[88]){//x
 			question2(1);
@@ -297,6 +298,11 @@ document.onkeydown = document.onkeyup = function(e){
 			}
 			responsiveVoice.speak(audioSelection);
 		}
+
+
+		else if(map[74]){ //J 
+			blockLister();
+		}	
 		else if(map[86])//v
 		{
 			 var blockArr = xmlDoc.getElementsByTagName('BLOCK');
@@ -312,6 +318,7 @@ document.onkeydown = document.onkeyup = function(e){
  			catch(err){
  				window.alert(err+err.lineNumber);
  			}
+
 		}
 	}
 };
