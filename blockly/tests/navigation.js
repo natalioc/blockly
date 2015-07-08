@@ -341,6 +341,7 @@ function traverseOut() {
         currentNode = findTop(currentNode).parentNode.parentNode;
         console.log('Going to ' + currentNode.nodeName + ' with id ' + currentNode.getAttribute('id'));
         updateSelection();
+        speakAudio(speedSpeak);
         return;
     }
     // If it's not, then do nothing, you cannot go in.
@@ -368,6 +369,7 @@ function traverseIn() {
             currentNode = children[i].getElementsByTagName('BLOCK')[0];
             console.log('Going to ' + currentNode.nodeName + ' with id ' + currentNode.getAttribute('id'));
             updateSelection();
+            speakAudio(speedSpeak);
             return;
         }
     }
@@ -393,6 +395,7 @@ function traverseUp() {
         currentNode = currentNode.parentNode.parentNode;
         console.log('Going to ' + currentNode.nodeName + ' with id ' + currentNode.getAttribute('id'));
         updateSelection();
+        speakAudio(speedSpeak);
         return;
     }
 
@@ -403,6 +406,7 @@ function traverseUp() {
         currentNode = findBottom(currentNode);
         console.log('Going to ' + currentNode.nodeName + ' with id ' + currentNode.getAttribute('id') + ' via cycle.');
         updateSelection();
+        speakAudio(speedSpeak);
         return;
     }
 
@@ -432,6 +436,7 @@ function traverseDown() {
             currentNode = children[i].getElementsByTagName('BLOCK')[0];
             console.log('Going to ' + currentNode.nodeName + ' with id ' + currentNode.getAttribute('id'));
             updateSelection();
+            speakAudio(speedSpeak);
             return;
         }
     }
@@ -442,6 +447,7 @@ function traverseDown() {
         currentNode = findTop(currentNode);
         console.log('Going to ' + currentNode.nodeName + ' with id ' + currentNode.getAttribute('id') + ' via cycle.');
         updateSelection();
+        speakAudio(speedSpeak);
         return;
     }
 
@@ -597,9 +603,7 @@ function clickAudio(){
 function speakAudio(speedSpeak){
     var here=getCurrentNode();
     var now=here.getAttribute('type');
-    meSpeak.speak(now, {speed: speedSpeak});
-    var apple=here.getFieldName();
-    window.alert(here);
+    responsiveVoice.speak(now);
 }
 
 function depthAudio(){
