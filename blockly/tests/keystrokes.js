@@ -23,7 +23,7 @@ goog.require('Blockly.Workspace');
 //goog.require('meSpeak');
 //var meSpeak=require("mespeak");
 
-T.soundfont.preload([1,9,25,33,42]);
+//T.soundfont.preload([1,9,25,33,42]);
 
 
 var map = [];
@@ -298,7 +298,9 @@ document.onkeydown = document.onkeyup = function(e){
 			}
 			responsiveVoice.speak(audioSelection);
 		}
-
+		else if (map[73]){
+			codeReader();
+		}
 
 		else if(map[74]){ //J 
 			blockLister();

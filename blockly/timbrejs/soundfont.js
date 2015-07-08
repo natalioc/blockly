@@ -152,6 +152,7 @@
 		for (i = 0; i < noteArray.length; i++) {
 			getSample(noteArray[i], noop);
 		}
+		//loading = false;
 	};
 
 	soundfont.play = function (note, playOnLoad, options) {
