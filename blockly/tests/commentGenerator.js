@@ -404,11 +404,11 @@ function earNestLevel(currentNode){
                     switch (nestArray[j])
                     {
                         case "-1": nestArray[j]=-1; break;
-                        case "1": nestArray[j]=1;break;
-                        case "2": nestArray[j]=9;break;
-                        case "3": nestArray[j]=25;break;
-                        case "4": nestArray[j]=33;break;
-                        case "5": nestArray[j]=42;break;
+                        case "1": nestArray[j]=41;break;
+                        case "2": nestArray[j]=42;break;
+                        case "3": nestArray[j]=43;break;
+                        case "4": nestArray[j]=44;break;
+                        case "5": nestArray[j]=45;break;
                         default: nestArray[j]=73;break;
                     }
                 }  
