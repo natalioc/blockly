@@ -35,7 +35,7 @@ var commentableBlockArr = []; //an array of the blocks we will be checking for c
 var prefixArr = []; //an array containing the prefix for the comment generation
 var indentationArr = []; //an array that stores the depth of the blocks for indentation
 var stateChange = false;
-
+var globalNextCount = 0;
 /**
  * Whenever the workspace is modified it updates the state so that we better know when to call the comment generation
  */
@@ -132,8 +132,8 @@ Blockly.Accessibility.TreeView.getIndent = function(commentableBlockArr){
 		indentationArr.push(indentationArr[i]);
 	}
 	indentationArr.splice(i);
-	return indentationArr;
-	//Blockly.Accessibility.TreeView.createComments(commentableBlockArr, indentationArr);
+	//return indentationArr;
+	Blockly.Accessibility.TreeView.createComments(commentableBlockArr, indentationArr);
 };
 
 /**
@@ -376,161 +376,260 @@ Blockly.Accessibility.TreeView.getAllComments = function() {
         return null;
     }
     //Add all xml blocks to blockArr 
-     var blockArr = xmlDoc.getElementsByTagName('BLOCK');
-     //array of indented blocks
-     var indentArr = null//Blockly.Accessibility.TreeView.getIndent2(blockArr);
-     var nextCount = 0;
-     var capitalAlphabet = 0;
-     var lowerAlphabet = 0;
-     var newPrefixArr = [];
-     var oldPrefix = '';
-     var blockIndex = 1;
-     var emptyVisited = false;
-     var previousNode = null; //previous node for checking statements
-     var storedStr = ''; // the stored str for weird jumps in indentation
-     var statementCount = 1; //how indented the statement got
-     var statementIndex = 1; //block index of statements
-     var statementVisited = false;
-     console.log(blockArr);
-     //console.log(indentArr);
-     for (var i = 0; i <= blockArr.length - 1; i++) {
-     	//will find blocks that currently don't have any children
-     	if(blockArr[i].childNodes.length == 0){
-     		if(emptyVisited == true){
-     			emptyVisited = false;
-     		}
-     		else{
-     			oldPrefix = oldPrefix.substring(0, oldPrefix.length - 1) + blockIndex;
-     			newPrefixArr.push(oldPrefix);
-     			blockIndex++;
-     			lowerAlphabet = 0;
-     			previousNode = blockArr[i];
-     		}
-     	}
+    var blockArr = xmlDoc.getElementsByTagName('BLOCK');
+    //array of indented blocks
+    var indentArr = null//Blockly.Accessibility.TreeView.getIndent2(blockArr);
+    var nextCount = 0;
+    var capitalAlphabet = 0;
+	var map = {};
+    var lowerAlphabet = 0;
+    var newPrefixArr = [];
+    var oldPrefix = '';
+    var blockIndex = 1;
+    var emptyVisited = true;
+    var previousNode = null; //previous node for checking statements
+    var storedStr = ''; // the stored str for weird jumps in indentation
+    var statementCount = 0; //how indented the statement got
+    var statementIndex = 1; //block index of statements
+    var statementVisited = false;
+    var capitalAlphabet2 = 0;
+    var flipped = false;
+    var savedString = '';
+    console.log(blockArr);
+    //console.log(indentArr);
+    for (var i = 0; i <= blockArr.length - 1; i++) {
      	//will find blocks that arent connected to anything
      	if(blockArr[i].parentNode.nodeName == 'XML'){
      		blockIndex = 1;
      		oldPrefix = Blockly.Accessibility.TreeView.getAlphabetical(capitalAlphabet).toUpperCase() + blockIndex;
      		newPrefixArr.push(oldPrefix);
+     		savedString = oldPrefix;
      		capitalAlphabet++;
-     		lowerAlphabet = 0;
-     		previousNode = blockArr[i];
+    		map[blockArr[i].getAttribute('id').toString()] = oldPrefix;
+    		lowerAlphabet = 0;
+     		//previousNode = blockArr[i];
      		emptyVisited = true;
+     		Blockly.Accessibility.TreeView.howManyNexts(blockArr[i], oldPrefix);
+     		var k = 1;
+     		while(k <= globalNextCount){
+     			if(k == 1){
+     				k++;
+     			}
+     			else{
+     				oldPrefix = oldPrefix.substring(0, oldPrefix.length - 1) + k;
+     				newPrefixArr.push(oldPrefix);
+     				k++;
+     			}
+     		}
+     		blockIndex++;
+     	}
+     	//will handle blocks that have no children
+     	if(blockArr[i].childNodes.length == 0){
+     		if(emptyVisited == true){
+     			emptyVisited = false;
+     		}
+     		else{
+     			console.log(blockArr[i].parentNode.parentNode);
+     			oldPrefix = map[blockArr[i].parentNode.parentNode.getAttribute('id').toString()];
+     			oldPrefix = oldPrefix.substring(0, oldPrefix.length - 1);
+     			oldPrefix = oldPrefix + blockIndex;
+     			newPrefixArr.push(oldPrefix);
+    			map[blockArr[i].getAttribute('id').toString()] = oldPrefix;
+     			blockIndex++;
+     			lowerAlphabet = 0;
+     		}
      	}
      	for (var j = 0; j < blockArr[i].childNodes.length; j++) {
      		//this is for blocks nested inside of a block
      		if(blockArr[i].childNodes[j].nodeName == 'VALUE'){
-     			if(lowerAlphabet > 0){
-     				oldPrefix = oldPrefix.substring(0, oldPrefix.length - 1);
-     			}
-     			oldPrefix = oldPrefix + Blockly.Accessibility.TreeView.getAlphabetical(lowerAlphabet);
-     			newPrefixArr.push(oldPrefix);
-     			lowerAlphabet++;
-     		}
-     		//if our current node has something below it
-     		else if(blockArr[i].childNodes[j].nodeName == 'NEXT'){
      			var lastPrefixStr = oldPrefix[oldPrefix.length - 1];
-     			blockIndex++;
+     			oldPrefix = map[blockArr[i].childNodes[j].parentNode.getAttribute('id').toString()];
      			if(lastPrefixStr.match(/[a-z]/i)){
      				oldPrefix = oldPrefix.substring(0, oldPrefix.length - 1)
      			}
-     			//if your counting after a statement
-     			if(statementVisited == true) {
-     				//childNodes[0] allows you to access the block within the next or statement tag
-     				var prevNumberOfParents = Blockly.Accessibility.TreeView.getNumberOfParents(previousNode.childNodes[0]);
-     				var curNumberOfParents = Blockly.Accessibility.TreeView.getNumberOfParents(blockArr[i].childNodes[j].childNodes[0]);
-     				console.log(prevNumberOfParents);
-     				console.log(curNumberOfParents);
-     				var difference = prevNumberOfParents - curNumberOfParents;
-     				if(difference == 0){
-     					if(storedStr != '')
-     					{
-     						difference = 2;
-     						oldPrefix = storedStr;
-     						var lastGoodNumber = parseInt(oldPrefix.charAt(oldPrefix.length - (difference - 1)), 10);
-     						oldPrefix = oldPrefix.substring(0, oldPrefix.length - (difference)) + "." + (lastGoodNumber + 1);	
-     						console.log("OldPrefix if we went backwards before");
-     						console.log(oldPrefix);	
-     					}
-     					else{
-     						difference = 2;
-     						var lastGoodNumber = parseInt(oldPrefix.charAt(oldPrefix.length - (difference - 1)), 10);
-     						oldPrefix = oldPrefix.substring(0, oldPrefix.length - (difference)) + "." + (lastGoodNumber + 1);
-     						console.log("Going Down normally");
-     						console.log(oldPrefix);
-     					}
-     				}
-     				else if(difference > 0){
-     					//handles the case of the outtermost block since it has a different prefix
-     					if(curNumberOfParents == 0)
-     					{
-     						difference = difference * 2;
-     						storedStr = oldPrefix.substring(0, oldPrefix.length);
-     						var lastGoodNumber = parseInt(oldPrefix.charAt(oldPrefix.length - (difference - 1)), 10);
-     						oldPrefix = oldPrefix.substring(0, oldPrefix.length - (difference + 1)) + (lastGoodNumber + 1);
-     						console.log("were going to a top node");
-     						console.log(oldPrefix);
-     						console.log(storedStr);
-     					}
-     					else{
-     						difference = difference * 2;
-     						storedStr = oldPrefix.substring(oldPrefix.length - (difference), oldPrefix.length);
-     						var lastGoodNumber = parseInt(oldPrefix.charAt(oldPrefix.length - (difference - 1)), 10);
-     						oldPrefix = oldPrefix.substring(0, oldPrefix.length - (difference)) + "." + (lastGoodNumber + 1);
-     						console.log("we went backwards but still have some stuff to save");
-     						console.log(oldPrefix);
-     					}
-     				}
-     				newPrefixArr.push(oldPrefix);
-     			}
-     			//if your normally counting down
-     			else{
-     				console.log("just went down- same indent and no statement");
-     				oldPrefix = oldPrefix.substring(0, oldPrefix.length - 1) + blockIndex;
-     				newPrefixArr.push(oldPrefix);
-     				lowerAlphabet = 0;
-     				emptyVisited = true;
-     				statementCount = 0;
-     				previousNode = blockArr[i].childNodes[j];
-     			}
+     			oldPrefix = oldPrefix + Blockly.Accessibility.TreeView.getAlphabetical(lowerAlphabet);
+     			newPrefixArr.push(oldPrefix);
+    			map[blockArr[i].childNodes[j].childNodes[0].getAttribute('id').toString()] = oldPrefix;
+     			lowerAlphabet++;
      		}
      		//if you have a statement
      		else if(blockArr[i].childNodes[j].nodeName == 'STATEMENT'){
      			//console.log("more indented...only called for the first block in statement");
-     			var lastPrefixStr = oldPrefix[oldPrefix.length - 1];
      			lowerAlphabet = 0;
-     			if(lastPrefixStr.match(/[a-z]/i)){
-     				oldPrefix = oldPrefix.substring(0, oldPrefix.length - 1)
-     			}
+     			oldPrefix = map[blockArr[i].childNodes[j].parentNode.getAttribute('id').toString()] + ".1";
+     			//console.log(globalNextCount);
      			statementCount++;
-     			oldPrefix = oldPrefix + '.1';
+     			//if(globalNextCount > 1){
+     			//	if(statementCount > 0){
+     			//		oldPrefix = oldPrefix.substring(0, oldPrefix.length - 1);
+     			//	}
+     			//	else{
+     			//		console.log("in the globalNext")
+     			//		oldPrefix = savedString;
+     			//	}
+     			//}
      			newPrefixArr.push(oldPrefix);
+    			map[blockArr[i].childNodes[j].childNodes[0].getAttribute('id').toString()] = oldPrefix;
+
+     			/**
      			emptyVisited = true;
      			statementVisited = true;
-     			previousNode = blockArr[i].childNodes[j];
+     			//previousNode = blockArr[i].childNodes[j];
+     			console.log("old Prefix before the statement increase");
+     			console.log(oldPrefix);
+     			globalNextCount = 0;
+     			Blockly.Accessibility.TreeView.howManyNexts(blockArr[i].childNodes[j].childNodes[0]);
+     			var k = 1;
+     			console.log(globalNextCount);
+     			while(k <= globalNextCount){
+     				if(k == 1){
+     				k++;
+     				}
+     				else{
+     					oldPrefix = oldPrefix.substring(0, oldPrefix.length - 1) + k;
+     					newPrefixArr.push(oldPrefix);
+     					k++;
+     				}
+     			}*/
+     		}
+     		else if(blockArr[i].childNodes[j].nodeName == 'NEXT'){
+     			lowerAlphabet = 0;
+     			emptyVisited = true;
+     			oldPrefix = map[blockArr[i].childNodes[j].parentNode.getAttribute('id').toString()];
+     			var lastGoodNumber = parseInt(oldPrefix.charAt(oldPrefix.length - 1, 10));
+     			console.log(lastGoodNumber);
+     			oldPrefix = oldPrefix.substring(0, oldPrefix.length - 1) + (lastGoodNumber + 1);
+    			map[blockArr[i].childNodes[j].childNodes[0].getAttribute('id').toString()] = oldPrefix;
      		}
      		else{
-     			console.log("This is a value");
+     			console.log("This is a field");
      		}
      	}
     }
+    for (var i = 0; i < blockArr.length - 1; i++) {
+    	for (var j = 0; j < blockArr[i].childNodes.length; j++) {
+    		if(blockArr[i].childNodes[j].nodeName == 'NEXT'){	
+    			/**
+	    		//console.log(oldPrefix);
+	    		console.log(previousNode);
+	    		//catch the first block
+	    		if(!previousNode){
+	    			previousNode = blockArr[i];
+	    		}
+	    		console.log("PreviousNode then Current Node");
+	    		//allows us to get the right blocks for comparisson 
+	    		if(j == 0){
+	    			console.log("first")
+	    			console.log(previousNode);
+	    			var prevNumberOfParents = Blockly.Accessibility.TreeView.getNumberOfParents(previousNode);
+	    		}
+	    		//j is 1 or greater
+	    		else{
+	    			console.log("second")
+	    			var k = j - 1;
+	    			console.log(previousNode.childNodes[k].childNodes[0]);
+	    			var prevNumberOfParents = Blockly.Accessibility.TreeView.getNumberOfParents(previousNode.childNodes[k].childNodes[0]);
+	    		
+	    		}
+	    		console.log(blockArr[i].childNodes[j].childNodes[0]);
+	    		var lastPrefixStr = oldPrefix[oldPrefix.length - 1];
+	     		var curNumberOfParents = Blockly.Accessibility.TreeView.getNumberOfParents(blockArr[i].childNodes[j].childNodes[0]);
+	     		console.log(prevNumberOfParents);
+	     		console.log(curNumberOfParents);
+	     		console.log("seperate");
+	     		if(flipped == true){
+	     			var difference = curNumberOfParents - prevNumberOfParents;
+	     		}
+	     		else{
+	     			var difference = prevNumberOfParents - curNumberOfParents;
+	     		}
+	     		//console.log(difference)
+    			//cuts off any lowercase variables if the last prefix was 
+    			if(lastPrefixStr.match(/[a-z]/i)){
+     				oldPrefix = oldPrefix.substring(0, oldPrefix.length - 1)
+     			}
+     			if(statementCount != 0){
+    				if(difference <= 0){
+    					if(difference < 0){
+    						statementCount--;
+    					}
+    					console.log("difference is equal to or less than 0")
+    					difference = 2;
+     					var lastGoodNumber = parseInt(oldPrefix.charAt(oldPrefix.length - (difference - 1), 10));
+     					//console.log(lastGoodNumber);
+     					oldPrefix = oldPrefix.substring(0, oldPrefix.length - (difference - 1)) + (lastGoodNumber + 1);
+     					//console.log(oldPrefix);
+     					newPrefixArr.push(oldPrefix);
+     					previousNode = blockArr[i].childNodes[j].childNodes[0];
+    				}
+    				//should check for the heading condition here and handle the regular difference in the else
+    				else if(difference > 0){
+    					console.log("difference is greater than 0")
+    					difference = difference * 2;
+     					var lastGoodNumber = parseInt(oldPrefix.charAt(oldPrefix.length - (difference + 1)), 10);
+     					oldPrefix = oldPrefix.substring(0, oldPrefix.length - (difference - 1)) + (lastGoodNumber + 1);
+
+     					newPrefixArr.push(oldPrefix);
+     					statementCount = statementCount - 1;
+     					previousNode = blockArr[i].childNodes[j].childNodes[0];
+     					flipped = true;
+    				}
+    				else{
+    					console.log("WHY AM I HERE?")
+    				}
+    			}
+    			//if we are on the outtermost layer
+    			else{
+    				if(statementCount == 0){
+    					if(capitalAlphabet <= 25){
+							var lastGoodNumber = parseInt(oldPrefix.charAt(1), 10);
+     						oldPrefix = oldPrefix.substring(0, 1) + (lastGoodNumber + 1);
+     						newPrefixArr.push(oldPrefix);
+     						previousNode = blockArr[i].childNodes[j].childNodes[0];
+						}
+						else{
+							var lastGoodNumber = parseInt(oldPrefix.charAt(2), 10);
+     						oldPrefix = oldPrefix.substring(0, 2) + (lastGoodNumber + 1);
+     						newPrefixArr.push(oldPrefix);
+     						previousNode = blockArr[i].childNodes[j].childNodes[0];
+						}
+    				}
+    				else{
+    					//console.log(blockArr[i].childNodes[j].parentNode);
+    					console.log("in the far else");
+    					difference = 1;
+     					var lastGoodNumber = parseInt(oldPrefix.charAt(oldPrefix.length - (difference)), 10);
+     					oldPrefix = oldPrefix.substring(0, oldPrefix.length - (difference)) + (lastGoodNumber + 1);
+     					newPrefixArr.push(oldPrefix);
+     					previousNode = blockArr[i].childNodes[j].childNodes[0];
+     				}
+
+    			}*/
+    			//console.log("still Alive")
+    		}
+    	}
+    }
+    //eliminates all duplicates from the list
     var noDuplicatePrefixArr = newPrefixArr.filter(function(elem, pos) {
     return newPrefixArr.indexOf(elem) == pos;
    	});
-    console.log(noDuplicatePrefixArr);
+   	console.log(map);
+    //console.log(newPrefixArr);
 };
 
-Blockly.Accessibility.TreeView.getIndent2 = function(blockArr){
-	var statementCount = 0;
-	var blockArrIndent = [];
-	for (var i = 0; i < blockArr.length; i++) {
-		var blockIndent = Blockly.Accessibility.TreeView.getNumberOfParents(blockArr[i]);
-		blockArrIndent.push(blockIndent);
+Blockly.Accessibility.TreeView.putAllNexts = function(Oldprefix, prefixArr){
+
+};
+
+Blockly.Accessibility.TreeView.howManyNexts = function(block){
+	globalNextCount++;
+	for (var i = 0; i < block.childNodes.length; i++) {
+		if(block.childNodes[i].nodeName == 'NEXT'){
+			Blockly.Accessibility.TreeView.howManyNexts(block.childNodes[i].childNodes[0]);
+
+		}
 	}
-	//console.log("This is the indent arr");
-	//console.log(blockArrIndent);
-	return blockArrIndent;
-}
+};
 
 Blockly.Accessibility.TreeView.eliminateDuplicates = function(arr) {
   var i,
