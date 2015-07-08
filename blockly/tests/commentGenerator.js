@@ -494,6 +494,13 @@ function blockLister(){
         idList[i] = blockList[i].getAttribute('type');
      };
 
+
+
+     var parArrLen = parentArr.length;
+     for(var i = 0; i<parArrLen; i++){
+        window.alert(parentArr[i].toString());
+     }
+
     /*
     var childList =[];
     for (var i = 0 < listLen; i++){
@@ -501,10 +508,10 @@ function blockLister(){
     };
 
     window.alert(childList);
-    */
+   
 
-     window.alert(idList);
-     
+    window.alert(idList);
+     */
      var currentXml = Blockly.Xml.domToPrettyText(Blockly.Xml.workspaceToDom(Blockly.mainWorkspace));
      window.alert(currentXml);
      //perfectArr = [];
