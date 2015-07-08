@@ -1,5 +1,7 @@
 'use strict';
 
+var numberOfBlocks=0;
+
 /**
 *Copyright [2015] [Rachael Bosley, Luna Meier]
 *
@@ -16,6 +18,8 @@
 *limitations under the License.
 */
 goog.require('Blockly.Blocks');
+goog.require('Blockly.WorkspaceSvg');
+goog.require('Blockly.Workspace');
 //goog.require('meSpeak');
 //var meSpeak=require("mespeak");
 
@@ -256,9 +260,19 @@ document.onkeydown = document.onkeyup = function(e){
 			//var highlight = blockArr[0];
 			//window.alert(highlight);
 		}
-		else if(map[88]){
+		else if(map[88]){//x
 			question2(1);
+			try{
+			//Blockly.BlockSvg.getBlockNodeByID(53).select();
+//			var here=getBlockNodeById(1);
+
+//			window.alert(here);
+			}
+			catch(err){
+				window.alert(err+"  "+err.lineNumber);
+			}
 		}
+
 		else if(map[61]){ //+
 			speedSpeak+=20;
 		}
@@ -282,6 +296,18 @@ document.onkeydown = document.onkeyup = function(e){
 					break;
 			}
 			meSpeak.speak(audioSelection);
+		}
+		else if(map[86])//v
+		{
+			jumpToID(1);
+		}
+		else if(map[70]){//f
+			try{
+				question4(1);		
+ 			}
+ 			catch(err){
+ 				window.alert(err+err.lineNumber);
+ 			}
 		}
 	}
 };

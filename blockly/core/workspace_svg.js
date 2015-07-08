@@ -311,6 +311,15 @@ Blockly.WorkspaceSvg.prototype.render = function() {
   }
 };
 
+Blockly.WorkspaceSvg.prototype.selectBlocks=function() {
+  window.alert(this.getAllBlocks().length);
+};
+
+Blockly.WorkspaceSvg.prototype.showBlocks = function() {
+  var renderList = this.getAllBlocks();
+  window.alert(renderList)
+};
+
 /**
  * Turn the visual trace functionality on or off.
  * @param {boolean} armed True if the trace should be on.

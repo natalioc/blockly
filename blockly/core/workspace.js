@@ -118,6 +118,12 @@ Blockly.Workspace.prototype.getTopBlocks = function(ordered) {
   return blocks;
 };
 
+Blockly.Workspace.prototype.selectBlock=function(){
+  //var blocks = [].concat(this.topBlocks_);
+  //window.alert(blocks);
+  window.alert(this.getAllBlocks().length);
+};
+
 /**
  * Find all blocks in workspace.  No particular order.
  * @return {!Array.<!Blockly.Block>} Array of blocks.

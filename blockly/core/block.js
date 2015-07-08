@@ -289,7 +289,14 @@ Blockly.Block.prototype.getConnections_ = function(all) {
   }
   return myConnections;
 };
+/*
+function root(current){
 
+}
+
+Blockly.Block.prototype.getRoot=function(){
+
+}*/
 /**
  * Bump unconnected blocks out of alignment.  Two blocks which aren't actually
  * connected should not coincidentally line up on screen.
