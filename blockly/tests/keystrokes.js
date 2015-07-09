@@ -23,7 +23,7 @@ goog.require('Blockly.Workspace');
 //goog.require('meSpeak');
 //var meSpeak=require("mespeak");
 
-//T.soundfont.preload([1,9,25,33,42]);
+T.soundfont.preload([41,42,43,44,45]);
 
 
 var map = [];
