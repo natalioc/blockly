@@ -566,3 +566,12 @@ function blockLister(){
     // var currentXml = Blockly.Xml.domToPrettyText(Blockly.Xml.workspaceToDom(Blockly.mainWorkspace));
     // window.alert(currentXml);
 }//end of getImportantBlocks
+
+function codeReader(){
+    var array = "variable i equals 0. variable k equals 0. while i less than 2, increase k by 1, if i is equal to 0 increase k by 1, else decrease k by 1, increase i by 1, print k";
+
+
+        responsiveVoice.speak(array);
+
+};
+>>>>>>> f37abee98104573a24ecd619a7d867c67bd57272
