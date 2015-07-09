@@ -580,6 +580,7 @@ function codeReader(){
  //   var indent=[1,-1,-1,2,-1,3,2,3,2,1];
     var indent=[1,-1,2,-1,3,2]
     var i=0;
+    var speedPlay;
     play=false;
     try{
     for(i;i<array.length;i++){
@@ -591,7 +592,11 @@ function codeReader(){
             else if(levelReader==="ear con")
                 playStringEar(indent[i]);
         }
-        playString(array[i]);
+        if(levelReader==="ear con")
+            speedPlay=1500;
+        else
+            speedPlay=100;
+        playString(array[i],speedPlay);
     }
     }
     catch(err){
@@ -601,9 +606,9 @@ function codeReader(){
 
 var doneTalking=true;
 
-function playString(text){
+function playString(text,speedPlay){
     if(responsiveVoice.isPlaying()===true||play===true||doneTalking===false){
-       setTimeout(function() {playString(text);}, 200);
+       setTimeout(function() {playString(text,speedPlay);}, speedPlay);
        return;
     }
     else{
@@ -614,7 +619,7 @@ function playString(text){
 
 function playStringNormal(indent){
     if(responsiveVoice.isPlaying()===true){
-       setTimeout(function() {playStringNormal(indent);}, 200);
+       setTimeout(function() {playStringNormal(indent);}, 100);
        return;
     }
     else{
@@ -627,7 +632,7 @@ function playStringNormal(indent){
 function playStringEar(indent){
     if(responsiveVoice.isPlaying()===true||play===true){
         console.log(play);
-       setTimeout(function() {playStringEar(indent);}, 200);
+       setTimeout(function() {playStringEar(indent);}, 1500);
        return;
     }
     else{
@@ -645,17 +650,21 @@ function playStringEar(indent){
             }
         }
         var normalText="Level "+indent;
-        play=true;
         var j=0;
         var toggle = false;
         var newSpeed=720/indent;
         T.soundfont.preload(instrument);
+        play=true;
         var t = T("interval", {interval:newSpeed,timeout:"55sec"},function(){
+            if(j>instrument.length-1||instrument[j]===undefined){
+                this.stop();
+                play=false;
+            }
             if(!toggle){
                 if(!instrument[j]){
                //     window.alert(i);
                     this.stop();
-                    setTimeout(function() {play = false;}, 720);
+                    play=false;
                 }
                 T.soundfont.play(instrument[j]);
                 j++;
@@ -663,9 +672,6 @@ function playStringEar(indent){
             }
             else{
                 toggle = !toggle;
-            }
-            if(j>instrument.length-1||instrument[j]===undefined){
-                this.stop();
             }
         }).on("ended",function(){
             this.stop();
@@ -676,7 +682,7 @@ function playStringEar(indent){
 };
 function playStringSpear(indent){
     if(responsiveVoice.isPlaying()===true||doneTalking===false){
-       setTimeout(function() {playStringSpear(indent);}, 200);
+       setTimeout(function() {playStringSpear(indent);}, 100);
        return;
     }
     else{
