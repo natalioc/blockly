@@ -559,9 +559,9 @@ function blockLister(){
 }//end of getImportantBlocks
 
 function codeReader(){
-    voicecollection.CHARACTER_LIMIT=200;
-    var array = "variable i equals 0. variable k equals 0. while i less than 2, increase k by 1, if i is equal to 0
-    increase k by 1, else decrease k by 1, increase i by 1, print k";
+    var array = "variable i equals 0. variable k equals 0. while i less than 2, increase k by 1, if i is equal to 0 increase k by 1, else decrease k by 1, increase i by 1, print k";
+
 
         responsiveVoice.speak(array);
+
 };
