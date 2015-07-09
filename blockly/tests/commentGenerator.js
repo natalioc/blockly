@@ -331,19 +331,12 @@ function nestLevel(currentNode,speakSpeed){
                var nestInfo = prefixArr[i].substring(1);
                var nestArray = nestInfo.split(".");
                for(var j=0;j<nestArray.length;j++){
-                    if(j===0){
-                        speakLevel="Section "+ nestArray[j];
-                  //      meSpeak.speak(speakLevel, {speed: spearSpeed});
-                    }
-                    else if(j===1){
-                        addition="Depth "+nestArray[j];
-                        speakLevel+=addition;
-                    //    meSpeak.speak(speakLevel, {speed: spearSpeed});
+                    if(j<nestArray.length-1){
+                        speakLevel+=nestArray[j];
+                        speakLevel+=" point ";
                     }
                     else{
-                        addition="Subsection "+nestArray[j];
-                        speakLevel+=addition;
-                     //   meSpeak.speak(now, {speed: spearSpeed});
+                        speakLevel+=nestArray[j];
                     }
                 }
                 responsiveVoice.speak(speakLevel);
@@ -364,19 +357,12 @@ function spearNestLevel(currentNode){
                 var nestInfo = prefixArr[i].substring(1);
                 var nestArray = nestInfo.split(".");
                 for(var j=0;j<nestArray.length;j++){
-                    if(j===0){
-                        speakLevel="Section "+ nestArray[j];
-                  //      meSpeak.speak(speakLevel, {speed: spearSpeed});
-                    }
-                    else if(j===1){
-                        addition="Depth "+nestArray[j];
-                        speakLevel+=addition;
-                    //    meSpeak.speak(speakLevel, {speed: spearSpeed});
+                    if(j<nestArray.length-1){
+                        speakLevel+=nestArray[j];
+                        speakLevel+=" point ";
                     }
                     else{
-                        addition="Subsection "+nestArray[j];
-                        speakLevel+=addition;
-                     //   meSpeak.speak(now, {speed: spearSpeed});
+                        speakLevel+=nestArray[j];
                     }
                 }
                 meSpeak.speak(speakLevel, {speed: spearSpeed});
@@ -405,14 +391,13 @@ function earNestLevel(currentNode){
                     {
                         case "-1": nestArray[j]=-1; break;
                         case "1": nestArray[j]=41;break;
-                        case "2": nestArray[j]=41;break;
-                        case "3": nestArray[j]=41;break;
-                        case "4": nestArray[j]=41;break;
-                        case "5": nestArray[j]=41;break;
+                        case "2": nestArray[j]=42;break;
+                        case "3": nestArray[j]=43;break;
+                        case "4": nestArray[j]=44;break;
+                        case "5": nestArray[j]=45;break;
                         default: nestArray[j]=73;break;
                     }
                 } 
-                window.alert(nestArray);
                 var tempNotes=[];
                 for(var j=0;j<nestArray.length;j++){
                     if(nestArray[j]===-1){
@@ -448,7 +433,6 @@ function playNotes(noteToPlay,speed){
     t = T("interval", {interval:newSpeed,timeout:"55sec"},function(){
         if(i>noteToPlay.length-1||noteToPlay[i]===undefined){
             this.stop();
-            play=false;
         }
         if(!toggle){
             if(!noteToPlay[i]){
@@ -515,7 +499,7 @@ function blockLister(){
     window.alert(idList);
      */
      var currentXml = Blockly.Xml.domToPrettyText(Blockly.Xml.workspaceToDom(Blockly.mainWorkspace));
-     window.alert(currentXml);
+    // window.alert(currentXml);
      //perfectArr = [];
 
      /*
@@ -559,9 +543,121 @@ function blockLister(){
 }//end of getImportantBlocks
 
 function codeReader(){
-    var array = "variable i equals 0. variable k equals 0. while i less than 2, increase k by 1, if i is equal to 0 increase k by 1, else decrease k by 1, increase i by 1, print k";
+    var levelReader=audioSelection;
+    var array = []; 
+    array[0]="variable i equals 0"; 
+    array[1]="variable k equals 0";
+    array[2]="while i is less than 2"; 
+    array[3]="increase k by 1";
+    array[4]="if i is equal to 0";
+    array[5]="increase k by 1"; 
+    array[6]="else";
+    array[7]="decrease k by 1"; 
+    array[8]="increase i by 1";
+    array[9]="print k";
 
+    var indent=[1,-1,-1,2,-1,3,2,3,2,1];
+    var i=0;
+    play=false;
+    try{
+    for(i;i<array.length;i++){
+        if(indent[i]!=-1){
+            if(levelReader==="normal")
+                playStringNormal(indent[i]);
+            else if(levelReader==="spear con")
+                playStringSpear(indent[i]);
+            else if(levelReader==="ear con")
+                playStringEar(indent[i]);
+        }
+        playString(array[i]);
+    }
+    }
+    catch(err){
+        window.alert(err+"    "+err.lineNumber);
+    }
+};
 
-        responsiveVoice.speak(array);
+function playString(text){
+    if(responsiveVoice.isPlaying()===true||play===true){
+       setTimeout(function() {playString(text);}, 300);
+       return;
+    }
+    else{
+        responsiveVoice.speak(text);
+        return;
+    }
+};
 
+function playStringNormal(indent){
+    if(responsiveVoice.isPlaying()===true){
+       setTimeout(function() {playStringNormal(indent);}, 300);
+       return;
+    }
+    else{
+        var normalText="Level "+indent;
+        responsiveVoice.speak(normalText);
+        return;
+    }
+};
+
+function playStringEar(indent){
+    if(responsiveVoice.isPlaying()===true||play===true){
+       setTimeout(function() {playStringEar(indent);}, 300);
+       return;
+    }
+    else{
+        var instrument=[];
+        for (var j=0;j<indent;j++)
+            instrument.push(indent);
+        for (var j=0;j<instrument.length;j++){
+            switch(instrument[j]){
+                case 1: instrument[j]=41;break;
+                case 2: instrument[j]=42;break;
+                case 3: instrument[j]=43;break;
+                case 4: instrument[j]=44;break;
+                case 5: instrument[j]=45;break;
+                default: instrument[j]=73;break;
+            }
+        }
+        var normalText="Level "+indent;
+        play=true;
+        var j=0;
+        var toggle = false;
+        var newSpeed=720/indent;
+        T.soundfont.preload(instrument);
+        var t = T("interval", {interval:newSpeed,timeout:"55sec"},function(){
+            if(j>instrument.length-1||instrument[j]===undefined){
+                this.stop();
+            }
+            if(!toggle){
+                if(!instrument[j]){
+               //     window.alert(i);
+                    this.stop();
+                    play = false;
+                }
+                T.soundfont.play(instrument[j]);
+                j++;
+                toggle = !toggle;
+            }
+            else{
+                toggle = !toggle;
+            }
+        }).on("ended",function(){
+            this.stop();
+            play=false;
+        }).start();
+    }
+    return;
+};
+
+function playStringSpear(indent){
+    if(responsiveVoice.isPlaying()===true){
+       setTimeout(function() {playStringSpear(indent);}, 300);
+       return;
+    }
+    else{
+        var normalText="Level "+indent;
+        meSpeak.speak(normalText, {speed: 700});
+        return;
+    }
 };

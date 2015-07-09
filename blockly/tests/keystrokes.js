@@ -23,8 +23,6 @@ goog.require('Blockly.Workspace');
 //goog.require('meSpeak');
 //var meSpeak=require("mespeak");
 
-T.soundfont.preload([41,42,43,44,45]);
-
 
 var map = [];
 var keyboardState = 'hotkeyMode';
