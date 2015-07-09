@@ -379,7 +379,12 @@ function spearNestLevel(currentNode){
                      //   meSpeak.speak(now, {speed: spearSpeed});
                     }
                 }
-                meSpeak.speak(speakLevel, {speed: spearSpeed});
+                try{
+                    meSpeak.speak(speakLevel, {speed: spearSpeed});
+                }
+                catch(err){
+                    window.alert(err+"   "+err.lineNumber);
+                }
                 break;
             }
         }
@@ -412,7 +417,6 @@ function earNestLevel(currentNode){
                         default: nestArray[j]=73;break;
                     }
                 } 
-                window.alert(nestArray);
                 var tempNotes=[];
                 for(var j=0;j<nestArray.length;j++){
                     if(nestArray[j]===-1){
@@ -433,6 +437,7 @@ function earNestLevel(currentNode){
 var play=false;
 var t;
 function playNotes(noteToPlay,speed){
+    try{
     if(play===true){
         setTimeout(function() {
             playNotes(noteToPlay,speed);
@@ -466,6 +471,10 @@ function playNotes(noteToPlay,speed){
         this.stop();
         play=false;
     }).start();
+    }
+    catch(err){
+        window.alert(err);
+    }
     return;
 };
 
@@ -565,3 +574,4 @@ function codeReader(){
         responsiveVoice.speak(array);
 
 };
+>>>>>>> f37abee98104573a24ecd619a7d867c67bd57272
