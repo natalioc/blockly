@@ -1,0 +1,52 @@
+    
+	
+	Auditory Cue Orders for the trials
+
+
+    1 - earcons, spearcons, speech
+    2 - earcons, speech, spearcons
+    3 - spearcons, earcons, speech
+    4 - speech, earcons, spearcons
+    5 -	spearcons, speech, earcons
+    6 - speech, spearcons, earcons
+
+
+    Combinations of Tasks to be used in task 1 (7 to Choose from, labeled A - G);
+
+    A B C
+	A B D
+	A B E
+	A B F
+	A B G
+	A C D
+	A C E
+	A C F
+	A C G
+	A D E
+	A D F
+	A D G
+	A E F
+	A E G
+	A F G
+	B C D
+	B C E
+	B C F
+	B C G
+	B D E
+	B D F
+	B D G
+	B E F
+	B E G
+	B F G
+	C D E
+	C D F
+	C D G
+	C E F
+	C E G
+	C F G
+	D E F
+	D E G
+	D F G
+	E F G
+
+	

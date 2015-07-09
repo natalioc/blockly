@@ -493,7 +493,7 @@ function blockLister(){
 
 
      var parArrLen = parentArr.length;
-     window.alert(parArrLen);
+     window.alert(parentArr);
      /*
      for(var i = 0; i<parArrLen; i++){
         window.alert(parentArr[i].toString());
