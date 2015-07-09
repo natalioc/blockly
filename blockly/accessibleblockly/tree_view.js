@@ -210,49 +210,33 @@ Blockly.Accessibility.TreeView.commentPrefix = function(commentableBlockArr, ind
  * @param {array} commentableBlockArr is the array of blocks that potentially have comments
  * @param {array} indentationArr is an array that tracks how deeply nested the blocks are
  */
-Blockly.Accessibility.TreeView.createComments = function(commentableBlockArr, indentationArr){
+Blockly.Accessibility.TreeView.createComments = function(){//commentableBlockArr, indentationArr){
   //clears the comment div of old data
-  document.getElementById("comment").innerHTML = "";
-
-  var pTag; 
-  var commentStr;
-  var prefixes = Blockly.Accessibility.TreeView.commentPrefix(commentableBlockArr, indentationArr);
-  var indent;
-  var currNode;
-  for(var i = 0; i < commentableBlockArr.length; i++){
-    commentStr = '';
-    currNode = commentableBlockArr[i];
-    pTag = document.createElement("p");
-    pTag.setAttribute("tabindex", 0);
-    pTag.setAttribute("id", i);
-    indent = indentationArr[i];
-    //checks how many indents a comment is going to have
-    while(indent != 0) {
-      commentStr += "---";
-      indent--;
+    document.getElementById("comment").innerHTML = "";
+    map = Blockly.Accessibility.TreeView.getAllComments();
+    var pTag; 
+    var commentStr = '';
+    var blockArr = xmlDoc.getElementsByTagName('BLOCK');
+    var commentArr = xmlDoc.getElementsByTagName('COMMENT');
+    map = Blockly.Accessibility.TreeView.getAllComments();
+    if(commentArr.length == 0){
+    	pTag = document.createElement("p");
+    	pTag.setAttribute("tabindex", 0);
+    	pTag.setAttribute("id", 0);
+    	commentStr = "No Comments";
     }
-    commentStr += " " + prefixes[i];
-
-    if(commentableBlockArr[i].getElementsByTagName("comment")[0] == undefined){
-      commentStr += " No comment";
-    } 
-
     else{
-    	//if the block has a comment it will be shown otherwise it will print no comment
-        var parentsId = commentableBlockArr[i].getElementsByTagName("comment")[0].parentNode.getAttribute('id');
-        if(parentsId == currNode.getAttribute('id')){
-          var htmlComment = currNode.getElementsByTagName("comment")[0].innerHTML;
-          commentStr += " " + htmlComment;
-        }
-        else{
-          commentStr += " No comment";
-        }
-    }
-
+	    for(var i = 0; i <= commentArr.length - 1; i++){
+	    	pTag = document.createElement("p");
+	    	pTag.setAttribute("tabindex", 0);
+	    	pTag.setAttribute("id", i);
+	    	commentStr += map[commentArr[i].parentNode.getAttribute('id').toString()];
+        	commentStr += " " + commentArr[i].childNodes[0].data;
+	    }
+	}
     var pTextNode = document.createTextNode(commentStr);
     pTag.appendChild(pTextNode);
     document.getElementById("comment").appendChild(pTag);
-  }
 };
 
 /**
@@ -286,15 +270,15 @@ Blockly.Accessibility.TreeView.commentOrBlockJump = function(){
  * (@param int) the id of the current node we are on
  */
 Blockly.Accessibility.TreeView.infoBoxFill = function(currentNode){
-	//erases any pre-existing text in the div
+	Blockly.Accessibility.TreeView.createComments();
 	var map = Blockly.Accessibility.TreeView.getAllComments();
 	if (!xmlDoc || !xmlDoc.getElementsByTagName('BLOCK')) {
-		console.log("nothings here");
         return null;
     }
+    //erases any pre-existing text in the div
+	document.getElementById("infoBox").innerHTML = "";
     //Add all xml blocks to blockArr 
     var blockArr = xmlDoc.getElementsByTagName('BLOCK');
-	document.getElementById("infoBox").innerHTML = "";
 	var sectionStr = '';
 	var depthStr = '';
 	var prefixStr = '';
@@ -304,28 +288,6 @@ Blockly.Accessibility.TreeView.infoBoxFill = function(currentNode){
 
 	//Build String to put in box
 	for (var i = 0; i <= blockArr.length - 1; i++) {
-		/**
-		if(currentNode.getAttribute('id') == blockArr[i].getAttribute('id')){	
-			var indexOfPeriod = prefixArr[i].indexOf(".");
-			if(indexOfPeriod == -1){
-				var prefixLength = prefixArr[i].length;
-				if(prefixLength == 2){
-					sectionStr = "Section " + prefixArr[i].substring(1, 2);
-				}
-				else{
-					sectionStr = "Section " + prefixArr[i].substring(1, 3);
-				}
-			}
-			else if(indexOfPeriod == 2){
-				sectionStr = "Section " + prefixArr[i].substring(1, 2);
-			}
-			else if(indexOfPeriod == 3){
-				sectionStr = "Section " + prefixArr[i].substring(1, 3);
-			}
-			depthStr = "Depth " + (indentationArr[i] + 1);
-			prefixStr = prefixArr[i].substring(1, prefixArr[i].length+1);
-		}
-		*/
 		if(bigCapital == true){
 			sectionStr = map[currentNode.getAttribute('id').toString()];
 			sectionStr = "Section: " + sectionStr.substring(0, 1);
@@ -336,7 +298,6 @@ Blockly.Accessibility.TreeView.infoBoxFill = function(currentNode){
 		}
 		depthStr = map[currentNode.getAttribute('id').toString()];
 		depthStr = "Depth: " + (depthStr.match(/./g).length / 2);
-		console.log(depthStr);
 		prefixStr = map[currentNode.getAttribute('id').toString()];
 	}
 	//puts the text onto the page and in the div
@@ -407,6 +368,7 @@ Blockly.Accessibility.TreeView.getAllComments = function() {
     var oldPrefix = '';
     var blockIndex = 1;
     var emptyVisited = true;
+    var previousValue = null;
     for (var i = 0; i <= blockArr.length - 1; i++) {
      	//will find blocks that arent connected to anything
      	if(blockArr[i].parentNode.nodeName == 'XML'){
@@ -440,6 +402,18 @@ Blockly.Accessibility.TreeView.getAllComments = function() {
 	 	for (var j = 0; j < blockArr[i].childNodes.length; j++) {
 	 		//this is for blocks nested inside of a block
 	 		if(blockArr[i].childNodes[j].nodeName == 'VALUE'){
+	 			//this if else catchs a bug with the function that returns a block
+	 			//since it's setup of values are in a different order compared to the others
+	 			if(previousValue == null){
+	 				previousValue = blockArr[i];
+	 			}
+	 			else{
+	 				if(previousValue != blockArr[i]){
+	 					lowerAlphabet = 0;
+	 					previousValue = blockArr[i];
+	 				}
+	 				previousValue = blockArr[i];
+	 			}
 	 			oldPrefix = map[blockArr[i].childNodes[j].parentNode.getAttribute('id').toString()];
 	 			var lastPrefixStr = oldPrefix[oldPrefix.length - 1];
 	 			//if the prefix already has a letter on the end of it cut it off before adding the new prefix
@@ -474,6 +448,5 @@ Blockly.Accessibility.TreeView.getAllComments = function() {
 	 		}
 	 	}
 	}
-	console.log(map);
     return map;
 };
