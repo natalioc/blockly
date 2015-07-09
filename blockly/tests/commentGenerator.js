@@ -555,7 +555,7 @@ function blockLister(){
 function codeReader(){
     var levelReader=audioSelection;
     var array = []; 
-    array[0]="variable i equals 0"; 
+/*    array[0]="variable i equals 0"; 
     array[1]="variable k equals 0";
     array[2]="while i is less than 2"; 
     array[3]="increase k by 1";
@@ -564,9 +564,18 @@ function codeReader(){
     array[6]="else";
     array[7]="decrease k by 1"; 
     array[8]="increase i by 1";
-    array[9]="print k";
+    array[9]="print k";*/
 
-    var indent=[1,-1,-1,2,-1,3,2,3,2,1];
+    var array = [];
+    array[0] = "variable i equals 0";
+    array[1] = "loop 10 times";
+    array[2] = "print i";
+    array[3] = "if i equals 5";
+    array[4] = "print the quote \"Halfway\"";
+    array[5] = "increase i by 1";
+
+ //   var indent=[1,-1,-1,2,-1,3,2,3,2,1];
+    var indent=[1,-1,2,-1,3,2]
     var i=0;
     play=false;
     try{
@@ -587,8 +596,10 @@ function codeReader(){
     }
 };
 
+var doneTalking=true;
+
 function playString(text){
-    if(responsiveVoice.isPlaying()===true||play===true){
+    if(responsiveVoice.isPlaying()===true||play===true||doneTalking===false){
        setTimeout(function() {playString(text);}, 200);
        return;
     }
@@ -612,6 +623,7 @@ function playStringNormal(indent){
 
 function playStringEar(indent){
     if(responsiveVoice.isPlaying()===true||play===true){
+        console.log(play);
        setTimeout(function() {playStringEar(indent);}, 200);
        return;
     }
@@ -636,14 +648,11 @@ function playStringEar(indent){
         var newSpeed=720/indent;
         T.soundfont.preload(instrument);
         var t = T("interval", {interval:newSpeed,timeout:"55sec"},function(){
-            if(j>instrument.length-1||instrument[j]===undefined){
-                this.stop();
-            }
             if(!toggle){
                 if(!instrument[j]){
                //     window.alert(i);
                     this.stop();
-                    play = false;
+                    setTimeout(function() {play = false;}, 720);
                 }
                 T.soundfont.play(instrument[j]);
                 j++;
@@ -652,21 +661,29 @@ function playStringEar(indent){
             else{
                 toggle = !toggle;
             }
+            if(j>instrument.length-1||instrument[j]===undefined){
+                this.stop();
+            }
         }).on("ended",function(){
             this.stop();
             play=false;
         }).start();
     }
-    return;
+//    setTimeout(function() {return;}, 720);
 };
 function playStringSpear(indent){
-    if(responsiveVoice.isPlaying()===true){
+    if(responsiveVoice.isPlaying()===true||doneTalking===false){
        setTimeout(function() {playStringSpear(indent);}, 200);
        return;
     }
     else{
+        doneTalking=false;
         var normalText="Level "+indent;
-        meSpeak.speak(normalText, {speed: 700});
+        meSpeak.speak(normalText, {speed: 700},meSpeakDone);
         return;
     }
 };
+
+function meSpeakDone(){
+    doneTalking=true;
+}
