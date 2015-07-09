@@ -252,7 +252,7 @@ document.onkeydown = document.onkeyup = function(e){
 				window.alert(err+err.lineNumber);
 			}
 		}
-		else if(map[90]){
+		else if(map[90]){//z
 			//question1(1);
 			//var blockArr = xmlDoc.getElementsByTagName('BLOCK');
 			//var highlight = blockArr[0];
@@ -279,7 +279,7 @@ document.onkeydown = document.onkeyup = function(e){
 			speedSpeak-=20;
 		}
 
-		else if(map[32]){//space
+		else if(map[45]){//insert
 			switch(audioSelection)
 			{
 				case 'normal':
@@ -296,7 +296,7 @@ document.onkeydown = document.onkeyup = function(e){
 			}
 			responsiveVoice.speak(audioSelection);
 		}
-		else if (map[73]){
+		else if (map[73]){//i
 			codeReader();
 		}
 

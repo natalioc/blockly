@@ -365,7 +365,12 @@ function spearNestLevel(currentNode){
                         speakLevel+=nestArray[j];
                     }
                 }
-                meSpeak.speak(speakLevel, {speed: spearSpeed});
+                try{
+                    meSpeak.speak(speakLevel, {speed: spearSpeed});
+                }
+                catch(err){
+                    window.alert(err+"   "+err.lineNumber);
+                }
                 break;
             }
         }
@@ -418,6 +423,7 @@ function earNestLevel(currentNode){
 var play=false;
 var t;
 function playNotes(noteToPlay,speed){
+    try{
     if(play===true){
         setTimeout(function() {
             playNotes(noteToPlay,speed);
@@ -450,6 +456,10 @@ function playNotes(noteToPlay,speed){
         this.stop();
         play=false;
     }).start();
+    }
+    catch(err){
+        window.alert(err);
+    }
     return;
 };
 
@@ -649,7 +659,6 @@ function playStringEar(indent){
     }
     return;
 };
-
 function playStringSpear(indent){
     if(responsiveVoice.isPlaying()===true){
        setTimeout(function() {playStringSpear(indent);}, 300);
