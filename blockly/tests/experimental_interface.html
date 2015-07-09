@@ -1810,6 +1810,76 @@ XML Task 2 Sample Codes (Taken from Stefik's paper)
   </xml>
 
 
+  Example Code from Karlton Weaver's Paper
+
+  <xml xmlns="http://www.w3.org/1999/xhtml">
+    <block type="variables_set" id="50" inline="true" x="112.99999999999977" y="163">
+      <field name="VAR">i</field>
+      <value name="VALUE">
+        <block type="math_number" id="78">
+          <field name="NUM">0</field>
+        </block>
+      </value>
+      <next>
+        <block type="controls_repeat_ext" id="88" inline="true">
+          <value name="TIMES">
+            <block type="math_number" id="89">
+              <field name="NUM">10</field>
+            </block>
+          </value>
+          <statement name="DO">
+            <block type="text_print" id="242" inline="false">
+              <value name="TEXT">
+                <block type="variables_get" id="252">
+                  <field name="VAR">i</field>
+                </block>
+              </value>
+              <next>
+                <block type="controls_if" id="555" inline="false">
+                  <value name="IF0">
+                    <block type="logic_compare" id="597" inline="true">
+                      <field name="OP">EQ</field>
+                      <value name="A">
+                        <block type="variables_get" id="602">
+                          <field name="VAR">i</field>
+                        </block>
+                      </value>
+                      <value name="B">
+                        <block type="math_number" id="630">
+                          <field name="NUM">5</field>
+                        </block>
+                      </value>
+                    </block>
+                  </value>
+                  <statement name="DO0">
+                    <block type="text_print" id="345" inline="false">
+                      <value name="TEXT">
+                        <block type="text" id="768">
+                          <field name="TEXT">Halfway</field>
+                        </block>
+                      </value>
+                    </block>
+                  </statement>
+                  <next>
+                    <block type="math_change" id="966" inline="true">
+                      <field name="VAR">i</field>
+                      <value name="DELTA">
+                        <block type="math_number" id="967">
+                          <field name="NUM">1</field>
+                        </block>
+                      </value>
+                    </block>
+                  </next>
+                </block>
+              </next>
+            </block>
+          </statement>
+        </block>
+      </next>
+    </block>
+  </xml>
+
+
 
 
 -->
