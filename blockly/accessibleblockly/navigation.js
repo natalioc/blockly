@@ -485,7 +485,7 @@ Blockly.Accessibility.Navigation.playAudioBlock = function() {
 /**
  * Contains the array that describes whether the selected block has values, fields, or statements.
  */
-Blockly.Accessibility.Navigation.selectedBlockConnections = [];
+Blockly.Accessibility.Navigation.selectionList = [];
 
 /**
  * Contains the index of the currently selected value, field, or statement
@@ -494,17 +494,48 @@ Blockly.Accessibility.Navigation.connectionsIndex = 0;
 
 /**
  * Initializes all the information necessary to access a block. 
+ * Creates selectionList, which can be navigated to deal with the block
  * @return {bool} Returns true if success, returns false if failure to enter block
  */
 Blockly.Accessibility.Navigation.enterCurrentBlock = function () {
 
-    // Obtain the array from navigation-block-info
-    Blockly.Accessibility.Navigation.selectedBlockConnections =
-        blockInfo[currentNode.getAttribute('type')]
-    if (Blockly.Accessibility.Navigation.selectedBlockConnections == [])
+    if (!Blockly.selected) {
+        return false;
+    }
+
+    //this.inputList = Blockly.selected.inputList;
+    this.selectionList = [];
+    if(true){ //if(you can add a block to the bottom of the current block)
+        selectionList.push('bottomConnection');
+    }
+    
+    if(true){ //if(you can add a block to  the top of the current block)
+        selectionList.push('topConnection');
+    }
+
+    // Go through all of the inputs for the current block and see what you can add where
+    for(var i = 0; i < Blockly.selected.inputList.length; i++){
+        if(Blockly.selected.inputList[i].fieldRow.length > 0)
+        {
+            for(var j = 0; j < Blockly.selected.inputList[i].fieldRow.length; j++)
+            {
+                if(!(Blockly.selected.inputList[i].fieldRow[j] instanceof Blockly.FieldLabel))
+                {
+                    Blockly.push(Blockly.selected.inputList[i].fieldRow[j]);
+                }
+            }
+        }
+
+        if (Blockly.selected.inputList[i].name != "") {
+            Blockly.push(Blockly.selected.inputList[i]);
+        }
+    }
+
+    if (this.inputList.length == 0)
     {
         return false;
     }
+
     Blockly.Accessibility.Navigation.connectionsIndex = 0;
 
     return true;
@@ -514,7 +545,10 @@ Blockly.Accessibility.Navigation.enterCurrentBlock = function () {
  * Selects the next value or field within the current block
  */
 Blockly.Accessibility.Navigation.inBlock_SelectNext = function () {
-
+    this.connectionsIndex++;
+    if (this.connectionsIndex >= this.selectionList.length) {
+        this.connectionsIndex = 0;
+    }
 };
 
 /**
@@ -522,6 +556,11 @@ Blockly.Accessibility.Navigation.inBlock_SelectNext = function () {
  */
 Blockly.Accessibility.Navigation.inBlock_SelectPrev = function () {
 
+    this.connectionsIndex--;
+    if(this.connectionsIndex < 0)
+    {
+        this.connectionsIndex = this.selectionList.length - 1;
+    }
 };
 
 /**
