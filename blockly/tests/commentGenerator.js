@@ -560,34 +560,18 @@ function codeReader(){
     var levelReader=audioSelection;
     var array = [];
     var indent=[];
-    if(levelReader==="normal")
+    if(levelReader==="normal"){
         array = ["variable count equals 1.", " variable y equals 6.", "while count less than 6", "increase y by i", "increase count by 1", "print y." ];
-    else if(levelReader==="ear con")
+         indent= [1,-1,-1,2,-1,1];
+    }
+    else if(levelReader==="ear con"){
         array = ["variable sum equals 0","variable x equals 0", "repeat while x less than 10","increase x by 1","if x is divisible by 3","increase x by 2","increase sum by x","print x","print sum"];    
-    else if(levelReader==="spear con") 
+        indent = [1,-1,-1,2,-1,3,2,-1,1];
+    }
+    else if(levelReader==="spear con"){
         array = ["variable x equals 2","variable y equals 2","variable num equals 1","while num less than 10","print num","increase num by 2","if x greater than 0","print A","else","print B","print C"];
-
-    /*
-    var selectCode=Math.floor((Math.random() * 5);
-    switch(selectCode) 
-    {
-        case 0: 
-            array = ["variable count equals 1.", " variable y equals 6.", "while count less than 6", "increase y by i", "increase count by 1", "print y." ];
-            break;
-        case 1:
-            array = ["variable sum equals 0","variable x equals 0", "repeat while x less than 10","increase x by 1","if x is divisible by 3","increase x by 2","increase sum by x","print x","print sum"];
-            break;
-        case 2:
-            array = ["variable x equals 2","variable y equals 2","variable num equals 1","while num less than 10","print num","increase num by 2","if x greater than 0","print A","else","print B","print C"];
-            break;
-        case 3:
-            array = ["variable i equals 5.","variable x equals 50","if x less than equals 200","if x less than 100","if x less than equals 0","print A","if i less than equals 10","print Hello", "print C", "print B","print D"];
-            break;
-        case 4:
-            array = ["variable i equals 0","loop 10 times","print i","if i equals 5","print the quote \"Halfway\"","increase i by 1"];
-            var indent=[1,-1,2,-1,3,2]
-            break;
-    }*/
+        indent = [1,-1,-1,-1,2,-1,-1,3,2,3,2];
+    }
     var i=0;
     var speedPlay;
     play=false;
