@@ -30,7 +30,8 @@
  */
 var perfectArr = [];
 var prefixArr = [];
-var parentArr = []
+var parentArr = [];
+T.soundfont.preload(41,42,43,44,45);
 
 function getImportantBlocks(){
 	//check if the workspace is empty
@@ -407,7 +408,7 @@ function earNestLevel(currentNode){
                 for(var j=0;j<nestArray.length;j++){
                     if(nestArray[j]===-1){
                         var speed=tempNotes.length;
-                        T.soundfont.preload(tempNotes);
+                //        T.soundfont.preload(tempNotes);
                         playNotes(tempNotes,speed);
                         tempNotes=[];
                     }
@@ -557,28 +558,36 @@ function blockLister(){
 
 function codeReader(){
     var levelReader=audioSelection;
-    var array = []; 
-/*    array[0]="variable i equals 0"; 
-    array[1]="variable k equals 0";
-    array[2]="while i is less than 2"; 
-    array[3]="increase k by 1";
-    array[4]="if i is equal to 0";
-    array[5]="increase k by 1"; 
-    array[6]="else";
-    array[7]="decrease k by 1"; 
-    array[8]="increase i by 1";
-    array[9]="print k";*/
-
     var array = [];
-    array[0] = "variable i equals 0";
-    array[1] = "loop 10 times";
-    array[2] = "print i";
-    array[3] = "if i equals 5";
-    array[4] = "print the quote \"Halfway\"";
-    array[5] = "increase i by 1";
+    var indent=[];
+    if(levelReader==="normal")
+        array = ["variable count equals 1.", " variable y equals 6.", "while count less than 6", "increase y by i", "increase count by 1", "print y." ];
+    else if(levelReader==="ear con")
+        array = ["variable sum equals 0","variable x equals 0", "repeat while x less than 10","increase x by 1","if x is divisible by 3","increase x by 2","increase sum by x","print x","print sum"];    
+    else if(levelReader==="spear con") 
+        array = ["variable x equals 2","variable y equals 2","variable num equals 1","while num less than 10","print num","increase num by 2","if x greater than 0","print A","else","print B","print C"];
 
- //   var indent=[1,-1,-1,2,-1,3,2,3,2,1];
-    var indent=[1,-1,2,-1,3,2]
+    /*
+    var selectCode=Math.floor((Math.random() * 5);
+    switch(selectCode) 
+    {
+        case 0: 
+            array = ["variable count equals 1.", " variable y equals 6.", "while count less than 6", "increase y by i", "increase count by 1", "print y." ];
+            break;
+        case 1:
+            array = ["variable sum equals 0","variable x equals 0", "repeat while x less than 10","increase x by 1","if x is divisible by 3","increase x by 2","increase sum by x","print x","print sum"];
+            break;
+        case 2:
+            array = ["variable x equals 2","variable y equals 2","variable num equals 1","while num less than 10","print num","increase num by 2","if x greater than 0","print A","else","print B","print C"];
+            break;
+        case 3:
+            array = ["variable i equals 5.","variable x equals 50","if x less than equals 200","if x less than 100","if x less than equals 0","print A","if i less than equals 10","print Hello", "print C", "print B","print D"];
+            break;
+        case 4:
+            array = ["variable i equals 0","loop 10 times","print i","if i equals 5","print the quote \"Halfway\"","increase i by 1"];
+            var indent=[1,-1,2,-1,3,2]
+            break;
+    }*/
     var i=0;
     var speedPlay;
     play=false;
@@ -653,7 +662,7 @@ function playStringEar(indent){
         var j=0;
         var toggle = false;
         var newSpeed=720/indent;
-        T.soundfont.preload(instrument);
+ //       T.soundfont.preload(instrument);
         play=true;
         var t = T("interval", {interval:newSpeed,timeout:"55sec"},function(){
             if(j>instrument.length-1||instrument[j]===undefined){

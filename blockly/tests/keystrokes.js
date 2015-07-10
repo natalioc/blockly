@@ -30,7 +30,33 @@ meSpeak.loadConfig("mespeak_config.json");
 meSpeak.loadVoice("voices/en/en-us.json");
 var speedSpeak = 175;
 var audioSelection = 'normal';
-//var speedSpeak = 175;
+// ['normal','ear con','spear con'];
+//var codeSelection = [0,1,2,3,4];
+/*
+audioSelection=shuffle(audioSelection);
+codeSelection=shuffle(codeSelection);
+window.alert(audioSelection);
+window.alert(codeSelection);
+
+function shuffle(array) {
+  var currentIndex = array.length, temporaryValue, randomIndex ;
+
+  // While there remain elements to shuffle...
+  while (0 !== currentIndex) {
+
+    // Pick a remaining element...
+    randomIndex = Math.floor(Math.random() * currentIndex);
+    currentIndex -= 1;
+
+    // And swap it with the current element.
+    temporaryValue = array[currentIndex];
+    array[currentIndex] = array[randomIndex];
+    array[randomIndex] = temporaryValue;
+  }
+
+  return array;
+}
+*/
 
 /**
  * When a mouseup event happens, update the XML selection
@@ -313,7 +339,8 @@ document.onkeydown = document.onkeyup = function(e){
 
 		else if(map[70]){//f
 			try{
-				question4(1);		
+				workspace.playAudio("click");
+				//question4(1);		
  			}
  			catch(err){
  				window.alert(err+err.lineNumber);
