@@ -341,11 +341,30 @@ function traverseOut() {
         currentNode = findTop(currentNode).parentNode.parentNode;
         console.log('Going to ' + currentNode.nodeName + ' with id ' + currentNode.getAttribute('id'));
         updateSelection();
-        speakAudio(speedSpeak);
+        if(audioSelection==="normal"){
+            nestLevel(getCurrentNode());
+        }
+        else if(audioSelection==="ear con"){
+            earNestLevel(getCurrentNode());
+        }
+        else{
+            spearNestLevel(getCurrentNode());
+        }
+        speakAudio();
         return;
     }
     // If it's not, then do nothing, you cannot go in.
-    console.log('Cannot traverse outwards from here.');
+    if(audioSelection==="normal")
+        responsiveVoice.speak("Highest level of Nesting Reached.");
+    else if(audioSelection==="ear con"){
+        var note=[17];
+        playNotes(note,1);
+    }
+    else{
+        doneTalking=false;
+        meSpeak.speak("Stop.", {speed: 700},meSpeakDone);
+    }
+    console.log('Stop.');
 }
 
 /** 
@@ -369,11 +388,30 @@ function traverseIn() {
             currentNode = children[i].getElementsByTagName('BLOCK')[0];
             console.log('Going to ' + currentNode.nodeName + ' with id ' + currentNode.getAttribute('id'));
             updateSelection();
-            speakAudio(speedSpeak);
+            if(audioSelection==="normal"){
+                nestLevel(getCurrentNode());
+            }
+            else if(audioSelection==="ear con"){
+                earNestLevel(getCurrentNode());
+            }
+            else{
+                spearNestLevel(getCurrentNode());
+            }
+            speakAudio();
             return;
         }
     }
     // If you don't, then do nothing, you cannot go in.
+    if(audioSelection==="normal")
+        responsiveVoice.speak("Deepest level of Nesting Reached.");
+    else if(audioSelection==="ear con"){
+        var note=[17];
+        playNotes(note,1);
+    }
+    else{
+        doneTalking=false;
+        meSpeak.speak("Stop", {speed: 700},meSpeakDone);
+    }
     console.log('Cannot traverse inwards from here.');
 }
 
@@ -395,7 +433,16 @@ function traverseUp() {
         currentNode = currentNode.parentNode.parentNode;
         console.log('Going to ' + currentNode.nodeName + ' with id ' + currentNode.getAttribute('id'));
         updateSelection();
-        speakAudio(speedSpeak);
+        if(audioSelection==="normal"){
+            nestLevel(getCurrentNode());
+        }
+        else if(audioSelection==="ear con"){
+            earNestLevel(getCurrentNode());
+        }
+        else{
+            spearNestLevel(getCurrentNode());
+        }
+        speakAudio();
         return;
     }
 
@@ -406,12 +453,31 @@ function traverseUp() {
         currentNode = findBottom(currentNode);
         console.log('Going to ' + currentNode.nodeName + ' with id ' + currentNode.getAttribute('id') + ' via cycle.');
         updateSelection();
-        speakAudio(speedSpeak);
+        if(audioSelection==="normal"){
+            nestLevel(getCurrentNode());
+        }
+        else if(audioSelection==="ear con"){
+            earNestLevel(getCurrentNode());
+        }
+        else{
+            spearNestLevel(getCurrentNode());
+        }
+        speakAudio();
         return;
     }
 
     // Otherwise just end.
     //  Otherwise just report that you've hit the bottom.
+    if(audioSelection==="normal")
+        responsiveVoice.speak("Top of nest reached.");
+    else if(audioSelection==="ear con"){
+        var note=[17];
+        playNotes(note,1);
+    }
+    else{
+        doneTalking=false;
+        meSpeak.speak("Stop.", {speed: 700},meSpeakDone);
+    }
     console.log('Cannot traverse up, top of list');
 }
 
@@ -436,7 +502,16 @@ function traverseDown() {
             currentNode = children[i].getElementsByTagName('BLOCK')[0];
             console.log('Going to ' + currentNode.nodeName + ' with id ' + currentNode.getAttribute('id'));
             updateSelection();
-            speakAudio(speedSpeak);
+            if(audioSelection==="normal"){
+                nestLevel(getCurrentNode());
+            }
+            else if(audioSelection==="ear con"){
+                earNestLevel(getCurrentNode());
+            }
+            else{
+                spearNestLevel(getCurrentNode());
+            }
+            speakAudio();
             return;
         }
     }
@@ -447,11 +522,30 @@ function traverseDown() {
         currentNode = findTop(currentNode);
         console.log('Going to ' + currentNode.nodeName + ' with id ' + currentNode.getAttribute('id') + ' via cycle.');
         updateSelection();
-        speakAudio(speedSpeak);
+        if(audioSelection==="normal"){
+            nestLevel(getCurrentNode());
+        }
+        else if(audioSelection==="ear con"){
+            earNestLevel(getCurrentNode());
+        }
+        else{
+            spearNestLevel(getCurrentNode());
+        }
+        speakAudio();
         return;
     }
 
     //  Otherwise just report that you've hit the bottom.
+    if(audioSelection==="normal")
+        responsiveVoice.speak("Bottom of nest reached.");
+    else if(audioSelection==="ear con"){
+        var note=[17];
+        playNotes(note,1);
+    }
+    else{
+        doneTalking=false;
+        meSpeak.speak("Stop.", {speed: 700},meSpeakDone);
+    }
     console.log('Cannot traverse down, end of list');
 }
 
@@ -600,11 +694,32 @@ function clickAudio(){
     workspace.playAudio(Blockly.Blocks[now].returnAudio());
 }
 
-function speakAudio(speedSpeak){
+function speakAudio(){
+    if(responsiveVoice.isPlaying()===true||play===true||doneTalking===false){
+        if(play===true){
+            setTimeout(function() {speakNow();}, noteLength);
+        }
+        else if(doneTalking===false)
+            setTimeout(function() {speakAudio();}, 100);
+        else
+            setTimeout(function() {speakAudio();}, 50);
+        return;
+    }
+    else{
+        var here=getCurrentNode();
+        var now=here.getAttribute('type');
+        var playHere=Blockly.Blocks[now].returnAudio(here);
+        responsiveVoice.speak(playHere);
+        return;
+    }
+}
+
+function speakNow(){
     var here=getCurrentNode();
     var now=here.getAttribute('type');
-    var play=Blockly.Blocks[now].returnAudio(here);
-    responsiveVoice.speak(play);
+    var playHere=Blockly.Blocks[now].returnAudio(here);
+    responsiveVoice.speak(playHere);
+    return;
 }
 
 function depthAudio(){

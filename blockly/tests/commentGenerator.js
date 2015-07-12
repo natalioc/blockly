@@ -32,6 +32,9 @@ var perfectArr = [];
 var prefixArr = [];
 var parentArr = [];
 T.soundfont.preload(41,42,43,44,45);
+var play=false;
+var noteLength=600;
+var doneTalking=true;
 
 function getImportantBlocks(){
 	//check if the workspace is empty
@@ -40,9 +43,9 @@ function getImportantBlocks(){
         return null;
     }
     //add all blocks to the blockArr
-     var blockArr = xmlDoc.getElementsByTagName('BLOCK');
+    var blockArr = xmlDoc.getElementsByTagName('BLOCK');
 
-     perfectArr = [];
+    perfectArr = [];
 
     //adding any blocks which can stand on their own to perfectArr
     for(var i=0; i < blockArr.length; i++){
@@ -322,9 +325,9 @@ function infoBoxFill(currentNode){
 * @param nesting level
 * Added by: Wil Merchant (6/26/15)
 */
-function nestLevel(currentNode,speakSpeed){
+function nestLevel(currentNode){
     if(currentNode!=null){
-        var speakLevel="";
+        var speakLevel="Level ";
         var addition="";
         var arrLength = perfectArr.length; //The length of the parentArr and perfectArr arrays
         for (var i = 0; i < arrLength; i++) {
@@ -349,8 +352,7 @@ function nestLevel(currentNode,speakSpeed){
 
 function spearNestLevel(currentNode){
     if(currentNode!=null){
-        var spearSpeed=600;
-        var speakLevel="";
+        var speakLevel="Level ";
         var addition="";
         var arrLength = perfectArr.length; //The length of the parentArr and perfectArr arrays
         for (var i = 0; i < arrLength; i++) {
@@ -366,12 +368,8 @@ function spearNestLevel(currentNode){
                         speakLevel+=nestArray[j];
                     }
                 }
-                try{
-                    meSpeak.speak(speakLevel, {speed: spearSpeed});
-                }
-                catch(err){
-                    window.alert(err+"   "+err.lineNumber);
-                }
+                doneTalking=false;
+                meSpeak.speak(speakLevel, {speed: 700},meSpeakDone);
                 break;
             }
         }
@@ -379,6 +377,7 @@ function spearNestLevel(currentNode){
 };
 function earNestLevel(currentNode){
     if(currentNode!=null){
+        noteLength=0;
         var speakLevel="";
         var arrLength = perfectArr.length; //The length of the parentArr and perfectArr arrays
         for (var i = 0; i < arrLength; i++) {
@@ -414,6 +413,7 @@ function earNestLevel(currentNode){
                     }
                     else{
                         tempNotes.push(nestArray[j]);
+                        noteLength+=440;
                     }
                 }
                 break;
@@ -421,25 +421,24 @@ function earNestLevel(currentNode){
         }
     }
 };
-var play=false;
 var t;
 function playNotes(noteToPlay,speed){
-    try{
     if(play===true){
         setTimeout(function() {
             playNotes(noteToPlay,speed);
-        }, 200);
+        }, 400);
         return;
     }
     if(t)
         t.stop();
-    play=true;
     var i=0;
     var toggle = false;
-    var newSpeed=720/speed;
+    var newSpeed=420/speed;
+    play=true;
     t = T("interval", {interval:newSpeed,timeout:"55sec"},function(){
         if(i>noteToPlay.length-1||noteToPlay[i]===undefined){
             this.stop();
+            play=false;
         }
         if(!toggle){
             if(!noteToPlay[i]){
@@ -457,10 +456,6 @@ function playNotes(noteToPlay,speed){
         this.stop();
         play=false;
     }).start();
-    }
-    catch(err){
-        window.alert(err);
-    }
     return;
 };
 
@@ -575,29 +570,30 @@ function codeReader(){
     var i=0;
     var speedPlay;
     play=false;
-    try{
+    if(levelReader==="ear con")
+        speedPlay=noteLength;
+    else
+        speedPlay=100;
     for(i;i<array.length;i++){
-        if(indent[i]!=-1){
-            if(levelReader==="normal")
-                playStringNormal(indent[i]);
-            else if(levelReader==="spear con")
-                playStringSpear(indent[i]);
-            else if(levelReader==="ear con")
-                playStringEar(indent[i]);
-        }
-        if(levelReader==="ear con")
-            speedPlay=1500;
-        else
-            speedPlay=100;
-        playString(array[i],speedPlay);
-    }
-    }
-    catch(err){
-        window.alert(err+"    "+err.lineNumber);
+        looped(i,array,levelReader,indent,speedPlay);
     }
 };
 
-var doneTalking=true;
+function looped(i,array,levelReader,indent,speedPlay){
+    if(responsiveVoice.isPlaying()===true)
+        setTimeout(function(){looped(i,array,levelReader,indent,speedPlay);},5000);
+    else{
+    if(indent[i]!=-1){
+        if(levelReader==="normal")
+            playStringNormal(indent[i]);
+        else if(levelReader==="spear con")
+            playStringSpear(indent[i]);
+        else if(levelReader==="ear con")
+            playStringEar(indent[i]);
+    }
+    playString(array[i],speedPlay);
+    }
+}
 
 function playString(text,speedPlay){
     if(responsiveVoice.isPlaying()===true||play===true||doneTalking===false){
@@ -690,4 +686,14 @@ function playStringSpear(indent){
 function meSpeakDone(){
     doneTalking=true;
 }
-
+/*
+function getIndent(current){
+    var speakLevel="";
+    var arrLength = perfectArr.length; //The length of the parentArr and perfectArr arrays
+    for (var i = 0; i < arrLength; i++) {
+        if(currentNode.getAttribute('id') === perfectArr[i].getAttribute('id')){
+            var nestInfo = prefixArr[i].substring(1);
+            return nestInfo;
+        }
+    }
+}*/

@@ -265,7 +265,7 @@ document.onkeydown = document.onkeyup = function(e){
 		else if(map[84]){//t
 			speakAudio(speedSpeak);
 		}
-		else if(map[89]){
+		else if(map[89]){//y
 			try{
 			if(audioSelection==='normal')
 				nestLevel(getCurrentNode(),speedSpeak);
@@ -279,23 +279,15 @@ document.onkeydown = document.onkeyup = function(e){
 			}
 		}
 		else if(map[90]){//z
-			//question1(1);
-			//var blockArr = xmlDoc.getElementsByTagName('BLOCK');
-			//var highlight = blockArr[0];
-			//window.alert(highlight);
-			responsiveVoice.speak("Yoo");
+			updateXmlSelection();
+			question2(1);
 		}
 		else if(map[88]){//x
 			question2(1);
-			try{
-			//Blockly.BlockSvg.getBlockNodeByID(53).select();
-//			var here=getBlockNodeById(1);
-
-//			window.alert(here);
-			}
-			catch(err){
-				window.alert(err+"  "+err.lineNumber);
-			}
+			updateXmlSelection();
+			var blockArr = xmlDoc.getElementsByTagName('BLOCK');
+			var firstBlock=blockArr[0].getAttribute('ID');
+			jumpToID(firstBlock);
 		}
 
 		else if(map[61]){ //+
@@ -329,13 +321,12 @@ document.onkeydown = document.onkeyup = function(e){
 		else if(map[74]){ //J 
 			blockLister();
 		}	
-		else if(map[86])//v
+	/*	else if(map[86])//v
 		{
 			 var blockArr = xmlDoc.getElementsByTagName('BLOCK');
 			 var firstBlock=blockArr[0].getAttribute('ID');
-			 window.alert(firstBlock);
 			jumpToID(firstBlock);
-		}
+		}*/
 
 		else if(map[70]){//f
 			try{
