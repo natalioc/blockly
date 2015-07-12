@@ -279,11 +279,14 @@ document.onkeydown = document.onkeyup = function(e){
 			}
 		}
 		else if(map[90]){//z
-			updateXmlSelection();
 			question2(1);
+			updateXmlSelection();
+			var blockArr = xmlDoc.getElementsByTagName('BLOCK');
+			var firstBlock=blockArr[0].getAttribute('ID');
+			jumpToID(firstBlock);
 		}
 		else if(map[88]){//x
-			question2(1);
+			question4(1);
 			updateXmlSelection();
 			var blockArr = xmlDoc.getElementsByTagName('BLOCK');
 			var firstBlock=blockArr[0].getAttribute('ID');
@@ -321,12 +324,13 @@ document.onkeydown = document.onkeyup = function(e){
 		else if(map[74]){ //J 
 			blockLister();
 		}	
-	/*	else if(map[86])//v
+		else if(map[86])//v
 		{
-			 var blockArr = xmlDoc.getElementsByTagName('BLOCK');
-			 var firstBlock=blockArr[0].getAttribute('ID');
+			updateXmlSelection();
+			var blockArr = xmlDoc.getElementsByTagName('BLOCK');
+			var firstBlock=blockArr[0].getAttribute('ID');
 			jumpToID(firstBlock);
-		}*/
+		}
 
 		else if(map[70]){//f
 			try{
