@@ -369,7 +369,7 @@ function spearNestLevel(currentNode){
                     }
                 }
                 doneTalking=false;
-                meSpeak.speak(speakLevel, {speed: 700},meSpeakDone);
+                meSpeak.speak(speakLevel, {speed: 600},meSpeakDone);
                 break;
             }
         }
@@ -695,7 +695,7 @@ function playStringSpear(indent){
     else{
         doneTalking=false;
         var normalText="Level "+indent;
-        meSpeak.speak(normalText, {speed: 700},meSpeakDone);
+        meSpeak.speak(normalText, {speed: 600},meSpeakDone);
         return;
     }
 };
