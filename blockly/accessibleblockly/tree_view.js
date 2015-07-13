@@ -369,11 +369,12 @@ Blockly.Accessibility.TreeView.getAllComments = function() {
     var blockIndex = 1;
     var emptyVisited = true;
     var previousValue = null;
+    var functionArr = []; //an array to handle the function return block that behaves differently
     for (var i = 0; i <= blockArr.length - 1; i++) {
      	//will find blocks that arent connected to anything
      	if(blockArr[i].parentNode.nodeName == 'XML'){
      		blockIndex = 1;
-     		oldPrefix = Blockly.Accessibility.TreeView.getAlphabetical(capitalAlphabet).toUpperCase() + blockIndex;
+     		oldPrefix = this.getAlphabetical(capitalAlphabet).toUpperCase() + blockIndex;
      		capitalAlphabet++;
     		map[blockArr[i].getAttribute('id').toString()] = oldPrefix;
     		lowerAlphabet = 0;
@@ -402,28 +403,22 @@ Blockly.Accessibility.TreeView.getAllComments = function() {
 	 	for (var j = 0; j < blockArr[i].childNodes.length; j++) {
 	 		//this is for blocks nested inside of a block
 	 		if(blockArr[i].childNodes[j].nodeName == 'VALUE'){
-	 			//this if else catchs a bug with the function that returns a block
-	 			//since it's setup of values are in a different order compared to the others
-	 			if(previousValue == null){
-	 				previousValue = blockArr[i];
+	 			//since the function block's children are different to other blocks we have a check for that block specifically
+	 			if(this.getValueTop(blockArr[i].childNodes[j].childNodes[0]).getAttribute('type') == 'procedures_defreturn'){
+	 				functionArr.push(blockArr[i].childNodes[j].childNodes[0]);
 	 			}
-	 			else{
-	 				if(previousValue != blockArr[i]){
-	 					lowerAlphabet = 0;
-	 					previousValue = blockArr[i];
-	 				}
-	 				previousValue = blockArr[i];
-	 			}
-	 			oldPrefix = map[blockArr[i].childNodes[j].parentNode.getAttribute('id').toString()];
-	 			var lastPrefixStr = oldPrefix[oldPrefix.length - 1];
-	 			//if the prefix already has a letter on the end of it cut it off before adding the new prefix
-	 			if(lastPrefixStr.match(/[a-z]/i)){
-	 				oldPrefix = oldPrefix.substring(0, oldPrefix.length - 1)
-	 			}
-	 			oldPrefix = oldPrefix + Blockly.Accessibility.TreeView.getAlphabetical(lowerAlphabet);
-				map[blockArr[i].childNodes[j].childNodes[0].getAttribute('id').toString()] = oldPrefix;
-	 			lowerAlphabet++;
-	 			emptyVisited = true;
+		 		else{
+		 			oldPrefix = map[blockArr[i].childNodes[j].parentNode.getAttribute('id').toString()];
+		 			var lastPrefixStr = oldPrefix[oldPrefix.length - 1];
+		 			//if the prefix already has a letter on the end of it cut it off before adding the new prefix
+		 			if(lastPrefixStr.match(/[a-z]/i)){
+		 				oldPrefix = oldPrefix.substring(0, oldPrefix.length - 1)
+		 			}
+		 			oldPrefix = oldPrefix + this.getAlphabetical(lowerAlphabet);
+					map[blockArr[i].childNodes[j].childNodes[0].getAttribute('id').toString()] = oldPrefix;
+		 			lowerAlphabet++;
+		 			emptyVisited = true;
+		 		}
 	 		}
 	 		//if you have a statement or going to the right
 	 		else if(blockArr[i].childNodes[j].nodeName == 'STATEMENT'){
@@ -447,6 +442,22 @@ Blockly.Accessibility.TreeView.getAllComments = function() {
 
 	 		}
 	 	}
+	}
+	lowerAlphabet = 0;
+	if(functionArr.length > 0){
+		//this for loop makes the prefixes for the function return block
+		for (var i = 0; i <= functionArr.length - 1; i++) {
+			var topBlock = this.getValueTop(functionArr[i]);
+			oldPrefix = map[topBlock.getAttribute('id')];
+			var lastPrefixStr = oldPrefix[oldPrefix.length - 1];
+			//if the prefix already has a letter on the end of it cut it off before adding the new prefix
+			if(lastPrefixStr.match(/[a-z]/i)){
+				oldPrefix = oldPrefix.substring(0, oldPrefix.length - 1)
+			}
+			oldPrefix = oldPrefix + this.getAlphabetical(lowerAlphabet);
+			map[functionArr[i].getAttribute('id').toString()] = oldPrefix;
+			lowerAlphabet++;
+		}
 	}
     return map;
 };
