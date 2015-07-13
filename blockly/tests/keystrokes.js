@@ -334,8 +334,7 @@ document.onkeydown = document.onkeyup = function(e){
 		else if(map[74]){ //J 
 			blockLister();
 		}	
-		else if(map[86])//v
-		{
+		else if(map[86]){//v
 			updateXmlSelection();
 			var blockArr = xmlDoc.getElementsByTagName('BLOCK');
 			var firstBlock=blockArr[0].getAttribute('ID');

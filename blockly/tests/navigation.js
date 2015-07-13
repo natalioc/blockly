@@ -362,7 +362,7 @@ function traverseOut() {
     }
     else{
         doneTalking=false;
-        meSpeak.speak("Stop.", {speed: 700},meSpeakDone);
+        meSpeak.speak("Limit reached.", {speed: 600},meSpeakDone);
     }
     console.log('Stop.');
 }
@@ -410,7 +410,7 @@ function traverseIn() {
     }
     else{
         doneTalking=false;
-        meSpeak.speak("Stop", {speed: 700},meSpeakDone);
+        meSpeak.speak("Stop", {speed: 600},meSpeakDone);
     }
     console.log('Cannot traverse inwards from here.');
 }
@@ -476,7 +476,7 @@ function traverseUp() {
     }
     else{
         doneTalking=false;
-        meSpeak.speak("Stop.", {speed: 700},meSpeakDone);
+        meSpeak.speak("Stop.", {speed: 600},meSpeakDone);
     }
     console.log('Cannot traverse up, top of list');
 }
@@ -544,7 +544,7 @@ function traverseDown() {
     }
     else{
         doneTalking=false;
-        meSpeak.speak("Stop.", {speed: 700},meSpeakDone);
+        meSpeak.speak("Stop.", {speed: 600},meSpeakDone);
     }
     console.log('Cannot traverse down, end of list');
 }
@@ -696,9 +696,9 @@ function clickAudio(){
 
 function speakAudio(){
     if(responsiveVoice.isPlaying()===true||play===true||doneTalking===false){
-        if(play===true){
+        
+        if(play===true)
             setTimeout(function() {speakNow();}, noteLength);
-        }
         else if(doneTalking===false)
             setTimeout(function() {speakAudio();}, 100);
         else
