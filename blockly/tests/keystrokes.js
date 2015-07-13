@@ -30,6 +30,7 @@ meSpeak.loadConfig("mespeak_config.json");
 meSpeak.loadVoice("voices/en/en-us.json");
 var speedSpeak = 175;
 var audioSelection = 'normal';
+responsiveVoice.setDefaultVoice("US English Female");
 // ['normal','ear con','spear con'];
 //var codeSelection = [0,1,2,3,4];
 /*

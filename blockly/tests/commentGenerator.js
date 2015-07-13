@@ -507,8 +507,8 @@ function blockLister(){
 
     window.alert(idList);
      */
-     var currentXml = Blockly.Xml.domToPrettyText(Blockly.Xml.workspaceToDom(Blockly.mainWorkspace));
-    // window.alert(currentXml);
+    var currentXml = Blockly.Xml.domToPrettyText(Blockly.Xml.workspaceToDom(Blockly.mainWorkspace));
+    window.alert(currentXml);
      //perfectArr = [];
 
      /*
