@@ -297,6 +297,7 @@ document.onkeydown = document.onkeyup = function(e){
 			else{
 				question6(1);
 			}
+			responsiveVoice.speak("Root Block Selected");
 			updateXmlSelection();
 			var blockArr = xmlDoc.getElementsByTagName('BLOCK');
 			var firstBlock=blockArr[0].getAttribute('ID');
@@ -336,6 +337,7 @@ document.onkeydown = document.onkeyup = function(e){
 		}	
 		else if(map[86])//v
 		{
+			responsiveVoice.speak("Root Block Selected");
 			updateXmlSelection();
 			var blockArr = xmlDoc.getElementsByTagName('BLOCK');
 			var firstBlock=blockArr[0].getAttribute('ID');
