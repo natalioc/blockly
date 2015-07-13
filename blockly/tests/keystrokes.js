@@ -32,10 +32,11 @@ var speedSpeak = 175;
 var audioSelection = 'normal';
 responsiveVoice.setDefaultVoice("US English Female");
 // ['normal','ear con','spear con'];
-//var codeSelection = [0,1,2,3,4];
-/*
-audioSelection=shuffle(audioSelection);
+/*var codeSelection = [1,2,3];
+
+//audioSelection=shuffle(audioSelection);
 codeSelection=shuffle(codeSelection);
+
 window.alert(audioSelection);
 window.alert(codeSelection);
 
@@ -58,6 +59,8 @@ function shuffle(array) {
   return array;
 }
 */
+
+
 
 /**
  * When a mouseup event happens, update the XML selection
@@ -287,7 +290,13 @@ document.onkeydown = document.onkeyup = function(e){
 			jumpToID(firstBlock);
 		}
 		else if(map[88]){//x
-			question5(1);
+			if(audioSelection==="normal")
+				question4(1);
+			else if(audioSelection==="ear con")
+				question5(1);
+			else{
+				question6(1);
+			}
 			updateXmlSelection();
 			var blockArr = xmlDoc.getElementsByTagName('BLOCK');
 			var firstBlock=blockArr[0].getAttribute('ID');
