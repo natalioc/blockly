@@ -579,6 +579,24 @@ function codeReader(){
     }
 };
 
+function codeReaderTrial(){
+    var levelReader=audioSelection;
+    var array = [];
+    var indent=[];
+    var array = ["variable count equals 1.", " variable y equals 6.", "while count less than 6", "increase y by i", "increase count by 1", "print y." ];
+    var indent = [1,-1,-1,2,-1,1];
+    var i=0;
+    var speedPlay;
+    play=false;
+    if(levelReader==="ear con")
+        speedPlay=noteLength;
+    else
+        speedPlay=100;
+    for(i;i<array.length;i++){
+        looped(i,array,levelReader,indent,speedPlay);
+    }
+};
+
 function looped(i,array,levelReader,indent,speedPlay){
     if(responsiveVoice.isPlaying()===true)
         setTimeout(function(){looped(i,array,levelReader,indent,speedPlay);},5000);
