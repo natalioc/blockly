@@ -235,6 +235,19 @@ function question5(n){
   console.timeEnd('Question5Xml domToWorkspace');
 }
 
+function question6(n){
+  var xml =question6Xml;
+  for(var i = 0; i < n; i++) {
+    xml = xml.replace(/(<(statement|next)( name="DO0")?>)<\//g,
+        '$1' + question6Xml + '</');
+  }
+  xml = '<xml xmlns="http://www.w3.org/1999/xhtml">' + xml + '</xml>';
+  var dom = Blockly.Xml.textToDom(xml);
+  console.time('question6Xml domToWorkspace');
+  Blockly.Xml.domToWorkspace(Blockly.mainWorkspace, dom);
+  console.timeEnd('Question6Xml domToWorkspace');
+}
+
 var question1Xml = [
  ' <block type="variables_set" id="21" inline="true" x="138" y="113">'+
   '  <field name="VAR">x</field>'+
@@ -361,6 +374,15 @@ var question2Xml = [
                     '</value>'+
                   '</block>'+
                 '</statement>'+
+                 '<next>'+
+                  '<block type="text_print" id="83" inline="false">'+
+                    '<value name="TEXT">'+
+                      '<block type="text" id="101">'+
+                        '<field name="TEXT"></field>'+
+                      '</block>'+
+                    '</value>'+
+                  '</block>'+
+                '</next>'+
               '</block>'+
             '</statement>'+
           '</block>'+
@@ -595,7 +617,7 @@ var question5Xml = [
   '</block>'
 ].join('\n')
 
-
+/*
 var question5Xml = [
   '<block type="variables_set" id="133" inline="true" x="88" y="288">'+
     '<field name="VAR">values</field>'+
@@ -683,6 +705,81 @@ var question5Xml = [
         '</next>' +
       '</block>' +
     '</next>' +
+  '</block>'
+].join('\n')
+*/
+var question6Xml=[
+  '<block type="variables_set" id="12" inline="true" x="63" y="288">'+
+    '<field name="VAR">item</field>'+
+    '<value name="VALUE">'+
+      '<block type="lists_create_with" id="29" inline="false">'+
+        '<mutation items="3"></mutation>'+
+        '<value name="ADD0">'+
+          '<block type="math_number" id="160">'+
+            '<field name="NUM">13</field>'+
+          '</block>'+
+        '</value>'+
+        '<value name="ADD1">'+
+          '<block type="math_number" id="179">'+
+            '<field name="NUM">21</field>'+
+          '</block>'+
+        '</value>'+
+        '<value name="ADD2">'+
+          '<block type="math_number" id="198">'+
+            '<field name="NUM">10</field>'+
+          '</block>'+
+        '</value>'+
+      '</block>'+
+    '</value>'+
+    '<next>'+
+      '<block type="variables_set" id="201" inline="true">'+
+        '<field name="VAR">greatest</field>'+
+        '<value name="VALUE">'+
+          '<block type="math_number" id="220">'+
+            '<field name="NUM">0</field>'+
+          '</block>'+
+        '</value>'+
+        '<next>'+
+          '<block type="controls_forEach" id="256" inline="false">'+
+            '<field name="VAR">i</field>'+
+            '<value name="LIST">'+
+              '<block type="variables_get" id="310">'+
+                '<field name="VAR">item</field>'+
+              '</block>'+
+            '</value>'+
+            '<statement name="DO">'+
+              '<block type="controls_if" id="318" inline="false">'+
+                '<value name="IF0">'+
+                  '<block type="logic_compare" id="419" inline="true">'+
+                    '<field name="OP">EQ</field>'+
+                    '<value name="A">'+
+                      '<block type="variables_get" id="429">'+
+                        '<field name="VAR">i</field>'+
+                      '</block>'+
+                    '</value>'+
+                    '<value name="B">'+
+                      '<block type="variables_get" id="439">'+
+                        '<field name="VAR">greatest</field>'+
+                      '</block>'+
+                    '</value>'+
+                  '</block>'+
+                '</value>'+
+                '<statement name="DO0">'+
+                  '<block type="variables_set" id="456" inline="true">'+
+                    '<field name="VAR">greatest</field>'+
+                    '<value name="VALUE">'+
+                      '<block type="variables_get" id="463">'+
+                        '<field name="VAR">i</field>'+
+                      '</block>'+
+                    '</value>'+
+                  '</block>'+
+                '</statement>'+
+              '</block>'+
+            '</statement>'+
+          '</block>'+
+        '</next>'+
+      '</block>'+
+    '</next>'+
   '</block>'
 ].join('\n')
 
