@@ -450,3 +450,30 @@ Blockly.Accessibility.TreeView.getAllComments = function() {
 	}
     return map;
 };
+/**
+* returns the top parent of a value block
+* @return{block} the top block of a value
+*/
+Blockly.Accessibility.TreeView.getValueTop = function(block){
+	if(block.parentNode.nodeName.toUpperCase() == 'VALUE'){
+		block = block.parentNode.parentNode;
+		return this.getValueTop(block);
+	}
+	return block;
+};
+
+/**
+ * A function that will generate the integer representation of the char you give it
+ * @param (str) a str you want to be converted into an int
+ * @return (int) a int representation of a string
+ */
+Blockly.Accessibility.TreeView.alphabeticalToInt = function(alpha) {
+	console.log(alpha);
+	var alphabetList = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 
+	'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z'];
+	for (var i = 0; i < alphabetList.length; i++) {
+		if(alphabetList[i] == alpha){
+			return i;
+		}
+	}
+};
