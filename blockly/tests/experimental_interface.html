@@ -222,6 +222,19 @@ function question4(n){
   console.timeEnd('Question4Xml domToWorkspace');
 }
 
+function question5(n){
+  var xml =question5Xml;
+  for(var i = 0; i < n; i++) {
+    xml = xml.replace(/(<(statement|next)( name="DO0")?>)<\//g,
+        '$1' + question5Xml + '</');
+  }
+  xml = '<xml xmlns="http://www.w3.org/1999/xhtml">' + xml + '</xml>';
+  var dom = Blockly.Xml.textToDom(xml);
+  console.time('question5Xml domToWorkspace');
+  Blockly.Xml.domToWorkspace(Blockly.mainWorkspace, dom);
+  console.timeEnd('Question5Xml domToWorkspace');
+}
+
 var question1Xml = [
  ' <block type="variables_set" id="21" inline="true" x="138" y="113">'+
   '  <field name="VAR">x</field>'+
@@ -491,6 +504,189 @@ var question4Xml = [
     '</next>'+
   '</block>'
 ].join('\n')
+
+var question5Xml = [
+  '<block type="variables_set" id="133" inline="true" x="88" y="288">'+
+    '<field name="VAR">values</field>'+
+    '<value name="VALUE">' +
+      '<block type="lists_create_with" id="210" inline="false">' +
+        '<mutation items="5"></mutation>' +
+        '<value name="ADD0">'+
+          '<block type="math_number" id="252">'+
+            '<field name="NUM">32</field>' + 
+          '</block>' +
+        '</value>' +
+        '<value name="ADD1">' +
+          '<block type="math_number" id="287">' +
+            '<field name="NUM">29</field>' +
+          '</block>'+
+        '</value>' +
+        '<value name="ADD2">' +
+          '<block type="math_number" id="306">' +
+            '<field name="NUM">67.5</field>' +
+          '</block>' +
+        '</value>' +
+        '<value name="ADD3">' +
+          '<block type="math_number" id="325">' +
+            '<field name="NUM">54</field>' +
+          '</block>' +
+        '</value>' +
+        '<value name="ADD4">' +
+          '<block type="math_number" id="344">' +
+            '<field name="NUM">35</field>' +
+          '</block>' +
+        '</value>' +
+      '</block>' +
+    '</value>' +
+    '<next>' +
+      '<block type="variables_set" id="379" inline="true">' +
+        '<field name="VAR">wholeCount</field>' +
+        '<value name="VALUE">' +
+          '<block type="math_number" id="407">' +
+            '<field name="NUM">0</field>' +
+          '</block>' +
+        '</value>' +
+        '<next>' +
+          '<block type="controls_forEach" id="656" inline="false">' +
+            '<field name="VAR">i</field>' +
+            '<value name="LIST">' +
+              '<block type="variables_get" id="681">' +
+                '<field name="VAR">values</field>' +
+              '</block>' +
+            '</value>' +
+            '<statement name="DO">' +
+              '<block type="controls_if" id="809" inline="false">' +
+                '<value name="IF0">' +
+                  '<block type="math_number_property" id="925" inline="true">' +
+                    '<mutation divisor_input="false"></mutation>' +
+                    '<field name="PROPERTY">EVEN</field>' +
+                    '<value name="NUMBER_TO_CHECK">' +
+                      '<block type="variables_get" id="937">' +
+                        '<field name="VAR">i</field>' +
+                      '</block>' +
+                    '</value>' +
+                  '</block>' +
+                '</value>' +
+                '<statement name="DO0">' +
+                  '<block type="math_change" id="991" inline="true">' +
+                    '<field name="VAR">wholeCount</field>' +
+                    '<value name="DELTA">' +
+                      '<block type="math_number" id="992">' +
+                        '<field name="NUM">1</field>' +
+                      '</block>' +
+                    '</value>' +
+                  '</block>' +
+                '</statement>' +
+              '</block>' +
+            '</statement>' +
+            '<next>' +
+              '<block type="text_print" id="1010" inline="false">'+
+                '<value name="TEXT">' +
+                  '<block type="variables_get" id="1019">' +
+                    '<field name="VAR">wholeCount</field>' +
+                  '</block>' +
+                '</value>' +
+              '</block>' +
+            '</next>' +
+          '</block>' +
+        '</next>' +
+      '</block>' +
+    '</next>' +
+  '</block>'
+].join('\n')
+
+
+var question5Xml = [
+  '<block type="variables_set" id="133" inline="true" x="88" y="288">'+
+    '<field name="VAR">values</field>'+
+    '<value name="VALUE">' +
+      '<block type="lists_create_with" id="210" inline="false">' +
+        '<mutation items="5"></mutation>' +
+        '<value name="ADD0">'+
+          '<block type="math_number" id="252">'+
+            '<field name="NUM">32</field>' + 
+          '</block>' +
+        '</value>' +
+        '<value name="ADD1">' +
+          '<block type="math_number" id="287">' +
+            '<field name="NUM">29</field>' +
+          '</block>'+
+        '</value>' +
+        '<value name="ADD2">' +
+          '<block type="math_number" id="306">' +
+            '<field name="NUM">67.5</field>' +
+          '</block>' +
+        '</value>' +
+        '<value name="ADD3">' +
+          '<block type="math_number" id="325">' +
+            '<field name="NUM">54</field>' +
+          '</block>' +
+        '</value>' +
+        '<value name="ADD4">' +
+          '<block type="math_number" id="344">' +
+            '<field name="NUM">35</field>' +
+          '</block>' +
+        '</value>' +
+      '</block>' +
+    '</value>' +
+    '<next>' +
+      '<block type="variables_set" id="379" inline="true">' +
+        '<field name="VAR">wholeCount</field>' +
+        '<value name="VALUE">' +
+          '<block type="math_number" id="407">' +
+            '<field name="NUM">0</field>' +
+          '</block>' +
+        '</value>' +
+        '<next>' +
+          '<block type="controls_forEach" id="656" inline="false">' +
+            '<field name="VAR">i</field>' +
+            '<value name="LIST">' +
+              '<block type="variables_get" id="681">' +
+                '<field name="VAR">values</field>' +
+              '</block>' +
+            '</value>' +
+            '<statement name="DO">' +
+              '<block type="controls_if" id="809" inline="false">' +
+                '<value name="IF0">' +
+                  '<block type="math_number_property" id="925" inline="true">' +
+                    '<mutation divisor_input="false"></mutation>' +
+                    '<field name="PROPERTY">EVEN</field>' +
+                    '<value name="NUMBER_TO_CHECK">' +
+                      '<block type="variables_get" id="937">' +
+                        '<field name="VAR">i</field>' +
+                      '</block>' +
+                    '</value>' +
+                  '</block>' +
+                '</value>' +
+                '<statement name="DO0">' +
+                  '<block type="math_change" id="991" inline="true">' +
+                    '<field name="VAR">wholeCount</field>' +
+                    '<value name="DELTA">' +
+                      '<block type="math_number" id="992">' +
+                        '<field name="NUM">1</field>' +
+                      '</block>' +
+                    '</value>' +
+                  '</block>' +
+                '</statement>' +
+              '</block>' +
+            '</statement>' +
+            '<next>' +
+              '<block type="text_print" id="1010" inline="false">'+
+                '<value name="TEXT">' +
+                  '<block type="variables_get" id="1019">' +
+                    '<field name="VAR">wholeCount</field>' +
+                  '</block>' +
+                '</value>' +
+              '</block>' +
+            '</next>' +
+          '</block>' +
+        '</next>' +
+      '</block>' +
+    '</next>' +
+  '</block>'
+].join('\n')
+
+
 
 var spaghettiXml = [
   '  <block type="controls_if" inline="false" x="30" y="30">' +
