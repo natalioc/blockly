@@ -286,7 +286,7 @@ document.onkeydown = document.onkeyup = function(e){
 			jumpToID(firstBlock);
 		}
 		else if(map[88]){//x
-			question4(1);
+			question5(1);
 			updateXmlSelection();
 			var blockArr = xmlDoc.getElementsByTagName('BLOCK');
 			var firstBlock=blockArr[0].getAttribute('ID');
