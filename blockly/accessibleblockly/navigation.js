@@ -55,6 +55,7 @@ Blockly.BlockSvg.prototype.select = function () {
     if (Blockly.Accessibility.Navigation.getBlockNodeById(this.id)) {
         currentNode = Blockly.Accessibility.Navigation.getBlockNodeById(this.id);
         console.log(this.id);
+        console.log(this.inputList);
     }
 };
 
@@ -519,14 +520,15 @@ Blockly.Accessibility.Navigation.enterCurrentBlock = function () {
         {
             for(var j = 0; j < Blockly.selected.inputList[i].fieldRow.length; j++)
             {
-                if(!(Blockly.selected.inputList[i].fieldRow[j] instanceof Blockly.FieldLabel))
+                if (!(Blockly.selected.inputList[i].fieldRow[j] instanceof Blockly.FieldLabel) &&
+                    !(Blockly.selected.inputList[i].fieldRow[j] instanceof Blockly.FieldImage))
                 {
                     Blockly.push(Blockly.selected.inputList[i].fieldRow[j]);
                 }
             }
         }
 
-        if (Blockly.selected.inputList[i].name != "") {
+        if (Blockly.selected.inputList[i].name != '') {
             Blockly.push(Blockly.selected.inputList[i]);
         }
     }
@@ -549,6 +551,8 @@ Blockly.Accessibility.Navigation.inBlock_SelectNext = function () {
     if (this.connectionsIndex >= this.selectionList.length) {
         this.connectionsIndex = 0;
     }
+
+    console.log(this.selectionList[this.connectionsIndex]);
 };
 
 /**
@@ -569,12 +573,50 @@ Blockly.Accessibility.Navigation.inBlock_SelectPrev = function () {
  */
 Blockly.Accessibility.Navigation.inBlock_EnterSelected = function () {
 
+
+    if (this.selectionList[this.connectionsIndex] === 'bottomConnection') {
+        this.traverseDown();
+    }
+    else if (this.selectionList[this.connectionsIndex] === 'topConnection') {
+        this.traverseUp();
+    }
+    else if (this.selectionList[this.connectionsIndex] instanceof Blockly.Input) {
+        if (this.selectionList[this.connectionsIndex].connection.targetConnection != null) {
+            // Find the block that's connected to this input and jump to it
+            this.jumpToID(this.selectionList[this.connectionsIndex].connection.targetConnection.sourceBlock_.id);
+        }
+    }
+    else if (this.selectionList[this.connectionsIndex] instanceof Blockly.FieldDropdown) {
+        // Code to select a dropdown field to allow for remote selection here
+        console.log('DROPDOWN ENTERING NOT IMPLEMENTED');
+    }
+    else if (this.selectionList[this.connectionsIndex] instanceof Blockly.FieldTextInput) {
+        // Code to select a textInput field to allow for remote selection here
+        console.log('TEXTINPUT ENTERING NOT IMPLEMENTED');
+    }
+    else if (this.selectionList[this.connectionsIndex] instanceof Blockly.FieldColour) {
+        // Code to select a colour field to allow for remote selection here
+        console.log('COLOUR ENTERING NOT IMPLEMENTED');
+    }
+    else if (this.selectionList[this.connectionsIndex] instanceof Blockly.FieldCheckbox) {
+        // Code to select a checkbox field to allow for remote selection here
+        console.log('CHECKBOX ENTERING NOT IMPLEMENTED');
+    }
+    else if (this.selectionList[this.connectionsIndex] instanceof Blockly.FieldDate) {
+        // Code to select a date field to allow for remote selection here
+        console.log('DATE ENTERING NOT IMPLEMENTED');
+    }
+    else if (this.selectionList[this.connectionsIndex] instanceof Blockly.FieldVariable) {
+        // Code to select a variable field to allow for remote selection here
+        console.log('VARIABLE ENTERING NOT IMPLEMENTED');
+    }
+
 };
 
 /**
  * If a value or statement is selected, add a block to it.
  */
-Blockly.Accessibility.Navigation.inBlock_EnterSelected = function () {
+Blockly.Accessibility.Navigation.inBlock_AddBlock = function () {
 
 };
 //#endregion
