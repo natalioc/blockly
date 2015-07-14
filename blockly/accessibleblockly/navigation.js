@@ -51,11 +51,11 @@ Blockly.BlockSvg.prototype.select = function () {
 
     this.defaultSelect();
 
-    console.log(Blockly.Accessibility.Navigation.getBlockNodeById(this.id));
     if (Blockly.Accessibility.Navigation.getBlockNodeById(this.id)) {
         currentNode = Blockly.Accessibility.Navigation.getBlockNodeById(this.id);
+
         console.log(this.id);
-        console.log(this.inputList);
+        console.log(this);
     }
 };
 
