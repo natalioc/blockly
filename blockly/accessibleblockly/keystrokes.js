@@ -50,7 +50,7 @@ document.onkeydown = document.onkeyup = function(e){
 		return;
 	}	
 
-	if(keyboardState=='editMode'){ //if you are in editMode, normal hotkeys are disabled
+	else if(keyboardState=='editMode'){ //if you are in editMode, normal hotkeys are disabled
 		if(map[27]){ //Escape
 			console.log('Escape key pressed.');
 			keyboardState = 'hotkeyMode';
@@ -71,7 +71,7 @@ document.onkeydown = document.onkeyup = function(e){
 		}
 	}	
 	
-	if(keyboardState=='hotkeyMode'){	
+	else if(keyboardState=='hotkeyMode'){	
 
 	    if(map[18] && map[16] && map[67]){ //Alt Shift C
 			console.log('Alt Shift C keys pressed.');
