@@ -72,6 +72,7 @@ var block = null;
 var workspace = null;
 //Contains the code after exporting to javascript
 var code;
+var audioSelection = "normal";
 
 function enableRealtimeSpecificUi() {
   var realtimeDiv = document.getElementById('realtime');
@@ -709,73 +710,100 @@ var question5Xml = [
 ].join('\n')
 */
 var question6Xml=[
-  '<block type="variables_set" id="12" inline="true" x="63" y="288">'+
+  '<block type="variables_set" id="1" inline="true" x="300" y="200">'+
     '<field name="VAR">item</field>'+
     '<value name="VALUE">'+
-      '<block type="lists_create_with" id="29" inline="false">'+
+      '<block type="lists_create_with" id="2" inline="false">'+
         '<mutation items="3"></mutation>'+
         '<value name="ADD0">'+
-          '<block type="math_number" id="160">'+
+          '<block type="math_number" id="3">'+
             '<field name="NUM">13</field>'+
           '</block>'+
         '</value>'+
         '<value name="ADD1">'+
-          '<block type="math_number" id="179">'+
+          '<block type="math_number" id="4">'+
             '<field name="NUM">21</field>'+
           '</block>'+
         '</value>'+
         '<value name="ADD2">'+
-          '<block type="math_number" id="198">'+
+          '<block type="math_number" id="5">'+
             '<field name="NUM">10</field>'+
           '</block>'+
         '</value>'+
       '</block>'+
     '</value>'+
     '<next>'+
-      '<block type="variables_set" id="201" inline="true">'+
+      '<block type="variables_set" id="6" inline="true">'+
         '<field name="VAR">greatest</field>'+
         '<value name="VALUE">'+
-          '<block type="math_number" id="220">'+
+          '<block type="math_number" id="7">'+
             '<field name="NUM">0</field>'+
           '</block>'+
         '</value>'+
         '<next>'+
-          '<block type="controls_forEach" id="256" inline="false">'+
-            '<field name="VAR">i</field>'+
-            '<value name="LIST">'+
-              '<block type="variables_get" id="310">'+
+          '<block type="text_print" id="33" inline="false">'+
+            '<value name="TEXT">'+
+              '<block type="variables_get" id="108">'+
                 '<field name="VAR">item</field>'+
               '</block>'+
             '</value>'+
-            '<statement name="DO">'+
-              '<block type="controls_if" id="318" inline="false">'+
-                '<value name="IF0">'+
-                  '<block type="logic_compare" id="419" inline="true">'+
-                    '<field name="OP">EQ</field>'+
-                    '<value name="A">'+
-                      '<block type="variables_get" id="429">'+
-                        '<field name="VAR">i</field>'+
+            '<next>'+
+              '<block type="controls_forEach" id="8" inline="false">'+
+                '<field name="VAR">i</field>'+
+                '<value name="LIST">'+
+                  '<block type="variables_get" id="9">'+
+                    '<field name="VAR">item</field>'+
+                  '</block>'+
+                '</value>'+
+                '<statement name="DO">'+
+                  '<block type="controls_if" id="10" inline="false">'+
+                    '<value name="IF0">'+
+                      '<block type="logic_compare" id="11" inline="true">'+
+                        '<field name="OP">EQ</field>'+
+                        '<value name="A">'+
+                          '<block type="variables_get" id="12">'+
+                            '<field name="VAR">i</field>'+
+                          '</block>'+
+                        '</value>'+
+                        '<value name="B">'+
+                          '<block type="variables_get" id="13">'+
+                            '<field name="VAR">greatest</field>'+
+                          '</block>'+
+                        '</value>'+
                       '</block>'+
                     '</value>'+
-                    '<value name="B">'+
-                      '<block type="variables_get" id="439">'+
+                    '<statement name="DO0">'+
+                      '<block type="variables_set" id="14" inline="true">'+
+                        '<field name="VAR">greatest</field>'+
+                        '<value name="VALUE">'+
+                          '<block type="variables_get" id="15">'+
+                            '<field name="VAR">i</field>'+
+                          '</block>'+
+                        '</value>'+
+                      '</block>'+
+                    '</statement>'+
+                    '<next>'+
+                      '<block type="text_print" id="69" inline="false">'+
+                        '<value name="TEXT">'+
+                          '<block type="variables_get" id="101">'+
+                            '<field name="VAR">i</field>'+
+                          '</block>'+
+                        '</value>'+
+                      '</block>'+
+                    '</next>'+
+                  '</block>'+
+                '</statement>'+
+                '<next>'+
+                  '<block type="text_print" id="87" inline="false">'+
+                    '<value name="TEXT">'+
+                      '<block type="variables_get" id="142">'+
                         '<field name="VAR">greatest</field>'+
                       '</block>'+
                     '</value>'+
                   '</block>'+
-                '</value>'+
-                '<statement name="DO0">'+
-                  '<block type="variables_set" id="456" inline="true">'+
-                    '<field name="VAR">greatest</field>'+
-                    '<value name="VALUE">'+
-                      '<block type="variables_get" id="463">'+
-                        '<field name="VAR">i</field>'+
-                      '</block>'+
-                    '</value>'+
-                  '</block>'+
-                '</statement>'+
+                '</next>'+
               '</block>'+
-            '</statement>'+
+            '</next>'+
           '</block>'+
         '</next>'+
       '</block>'+

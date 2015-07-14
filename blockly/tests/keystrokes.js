@@ -29,7 +29,7 @@ var keyboardState = 'hotkeyMode';
 meSpeak.loadConfig("mespeak_config.json");
 meSpeak.loadVoice("voices/en/en-us.json");
 var speedSpeak = 175;
-var audioSelection = 'normal';
+//var audioSelection = 'normal';
 responsiveVoice.setDefaultVoice("US English Female");
 // ['normal','ear con','spear con'];
 /*var codeSelection = [1,2,3];
@@ -243,10 +243,10 @@ document.onkeydown = document.onkeyup = function(e){
 			jumpToTopOfSection();
 		}
 		
-		else if(map[13]){ //Enter
+	/*	else if(map[13]){ //Enter
 			console.log('Enter key pressed.');
 			updateXmlSelection();
-		}
+		}*/
 		
 		//Arrow keys for development purposes.  Switch as needed for proper usage.
 		
@@ -357,5 +357,36 @@ document.onkeydown = document.onkeyup = function(e){
 		else if(map[85]){//u
 			codeReaderTrial();
 		}
+
+
+		else if(map[13]){ //Enter
+            window.alert(getCurrentNode().id)
+            if(audioSelection==="normal"){
+                if((getCurrentNode().id)==="9"){
+                    responsiveVoice.speak("Correct!");
+                }
+                else{
+                    responsiveVoice.speak("Wrong!");
+                }
+            }
+            else if(audioSelection==="ear con"){
+                if((getCurrentNode().id)==="15"){
+                    responsiveVoice.speak("Correct!");
+                }
+                else{
+                    responsiveVoice.speak("Wrong!");
+                }
+            }
+            else if(audioSelection==="spear con"){
+                if((getCurrentNode().id)==="18"){
+                    responsiveVoice.speak("Correct!");
+                }
+                else{
+                    responsiveVoice.speak("Wrong!");
+                }
+            }
+
+        }
+
 	}
 };

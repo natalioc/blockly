@@ -1,0 +1,2382 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>AMI REU BLOCKLY EXPERIMENT</title>
+<script src="../blockly_uncompressed.js"></script>
+
+<script src="../generators/javascript.js"></script>
+<script src="../generators/javascript/logic.js"></script>
+<script src="../generators/javascript/loops.js"></script>
+<script src="../generators/javascript/math.js"></script>
+<script src="../generators/javascript/text.js"></script>
+<script src="../generators/javascript/lists.js"></script>
+<script src="../generators/javascript/colour.js"></script>
+<script src="../generators/javascript/variables.js"></script>
+<script src="../generators/javascript/procedures.js"></script>
+<script src="../generators/javascript/audio.js"></script>
+<script src="../generators/python.js"></script>
+<script src="../generators/python/logic.js"></script>
+<script src="../generators/python/loops.js"></script>
+<script src="../generators/python/math.js"></script>
+<script src="../generators/python/text.js"></script>
+<script src="../generators/python/lists.js"></script>
+<script src="../generators/python/colour.js"></script>
+<script src="../generators/python/variables.js"></script>
+<script src="../generators/python/procedures.js"></script>
+<script src="../generators/dart.js"></script>
+<script src="../generators/dart/logic.js"></script>
+<script src="../generators/dart/loops.js"></script>
+<script src="../generators/dart/math.js"></script>
+<script src="../generators/dart/text.js"></script>
+<script src="../generators/dart/lists.js"></script>
+<script src="../generators/dart/colour.js"></script>
+<script src="../generators/dart/variables.js"></script>
+<script src="../generators/dart/procedures.js"></script>
+<script src="../msg/messages.js"></script>
+<script src="../blocks/logic.js"></script>
+<script src="../blocks/loops.js"></script>
+<script src="../blocks/math.js"></script>
+<script src="../blocks/text.js"></script>
+<script src="../blocks/lists.js"></script>
+<script src="../blocks/colour.js"></script>
+<script src="../blocks/variables.js"></script>
+<script src="../blocks/procedures.js"></script>
+<script src="../blocks/audio.js"></script>
+
+<!-- attempt to indclude the timbre.js library --> 
+
+<script src="../timbrejs/timbre.js"></script>
+<script src="../timbrejs/audio-jsonp.js"></script>
+<script src="../timbrejs/jsmad.js"></script>
+<script src="../timbrejs/mp3_decode.js"></script>
+<script src="../timbrejs/soundfont.js"></script>
+<script src="../timbrejs/Instrument.js"></script>
+
+
+<script src="../mespeak/mespeak.js"></script>
+<script src="../mespeak/msie_flashFallback/flashFallback.js"></script>
+
+<!-- Load the Google Drive SDK Realtime libraries. -->
+<script src="https://apis.google.com/js/api.js"></script>
+<script src="loadxml.js"></script>
+<script src="debug.js"></script>
+<script src="navigation-block-info.js"></script>
+<script src="commentGenerator.js"></script>
+<script src="http://code.responsivevoice.org/responsivevoice.js"></script>
+<script type="text/javascript">
+'use strict';
+// Depending on the URL argument, render as LTR or RTL.
+var rtl = (document.location.search == '?rtl');
+var block = null;
+var workspace = null;
+//Contains the code after exporting to javascript
+var code;
+var audioSelection = "ear con";
+
+function enableRealtimeSpecificUi() {
+  var realtimeDiv = document.getElementById('realtime');
+  realtimeDiv.display = 'block';
+}
+
+function start() {
+  var toolbox = document.getElementById('toolbox');
+  workspace = Blockly.inject(document.getElementById('blocklyDiv'),
+          {rtl: rtl,
+           media: '../media/',
+           toolbox: toolbox,
+           comments: true,
+           disable: true,
+           collapse: true,
+		   trashcan: false,
+           grid:
+             {spacing: 25,
+              length: 3,
+              colour: '#ccc',
+              snap: true},
+           realtime: false,
+           realtimeOptions:
+             {clientId: 'YOUR CLIENT ID GOES HERE',
+              chatbox: {elementId: 'chatbox'},
+              collabElementId: 'collaborators'}});
+  if (Blockly.Realtime.isEnabled()) {
+    enableRealtimeSpecificUi();
+  }
+
+  toolbox.setAttribute("tabindex", "0");
+}
+
+function toXml() {
+  var output = document.getElementById('importExport');
+  var xml = Blockly.Xml.workspaceToDom(Blockly.mainWorkspace);
+  output.value = Blockly.Xml.domToPrettyText(xml);
+  output.focus();
+  output.select();
+  return output.value;
+}
+
+function fromXml() {
+  var input = document.getElementById('importExport');
+  var xml = Blockly.Xml.textToDom(input.value);
+  Blockly.Xml.domToWorkspace(Blockly.mainWorkspace, xml);
+  updateXmlSelection();
+}
+
+function toCode(lang) {
+  var output = document.getElementById('importExport');
+  output.value = Blockly[lang].workspaceToCode();
+  
+}
+
+function airstrike(n) {
+  var prototypes = [];
+  var toolbox = document.getElementById('toolbox');
+  var blocks = toolbox.getElementsByTagName('block');
+  responsiveVoice.speak("hello world");
+  for (var i = 0, block; block = blocks[i]; i++) {
+    prototypes.push(block.getAttribute('type'));
+  }
+  for (var i = 0; i < n; i++) {
+    var prototype = prototypes[Math.floor(Math.random() * prototypes.length)];
+    var block = Blockly.Block.obtain(Blockly.mainWorkspace, prototype);
+    block.initSvg();
+    block.getSvgRoot().setAttribute('transform', 'translate(' +
+        Math.round(Math.random() * 450 + 40) + ', ' +
+        Math.round(Math.random() * 600 + 40) + ')');
+    block.render();
+  }
+}
+
+function spaghetti(n) {
+  var xml = spaghettiXml;
+  for(var i = 0; i < n; i++) {
+    xml = xml.replace(/(<(statement|next)( name="DO0")?>)<\//g,
+        '$1' + spaghettiXml + '</');
+  }
+  xml = '<xml xmlns="http://www.w3.org/1999/xhtml">' + xml + '</xml>';
+  var dom = Blockly.Xml.textToDom(xml);
+  console.time('Spaghetti domToWorkspace');
+  Blockly.Xml.domToWorkspace(Blockly.mainWorkspace, dom);
+  console.timeEnd('Spaghetti domToWorkspace');
+}
+
+function runCode(){
+	window.LoopTrap = 1000;
+	Blockly.JavaScript.INFINITE_LOOP_TRAP = 'if(--window.LoopTrap == 0) throw "Infinite loop.";\n';
+	code = Blockly['JavaScript'].workspaceToCode();
+	try {
+		eval(code);
+	} catch (e) {
+		alert(e);
+	}
+}
+
+function question1(n){
+  var xml =question1Xml;
+  for(var i = 0; i < n; i++) {
+    xml = xml.replace(/(<(statement|next)( name="DO0")?>)<\//g,
+        '$1' + question1Xml + '</');
+  }
+  xml = '<xml xmlns="http://www.w3.org/1999/xhtml">' + xml + '</xml>';
+  var dom = Blockly.Xml.textToDom(xml);
+  console.time('question1Xml domToWorkspace');
+  Blockly.Xml.domToWorkspace(Blockly.mainWorkspace, dom);
+  console.timeEnd('Question1Xml domToWorkspace');
+}
+
+function question2(n){
+  var xml =question2Xml;
+  for(var i = 0; i < n; i++) {
+    xml = xml.replace(/(<(statement|next)( name="DO0")?>)<\//g,
+        '$1' + question2Xml + '</');
+  }
+  xml = '<xml xmlns="http://www.w3.org/1999/xhtml">' + xml + '</xml>';
+  var dom = Blockly.Xml.textToDom(xml);
+  console.time('question2Xml domToWorkspace');
+  Blockly.Xml.domToWorkspace(Blockly.mainWorkspace, dom);
+  console.timeEnd('Question2Xml domToWorkspace');
+}
+
+function question3(n){
+  var xml =question3Xml;
+  for(var i = 0; i < n; i++) {
+    xml = xml.replace(/(<(statement|next)( name="DO0")?>)<\//g,
+        '$1' + question3Xml + '</');
+  }
+  xml = '<xml xmlns="http://www.w3.org/1999/xhtml">' + xml + '</xml>';
+  var dom = Blockly.Xml.textToDom(xml);
+  console.time('question3Xml domToWorkspace');
+  Blockly.Xml.domToWorkspace(Blockly.mainWorkspace, dom);
+  console.timeEnd('Question3Xml domToWorkspace');
+}
+
+function question4(n){
+  var xml =question4Xml;
+  for(var i = 0; i < n; i++) {
+    xml = xml.replace(/(<(statement|next)( name="DO0")?>)<\//g,
+        '$1' + question4Xml + '</');
+  }
+  xml = '<xml xmlns="http://www.w3.org/1999/xhtml">' + xml + '</xml>';
+  var dom = Blockly.Xml.textToDom(xml);
+  console.time('question4Xml domToWorkspace');
+  Blockly.Xml.domToWorkspace(Blockly.mainWorkspace, dom);
+  console.timeEnd('Question4Xml domToWorkspace');
+}
+
+function question5(n){
+  var xml =question5Xml;
+  for(var i = 0; i < n; i++) {
+    xml = xml.replace(/(<(statement|next)( name="DO0")?>)<\//g,
+        '$1' + question5Xml + '</');
+  }
+  xml = '<xml xmlns="http://www.w3.org/1999/xhtml">' + xml + '</xml>';
+  var dom = Blockly.Xml.textToDom(xml);
+  console.time('question5Xml domToWorkspace');
+  Blockly.Xml.domToWorkspace(Blockly.mainWorkspace, dom);
+  console.timeEnd('Question5Xml domToWorkspace');
+}
+
+function question6(n){
+  var xml =question6Xml;
+  for(var i = 0; i < n; i++) {
+    xml = xml.replace(/(<(statement|next)( name="DO0")?>)<\//g,
+        '$1' + question6Xml + '</');
+  }
+  xml = '<xml xmlns="http://www.w3.org/1999/xhtml">' + xml + '</xml>';
+  var dom = Blockly.Xml.textToDom(xml);
+  console.time('question6Xml domToWorkspace');
+  Blockly.Xml.domToWorkspace(Blockly.mainWorkspace, dom);
+  console.timeEnd('Question6Xml domToWorkspace');
+}
+
+var question1Xml = [
+ ' <block type="variables_set" id="21" inline="true" x="138" y="113">'+
+  '  <field name="VAR">x</field>'+
+  '  <value name="VALUE">' +
+   '   <block type="math_number" id="42"> '+
+  '      <field name="NUM">0</field> '+
+  '    </block> '+
+  '  </value> '+
+  '  <next> '+
+  '    <block type="controls_whileUntil" id="52" inline="false"> '+
+  '      <field name="MODE">WHILE</field> '+
+  '      <value name="BOOL"> '+
+  '       <block type="logic_compare" id="60" inline="true">'+
+  '          <field name="OP">LT</field>'+
+  '          <value name="A">'+
+  '            <block type="variables_get" id="65">'+
+  '              <field name="VAR">x</field>'+
+  '            </block>'+
+  '          </value>'+
+  '          <value name="B">'+
+  '            <block type="math_number" id="84">'+
+  '              <field name="NUM">10</field>'+
+  '            </block>'+
+  '          </value>'+
+  '        </block>'+
+  '      </value>'+
+  '      <statement name="DO">'+
+  '        <block type="text_print" id="120" inline="false">'+
+  '          <value name="TEXT">'+
+  '            <block type="variables_get" id="143">'+
+  '              <field name="VAR">x</field>'+
+  '            </block>'+
+  '          </value>'+
+  '          <next>'+
+  '              <block type="variables_set" id="151" inline="true">'+
+  '              <field name="VAR">x</field>'+
+  '              <value name="VALUE">'+
+  '                <block type="math_arithmetic" id="170" inline="true">'+
+  '                  <field name="OP">ADD</field>'+
+  '                  <value name="A">'+
+  '                    <block type="variables_get" id="175">'+
+  '                      <field name="VAR">x</field>'+
+  '                    </block>'+
+  '                  </value>'+
+  '                  <value name="B">'+
+  '                    <block type="math_number" id="194">'+
+  '                      <field name="NUM">1</field>'+
+  '                    </block>'+
+  '                  </value>'+
+  '                </block>'+
+  '              </value>'+
+  '            </block>'+
+  '          </next>'+
+  '        </block>'+
+  '      </statement>'+
+  '    </block>'+
+  '  </next>'+
+  '</block>'
+].join('\n');
+
+var question2Xml = [
+  '<block type="variables_set" id="53" inline="true" x="300" y="300">'+
+    '<field name="VAR">item</field>'+
+    '<value name="VALUE">'+
+      '<block type="lists_create_with" id="129" inline="false">'+
+        '<mutation items="3"></mutation>'+
+        '<value name="ADD0">'+
+          '<block type="math_number" id="150">'+
+            '<field name="NUM">13</field>'+
+          '</block>'+
+        '</value>'+
+        '<value name="ADD1">'+
+          '<block type="math_number" id="169">'+
+            '<field name="NUM">21</field>'+
+          '</block>'+
+        '</value>'+
+        '<value name="ADD2">'+
+          '<block type="math_number" id="188">'+
+            '<field name="NUM">10</field>'+
+          '</block>'+
+        '</value>'+
+      '</block>'+
+    '</value>'+
+    '<next>'+
+      '<block type="variables_set" id="242" inline="true">'+
+        '<field name="VAR">greatest</field>'+
+        '<value name="VALUE">'+
+          '<block type="math_number" id="261">'+
+            '<field name="NUM">0</field>'+
+          '</block>'+
+        '</value>'+
+        '<next>'+
+          '<block type="controls_forEach" id="198" inline="false">'+
+            '<field name="VAR">i</field>'+
+            '<value name="LIST">'+
+              '<block type="variables_get" id="203">'+
+                '<field name="VAR">item</field>'+
+              '</block>'+
+            '</value>'+
+            '<statement name="DO">'+
+              '<block type="controls_if" id="211" inline="false">'+
+                '<value name="IF0">'+
+                  '<block type="logic_compare" id="269" inline="true">'+
+                    '<field name="OP">GT</field>'+
+                    '<value name="A">'+
+                      '<block type="variables_get" id="276">'+
+                        '<field name="VAR">i</field>'+
+                      '</block>'+
+                    '</value>'+
+                    '<value name="B">'+
+                      '<block type="variables_get" id="283">'+
+                        '<field name="VAR">greatest</field>'+
+                      '</block>'+
+                    '</value>'+
+                  '</block>'+
+                '</value>'+
+                '<statement name="DO0">'+
+                  '<block type="variables_set" id="290" inline="true">'+
+                    '<field name="VAR">greatest</field>'+
+                    '<value name="VALUE">'+
+                      '<block type="variables_get" id="297">'+
+                        '<field name="VAR">i</field>'+
+                      '</block>'+
+                    '</value>'+
+                  '</block>'+
+                '</statement>'+
+                 '<next>'+
+                  '<block type="text_print" id="83" inline="false">'+
+                    '<value name="TEXT">'+
+                      '<block type="text" id="101">'+
+                        '<field name="TEXT"></field>'+
+                      '</block>'+
+                    '</value>'+
+                  '</block>'+
+                '</next>'+
+              '</block>'+
+            '</statement>'+
+          '</block>'+
+        '</next>'+
+      '</block>'+
+    '</next>'+
+  '</block>'
+].join('\n')
+
+var question3Xml= [
+  '<block type="variables_set" id="3" inline="true" x="38" y="238">'+
+    '<field name="VAR">text</field>'+
+    '<value name="VALUE">'+
+      '<block type="text_prompt_ext" id="24" inline="false">'+
+        '<field name="TYPE">TEXT</field>'+
+        '<value name="TEXT">'+
+          '<block type="text" id="58">'+
+            '<field name="TEXT">Enter text here.</field>'+
+          '</block>'+
+        '</value>'+
+      '</block>'+
+    '</value>'+
+    '<next>'+
+      '<block type="controls_if" id="81" inline="false">'+
+        '<mutation else="1"></mutation>'+
+        '<value name="IF0">'+
+          '<block type="logic_compare" id="102" inline="true">'+
+            '<field name="OP">GT</field>'+
+            '<value name="A">'+
+              '<block type="text_length" id="124" inline="false">'+
+                '<value name="VALUE">'+
+                  '<block type="variables_get" id="129">'+
+                    '<field name="VAR">text</field>'+
+                  '</block>'+
+                '</value>'+
+              '</block>'+
+            '</value>'+
+            '<value name="B">'+
+              '<block type="math_number" id="148">'+
+                '<field name="NUM">5</field>'+
+              '</block>'+
+            '</value>'+
+          '</block>'+
+        '</value>'+
+        '<statement name="DO0">'+
+          '<block type="text_print" id="166" inline="false">'+
+            '<value name="TEXT">'+
+              '<block type="text" id="184" collapsed="true">'+
+                '<field name="TEXT">Text is longer than 5 letters.</field>'+
+              '</block>'+
+            '</value>'+
+          '</block>'+
+        '</statement>'+
+        '<statement name="ELSE">'+
+          '<block type="text_print" id="217" inline="false">'+
+            '<value name="TEXT">'+
+              '<block type="text" id="235">'+
+                '<field name="TEXT">Text is less than 5 letters.</field>'+
+              '</block>'+
+            '</value>'+
+          '</block>'+
+        '</statement>'+
+      '</block>'+
+    '</next>'+
+  '</block>'
+].join('\n')
+
+var question4Xml = [
+  '<block type="variables_set" id="348" inline="true" x="137.99999999999994" y="262.0000000000003">'+
+    '<field name="VAR">sum</field>'+
+    '<value name="VALUE">'+
+      '<block type="math_number" id="367">'+
+        '<field name="NUM">0</field>'+
+      '</block>'+
+    '</value>'+
+    '<next>'+
+      '<block type="controls_repeat_ext" id="278" inline="true">'+
+        '<value name="TIMES">'+
+          '<block type="math_number" id="279">'+
+            '<field name="NUM">10</field>'+
+          '</block>'+
+        '</value>'+
+        '<statement name="DO">'+
+          '<block type="variables_set" id="301" inline="true">'+
+            '<field name="VAR">number</field>'+
+            '<value name="VALUE">'+
+              '<block type="math_random_int" id="341" inline="true">'+
+                '<value name="FROM">'+
+                  '<block type="math_number" id="342">'+
+                    '<field name="NUM">1</field>'+
+                  '</block>'+
+                '</value>'+
+                '<value name="TO">'+
+                  '<block type="math_number" id="343">'+
+                    '<field name="NUM">10</field>'+
+                  '</block>'+
+                '</value>'+
+              '</block>'+
+            '</value>'+
+            '<next>'+
+              '<block type="text_print" id="557" inline="false">'+
+                '<value name="TEXT">'+
+                  '<block type="variables_get" id="564">'+
+                    '<field name="VAR">number</field>'+
+                  '</block>'+
+                '</value>'+
+                '<next>'+
+                  '<block type="variables_set" id="453" inline="true">'+
+                    '<field name="VAR">sum</field>'+
+                    '<value name="VALUE">'+
+                      '<block type="math_arithmetic" id="472" inline="true">'+
+                        '<field name="OP">ADD</field>'+
+                        '<value name="A">'+
+                          '<block type="variables_get" id="479">'+
+                            '<field name="VAR">number</field>'+
+                          '</block>'+
+                        '</value>'+
+                        '<value name="B">'+
+                          '<block type="variables_get" id="496">'+
+                            '<field name="VAR">sum</field>'+
+                          '</block>'+
+                        '</value>'+
+                      '</block>'+
+                    '</value>'+
+                  '</block>'+
+                '</next>'+
+              '</block>'+
+            '</next>'+
+          '</block>'+
+        '</statement>'+
+        '<next>'+
+          '<block type="text_print" id="514" inline="false">'+
+            '<value name="TEXT">'+
+              '<block type="variables_get" id="539">'+
+                '<field name="VAR">sum</field>'+
+              '</block>'+
+            '</value>'+
+          '</block>'+
+        '</next>'+
+      '</block>'+
+    '</next>'+
+  '</block>'
+].join('\n')
+
+var question5Xml = [
+  '<block type="variables_set" id="133" inline="true" x="88" y="288">'+
+    '<field name="VAR">values</field>'+
+    '<value name="VALUE">' +
+      '<block type="lists_create_with" id="210" inline="false">' +
+        '<mutation items="5"></mutation>' +
+        '<value name="ADD0">'+
+          '<block type="math_number" id="252">'+
+            '<field name="NUM">32</field>' + 
+          '</block>' +
+        '</value>' +
+        '<value name="ADD1">' +
+          '<block type="math_number" id="287">' +
+            '<field name="NUM">29</field>' +
+          '</block>'+
+        '</value>' +
+        '<value name="ADD2">' +
+          '<block type="math_number" id="306">' +
+            '<field name="NUM">67.5</field>' +
+          '</block>' +
+        '</value>' +
+        '<value name="ADD3">' +
+          '<block type="math_number" id="325">' +
+            '<field name="NUM">54</field>' +
+          '</block>' +
+        '</value>' +
+        '<value name="ADD4">' +
+          '<block type="math_number" id="344">' +
+            '<field name="NUM">35</field>' +
+          '</block>' +
+        '</value>' +
+      '</block>' +
+    '</value>' +
+    '<next>' +
+      '<block type="variables_set" id="379" inline="true">' +
+        '<field name="VAR">wholeCount</field>' +
+        '<value name="VALUE">' +
+          '<block type="math_number" id="407">' +
+            '<field name="NUM">0</field>' +
+          '</block>' +
+        '</value>' +
+        '<next>' +
+          '<block type="controls_forEach" id="656" inline="false">' +
+            '<field name="VAR">i</field>' +
+            '<value name="LIST">' +
+              '<block type="variables_get" id="681">' +
+                '<field name="VAR">values</field>' +
+              '</block>' +
+            '</value>' +
+            '<statement name="DO">' +
+              '<block type="controls_if" id="809" inline="false">' +
+                '<value name="IF0">' +
+                  '<block type="math_number_property" id="925" inline="true">' +
+                    '<mutation divisor_input="false"></mutation>' +
+                    '<field name="PROPERTY">EVEN</field>' +
+                    '<value name="NUMBER_TO_CHECK">' +
+                      '<block type="variables_get" id="937">' +
+                        '<field name="VAR">i</field>' +
+                      '</block>' +
+                    '</value>' +
+                  '</block>' +
+                '</value>' +
+                '<statement name="DO0">' +
+                  '<block type="math_change" id="991" inline="true">' +
+                    '<field name="VAR">wholeCount</field>' +
+                    '<value name="DELTA">' +
+                      '<block type="math_number" id="992">' +
+                        '<field name="NUM">1</field>' +
+                      '</block>' +
+                    '</value>' +
+                  '</block>' +
+                '</statement>' +
+              '</block>' +
+            '</statement>' +
+            '<next>' +
+              '<block type="text_print" id="1010" inline="false">'+
+                '<value name="TEXT">' +
+                  '<block type="variables_get" id="1019">' +
+                    '<field name="VAR">wholeCount</field>' +
+                  '</block>' +
+                '</value>' +
+              '</block>' +
+            '</next>' +
+          '</block>' +
+        '</next>' +
+      '</block>' +
+    '</next>' +
+  '</block>'
+].join('\n')
+
+/*
+var question5Xml = [
+  '<block type="variables_set" id="133" inline="true" x="88" y="288">'+
+    '<field name="VAR">values</field>'+
+    '<value name="VALUE">' +
+      '<block type="lists_create_with" id="210" inline="false">' +
+        '<mutation items="5"></mutation>' +
+        '<value name="ADD0">'+
+          '<block type="math_number" id="252">'+
+            '<field name="NUM">32</field>' + 
+          '</block>' +
+        '</value>' +
+        '<value name="ADD1">' +
+          '<block type="math_number" id="287">' +
+            '<field name="NUM">29</field>' +
+          '</block>'+
+        '</value>' +
+        '<value name="ADD2">' +
+          '<block type="math_number" id="306">' +
+            '<field name="NUM">67.5</field>' +
+          '</block>' +
+        '</value>' +
+        '<value name="ADD3">' +
+          '<block type="math_number" id="325">' +
+            '<field name="NUM">54</field>' +
+          '</block>' +
+        '</value>' +
+        '<value name="ADD4">' +
+          '<block type="math_number" id="344">' +
+            '<field name="NUM">35</field>' +
+          '</block>' +
+        '</value>' +
+      '</block>' +
+    '</value>' +
+    '<next>' +
+      '<block type="variables_set" id="379" inline="true">' +
+        '<field name="VAR">wholeCount</field>' +
+        '<value name="VALUE">' +
+          '<block type="math_number" id="407">' +
+            '<field name="NUM">0</field>' +
+          '</block>' +
+        '</value>' +
+        '<next>' +
+          '<block type="controls_forEach" id="656" inline="false">' +
+            '<field name="VAR">i</field>' +
+            '<value name="LIST">' +
+              '<block type="variables_get" id="681">' +
+                '<field name="VAR">values</field>' +
+              '</block>' +
+            '</value>' +
+            '<statement name="DO">' +
+              '<block type="controls_if" id="809" inline="false">' +
+                '<value name="IF0">' +
+                  '<block type="math_number_property" id="925" inline="true">' +
+                    '<mutation divisor_input="false"></mutation>' +
+                    '<field name="PROPERTY">EVEN</field>' +
+                    '<value name="NUMBER_TO_CHECK">' +
+                      '<block type="variables_get" id="937">' +
+                        '<field name="VAR">i</field>' +
+                      '</block>' +
+                    '</value>' +
+                  '</block>' +
+                '</value>' +
+                '<statement name="DO0">' +
+                  '<block type="math_change" id="991" inline="true">' +
+                    '<field name="VAR">wholeCount</field>' +
+                    '<value name="DELTA">' +
+                      '<block type="math_number" id="992">' +
+                        '<field name="NUM">1</field>' +
+                      '</block>' +
+                    '</value>' +
+                  '</block>' +
+                '</statement>' +
+              '</block>' +
+            '</statement>' +
+            '<next>' +
+              '<block type="text_print" id="1010" inline="false">'+
+                '<value name="TEXT">' +
+                  '<block type="variables_get" id="1019">' +
+                    '<field name="VAR">wholeCount</field>' +
+                  '</block>' +
+                '</value>' +
+              '</block>' +
+            '</next>' +
+          '</block>' +
+        '</next>' +
+      '</block>' +
+    '</next>' +
+  '</block>'
+].join('\n')
+*/
+var question6Xml=[
+  '<block type="variables_set" id="1" inline="true" x="300" y="200">'+
+    '<field name="VAR">item</field>'+
+    '<value name="VALUE">'+
+      '<block type="lists_create_with" id="2" inline="false">'+
+        '<mutation items="3"></mutation>'+
+        '<value name="ADD0">'+
+          '<block type="math_number" id="3">'+
+            '<field name="NUM">13</field>'+
+          '</block>'+
+        '</value>'+
+        '<value name="ADD1">'+
+          '<block type="math_number" id="4">'+
+            '<field name="NUM">21</field>'+
+          '</block>'+
+        '</value>'+
+        '<value name="ADD2">'+
+          '<block type="math_number" id="5">'+
+            '<field name="NUM">10</field>'+
+          '</block>'+
+        '</value>'+
+      '</block>'+
+    '</value>'+
+    '<next>'+
+      '<block type="variables_set" id="6" inline="true">'+
+        '<field name="VAR">greatest</field>'+
+        '<value name="VALUE">'+
+          '<block type="math_number" id="7">'+
+            '<field name="NUM">0</field>'+
+          '</block>'+
+        '</value>'+
+        '<next>'+
+          '<block type="text_print" id="33" inline="false">'+
+            '<value name="TEXT">'+
+              '<block type="variables_get" id="108">'+
+                '<field name="VAR">item</field>'+
+              '</block>'+
+            '</value>'+
+            '<next>'+
+              '<block type="controls_forEach" id="8" inline="false">'+
+                '<field name="VAR">i</field>'+
+                '<value name="LIST">'+
+                  '<block type="variables_get" id="9">'+
+                    '<field name="VAR">item</field>'+
+                  '</block>'+
+                '</value>'+
+                '<statement name="DO">'+
+                  '<block type="controls_if" id="10" inline="false">'+
+                    '<value name="IF0">'+
+                      '<block type="logic_compare" id="11" inline="true">'+
+                        '<field name="OP">EQ</field>'+
+                        '<value name="A">'+
+                          '<block type="variables_get" id="12">'+
+                            '<field name="VAR">i</field>'+
+                          '</block>'+
+                        '</value>'+
+                        '<value name="B">'+
+                          '<block type="variables_get" id="13">'+
+                            '<field name="VAR">greatest</field>'+
+                          '</block>'+
+                        '</value>'+
+                      '</block>'+
+                    '</value>'+
+                    '<statement name="DO0">'+
+                      '<block type="variables_set" id="14" inline="true">'+
+                        '<field name="VAR">greatest</field>'+
+                        '<value name="VALUE">'+
+                          '<block type="variables_get" id="15">'+
+                            '<field name="VAR">i</field>'+
+                          '</block>'+
+                        '</value>'+
+                      '</block>'+
+                    '</statement>'+
+                    '<next>'+
+                      '<block type="text_print" id="69" inline="false">'+
+                        '<value name="TEXT">'+
+                          '<block type="variables_get" id="101">'+
+                            '<field name="VAR">i</field>'+
+                          '</block>'+
+                        '</value>'+
+                      '</block>'+
+                    '</next>'+
+                  '</block>'+
+                '</statement>'+
+                '<next>'+
+                  '<block type="text_print" id="87" inline="false">'+
+                    '<value name="TEXT">'+
+                      '<block type="variables_get" id="142">'+
+                        '<field name="VAR">greatest</field>'+
+                      '</block>'+
+                    '</value>'+
+                  '</block>'+
+                '</next>'+
+              '</block>'+
+            '</next>'+
+          '</block>'+
+        '</next>'+
+      '</block>'+
+    '</next>'+
+  '</block>'
+].join('\n')
+
+
+
+var spaghettiXml = [
+  '  <block type="controls_if" inline="false" x="30" y="30">' +
+  '    <value name="IF0">' +
+  '      <block type="logic_compare" inline="true">' +
+  '        <field name="OP">EQ</field>' +
+  '        <value name="A">' +
+  '          <block type="math_arithmetic" inline="true">' +
+  '            <field name="OP">MULTIPLY</field>' +
+  '            <value name="A">' +
+  '              <block type="math_number">' +
+  '                <field name="NUM">6</field>' +
+  '              </block>' +
+  '            </value>' +
+  '            <value name="B">' +
+  '              <block type="math_number">' +
+  '                <field name="NUM">7</field>' +
+  '              </block>' +
+  '            </value>' +
+  '          </block>' +
+  '        </value>' +
+  '        <value name="B">' +
+  '          <block type="math_number">' +
+  '            <field name="NUM">42</field>' +
+  '          </block>' +
+  '        </value>' +
+  '      </block>' +
+  '    </value>' +
+  '    <statement name="DO0"></statement>' +
+  '    <next></next>' +
+  '  </block>'].join('\n');
+
+
+
+//========change the comment box font size dynamically=========
+function changeFontDD(){
+  var e = document.getElementById("fontDD");
+  var selectedSize = e.options[e.selectedIndex].value;
+  var commentBox = document.getElementById("comment");
+  commentBox.style.fontSize =selectedSize + "px";
+ 
+  var outputBox = document.getElementById("importExport");
+  outputBox.style.fontSize = selectedSize+"px";
+
+}
+
+function commentInterval(){
+    setInterval(getImportantBlocks, 2500); 
+}
+</script>
+
+<style>
+html, body {
+  height: 100%;
+}
+body {
+  background-color: #fff;
+  font-family: sans-serif;
+  overflow: auto;
+}
+h1 {
+  font-weight: normal;
+  font-size: 140%;
+}
+#blocklyDiv {
+  float: left;
+  height: 95%;
+  width: 100%;
+  margin-right: 1%;
+}
+#PrimaryContentDiv {
+    padding-left: 71%;
+    margin: 1%;
+}
+#commentDiv {
+    padding-left: 71%;
+    font-family: monospace;
+
+}
+
+#collaborators {
+  float: right;
+  width: 30px;
+  margin-left: 10px;
+}
+#collaborators > img {
+  margin-right: 5px;
+  height: 30px;
+  padding-bottom: 5px;
+  width: 30px;
+  border-radius: 3px;
+  margin-left: 5px;
+}
+#importExport {
+  font-family: monospace;
+  min-height: 200px;
+  max-height:95%;
+  width: 43%;
+  overflow: scroll;
+  word-wrap:normal;
+  display: inline-block;
+  resize: vertical;
+  margin-top: 5px;
+}
+#buttons { 
+  width: 50%;
+}
+#buttons button { 
+  width: 100%;
+}
+#comment{
+  outline: 1px solid gray;
+  margin-bottom: 5px;
+  height: 280px;
+  padding-left: 9px;
+  padding-top:  9px;
+  overflow: scroll;
+  word-wrap:normal;
+  resize:vertical;
+}
+
+/*change font size drop down*/
+#fontDD{
+  margin: .7em;
+  display: block;
+}
+
+/*output buttons*/
+div button{
+  width:10em;
+  margin: 3px;
+}
+/*when tabbing through highlight*/
+button:focus,input:focus,textarea:focus,#comment:focus,p:focus{
+outline: solid;
+outline-width: 3px;
+outline-offset: 1px;
+color: black;
+}
+
+#typeButtons{
+  text-align: center;
+}
+#infoBox{
+	border: 1px solid black;
+	position: fixed;
+	margin-left: 37.9%;
+	width: 15%;
+	height: 29%;
+	background-color: white;
+	font-size: 36px;
+	overflow: auto;
+	white-space: nowrap;
+	min-height: 100px;
+	resize: vertical;
+}
+#infoBox p{
+	margin: 6px;
+
+}
+</style>
+</head>
+<body onload="start()">
+
+  <div id="collaborators" tabindex="-1"></div>
+
+  <div id="blocklyDiv">
+    <h1 align="center">Blockly Audio Cues Experiment</h1>
+  </div>
+
+  <xml id="toolbox" style="display: none">
+    <!--
+      <category name="Audio">
+        <block type="beep"></block>
+      </category>
+    -->
+	   <category name="Logic">
+      <block type="controls_if"></block>
+      <block type="logic_compare"></block>
+      <block type="logic_operation"></block>
+      <block type="logic_negate"></block>
+      <block type="logic_boolean"></block>
+      <block type="logic_null"></block>
+      <block type="logic_ternary"></block>
+    </category>
+    <category name="Loops">
+      <block type="controls_repeat_ext">
+        <value name="TIMES">
+          <block type="math_number">
+            <field name="NUM">10</field>
+          </block>
+        </value>
+      </block>
+      <block type="controls_whileUntil"></block>
+      <block type="controls_for">
+        <value name="FROM">
+          <block type="math_number">
+            <field name="NUM">1</field>
+          </block>
+        </value>
+        <value name="TO">
+          <block type="math_number">
+            <field name="NUM">10</field>
+          </block>
+        </value>
+        <value name="BY">
+          <block type="math_number">
+            <field name="NUM">1</field>
+          </block>
+        </value>
+      </block>
+      <block type="controls_forEach"></block>
+      <block type="controls_flow_statements"></block>
+    </category>
+    <category name="Math">
+      <block type="math_number"></block>
+      <block type="math_arithmetic"></block>
+      <block type="math_single"></block>
+      <block type="math_trig"></block>
+      <block type="math_constant"></block>
+      <block type="math_number_property"></block>
+      <block type="math_change">
+        <value name="DELTA">
+          <block type="math_number">
+            <field name="NUM">1</field>
+          </block>
+        </value>
+      </block>
+      <block type="math_round"></block>
+      <block type="math_on_list"></block>
+      <block type="math_modulo"></block>
+      <block type="math_constrain">
+        <value name="LOW">
+          <block type="math_number">
+            <field name="NUM">1</field>
+          </block>
+        </value>
+        <value name="HIGH">
+          <block type="math_number">
+            <field name="NUM">100</field>
+          </block>
+        </value>
+      </block>
+      <block type="math_random_int">
+        <value name="FROM">
+          <block type="math_number">
+            <field name="NUM">1</field>
+          </block>
+        </value>
+        <value name="TO">
+          <block type="math_number">
+            <field name="NUM">100</field>
+          </block>
+        </value>
+      </block>
+      <block type="math_random_float"></block>
+    </category>
+    <category name="Text">
+      <block type="text"></block>
+      <block type="text_join"></block>
+      <block type="text_append">
+        <value name="TEXT">
+          <block type="text"></block>
+        </value>
+      </block>
+      <block type="text_length"></block>
+      <block type="text_isEmpty"></block>
+      <block type="text_indexOf">
+        <value name="VALUE">
+          <block type="variables_get">
+            <field name="VAR">text</field>
+          </block>
+        </value>
+      </block>
+      <block type="text_charAt">
+        <value name="VALUE">
+          <block type="variables_get">
+            <field name="VAR">text</field>
+          </block>
+        </value>
+      </block>
+      <block type="text_getSubstring">
+        <value name="STRING">
+          <block type="variables_get">
+            <field name="VAR">text</field>
+          </block>
+        </value>
+      </block>
+      <block type="text_changeCase"></block>
+      <block type="text_trim"></block>
+      <block type="text_print"></block>
+      <block type="text_prompt_ext">
+        <value name="TEXT">
+          <block type="text"></block>
+        </value>
+      </block>
+    </category>
+    <category name="Lists">
+      <block type="lists_create_empty"></block>
+      <block type="lists_create_with"></block>
+      <block type="lists_repeat">
+        <value name="NUM">
+          <block type="math_number">
+            <field name="NUM">5</field>
+          </block>
+        </value>
+      </block>
+      <block type="lists_length"></block>
+      <block type="lists_isEmpty"></block>
+      <block type="lists_indexOf">
+        <value name="VALUE">
+          <block type="variables_get">
+            <field name="VAR">list</field>
+          </block>
+        </value>
+      </block>
+      <block type="lists_getIndex">
+        <value name="VALUE">
+          <block type="variables_get">
+            <field name="VAR">list</field>
+          </block>
+        </value>
+      </block>
+      <block type="lists_setIndex">
+        <value name="LIST">
+          <block type="variables_get">
+            <field name="VAR">list</field>
+          </block>
+        </value>
+      </block>
+      <block type="lists_getSublist">
+        <value name="LIST">
+          <block type="variables_get">
+            <field name="VAR">list</field>
+          </block>
+        </value>
+      </block>
+      <block type="lists_split">
+        <value name="DELIM">
+          <block type="text">
+            <field name="TEXT">,</field>
+          </block>
+        </value>
+      </block>
+    </category>
+
+    <!-->
+    <category name="Colour">
+      <block type="colour_picker"></block>
+      <block type="colour_random"></block>
+      <block type="colour_rgb">
+        <value name="RED">
+          <block type="math_number">
+            <field name="NUM">100</field>
+          </block>
+        </value>
+        <value name="GREEN">
+          <block type="math_number">
+            <field name="NUM">50</field>
+          </block>
+        </value>
+        <value name="BLUE">
+          <block type="math_number">
+            <field name="NUM">0</field>
+          </block>
+        </value>
+      </block>
+      <block type="colour_blend">
+        <value name="COLOUR1">
+          <block type="colour_picker">
+            <field name="COLOUR">#ff0000</field>
+          </block>
+        </value>
+        <value name="COLOUR2">
+          <block type="colour_picker">
+            <field name="COLOUR">#3333ff</field>
+          </block>
+        </value>
+        <value name="RATIO">
+          <block type="math_number">
+            <field name="NUM">0.5</field>
+          </block>
+        </value>
+      </block>
+    </category>
+  -->
+    <category name="Variables" custom="VARIABLE"></category>
+    <!--
+    <category name="Functions" custom="PROCEDURE"></category>
+    -->
+  </xml>
+    
+    <div id="infoBox" style="display: none"></div>
+
+
+    <div class="commentDiv" tabindex="-1" style="display: none">
+        <h1 tabindex="-1" align="center">Blockly Playground</h1>
+        <select onchange="changeFontDD()" id= "fontDD" role="menu" aria-haspopup="true" aria-hidden="true" tabindex="-1">
+            <option value='12'>12</option>
+            <option value='14'>14</option>
+            <option value='18'>18</option>
+            <option value='24'>24</option>
+            <option value='36'>36</option>
+            <option value='48'>48</option> 
+            <option value='72'>72</option>
+        </select>
+    </div>
+
+    <p tabindex="0" id="comment" style="display: none">Comments go here</p>
+
+  <div id="primaryContentDiv" style="display: none">
+
+        <div id="typeButtons">
+            <button type="button" value="Export to XML" onclick="toXml()">Export to XML</button>
+            <button type="button" value="Import from XML" onclick="fromXml()">Import from XML</button>
+            <button type="button" value="To JavaScript" onclick="toCode('JavaScript')">To JavaScript</button>
+            <button type="button" value="To Python" onclick="toCode('Python')">To Python</button>
+            <button type="button" value="To Dart" onclick="toCode('Dart')">To Dart</button>
+            <button type="button" value="Run JavaScript" onclick="runCode()">Run JavaScript</button>
+    </div>
+    
+    <textarea id="importExport">Program Output is here</textarea>
+  <hr>
+<!--
+  <p>
+    Stress test:
+    <input type="button" value="Airstrike!" onclick="airstrike(100)">
+    <input type="button" value="Spaghetti!" onclick="spaghetti(8)">
+  </p>
+  -->
+  </div>
+  <!-- Realtime setup buttons. -->
+
+  <div id="realtime" style="display: none">
+
+    <p>Test realtime collaboration by opening
+      <a target="_blank" href="#" onmouseover="this.href = window.location.href">
+        this link</a> in a separate browser window or tab and they will be
+      synchronized.  You can even share the link with a friend!.</p>
+
+    <br>
+    <br>
+	
+
+    <!-- Undo and redo buttons. -->
+    <!-- TODO: Uncomment this when undo/redo are fixed. -->
+    <!--
+      <button id="undoButton" disabled>Undo</button>
+      <button id="redoButton" disabled>Redo</button>
+      <br />
+    -->
+
+    <!-- Text area that will be used for our collaborative chat box. -->
+    <textarea id="chatbox" style="width: 26%; height: 12em" disabled="true"></textarea>
+
+  </div>
+</body>
+<script type="text/javascript" src="keystrokes.js"></script>
+</html>
+
+
+<!--
+XML Task 2 Sample Codes (Taken from Stefik's paper)
+
+  ==========================================
+  Example From Task 6 
+  ==========================================
+  
+  <xml xmlns="http://www.w3.org/1999/xhtml">
+    <block type="variables_set" id="3" inline="true" x="37.999999999999886" y="37.99999999999983">
+      <field name="VAR">i</field>
+      <value name="VALUE">
+        <block type="math_number" id="22">
+          <field name="NUM">0</field>
+        </block>
+      </value>
+      <next>
+        <block type="variables_set" id="37" inline="true">
+          <field name="VAR">d</field>
+          <value name="VALUE">
+            <block type="math_number" id="65">
+              <field name="NUM">4</field>
+            </block>
+          </value>
+          <next>
+            <block type="controls_if" id="100" inline="false">
+              <value name="IF0">
+                <block type="logic_compare" id="135" inline="true">
+                  <field name="OP">NEQ</field>
+                  <value name="A">
+                    <block type="variables_get" id="179">
+                      <field name="VAR">d</field>
+                    </block>
+                  </value>
+                  <value name="B">
+                    <block type="variables_get" id="186">
+                      <field name="VAR">d</field>
+                    </block>
+                  </value>
+                </block>
+              </value>
+              <next>
+                <block type="controls_whileUntil" id="223" inline="false">
+                  <field name="MODE">WHILE</field>
+                  <value name="BOOL">
+                    <block type="logic_compare" id="231" inline="true">
+                      <field name="OP">LT</field>
+                      <value name="A">
+                        <block type="variables_get" id="315">
+                          <field name="VAR">i</field>
+                        </block>
+                      </value>
+                      <value name="B">
+                        <block type="variables_get" id="308">
+                          <field name="VAR">d</field>
+                        </block>
+                      </value>
+                    </block>
+                  </value>
+                  <statement name="DO">
+                    <block type="controls_if" id="332" inline="false">
+                      <mutation else="1"></mutation>
+                      <value name="IF0">
+                        <block type="logic_operation" id="382" inline="true">
+                          <field name="OP">OR</field>
+                          <value name="A">
+                            <block type="logic_compare" id="374" inline="true">
+                              <field name="OP">EQ</field>
+                              <value name="A">
+                                <block type="math_number" id="415">
+                                  <field name="NUM">2</field>
+                                </block>
+                              </value>
+                              <value name="B">
+                                <block type="variables_get" id="389">
+                                  <field name="VAR">i</field>
+                                </block>
+                              </value>
+                            </block>
+                          </value>
+                          <value name="B">
+                            <block type="logic_compare" id="340" inline="true">
+                              <field name="OP">EQ</field>
+                              <value name="A">
+                                <block type="math_number" id="443">
+                                  <field name="NUM">1</field>
+                                </block>
+                              </value>
+                              <value name="B">
+                                <block type="variables_get" id="396">
+                                  <field name="VAR">i</field>
+                                </block>
+                              </value>
+                            </block>
+                          </value>
+                        </block>
+                      </value>
+                      <statement name="DO0">
+                        <block type="controls_if" id="534" inline="false">
+                          <value name="IF0">
+                            <block type="logic_compare" id="490" inline="true">
+                              <field name="OP">EQ</field>
+                              <value name="A">
+                                <block type="math_number" id="491">
+                                  <field name="NUM">2</field>
+                                </block>
+                              </value>
+                              <value name="B">
+                                <block type="variables_get" id="492">
+                                  <field name="VAR">i</field>
+                                </block>
+                              </value>
+                            </block>
+                          </value>
+                        </block>
+                      </statement>
+                      <statement name="ELSE">
+                        <block type="controls_if" id="569" inline="false">
+                          <value name="IF0">
+                            <block type="logic_compare" id="570" inline="true">
+                              <field name="OP">EQ</field>
+                              <value name="A">
+                                <block type="math_number" id="571">
+                                  <field name="NUM">0</field>
+                                </block>
+                              </value>
+                              <value name="B">
+                                <block type="variables_get" id="572">
+                                  <field name="VAR">i</field>
+                                </block>
+                              </value>
+                            </block>
+                          </value>
+                        </block>
+                      </statement>
+                      <next>
+                        <block type="controls_if" id="580" inline="false">
+                          <value name="IF0">
+                            <block type="logic_compare" id="581" inline="true">
+                              <field name="OP">EQ</field>
+                              <value name="A">
+                                <block type="math_number" id="582">
+                                  <field name="NUM">0</field>
+                                </block>
+                              </value>
+                              <value name="B">
+                                <block type="variables_get" id="583">
+                                  <field name="VAR">i</field>
+                                </block>
+                              </value>
+                            </block>
+                          </value>
+                          <next>
+                            <block type="math_change" id="663" inline="true">
+                              <field name="VAR">i</field>
+                              <value name="DELTA">
+                                <block type="math_number" id="664">
+                                  <field name="NUM">1</field>
+                                </block>
+                              </value>
+                            </block>
+                          </next>
+                        </block>
+                      </next>
+                    </block>
+                  </statement>
+                  <next>
+                    <block type="controls_if" id="665" inline="false">
+                      <value name="IF0">
+                        <block type="logic_compare" id="666" inline="true">
+                          <field name="OP">EQ</field>
+                          <value name="A">
+                            <block type="variables_get" id="667">
+                              <field name="VAR">d</field>
+                            </block>
+                          </value>
+                          <value name="B">
+                            <block type="variables_get" id="668">
+                              <field name="VAR">d</field>
+                            </block>
+                          </value>
+                        </block>
+                      </value>
+                    </block>
+                  </next>
+                </block>
+              </next>
+            </block>
+          </next>
+        </block>
+      </next>
+    </block>
+  </xml>
+
+  ===========================================
+  Example From Training
+  ===========================================
+
+  <xml xmlns="http://www.w3.org/1999/xhtml">
+    <block type="variables_set" id="681" inline="true" x="100.00000000000003" y="38.40963855421671">
+      <field name="VAR">i</field>
+      <value name="VALUE">
+        <block type="math_number" id="709">
+          <field name="NUM">0</field>
+        </block>
+      </value>
+      <next>
+        <block type="variables_set" id="724" inline="true">
+          <field name="VAR">k</field>
+          <value name="VALUE">
+            <block type="math_number" id="743">
+              <field name="NUM">0</field>
+            </block>
+          </value>
+          <next>
+            <block type="controls_whileUntil" id="778" inline="false">
+              <field name="MODE">WHILE</field>
+              <value name="BOOL">
+                <block type="logic_compare" id="908" inline="true">
+                  <field name="OP">LT</field>
+                  <value name="A">
+                    <block type="variables_get" id="966">
+                      <field name="VAR">i</field>
+                    </block>
+                  </value>
+                  <value name="B">
+                    <block type="math_number" id="1001">
+                      <field name="NUM">2</field>
+                    </block>
+                  </value>
+                </block>
+              </value>
+              <statement name="DO">
+                <block type="math_change" id="1030" inline="true">
+                  <field name="VAR">k</field>
+                  <value name="DELTA">
+                    <block type="math_number" id="1031">
+                      <field name="NUM">1</field>
+                    </block>
+                  </value>
+                  <next>
+                    <block type="controls_if" id="1066" inline="false">
+                      <mutation else="1"></mutation>
+                      <value name="IF0">
+                        <block type="logic_compare" id="1087" inline="true">
+                          <field name="OP">EQ</field>
+                          <value name="A">
+                            <block type="variables_get" id="1094">
+                              <field name="VAR">i</field>
+                            </block>
+                          </value>
+                          <value name="B">
+                            <block type="math_number" id="1122">
+                              <field name="NUM">0</field>
+                            </block>
+                          </value>
+                        </block>
+                      </value>
+                      <statement name="DO0">
+                        <block type="math_change" id="1123" inline="true">
+                          <field name="VAR">k</field>
+                          <value name="DELTA">
+                            <block type="math_number" id="1124">
+                              <field name="NUM">1</field>
+                            </block>
+                          </value>
+                        </block>
+                      </statement>
+                      <statement name="ELSE">
+                        <block type="math_change" id="1125" inline="true">
+                          <field name="VAR">k</field>
+                          <value name="DELTA">
+                            <block type="math_number" id="1126">
+                              <field name="NUM">-1</field>
+                            </block>
+                          </value>
+                        </block>
+                      </statement>
+                      <next>
+                        <block type="math_change" id="1221" inline="true">
+                          <field name="VAR">i</field>
+                          <value name="DELTA">
+                            <block type="math_number" id="1222">
+                              <field name="NUM">1</field>
+                            </block>
+                          </value>
+                        </block>
+                      </next>
+                    </block>
+                  </next>
+                </block>
+              </statement>
+            </block>
+          </next>
+        </block>
+      </next>
+    </block>
+  </xml>
+
+  ============================================
+
+  Examples from csci 140 exam
+
+  1) 
+  
+  <xml xmlns="http://www.w3.org/1999/xhtml">
+    <block type="variables_set" id="117" inline="true" x="87.99999999999989" y="113">
+      <field name="VAR">count</field>
+      <value name="VALUE">
+        <block type="math_number" id="162">
+          <field name="NUM">1</field>
+        </block>
+      </value>
+      <next>
+        <block type="variables_set" id="217" inline="true">
+          <field name="VAR">y</field>
+          <value name="VALUE">
+            <block type="math_number" id="338">
+              <field name="NUM">6</field>
+            </block>
+          </value>
+          <next>
+            <block type="controls_whileUntil" id="431" inline="false">
+              <field name="MODE">WHILE</field>
+              <value name="BOOL">
+                <block type="logic_compare" id="578" inline="true">
+                  <field name="OP">LT</field>
+                  <value name="A">
+                    <block type="variables_get" id="595">
+                      <field name="VAR">count</field>
+                    </block>
+                  </value>
+                  <value name="B">
+                    <block type="math_number" id="623">
+                      <field name="NUM">6</field>
+                    </block>
+                  </value>
+                </block>
+              </value>
+              <statement name="DO">
+                <block type="math_change" id="791" inline="true">
+                  <field name="VAR">y</field>
+                  <value name="DELTA">
+                    <block type="math_number" id="792">
+                      <field name="NUM">-1</field>
+                    </block>
+                  </value>
+                  <next>
+                    <block type="math_change" id="837" inline="true">
+                      <field name="VAR">count</field>
+                      <value name="DELTA">
+                        <block type="math_number" id="838">
+                          <field name="NUM">1</field>
+                        </block>
+                      </value>
+                    </block>
+                  </next>
+                </block>
+              </statement>
+              <next>
+                <block type="text_print" id="1089" inline="false">
+                  <value name="TEXT">
+                    <block type="variables_get" id="1327">
+                      <field name="VAR">y</field>
+                    </block>
+                  </value>
+                </block>
+              </next>
+            </block>
+          </next>
+        </block>
+      </next>
+    </block>
+  </xml>
+
+
+  2)
+
+  <xml xmlns="http://www.w3.org/1999/xhtml">
+    <block type="variables_set" id="13" inline="true" x="112.00000000000011" y="138">
+      <field name="VAR">num</field>
+      <value name="VALUE">
+        <block type="math_number" id="69">
+          <field name="NUM">1</field>
+        </block>
+      </value>
+      <next>
+        <block type="controls_whileUntil" id="41" inline="false">
+          <field name="MODE">WHILE</field>
+          <value name="BOOL">
+            <block type="logic_compare" id="183" inline="true">
+              <field name="OP">EQ</field>
+              <value name="A">
+                <block type="variables_get" id="198">
+                  <field name="VAR">num</field>
+                </block>
+              </value>
+              <value name="B">
+                <block type="math_number" id="217">
+                  <field name="NUM">10</field>
+                </block>
+              </value>
+            </block>
+          </value>
+          <statement name="DO">
+            <block type="text_print" id="251" inline="false">
+              <value name="TEXT">
+                <block type="variables_get" id="428">
+                  <field name="VAR">num</field>
+                </block>
+              </value>
+              <next>
+                <block type="math_change" id="503" inline="true">
+                  <field name="VAR">num</field>
+                  <value name="DELTA">
+                    <block type="math_number" id="504">
+                      <field name="NUM">2</field>
+                    </block>
+                  </value>
+                </block>
+              </next>
+            </block>
+          </statement>
+        </block>
+      </next>
+    </block>
+  </xml>
+
+
+  3)
+
+  <xml xmlns="http://www.w3.org/1999/xhtml">
+  <block type="variables_set" id="3" inline="true" x="162.0000000000001" y="88">
+    <field name="VAR">num</field>
+    <value name="VALUE">
+      <block type="math_number" id="47">
+        <field name="NUM">1</field>
+      </block>
+    </value>
+    <next>
+      <block type="controls_whileUntil" id="147" inline="false">
+        <field name="MODE">WHILE</field>
+        <value name="BOOL">
+          <block type="logic_compare" id="182" inline="true">
+            <field name="OP">LT</field>
+            <value name="A">
+              <block type="variables_get" id="249">
+                <field name="VAR">num</field>
+              </block>
+            </value>
+            <value name="B">
+              <block type="math_number" id="234">
+                <field name="NUM">10</field>
+              </block>
+            </value>
+          </block>
+        </value>
+        <statement name="DO">
+          <block type="math_change" id="353" inline="true">
+            <field name="VAR">item</field>
+            <value name="DELTA">
+              <block type="math_number" id="354">
+                <field name="NUM">2</field>
+              </block>
+            </value>
+            <next>
+              <block type="text_print" id="466" inline="false">
+                <value name="TEXT">
+                  <block type="variables_get" id="522">
+                    <field name="VAR">num</field>
+                  </block>
+                </value>
+              </block>
+            </next>
+          </block>
+        </statement>
+      </block>
+    </next>
+  </block>
+</xml>
+
+  4)
+
+  
+  <xml xmlns="http://www.w3.org/1999/xhtml">
+    <block type="variables_set" id="30" inline="true" x="162.0000000000001" y="138">
+      <field name="VAR">sum</field>
+      <value name="VALUE">
+        <block type="math_number" id="58">
+          <field name="NUM">0</field>
+        </block>
+      </value>
+      <next>
+        <block type="variables_set" id="91" inline="true">
+          <field name="VAR">x</field>
+          <value name="VALUE">
+            <block type="math_number" id="126">
+              <field name="NUM">0</field>
+            </block>
+          </value>
+          <next>
+            <block type="controls_whileUntil" id="154" inline="false">
+              <field name="MODE">WHILE</field>
+              <value name="BOOL">
+                <block type="logic_compare" id="162" inline="true">
+                  <field name="OP">LT</field>
+                  <value name="A">
+                    <block type="variables_get" id="169">
+                      <field name="VAR">x</field>
+                    </block>
+                  </value>
+                  <value name="B">
+                    <block type="math_number" id="215">
+                      <field name="NUM">10</field>
+                    </block>
+                  </value>
+                </block>
+              </value>
+              <statement name="DO">
+                <block type="math_change" id="295" inline="true">
+                  <field name="VAR">x</field>
+                  <value name="DELTA">
+                    <block type="math_number" id="296">
+                      <field name="NUM">1</field>
+                    </block>
+                  </value>
+                  <next>
+                    <block type="controls_if" id="535" inline="false">
+                      <value name="IF0">
+                        <block type="math_number_property" id="923" inline="true">
+                          <mutation divisor_input="true"></mutation>
+                          <field name="PROPERTY">DIVISIBLE_BY</field>
+                          <value name="NUMBER_TO_CHECK">
+                            <block type="variables_get" id="940">
+                              <field name="VAR">x</field>
+                            </block>
+                          </value>
+                          <value name="DIVISOR">
+                            <block type="math_number" id="994">
+                              <field name="NUM">3</field>
+                            </block>
+                          </value>
+                        </block>
+                      </value>
+                      <statement name="DO0">
+                        <block type="math_change" id="1337" inline="true">
+                          <field name="VAR">x</field>
+                          <value name="DELTA">
+                            <block type="math_number" id="1338">
+                              <field name="NUM">2</field>
+                            </block>
+                          </value>
+                        </block>
+                      </statement>
+                      <next>
+                        <block type="math_change" id="1427" inline="true">
+                          <field name="VAR">sum</field>
+                          <value name="DELTA">
+                            <block type="variables_get" id="1453">
+                              <field name="VAR">x</field>
+                            </block>
+                          </value>
+                          <next>
+                            <block type="text_print" id="1520" inline="false">
+                              <value name="TEXT">
+                                <block type="variables_get" id="1560">
+                                  <field name="VAR">x</field>
+                                </block>
+                              </value>
+                            </block>
+                          </next>
+                        </block>
+                      </next>
+                    </block>
+                  </next>
+                </block>
+              </statement>
+              <next>
+                <block type="text_print" id="1624" inline="false">
+                  <value name="TEXT">
+                    <block type="variables_get" id="1692">
+                      <field name="VAR">sum</field>
+                    </block>
+                  </value>
+                </block>
+              </next>
+            </block>
+          </next>
+        </block>
+      </next>
+    </block>
+  </xml>
+
+  
+  5)
+
+  <xml xmlns="http://www.w3.org/1999/xhtml">
+    <block type="variables_set" id="336" inline="true" x="87.00000000000034" y="87.99999999999926">
+      <field name="VAR">x</field>
+      <value name="VALUE">
+        <block type="math_number" id="377">
+          <field name="NUM">2</field>
+        </block>
+      </value>
+      <next>
+        <block type="variables_set" id="341" inline="true">
+          <field name="VAR">y</field>
+          <value name="VALUE">
+            <block type="math_number" id="396">
+              <field name="NUM">2</field>
+            </block>
+          </value>
+          <next>
+            <block type="variables_set" id="64" inline="true">
+              <field name="VAR">num</field>
+              <value name="VALUE">
+                <block type="math_number" id="117">
+                  <field name="NUM">1</field>
+                </block>
+              </value>
+              <next>
+                <block type="controls_whileUntil" id="127" inline="false">
+                  <field name="MODE">WHILE</field>
+                  <value name="BOOL">
+                    <block type="logic_compare" id="135" inline="true">
+                      <field name="OP">LT</field>
+                      <value name="A">
+                        <block type="variables_get" id="140">
+                          <field name="VAR">num</field>
+                        </block>
+                      </value>
+                      <value name="B">
+                        <block type="math_number" id="168">
+                          <field name="NUM">10</field>
+                        </block>
+                      </value>
+                    </block>
+                  </value>
+                  <statement name="DO">
+                    <block type="text_print" id="196" inline="false">
+                      <value name="TEXT">
+                        <block type="variables_get" id="201">
+                          <field name="VAR">num</field>
+                        </block>
+                      </value>
+                      <next>
+                        <block type="math_change" id="247" inline="true">
+                          <field name="VAR">num</field>
+                          <value name="DELTA">
+                            <block type="math_number" id="248">
+                              <field name="NUM">2</field>
+                            </block>
+                          </value>
+                          <next>
+                            <block type="controls_if" id="561" inline="false">
+                              <mutation else="1"></mutation>
+                              <value name="IF0">
+                                <block type="logic_compare" id="587" inline="true">
+                                  <field name="OP">GT</field>
+                                  <value name="A">
+                                    <block type="variables_get" id="683">
+                                      <field name="VAR">x</field>
+                                    </block>
+                                  </value>
+                                  <value name="B">
+                                    <block type="math_number" id="606">
+                                      <field name="NUM">0</field>
+                                    </block>
+                                  </value>
+                                </block>
+                              </value>
+                              <statement name="DO0">
+                                <block type="text_print" id="798" inline="false">
+                                  <value name="TEXT">
+                                    <block type="text" id="832">
+                                      <field name="TEXT">A</field>
+                                    </block>
+                                  </value>
+                                </block>
+                              </statement>
+                              <statement name="ELSE">
+                                <block type="text_print" id="833" inline="false">
+                                  <value name="TEXT">
+                                    <block type="text" id="834">
+                                      <field name="TEXT">B</field>
+                                    </block>
+                                  </value>
+                                </block>
+                              </statement>
+                              <next>
+                                <block type="text_print" id="878" inline="false">
+                                  <value name="TEXT">
+                                    <block type="text" id="938">
+                                      <field name="TEXT">C</field>
+                                    </block>
+                                  </value>
+                                </block>
+                              </next>
+                            </block>
+                          </next>
+                        </block>
+                      </next>
+                    </block>
+                  </statement>
+                </block>
+              </next>
+            </block>
+          </next>
+        </block>
+      </next>
+    </block>
+  </xml>
+
+
+ 6)
+
+ <xml xmlns="http://www.w3.org/1999/xhtml">
+    <block type="variables_set" id="771" inline="true" x="87.00000000000045" y="87.00000000000003">
+      <field name="VAR">i</field>
+      <value name="VALUE">
+        <block type="math_number" id="790">
+          <field name="NUM">5</field>
+        </block>
+      </value>
+      <next>
+        <block type="variables_set" id="259" inline="true">
+          <field name="VAR">x</field>
+          <value name="VALUE">
+            <block type="math_number" id="329">
+              <field name="NUM">50</field>
+            </block>
+          </value>
+          <next>
+            <block type="controls_if" id="398" inline="false">
+              <value name="IF0">
+                <block type="logic_compare" id="471" inline="true">
+                  <field name="OP">LTE</field>
+                  <value name="A">
+                    <block type="variables_get" id="537">
+                      <field name="VAR">x</field>
+                    </block>
+                  </value>
+                  <value name="B">
+                    <block type="math_number" id="556">
+                      <field name="NUM">200</field>
+                    </block>
+                  </value>
+                </block>
+              </value>
+              <statement name="DO0">
+                <block type="controls_if" id="564" inline="false">
+                  <value name="IF0">
+                    <block type="logic_compare" id="565" inline="true">
+                      <field name="OP">LT</field>
+                      <value name="A">
+                        <block type="variables_get" id="566">
+                          <field name="VAR">x</field>
+                        </block>
+                      </value>
+                      <value name="B">
+                        <block type="math_number" id="567">
+                          <field name="NUM">100</field>
+                        </block>
+                      </value>
+                    </block>
+                  </value>
+                  <statement name="DO0">
+                    <block type="controls_if" id="568" inline="false">
+                      <value name="IF0">
+                        <block type="logic_compare" id="569" inline="true">
+                          <field name="OP">LTE</field>
+                          <value name="A">
+                            <block type="variables_get" id="570">
+                              <field name="VAR">x</field>
+                            </block>
+                          </value>
+                          <value name="B">
+                            <block type="math_number" id="571">
+                              <field name="NUM">0</field>
+                            </block>
+                          </value>
+                        </block>
+                      </value>
+                      <statement name="DO0">
+                        <block type="text_print" id="635" inline="false">
+                          <value name="TEXT">
+                            <block type="text" id="750">
+                              <field name="TEXT">A</field>
+                            </block>
+                          </value>
+                        </block>
+                      </statement>
+                      <next>
+                        <block type="controls_if" id="850" inline="false">
+                          <value name="IF0">
+                            <block type="logic_compare" id="851" inline="true">
+                              <field name="OP">GTE</field>
+                              <value name="A">
+                                <block type="variables_get" id="852">
+                                  <field name="VAR">i</field>
+                                </block>
+                              </value>
+                              <value name="B">
+                                <block type="math_number" id="853">
+                                  <field name="NUM">10</field>
+                                </block>
+                              </value>
+                            </block>
+                          </value>
+                          <statement name="DO0">
+                            <block type="text_print" id="854" inline="false">
+                              <value name="TEXT">
+                                <block type="text" id="855">
+                                  <field name="TEXT">Hello</field>
+                                </block>
+                              </value>
+                            </block>
+                          </statement>
+                          <next>
+                            <block type="text_print" id="753" inline="false">
+                              <value name="TEXT">
+                                <block type="text" id="754">
+                                  <field name="TEXT">C</field>
+                                </block>
+                              </value>
+                            </block>
+                          </next>
+                        </block>
+                      </next>
+                    </block>
+                  </statement>
+                  <next>
+                    <block type="text_print" id="751" inline="false">
+                      <value name="TEXT">
+                        <block type="text" id="752">
+                          <field name="TEXT">B</field>
+                        </block>
+                      </value>
+                    </block>
+                  </next>
+                </block>
+              </statement>
+              <next>
+                <block type="text_print" id="755" inline="false">
+                  <value name="TEXT">
+                    <block type="text" id="756">
+                      <field name="TEXT">D</field>
+                    </block>
+                  </value>
+                </block>
+              </next>
+            </block>
+          </next>
+        </block>
+      </next>
+    </block>
+  </xml>
+
+
+  Example Code from Karlton Weaver's Paper
+
+  <xml xmlns="http://www.w3.org/1999/xhtml">
+    <block type="variables_set" id="50" inline="true" x="112.99999999999977" y="163">
+      <field name="VAR">i</field>
+      <value name="VALUE">
+        <block type="math_number" id="78">
+          <field name="NUM">0</field>
+        </block>
+      </value>
+      <next>
+        <block type="controls_repeat_ext" id="88" inline="true">
+          <value name="TIMES">
+            <block type="math_number" id="89">
+              <field name="NUM">10</field>
+            </block>
+          </value>
+          <statement name="DO">
+            <block type="text_print" id="242" inline="false">
+              <value name="TEXT">
+                <block type="variables_get" id="252">
+                  <field name="VAR">i</field>
+                </block>
+              </value>
+              <next>
+                <block type="controls_if" id="555" inline="false">
+                  <value name="IF0">
+                    <block type="logic_compare" id="597" inline="true">
+                      <field name="OP">EQ</field>
+                      <value name="A">
+                        <block type="variables_get" id="602">
+                          <field name="VAR">i</field>
+                        </block>
+                      </value>
+                      <value name="B">
+                        <block type="math_number" id="630">
+                          <field name="NUM">5</field>
+                        </block>
+                      </value>
+                    </block>
+                  </value>
+                  <statement name="DO0">
+                    <block type="text_print" id="345" inline="false">
+                      <value name="TEXT">
+                        <block type="text" id="768">
+                          <field name="TEXT">Halfway</field>
+                        </block>
+                      </value>
+                    </block>
+                  </statement>
+                  <next>
+                    <block type="math_change" id="966" inline="true">
+                      <field name="VAR">i</field>
+                      <value name="DELTA">
+                        <block type="math_number" id="967">
+                          <field name="NUM">1</field>
+                        </block>
+                      </value>
+                    </block>
+                  </next>
+                </block>
+              </next>
+            </block>
+          </statement>
+        </block>
+      </next>
+    </block>
+  </xml>
+
+
+
+========================================================================
+Task 1 XML
+========================================================================
+
+1)
+
+<xml xmlns="http://www.w3.org/1999/xhtml">
+  <block type="variables_set" id="133" inline="true" x="88" y="288">
+    <field name="VAR">values</field>
+    <value name="VALUE">
+      <block type="lists_create_with" id="210" inline="false">
+        <mutation items="5"></mutation>
+        <value name="ADD0">
+          <block type="math_number" id="252">
+            <field name="NUM">32</field>
+          </block>
+        </value>
+        <value name="ADD1">
+          <block type="math_number" id="287">
+            <field name="NUM">29</field>
+          </block>
+        </value>
+        <value name="ADD2">
+          <block type="math_number" id="306">
+            <field name="NUM">67.5</field>
+          </block>
+        </value>
+        <value name="ADD3">
+          <block type="math_number" id="325">
+            <field name="NUM">54</field>
+          </block>
+        </value>
+        <value name="ADD4">
+          <block type="math_number" id="344">
+            <field name="NUM">35</field>
+          </block>
+        </value>
+      </block>
+    </value>
+    <next>
+      <block type="variables_set" id="379" inline="true">
+        <field name="VAR">wholeCount</field>
+        <value name="VALUE">
+          <block type="math_number" id="407">
+            <field name="NUM">0</field>
+          </block>
+        </value>
+        <next>
+          <block type="controls_forEach" id="656" inline="false">
+            <field name="VAR">i</field>
+            <value name="LIST">
+              <block type="variables_get" id="681">
+                <field name="VAR">values</field>
+              </block>
+            </value>
+            <statement name="DO">
+              <block type="controls_if" id="809" inline="false">
+                <value name="IF0">
+                  <block type="math_number_property" id="925" inline="true">
+                    <mutation divisor_input="false"></mutation>
+                    <field name="PROPERTY">EVEN</field>
+                    <value name="NUMBER_TO_CHECK">
+                      <block type="variables_get" id="937">
+                        <field name="VAR">i</field>
+                      </block>
+                    </value>
+                  </block>
+                </value>
+                <statement name="DO0">
+                  <block type="math_change" id="991" inline="true">
+                    <field name="VAR">wholeCount</field>
+                    <value name="DELTA">
+                      <block type="math_number" id="992">
+                        <field name="NUM">1</field>
+                      </block>
+                    </value>
+                  </block>
+                </statement>
+              </block>
+            </statement>
+            <next>
+              <block type="text_print" id="1010" inline="false">
+                <value name="TEXT">
+                  <block type="variables_get" id="1019">
+                    <field name="VAR">wholeCount</field>
+                  </block>
+                </value>
+              </block>
+            </next>
+          </block>
+        </next>
+      </block>
+    </next>
+  </block>
+</xml>
+
+
+2)
+
+<xml xmlns="http://www.w3.org/1999/xhtml">
+  <block type="variables_set" id="12" inline="true" x="63" y="288">
+    <field name="VAR">item</field>
+    <value name="VALUE">
+      <block type="lists_create_with" id="29" inline="false">
+        <mutation items="3"></mutation>
+        <value name="ADD0">
+          <block type="math_number" id="160">
+            <field name="NUM">13</field>
+          </block>
+        </value>
+        <value name="ADD1">
+          <block type="math_number" id="179">
+            <field name="NUM">21</field>
+          </block>
+        </value>
+        <value name="ADD2">
+          <block type="math_number" id="198">
+            <field name="NUM">10</field>
+          </block>
+        </value>
+      </block>
+    </value>
+    <next>
+      <block type="variables_set" id="201" inline="true">
+        <field name="VAR">greatest</field>
+        <value name="VALUE">
+          <block type="math_number" id="220">
+            <field name="NUM">0</field>
+          </block>
+        </value>
+        <next>
+          <block type="controls_forEach" id="256" inline="false">
+            <field name="VAR">i</field>
+            <value name="LIST">
+              <block type="variables_get" id="310">
+                <field name="VAR">item</field>
+              </block>
+            </value>
+            <statement name="DO">
+              <block type="controls_if" id="318" inline="false">
+                <value name="IF0">
+                  <block type="logic_compare" id="419" inline="true">
+                    <field name="OP">EQ</field>
+                    <value name="A">
+                      <block type="variables_get" id="429">
+                        <field name="VAR">i</field>
+                      </block>
+                    </value>
+                    <value name="B">
+                      <block type="variables_get" id="439">
+                        <field name="VAR">greatest</field>
+                      </block>
+                    </value>
+                  </block>
+                </value>
+                <statement name="DO0">
+                  <block type="variables_set" id="456" inline="true">
+                    <field name="VAR">greatest</field>
+                    <value name="VALUE">
+                      <block type="variables_get" id="463">
+                        <field name="VAR">i</field>
+                      </block>
+                    </value>
+                  </block>
+                </statement>
+              </block>
+            </statement>
+          </block>
+        </next>
+      </block>
+    </next>
+  </block>
+</xml>
+
+-->
+
+
+
