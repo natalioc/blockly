@@ -50,6 +50,27 @@ document.onkeydown = document.onkeyup = function(e){
 		return;
 	}	
 
+	if(keyboardState=='editMode'){ //if you are in editMode, normal hotkeys are disabled
+		if(map[27]){ //Escape
+			console.log('Escape key pressed.');
+			keyboardState = 'hotkeyMode';
+			Blockly.Accessibility.Navigation.updateXmlSelection();
+		}
+		else if(map[65]){ //A
+			//Navigate to previous field
+			Blockly.Accessibility.inBlock.selectPrev();
+		}
+		else if(map[68]){ //D
+			//Navigate to next field
+			Blockly.Accessibility.Navigation.selectNext();
+		}
+		else if(map[69]){ //E
+			console.log('E key pressed.');
+			Blockly.Accessibility.inBlock.enterSelected();
+			keyboardState = 'hotkeyMode'; //prevent getting stuck on same block
+		}
+	}	
+	
 	if(keyboardState=='hotkeyMode'){	
 
 	    if(map[18] && map[16] && map[67]){ //Alt Shift C
@@ -144,6 +165,8 @@ document.onkeydown = document.onkeyup = function(e){
 			console.log('E key pressed.');
 			Blockly.Accessibility.TreeView.getImportantBlocks();
 			//Edit block of code or edit comment
+			keyboardState = 'editMode';
+			Blockly.Accessibility.inBlock.enterCurrentBlock();
 		}
 		
 		else if(map[71]){ //G
