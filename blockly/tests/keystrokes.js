@@ -29,7 +29,7 @@ var keyboardState = 'hotkeyMode';
 meSpeak.loadConfig("mespeak_config.json");
 meSpeak.loadVoice("voices/en/en-us.json");
 var speedSpeak = 175;
-var audioSelection = 'normal';
+//var audioSelection = 'normal';
 responsiveVoice.setDefaultVoice("US English Female");
 var quickSelect=false;
 // ['normal','ear con','spear con'];
@@ -377,6 +377,7 @@ document.onkeydown = document.onkeyup = function(e){
                     startTimer();
                     window.alert(realTime);
                     window.alert(realTime);
+
                 }
                 else{
                     responsiveVoice.speak("Wrong!");
@@ -385,6 +386,7 @@ document.onkeydown = document.onkeyup = function(e){
             else if(audioSelection==="ear con"){
                 if((getCurrentNode().id)==="15"){
                     responsiveVoice.speak("Correct!");
+
                     window.alert(realTime);
                     window.alert(realTime);
                 }
@@ -393,6 +395,8 @@ document.onkeydown = document.onkeyup = function(e){
                 }
             }
             else if(audioSelection==="spear con"){
+
+
                 if((getCurrentNode().id)==="16"){
                     responsiveVoice.speak("Correct!");
                     window.alert(realTime);
