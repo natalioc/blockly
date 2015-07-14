@@ -373,6 +373,7 @@ Blockly.Accessibility.TreeView.getAllComments = function() {
     var bigChange = false; //an array boolean for which prefix it should generate
     var valueArr = [];//an array that handles the regular values
     var functionArr = []; //an array to handle the function return block that behaves differently
+    var emptyValueArr = []; //an array to handle empty values like the not block
     for (var i = 0; i <= blockArr.length - 1; i++) {
      	//will find blocks that arent connected to anything
      	if(blockArr[i].parentNode.nodeName == 'XML'){
@@ -394,18 +395,13 @@ Blockly.Accessibility.TreeView.getAllComments = function() {
      			emptyVisited = false;
      		}
      		else{
-     			//get your parents prefix so you know how to build yours
-     			oldPrefix = map[blockArr[i].parentNode.parentNode.getAttribute('id').toString()];
-     			oldPrefix = oldPrefix.substring(0, oldPrefix.length - 1);
-     			oldPrefix = oldPrefix + blockIndex;
-    			map[blockArr[i].getAttribute('id').toString()] = oldPrefix;
-     			blockIndex++;
-     			lowerAlphabet = 0;
+     			emptyValueArr.push(blockArr[i]);
      		}
      	}
 	 	for (var j = 0; j < blockArr[i].childNodes.length; j++) {
 	 		//this is for blocks nested inside of a block
 	 		if(blockArr[i].childNodes[j].nodeName == 'VALUE'){
+	 			emptyVisited = true;
 	 			//since the function block's children are different to other blocks we have a check for that block specifically
 	 			if(this.getValueTop(blockArr[i].childNodes[j].childNodes[0]).getAttribute('type') == 'procedures_defreturn'){
 	 				functionArr.push(blockArr[i].childNodes[j].childNodes[0]);
@@ -438,8 +434,10 @@ Blockly.Accessibility.TreeView.getAllComments = function() {
 	 	}
 	}
 	lowerAlphabet = 0;
+	//this handles all regular values and puts them into a logical order
 	if(valueArr.length > 0){
 		for (var i = 0; i <= valueArr.length - 1; i++) {
+			emptyVisited = true;
 			var topBlock = this.getValueTop(valueArr[i]);
 			if(previousTopBlock == null){
 				previousTopBlock = topBlock;
@@ -475,6 +473,28 @@ Blockly.Accessibility.TreeView.getAllComments = function() {
 	topBlock = null;
 	lowerAlphabet = 0;
 
+	//handles empty values and blocks
+	if(emptyValueArr.length > 0){
+		for (var i = 0; i <= emptyValueArr.length - 1; i++) {
+			emptyValueArr[i]
+			//get your parents prefix so you know how to build yours
+ 			oldPrefix = map[emptyValueArr[i].parentNode.parentNode.getAttribute('id').toString()];
+			var lastPrefixStr = oldPrefix[oldPrefix.length - 1];
+			if(lastPrefixStr.match(/[a-z]/i)){
+				oldPrefix = oldPrefix.substring(0, oldPrefix.length - 1);
+				oldPrefix = oldPrefix + lowerAlphabet;
+			}
+			else{
+ 				oldPrefix = oldPrefix.substring(0, oldPrefix.length - 1);
+ 				oldPrefix = oldPrefix + blockIndex;
+				map[emptyValueArr[i].getAttribute('id').toString()] = oldPrefix;
+ 				blockIndex++;
+ 				//lowerAlphabet = 0;
+ 			}
+     	}
+	}
+
+	//handles function return blocks since they are set up differently than regular blocks
 	if(functionArr.length > 0){
 		//this for loop makes the prefixes for the function return block
 		for (var i = 0; i <= functionArr.length - 1; i++) {
