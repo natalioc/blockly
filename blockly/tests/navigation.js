@@ -269,7 +269,7 @@ function jumpToTopOfSection() {
 /**
  * Sets the current node to the one at the bottom of this section of blocks
  */
-function jumpToBottompOfSection() {
+function jumpToBottomOfSection() {
 
     if (!currentNode) {
         console.log('Nothing Selected.')
@@ -277,9 +277,17 @@ function jumpToBottompOfSection() {
     }
 
     console.log('Jumping to bottom of section.');
-    currentNode = findTop(currentNode);
+    currentNode = findBottom(currentNode);
     console.log('Going to ' + currentNode.nodeName + ' with id ' + currentNode.getAttribute('id') + ' via cycle.');
     updateSelection();
+}
+
+function jumptToDesignatedSection(){
+    if (!currentNode) {
+        console.log('Nothing Selected.')
+        return;
+    }
+    console.log('Jumping to bottom of section.');
 }
 
 /**
@@ -318,6 +326,41 @@ function jumpToID(id) {
 
     console.log('Block with id ' + id + ' not found.');
 }
+var time=0;
+var mins;
+var secs;
+var tenths;
+var realTime;
+var running=false;
+
+function startTimer(){
+    if(running===false){
+        running=true;
+        increment();
+    }
+    else{
+        running=false;
+    }
+}
+
+function increment(){
+    if(running===true){
+        setTimeout(function(){
+        time++;
+        increment();
+        },100);
+    }
+    mins=Math.floor(time/10/60);
+    secs=Math.floor(time/10);
+    tenths=time%100;
+    if(mins<10)
+        mins="0"+mins;
+    if(secs<10)
+        secs="0"+secs;
+    if(tenths<10)
+        tenths="0"+secs;
+    realTime=mins+":"+secs+":"+tenths;
+}
 
 //#endregion
 
@@ -327,12 +370,14 @@ function jumpToID(id) {
  * Goes out of a block to go up a level
  */
 function traverseOut() {
-
+    
     if (!currentNode) {
         console.log('Nothing Selected.')
         return;
     }
-
+    if(running===false){
+        startTimer();
+    }
     console.log('traverseOut called.');
     console.log('Attempting to leave ' + currentNode.nodeName + ' with id ' + currentNode.getAttribute('id'));
 
@@ -357,12 +402,12 @@ function traverseOut() {
     if(audioSelection==="normal")
         responsiveVoice.speak("Highest level of Nesting Reached.");
     else if(audioSelection==="ear con"){
-        var note=[17];
+        var note=[115];
         playNotes(note,1);
     }
     else{
         doneTalking=false;
-        meSpeak.speak("Limit reached.", {speed: 600},meSpeakDone);
+        meSpeak.speak("Stop.", {speed: 700},meSpeakDone);
     }
     console.log('Stop.');
 }
@@ -376,7 +421,9 @@ function traverseIn() {
         console.log('Nothing Selected.')
         return;
     }
-
+    if(running===false){
+        startTimer();
+    }
     console.log('traverseIn called.');
     console.log('Attempting to leave ' + currentNode.nodeName + ' with id ' + currentNode.getAttribute('id'));
 
@@ -405,12 +452,12 @@ function traverseIn() {
     if(audioSelection==="normal")
         responsiveVoice.speak("Deepest level of Nesting Reached.");
     else if(audioSelection==="ear con"){
-        var note=[17];
+        var note=[115];
         playNotes(note,1);
     }
     else{
         doneTalking=false;
-        meSpeak.speak("Stop", {speed: 600},meSpeakDone);
+        meSpeak.speak("Stop", {speed: 700},meSpeakDone);
     }
     console.log('Cannot traverse inwards from here.');
 }
@@ -424,7 +471,9 @@ function traverseUp() {
         console.log('Nothing Selected.')
         return;
     }
-
+    if(running===false){
+        startTimer();
+    }
     console.log('traverseUp called.');
     console.log('Attempting to leave ' + currentNode.nodeName + ' with id ' + currentNode.getAttribute('id'));
 
@@ -471,12 +520,12 @@ function traverseUp() {
     if(audioSelection==="normal")
         responsiveVoice.speak("Top of nest reached.");
     else if(audioSelection==="ear con"){
-        var note=[17];
+        var note=[115];
         playNotes(note,1);
     }
     else{
         doneTalking=false;
-        meSpeak.speak("Stop.", {speed: 600},meSpeakDone);
+        meSpeak.speak("Stop.", {speed: 700},meSpeakDone);
     }
     console.log('Cannot traverse up, top of list');
 }
@@ -490,7 +539,9 @@ function traverseDown() {
         console.log('Nothing Selected.')
         return;
     }
-
+    if(running===false){
+        startTimer();
+    }
     console.log('traverseDown called.');
     console.log('Attempting to leave ' + currentNode.nodeName + ' with id ' + currentNode.getAttribute('id'));
 
@@ -539,12 +590,12 @@ function traverseDown() {
     if(audioSelection==="normal")
         responsiveVoice.speak("Bottom of nest reached.");
     else if(audioSelection==="ear con"){
-        var note=[17];
+        var note=[115];
         playNotes(note,1);
     }
     else{
         doneTalking=false;
-        meSpeak.speak("Stop.", {speed: 600},meSpeakDone);
+        meSpeak.speak("Stop.", {speed: 700},meSpeakDone);
     }
     console.log('Cannot traverse down, end of list');
 }
@@ -696,9 +747,9 @@ function clickAudio(){
 
 function speakAudio(){
     if(responsiveVoice.isPlaying()===true||play===true||doneTalking===false){
-        
-        if(play===true)
+        if(play===true){
             setTimeout(function() {speakNow();}, noteLength);
+        }
         else if(doneTalking===false)
             setTimeout(function() {speakAudio();}, 100);
         else

@@ -280,7 +280,7 @@ Blockly.Blocks['text_append'] = {
   },
 
   returnAudio: function() {
-      return 'append items';
+      return 'append text';
   }
 };
 

@@ -249,63 +249,99 @@ function question6(n){
 }
 
 var question1Xml = [
- ' <block type="variables_set" id="21" inline="true" x="138" y="113">'+
-  '  <field name="VAR">x</field>'+
-  '  <value name="VALUE">' +
-   '   <block type="math_number" id="42"> '+
-  '      <field name="NUM">0</field> '+
-  '    </block> '+
-  '  </value> '+
-  '  <next> '+
-  '    <block type="controls_whileUntil" id="52" inline="false"> '+
-  '      <field name="MODE">WHILE</field> '+
-  '      <value name="BOOL"> '+
-  '       <block type="logic_compare" id="60" inline="true">'+
-  '          <field name="OP">LT</field>'+
-  '          <value name="A">'+
-  '            <block type="variables_get" id="65">'+
-  '              <field name="VAR">x</field>'+
-  '            </block>'+
-  '          </value>'+
-  '          <value name="B">'+
-  '            <block type="math_number" id="84">'+
-  '              <field name="NUM">10</field>'+
-  '            </block>'+
-  '          </value>'+
-  '        </block>'+
-  '      </value>'+
-  '      <statement name="DO">'+
-  '        <block type="text_print" id="120" inline="false">'+
-  '          <value name="TEXT">'+
-  '            <block type="variables_get" id="143">'+
-  '              <field name="VAR">x</field>'+
-  '            </block>'+
-  '          </value>'+
-  '          <next>'+
-  '              <block type="variables_set" id="151" inline="true">'+
-  '              <field name="VAR">x</field>'+
-  '              <value name="VALUE">'+
-  '                <block type="math_arithmetic" id="170" inline="true">'+
-  '                  <field name="OP">ADD</field>'+
-  '                  <value name="A">'+
-  '                    <block type="variables_get" id="175">'+
-  '                      <field name="VAR">x</field>'+
-  '                    </block>'+
-  '                  </value>'+
-  '                  <value name="B">'+
-  '                    <block type="math_number" id="194">'+
-  '                      <field name="NUM">1</field>'+
-  '                    </block>'+
-  '                  </value>'+
-  '                </block>'+
-  '              </value>'+
-  '            </block>'+
-  '          </next>'+
-  '        </block>'+
-  '      </statement>'+
-  '    </block>'+
-  '  </next>'+
-  '</block>'
+'  <block type="variables_set" id="48" inline="true" x="163" y="188">'+
+'    <field name="VAR">item</field>'+
+'    <value name="VALUE">'+
+'      <block type="text" id="66" collapsed="true">'+
+'        <field name="TEXT">Hello</field>'+
+'      </block>'+
+'    </value>'+
+'    <next>'+
+'      <block type="controls_if" id="74" inline="false">'+
+'        <value name="IF0">'+
+'          <block type="logic_compare" id="133" inline="true">'+
+'            <field name="OP">EQ</field>'+
+'            <value name="A">'+
+'              <block type="text_length" id="172" inline="false">'+
+'                <value name="VALUE">'+
+'                  <block type="variables_get" id="136">'+
+'                    <field name="VAR">item</field>'+
+'                  </block>'+
+'                </value>'+
+'              </block>'+
+'            </value>'+
+'            <value name="B">'+
+'              <block type="math_number" id="191">'+
+'                <field name="NUM">5</field>'+
+'              </block>'+
+'            </value>'+
+'          </block>'+
+'        </value>'+
+'        <statement name="DO0">'+
+'          <block type="controls_whileUntil" id="334" inline="false">'+
+'            <field name="MODE">WHILE</field>'+
+'            <value name="BOOL">'+
+'              <block type="logic_compare" id="342" inline="true">'+
+'                <field name="OP">NEQ</field>'+
+'                <value name="A">'+
+'                  <block type="text_length" id="360" inline="false">'+
+'                    <value name="VALUE">'+
+'                      <block type="variables_get" id="363">'+
+'                        <field name="VAR">item</field>'+
+'                      </block>'+
+'                    </value>'+
+'                  </block>'+
+'                </value>'+
+'                <value name="B">'+
+'                  <block type="math_number" id="382">'+
+'                    <field name="NUM">10</field>'+
+'                  </block>'+
+'                </value>'+
+'              </block>'+
+'            </value>'+
+'            <statement name="DO">'+
+'              <block type="text_append" id="295" inline="false">'+
+'                <field name="VAR">item</field>'+
+'                <value name="TEXT">'+
+'                  <block type="text" id="296" collapsed="true">'+
+'                    <field name="TEXT">o</field>'+
+'                  </block>'+
+'                </value>'+
+'              </block>'+
+'            </statement>'+
+'          </block>'+
+'        </statement>'+
+'        <next>'+
+'          <block type="controls_repeat_ext" id="323" inline="true">'+
+'            <value name="TIMES">'+
+'              <block type="math_number" id="324">'+
+'                <field name="NUM">3</field>'+
+'              </block>'+
+'            </value>'+
+'            <statement name="DO">'+
+'              <block type="variables_set" id="623" inline="true">'+
+'                <field name="VAR">text_return</field>'+
+'                <value name="VALUE">'+
+'                  <block type="variables_get" id="437">'+
+'                    <field name="VAR">item</field>'+
+'                  </block>'+
+'                </value>'+
+'                <next>'+
+'                  <block type="text_print" id="416" inline="false">'+
+'                    <value name="TEXT">'+
+'                      <block type="variables_get" id="683">'+
+'                        <field name="VAR">text_return</field>'+
+'                      </block>'+
+'                    </value>'+
+'                  </block>'+
+'                </next>'+
+'              </block>'+
+'            </statement>'+
+'          </block>'+
+'        </next>'+
+'      </block>'+
+'    </next>'+
+'  </block>'
 ].join('\n');
 
 var question2Xml = [
@@ -451,7 +487,7 @@ var question3Xml= [
 ].join('\n')
 
 var question4Xml = [
-  '<block type="variables_set" id="348" inline="true" x="137.99999999999994" y="262.0000000000003">'+
+  '<block type="variables_set" id="348" inline="true" x="300" y="100">'+
     '<field name="VAR">sum</field>'+
     '<value name="VALUE">'+
       '<block type="math_number" id="367">'+
@@ -466,45 +502,45 @@ var question4Xml = [
           '</block>'+
         '</value>'+
         '<statement name="DO">'+
-          '<block type="variables_set" id="301" inline="true">'+
+          '<block type="variables_set" id="56" inline="true">'+
             '<field name="VAR">number</field>'+
             '<value name="VALUE">'+
-              '<block type="math_random_int" id="341" inline="true">'+
+              '<block type="math_random_int" id="84" inline="true">'+
                 '<value name="FROM">'+
-                  '<block type="math_number" id="342">'+
+                  '<block type="math_number" id="85">'+
                     '<field name="NUM">1</field>'+
                   '</block>'+
                 '</value>'+
                 '<value name="TO">'+
-                  '<block type="math_number" id="343">'+
-                    '<field name="NUM">10</field>'+
+                  '<block type="math_number" id="86">'+
+                    '<field name="NUM">100</field>'+
                   '</block>'+
                 '</value>'+
               '</block>'+
             '</value>'+
             '<next>'+
-              '<block type="text_print" id="557" inline="false">'+
-                '<value name="TEXT">'+
-                  '<block type="variables_get" id="564">'+
-                    '<field name="VAR">number</field>'+
+              '<block type="variables_set" id="93" inline="true">'+
+                '<field name="VAR">sum</field>'+
+                '<value name="VALUE">'+
+                  '<block type="math_arithmetic" id="112" inline="true">'+
+                    '<field name="OP">ADD</field>'+
+                    '<value name="A">'+
+                      '<block type="variables_get" id="119">'+
+                        '<field name="VAR">number</field>'+
+                      '</block>'+
+                    '</value>'+
+                    '<value name="B">'+
+                      '<block type="variables_get" id="126">'+
+                        '<field name="VAR">sum</field>'+
+                      '</block>'+
+                    '</value>'+
                   '</block>'+
                 '</value>'+
                 '<next>'+
-                  '<block type="variables_set" id="453" inline="true">'+
-                    '<field name="VAR">sum</field>'+
-                    '<value name="VALUE">'+
-                      '<block type="math_arithmetic" id="472" inline="true">'+
-                        '<field name="OP">ADD</field>'+
-                        '<value name="A">'+
-                          '<block type="variables_get" id="479">'+
-                            '<field name="VAR">number</field>'+
-                          '</block>'+
-                        '</value>'+
-                        '<value name="B">'+
-                          '<block type="variables_get" id="496">'+
-                            '<field name="VAR">sum</field>'+
-                          '</block>'+
-                        '</value>'+
+                  '<block type="text_print" id="144" inline="false">'+
+                    '<value name="TEXT">'+
+                      '<block type="variables_get" id="151">'+
+                        '<field name="VAR">number</field>'+
                       '</block>'+
                     '</value>'+
                   '</block>'+
@@ -528,7 +564,7 @@ var question4Xml = [
 ].join('\n')
 
 var question5Xml = [
-  '<block type="variables_set" id="133" inline="true" x="88" y="288">'+
+  '<block type="variables_set" id="133" inline="true" x="300" y="100">'+
     '<field name="VAR">values</field>'+
     '<value name="VALUE">' +
       '<block type="lists_create_with" id="210" inline="false">' +
@@ -617,166 +653,94 @@ var question5Xml = [
   '</block>'
 ].join('\n')
 
-/*
-var question5Xml = [
-  '<block type="variables_set" id="133" inline="true" x="88" y="288">'+
-    '<field name="VAR">values</field>'+
-    '<value name="VALUE">' +
-      '<block type="lists_create_with" id="210" inline="false">' +
-        '<mutation items="5"></mutation>' +
-        '<value name="ADD0">'+
-          '<block type="math_number" id="252">'+
-            '<field name="NUM">32</field>' + 
-          '</block>' +
-        '</value>' +
-        '<value name="ADD1">' +
-          '<block type="math_number" id="287">' +
-            '<field name="NUM">29</field>' +
-          '</block>'+
-        '</value>' +
-        '<value name="ADD2">' +
-          '<block type="math_number" id="306">' +
-            '<field name="NUM">67.5</field>' +
-          '</block>' +
-        '</value>' +
-        '<value name="ADD3">' +
-          '<block type="math_number" id="325">' +
-            '<field name="NUM">54</field>' +
-          '</block>' +
-        '</value>' +
-        '<value name="ADD4">' +
-          '<block type="math_number" id="344">' +
-            '<field name="NUM">35</field>' +
-          '</block>' +
-        '</value>' +
-      '</block>' +
-    '</value>' +
-    '<next>' +
-      '<block type="variables_set" id="379" inline="true">' +
-        '<field name="VAR">wholeCount</field>' +
-        '<value name="VALUE">' +
-          '<block type="math_number" id="407">' +
-            '<field name="NUM">0</field>' +
-          '</block>' +
-        '</value>' +
-        '<next>' +
-          '<block type="controls_forEach" id="656" inline="false">' +
-            '<field name="VAR">i</field>' +
-            '<value name="LIST">' +
-              '<block type="variables_get" id="681">' +
-                '<field name="VAR">values</field>' +
-              '</block>' +
-            '</value>' +
-            '<statement name="DO">' +
-              '<block type="controls_if" id="809" inline="false">' +
-                '<value name="IF0">' +
-                  '<block type="math_number_property" id="925" inline="true">' +
-                    '<mutation divisor_input="false"></mutation>' +
-                    '<field name="PROPERTY">EVEN</field>' +
-                    '<value name="NUMBER_TO_CHECK">' +
-                      '<block type="variables_get" id="937">' +
-                        '<field name="VAR">i</field>' +
-                      '</block>' +
-                    '</value>' +
-                  '</block>' +
-                '</value>' +
-                '<statement name="DO0">' +
-                  '<block type="math_change" id="991" inline="true">' +
-                    '<field name="VAR">wholeCount</field>' +
-                    '<value name="DELTA">' +
-                      '<block type="math_number" id="992">' +
-                        '<field name="NUM">1</field>' +
-                      '</block>' +
-                    '</value>' +
-                  '</block>' +
-                '</statement>' +
-              '</block>' +
-            '</statement>' +
-            '<next>' +
-              '<block type="text_print" id="1010" inline="false">'+
-                '<value name="TEXT">' +
-                  '<block type="variables_get" id="1019">' +
-                    '<field name="VAR">wholeCount</field>' +
-                  '</block>' +
-                '</value>' +
-              '</block>' +
-            '</next>' +
-          '</block>' +
-        '</next>' +
-      '</block>' +
-    '</next>' +
-  '</block>'
-].join('\n')
-*/
 var question6Xml=[
-  '<block type="variables_set" id="12" inline="true" x="63" y="288">'+
+  '<block type="variables_set" id="1" inline="true" x="300" y="100">'+
     '<field name="VAR">item</field>'+
     '<value name="VALUE">'+
-      '<block type="lists_create_with" id="29" inline="false">'+
+      '<block type="lists_create_with" id="2" inline="false">'+
         '<mutation items="3"></mutation>'+
         '<value name="ADD0">'+
-          '<block type="math_number" id="160">'+
+          '<block type="math_number" id="3">'+
             '<field name="NUM">13</field>'+
           '</block>'+
         '</value>'+
         '<value name="ADD1">'+
-          '<block type="math_number" id="179">'+
+          '<block type="math_number" id="4">'+
             '<field name="NUM">21</field>'+
           '</block>'+
         '</value>'+
         '<value name="ADD2">'+
-          '<block type="math_number" id="198">'+
+          '<block type="math_number" id="5">'+
             '<field name="NUM">10</field>'+
           '</block>'+
         '</value>'+
       '</block>'+
     '</value>'+
     '<next>'+
-      '<block type="variables_set" id="201" inline="true">'+
+      '<block type="variables_set" id="6" inline="true">'+
         '<field name="VAR">greatest</field>'+
         '<value name="VALUE">'+
-          '<block type="math_number" id="220">'+
+          '<block type="math_number" id="7">'+
             '<field name="NUM">0</field>'+
           '</block>'+
         '</value>'+
         '<next>'+
-          '<block type="controls_forEach" id="256" inline="false">'+
-            '<field name="VAR">i</field>'+
-            '<value name="LIST">'+
-              '<block type="variables_get" id="310">'+
-                '<field name="VAR">item</field>'+
-              '</block>'+
-            '</value>'+
-            '<statement name="DO">'+
-              '<block type="controls_if" id="318" inline="false">'+
-                '<value name="IF0">'+
-                  '<block type="logic_compare" id="419" inline="true">'+
-                    '<field name="OP">EQ</field>'+
-                    '<value name="A">'+
-                      '<block type="variables_get" id="429">'+
-                        '<field name="VAR">i</field>'+
+          
+              '<block type="controls_forEach" id="8" inline="false">'+
+                '<field name="VAR">i</field>'+
+                '<value name="LIST">'+
+                  '<block type="variables_get" id="9">'+
+                    '<field name="VAR">item</field>'+
+                  '</block>'+
+                '</value>'+
+                '<statement name="DO">'+
+                  '<block type="controls_if" id="10" inline="false">'+
+                    '<value name="IF0">'+
+                      '<block type="logic_compare" id="11" inline="true">'+
+                        '<field name="OP">EQ</field>'+
+                        '<value name="A">'+
+                          '<block type="variables_get" id="12">'+
+                            '<field name="VAR">i</field>'+
+                          '</block>'+
+                        '</value>'+
+                        '<value name="B">'+
+                          '<block type="variables_get" id="13">'+
+                            '<field name="VAR">greatest</field>'+
+                          '</block>'+
+                        '</value>'+
                       '</block>'+
                     '</value>'+
-                    '<value name="B">'+
-                      '<block type="variables_get" id="439">'+
+                    '<statement name="DO0">'+
+                      '<block type="variables_set" id="14" inline="true">'+
+                        '<field name="VAR">greatest</field>'+
+                        '<value name="VALUE">'+
+                          '<block type="variables_get" id="15">'+
+                            '<field name="VAR">i</field>'+
+                          '</block>'+
+                        '</value>'+
+                      '</block>'+
+                    '</statement>'+
+                    '<next>'+
+                      '<block type="text_print" id="69" inline="false">'+
+                        '<value name="TEXT">'+
+                          '<block type="variables_get" id="101">'+
+                            '<field name="VAR">i</field>'+
+                          '</block>'+
+                        '</value>'+
+                      '</block>'+
+                    '</next>'+
+                  '</block>'+
+                '</statement>'+
+                '<next>'+
+                  '<block type="text_print" id="87" inline="false">'+
+                    '<value name="TEXT">'+
+                      '<block type="variables_get" id="142">'+
                         '<field name="VAR">greatest</field>'+
                       '</block>'+
                     '</value>'+
                   '</block>'+
-                '</value>'+
-                '<statement name="DO0">'+
-                  '<block type="variables_set" id="456" inline="true">'+
-                    '<field name="VAR">greatest</field>'+
-                    '<value name="VALUE">'+
-                      '<block type="variables_get" id="463">'+
-                        '<field name="VAR">i</field>'+
-                      '</block>'+
-                    '</value>'+
-                  '</block>'+
-                '</statement>'+
+                '</next>'+
               '</block>'+
-            '</statement>'+
-          '</block>'+
         '</next>'+
       '</block>'+
     '</next>'+
