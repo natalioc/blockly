@@ -24,6 +24,7 @@ goog.require('Blockly.Workspace');
 //var meSpeak=require("mespeak");
 
 
+var question=0;
 var map = [];
 var keyboardState = 'hotkeyMode';
 meSpeak.loadConfig("mespeak_config.json");
@@ -283,18 +284,12 @@ document.onkeydown = document.onkeyup = function(e){
 				window.alert(err+err.lineNumber);
 			}
 		}
-		else if(map[90]){//z
-			question1(1);
-			updateXmlSelection();
-			var blockArr = xmlDoc.getElementsByTagName('BLOCK');
-			var firstBlock=blockArr[0].getAttribute('ID');
-			jumpToID(firstBlock);
-			quickSelect=true;
-		}
 		else if(map[88]){//x
-			if(audioSelection==="normal")
+			if(question===0)
+				question1(1);
+			if(question===1)
 				question4(1);
-			else if(audioSelection==="ear con")
+			else if(question===2)
 				question5(1);
 			else{
 				question6(1);
@@ -314,21 +309,22 @@ document.onkeydown = document.onkeyup = function(e){
 		}
 
 		else if(map[45]){//insert
-			switch(audioSelection)
+			switch(question)
 			{
-				case 'normal':
-					audioSelection='ear con';
+				case 1:
+					question=2;
 					break;
-				case 'ear con':
-					audioSelection='spear con';
+				case 2:
+					question=3;
 					break;
-				case 'spear con':
-					audioSelection='normal';
+				case 3:
+					question=1;
 					break;
 				default:
+					question=0;
 					break;
 			}
-			responsiveVoice.speak(audioSelection);
+			responsiveVoice.speak("question "+question);
 		}
 		else if (map[73]){//i
 			codeReader();

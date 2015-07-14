@@ -756,10 +756,12 @@ function speakAudio(){
         if(play===true){
             setTimeout(function() {speakNow();}, noteLength);
         }
-        else if(doneTalking===false)
+        else if(doneTalking===false){
             setTimeout(function() {speakAudio();}, 100);
-        else
+        }
+        else{
             setTimeout(function() {speakAudio();}, 50);
+        }
         return;
     }
     else if(arrayStack.length>1)

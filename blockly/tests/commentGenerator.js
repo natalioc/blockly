@@ -354,6 +354,7 @@ function nestLevel(currentNode){
 }; 
 
 function spearNestLevel(currentNode){
+    meSpeak.stop();
     if(currentNode!=null){
         var speakLevel="Level ";
         var addition="";
@@ -380,6 +381,7 @@ function spearNestLevel(currentNode){
 };
 function earNestLevel(currentNode){
     if(currentNode!=null){
+        play=false;
         noteLength=0;
         var speakLevel="";
         var arrLength = perfectArr.length; //The length of the parentArr and perfectArr arrays
@@ -439,8 +441,11 @@ function playNotes(noteToPlay,speed){
     var newSpeed=540/speed;
     play=true;
     t = T("interval", {interval:newSpeed,timeout:"55sec"},function(){
-        if(i>noteToPlay.length-1||noteToPlay[i]===undefined){
+        if(i>noteToPlay.length-1||noteToPlay[i]===undefined||play===false){
             this.stop();
+            if(play===false){
+
+            }
             play=false;
         }
         if(!toggle){
