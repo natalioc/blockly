@@ -362,7 +362,6 @@ Blockly.Accessibility.TreeView.getAllComments = function() {
     //Add all xml blocks to blockArr 
     var blockArr = xmlDoc.getElementsByTagName('BLOCK');
 	var map = {}; // our hashMap for Block Id's and their associated prefix ex Block:19 , A1.3
-    var nextCount = 0;
     var capitalAlphabet = 0;
     var lowerAlphabet = 0;
     var oldPrefix = '';
@@ -394,6 +393,7 @@ Blockly.Accessibility.TreeView.getAllComments = function() {
      		if(emptyVisited == true){
      			emptyVisited = false;
      		}
+     		//add the empty value to an array for post processing 
      		else{
      			emptyValueArr.push(blockArr[i]);
      		}
@@ -403,6 +403,7 @@ Blockly.Accessibility.TreeView.getAllComments = function() {
 	 		if(blockArr[i].childNodes[j].nodeName == 'VALUE'){
 	 			emptyVisited = true;
 	 			//since the function block's children are different to other blocks we have a check for that block specifically
+	 			//we add it to an array for post processing after going through all the blocks
 	 			if(this.getValueTop(blockArr[i].childNodes[j].childNodes[0]).getAttribute('type') == 'procedures_defreturn'){
 	 				functionArr.push(blockArr[i].childNodes[j].childNodes[0]);
 	 			}
@@ -439,6 +440,7 @@ Blockly.Accessibility.TreeView.getAllComments = function() {
 		for (var i = 0; i <= valueArr.length - 1; i++) {
 			emptyVisited = true;
 			var topBlock = this.getValueTop(valueArr[i]);
+			//this will check the highest block to keep things consistent
 			if(previousTopBlock == null){
 				previousTopBlock = topBlock;
 			}
@@ -447,6 +449,7 @@ Blockly.Accessibility.TreeView.getAllComments = function() {
 				previousTopBlock = topBlock;
 				bigChange = true;
 			}
+			//this changes the naming of the values so that they are more readable
 			var parentValue = valueArr[i].parentNode.parentNode;
 			if(previousParentValue == null){
 				previousParentValue = parentValue;
@@ -492,7 +495,6 @@ Blockly.Accessibility.TreeView.getAllComments = function() {
  				oldPrefix = oldPrefix + blockIndex;
 				map[emptyValueArr[i].getAttribute('id').toString()] = oldPrefix;
  				blockIndex++;
- 				//lowerAlphabet = 0;
  			}
      	}
 	}
@@ -501,6 +503,8 @@ Blockly.Accessibility.TreeView.getAllComments = function() {
 	if(functionArr.length > 0){
 		//this for loop makes the prefixes for the function return block
 		for (var i = 0; i <= functionArr.length - 1; i++) {
+			//this checks if the top block is the same if its not then the alphabet needs
+			//to be reset
 			var topBlock = this.getValueTop(functionArr[i]);
 			if(previousTopBlock == null){
 				previousTopBlock = topBlock;
@@ -510,6 +514,8 @@ Blockly.Accessibility.TreeView.getAllComments = function() {
 				previousTopBlock = topBlock;
 			}
 			var parentValue = functionArr[i].parentNode.parentNode;
+			//this has the names after the top block to be set in a good order if they are in
+			// a list
 			if(previousParentValue == null){
 				previousParentValue = parentValue;
 			}
