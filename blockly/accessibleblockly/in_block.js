@@ -201,8 +201,8 @@ Blockly.Accessibility.InBlock.dropDown = function () {
  * Allows the user to edit the selected textInput
  */
 Blockly.Accessibility.InBlock.textInput = function () {
-    // Code to select a textInput field to allow for remote selection here
-    console.log('TEXTINPUT ENTERING NOT IMPLEMENTED');
+
+    this.selectionList[this.connectionsIndex].showEditor_();
 };
 
 /**
