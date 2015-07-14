@@ -28,7 +28,7 @@ var currentNode = null;
 
 var undoStack = [];
 var redoStack = [];
-
+var arrayStack=[];
 //#region XML_UPDATING
 
 // Default functions for our hooks.
@@ -386,6 +386,7 @@ function traverseOut() {
         currentNode = findTop(currentNode).parentNode.parentNode;
         console.log('Going to ' + currentNode.nodeName + ' with id ' + currentNode.getAttribute('id'));
         updateSelection();
+        arrayStack.push(1);
         if(audioSelection==="normal"){
             nestLevel(getCurrentNode());
         }
@@ -435,6 +436,7 @@ function traverseIn() {
             currentNode = children[i].getElementsByTagName('BLOCK')[0];
             console.log('Going to ' + currentNode.nodeName + ' with id ' + currentNode.getAttribute('id'));
             updateSelection();
+            arrayStack.push(1);
             if(audioSelection==="normal"){
                 nestLevel(getCurrentNode());
             }
@@ -482,6 +484,7 @@ function traverseUp() {
         currentNode = currentNode.parentNode.parentNode;
         console.log('Going to ' + currentNode.nodeName + ' with id ' + currentNode.getAttribute('id'));
         updateSelection();
+        arrayStack.push(1);
         if(audioSelection==="normal"){
             nestLevel(getCurrentNode());
         }
@@ -502,6 +505,7 @@ function traverseUp() {
         currentNode = findBottom(currentNode);
         console.log('Going to ' + currentNode.nodeName + ' with id ' + currentNode.getAttribute('id') + ' via cycle.');
         updateSelection();
+        arrayStack.push(1);
         if(audioSelection==="normal"){
             nestLevel(getCurrentNode());
         }
@@ -553,6 +557,7 @@ function traverseDown() {
             currentNode = children[i].getElementsByTagName('BLOCK')[0];
             console.log('Going to ' + currentNode.nodeName + ' with id ' + currentNode.getAttribute('id'));
             updateSelection();
+            arrayStack.push(1);
             if(audioSelection==="normal"){
                 nestLevel(getCurrentNode());
             }
@@ -573,6 +578,7 @@ function traverseDown() {
         currentNode = findTop(currentNode);
         console.log('Going to ' + currentNode.nodeName + ' with id ' + currentNode.getAttribute('id') + ' via cycle.');
         updateSelection();
+        arrayStack.push(1);
         if(audioSelection==="normal"){
             nestLevel(getCurrentNode());
         }
@@ -755,6 +761,10 @@ function speakAudio(){
         else
             setTimeout(function() {speakAudio();}, 50);
         return;
+    }
+    else if(arrayStack.length>1)
+    {
+        arrayStack.pop();
     }
     else{
         var here=getCurrentNode();
