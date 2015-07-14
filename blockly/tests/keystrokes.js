@@ -348,7 +348,13 @@ document.onkeydown = document.onkeyup = function(e){
 		}
 
 		else if(map[70]){//f
-			jumpToBottomOfSection();
+    		var children = currentNode.childNodes;
+   			for (var i = 0; i < children.length; i++) {
+        		if (children[i].nodeName.toUpperCase() == 'STATEMENT') {
+        			responsiveVoice.speak("Lower level detected.");
+			//jumpToBottomOfSection();
+				}
+			}
 		}
 
 

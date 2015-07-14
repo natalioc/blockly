@@ -402,7 +402,7 @@ function traverseOut() {
     if(audioSelection==="normal")
         responsiveVoice.speak("Highest level of Nesting Reached.");
     else if(audioSelection==="ear con"){
-        var note=[115];
+        //var note=[115];
         playNotes(note,1);
     }
     else{
