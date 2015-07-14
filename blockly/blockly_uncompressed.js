@@ -1540,6 +1540,8 @@ goog.addDependency("../../../" + dir + "/accessibleblockly/accessibility.js", ['
 goog.addDependency("../../../" + dir + "/accessibleblockly/navigation.js", ['Blockly.Accessibility.Navigation'], ['Blockly.BlockSvg', 'Blockly.Block', 'Blockly.Connection', 'Blockly.FieldColour', 'Blockly.FieldTextInput', 'Blockly.FieldDropdown', 'Blockly.FieldCheckbox']);
 goog.addDependency("../../../" + dir + "/accessibleblockly/tree_view.js", ['Blockly.Accessibility.TreeView'], []);
 goog.addDependency("../../../" + dir + "/accessibleblockly/keystrokes.js", ['Blockly.Accessibility.Keystrokes'], []);
+goog.addDependency("../../../" + dir + "/accessibleblockly/in_block.js", ['Blockly.Accessibility.InBlock'], []);
+goog.addDependency("../../../" + dir + "/accessibleblockly/menu_nav.js", ['Blockly.Accessibility.MenuNav'], []);
 
 // Load Blockly.
 goog.require('Blockly');
@@ -1588,6 +1590,8 @@ goog.require('rtclient');
 goog.require('Blockly.Accessibility');
 goog.require('Blockly.Accessibility.Navigation');
 goog.require('Blockly.Accessibility.TreeView');
+goog.require('Blockly.Accessibility.MenuNav');
+goog.require('Blockly.Accessibility.InBlock');
 goog.require('Blockly.Accessibility.Keystrokes');
 
 delete window.BLOCKLY_DIR;
