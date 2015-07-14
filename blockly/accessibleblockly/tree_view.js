@@ -470,7 +470,10 @@ Blockly.Accessibility.TreeView.getAllComments = function() {
 			}
 		}
 	}
+	previousTopBlock = null;
 	topBlock = null;
+	parentValue = null;
+	previousParentValue = null;
 	lowerAlphabet = 0;
 
 	//handles empty values and blocks
@@ -506,15 +509,27 @@ Blockly.Accessibility.TreeView.getAllComments = function() {
 				lowerAlphabet = 0;
 				previousTopBlock = topBlock;
 			}
-			oldPrefix = map[topBlock.getAttribute('id')];
-			var lastPrefixStr = oldPrefix[oldPrefix.length - 1];
-			//if the prefix already has a letter on the end of it cut it off before adding the new prefix
-			if(lastPrefixStr.match(/[a-z]/i)){
-				oldPrefix = oldPrefix.substring(0, oldPrefix.length - 1)
+			var parentValue = functionArr[i].parentNode.parentNode;
+			if(previousParentValue == null){
+				previousParentValue = parentValue;
 			}
-			oldPrefix = oldPrefix + this.getAlphabetical(lowerAlphabet);
-			map[functionArr[i].getAttribute('id').toString()] = oldPrefix;
-			lowerAlphabet++;
+			if(previousParentValue != parentValue){
+				lowerAlphabet = 0;
+				previousParentValue = parentValue;
+				bigChange = false;
+			}
+			if(bigChange == true){
+				oldPrefix = map[topBlock.getAttribute('id')];
+				oldPrefix = oldPrefix + this.getAlphabetical(lowerAlphabet);
+				map[functionArr[i].getAttribute('id').toString()] = oldPrefix;
+				lowerAlphabet++;
+			}
+			else{
+				oldPrefix = map[previousParentValue.getAttribute('id')];
+				oldPrefix = oldPrefix + this.getAlphabetical(lowerAlphabet);
+				map[functionArr[i].getAttribute('id').toString()] = oldPrefix;
+				lowerAlphabet++;
+			}
 		}
 	}
     return map;
