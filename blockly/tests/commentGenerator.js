@@ -344,6 +344,8 @@ function nestLevel(currentNode){
                         speakLevel+=nestArray[j];
                     }
                 }
+                while(responsiveVoice.isPlaying())
+                    responsiveVoice.cancel();
                 responsiveVoice.speak(speakLevel);
                 break;
             }
@@ -408,13 +410,13 @@ function earNestLevel(currentNode){
                 for(var j=0;j<nestArray.length;j++){
                     if(nestArray[j]===-1){
                         var speed=tempNotes.length;
-                //        T.soundfont.preload(tempNotes);
+                        T.soundfont.preload(tempNotes);
                         playNotes(tempNotes,speed);
                         tempNotes=[];
                     }
                     else{
                         tempNotes.push(nestArray[j]);
-                        noteLength+=440;
+                        noteLength+=560;
                     }
                 }
                 break;
@@ -434,7 +436,7 @@ function playNotes(noteToPlay,speed){
         t.stop();
     var i=0;
     var toggle = false;
-    var newSpeed=420/speed;
+    var newSpeed=540/speed;
     play=true;
     t = T("interval", {interval:newSpeed,timeout:"55sec"},function(){
         if(i>noteToPlay.length-1||noteToPlay[i]===undefined){

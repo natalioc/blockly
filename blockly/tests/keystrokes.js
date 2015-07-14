@@ -31,6 +31,7 @@ meSpeak.loadVoice("voices/en/en-us.json");
 var speedSpeak = 175;
 //var audioSelection = 'normal';
 responsiveVoice.setDefaultVoice("US English Female");
+var quickSelect=false;
 // ['normal','ear con','spear con'];
 /*var codeSelection = [1,2,3];
 
@@ -283,11 +284,12 @@ document.onkeydown = document.onkeyup = function(e){
 			}
 		}
 		else if(map[90]){//z
-			question2(1);
+			question1(1);
 			updateXmlSelection();
 			var blockArr = xmlDoc.getElementsByTagName('BLOCK');
 			var firstBlock=blockArr[0].getAttribute('ID');
 			jumpToID(firstBlock);
+			quickSelect=true;
 		}
 		else if(map[88]){//x
 			if(audioSelection==="normal")
@@ -345,25 +347,37 @@ document.onkeydown = document.onkeyup = function(e){
 			jumpToID(firstBlock);
 		}
 
-		/*else if(map[70]){//f
-			try{
-				workspace.playAudio("click");
-				//question4(1);		
- 			}
- 			catch(err){
- 				window.alert(err+err.lineNumber);
- 			}
-		}*/
-		else if(map[85]){//u
-			codeReaderTrial();
+		else if(map[70]){//f
+    		var children = currentNode.childNodes;
+   			for (var i = 0; i < children.length; i++) {
+        		if (children[i].nodeName.toUpperCase() == 'STATEMENT') {
+        			responsiveVoice.speak("Lower level detected.");
+			//jumpToBottomOfSection();
+				}
+			}
 		}
 
 
 		else if(map[13]){ //Enter
-            window.alert(getCurrentNode().id)
-            if(audioSelection==="normal"){
-                if((getCurrentNode().id)==="9"){
+           // window.alert(getCurrentNode().id)
+            if(quickSelect===true){
+            	if((getCurrentNode().id)==="19"){
                     responsiveVoice.speak("Correct!");
+                    startTimer();
+                    window.alert(realTime);
+                    window.alert(realTime);
+                }
+                else{
+                    responsiveVoice.speak("Wrong!");
+                }
+            }
+            else if(audioSelection==="normal"){
+                if((getCurrentNode().id)==="13"){
+                    responsiveVoice.speak("Correct!");
+                    startTimer();
+                    window.alert(realTime);
+                    window.alert(realTime);
+
                 }
                 else{
                     responsiveVoice.speak("Wrong!");
@@ -372,14 +386,21 @@ document.onkeydown = document.onkeyup = function(e){
             else if(audioSelection==="ear con"){
                 if((getCurrentNode().id)==="15"){
                     responsiveVoice.speak("Correct!");
+
+                    window.alert(realTime);
+                    window.alert(realTime);
                 }
                 else{
                     responsiveVoice.speak("Wrong!");
                 }
             }
             else if(audioSelection==="spear con"){
-                if((getCurrentNode().id)==="18"){
+
+
+                if((getCurrentNode().id)==="16"){
                     responsiveVoice.speak("Correct!");
+                    window.alert(realTime);
+                    window.alert(realTime);
                 }
                 else{
                     responsiveVoice.speak("Wrong!");
