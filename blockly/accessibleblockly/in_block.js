@@ -47,19 +47,20 @@ Blockly.Accessibility.InBlock.enterCurrentBlock = function () {
         return false;
     }
 
-    //this.inputList = Blockly.selected.inputList;
+    // Check the bottom and top connections and only add them to the list if it's meaningful to do so.
     this.selectionList = [];
-    if (true) { //if(you can add a block to the bottom of the current block)
+    if (Blockly.selected.nextConnection != null) {
         this.selectionList.push('bottomConnection');
     }
 
-    if (true) { //if(you can add a block to  the top of the current block)
+    if (Blockly.selected.previousConnection != null) {
         this.selectionList.push('topConnection');
     }
 
     // Go through all of the inputs for the current block and see what you can add where
     for (var i = 0; i < Blockly.selected.inputList.length; i++) {
         if (Blockly.selected.inputList[i].fieldRow.length > 0) {
+            // Check all of the fields
             for (var j = 0; j < Blockly.selected.inputList[i].fieldRow.length; j++) {
                 if (!(Blockly.selected.inputList[i].fieldRow[j] instanceof Blockly.FieldLabel) &&
                     !(Blockly.selected.inputList[i].fieldRow[j] instanceof Blockly.FieldImage)) {
@@ -67,8 +68,8 @@ Blockly.Accessibility.InBlock.enterCurrentBlock = function () {
                 }
             }
         }
-
-        if (Blockly.selected.inputList[i].name != '') {
+        // If the connection is null it means nothing can be connected there, so we don't need to remember the input
+        if (Blockly.selected.inputList[i].connection != null) {
             this.selectionList.push(Blockly.selected.inputList[i]);
         }
     }
