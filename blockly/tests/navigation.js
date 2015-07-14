@@ -771,6 +771,7 @@ function speakAudio(){
         var now=here.getAttribute('type');
         var playHere=Blockly.Blocks[now].returnAudio(here);
         responsiveVoice.speak(playHere);
+        arrayStack.pop();
         return;
     }
 }
