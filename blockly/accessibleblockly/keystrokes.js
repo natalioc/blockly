@@ -110,7 +110,6 @@ document.onkeydown = document.onkeyup = function(e){
 		else if(map[13]){ //Enter
 			console.log('Enter key pressed.');
 			Blockly.Accessibility.Navigation.updateXmlSelection();
-			e.preventDefault();
 			//temporarily navigates menu
 		}
 		
