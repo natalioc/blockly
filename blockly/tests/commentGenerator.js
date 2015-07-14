@@ -444,7 +444,7 @@ function playNotes(noteToPlay,speed){
         if(i>noteToPlay.length-1||noteToPlay[i]===undefined||play===false){
             this.stop();
             if(play===false){
-
+                
             }
             play=false;
         }

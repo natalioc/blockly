@@ -231,20 +231,17 @@ document.onkeydown = document.onkeyup = function(e){
 			toggleDisable();
 			updateXmlSelection();
 		}
-		
 		else if(map[81]){ //Q
 			console.log("Q key pressed.");
 			//Trial variable for duplicating a block
 			duplicateSelected();
 			updateXmlSelection();
 		}
-		
 		else if(map[82]){ //R
 			//Jumps to the top of the currently selected container
 			console.log("R key pressed.");
 			jumpToTopOfSection();
 		}
-		
 	/*	else if(map[13]){ //Enter
 			console.log('Enter key pressed.');
 			updateXmlSelection();
@@ -255,7 +252,6 @@ document.onkeydown = document.onkeyup = function(e){
 		else if(map[37] || map[65]){ //left arrow or A
 			traverseOut();
 		}
-		
 		else if(map[38] || map[87]){ //up arrow or W
 			traverseUp();
 		}
@@ -263,11 +259,9 @@ document.onkeydown = document.onkeyup = function(e){
 		else if(map[39] || map[68]){ //right arrow or D
 			traverseIn();
 		}
-		
 		else if(map[40] || map[83]){ //down arrow or S
 			traverseDown();    
 		}
-
 		else if(map[84]){//t
 			speakAudio(speedSpeak);
 		}
@@ -287,7 +281,7 @@ document.onkeydown = document.onkeyup = function(e){
 		else if(map[88]){//x
 			if(question===0)
 				question1(1);
-			if(question===1)
+			else if(question===1)
 				question4(1);
 			else if(question===2)
 				question5(1);
@@ -311,6 +305,9 @@ document.onkeydown = document.onkeyup = function(e){
 		else if(map[45]){//insert
 			switch(question)
 			{
+				case 0:
+					question=1;
+					break;
 				case 1:
 					question=2;
 					break;
@@ -318,7 +315,7 @@ document.onkeydown = document.onkeyup = function(e){
 					question=3;
 					break;
 				case 3:
-					question=1;
+					question=0;
 					break;
 				default:
 					question=0;
@@ -348,15 +345,13 @@ document.onkeydown = document.onkeyup = function(e){
    			for (var i = 0; i < children.length; i++) {
         		if (children[i].nodeName.toUpperCase() == 'STATEMENT') {
         			responsiveVoice.speak("Lower level detected.");
+        			break;
 			//jumpToBottomOfSection();
 				}
 			}
 		}
-
-
 		else if(map[13]){ //Enter
-           // window.alert(getCurrentNode().id)
-            if(quickSelect===true){
+            if(question===0){
             	if((getCurrentNode().id)==="19"){
                     responsiveVoice.speak("Correct!");
                     startTimer();
@@ -367,7 +362,7 @@ document.onkeydown = document.onkeyup = function(e){
                     responsiveVoice.speak("Wrong!");
                 }
             }
-            else if(audioSelection==="normal"){
+            else if(question===1){
                 if((getCurrentNode().id)==="13"){
                     responsiveVoice.speak("Correct!");
                     startTimer();
@@ -379,7 +374,7 @@ document.onkeydown = document.onkeyup = function(e){
                     responsiveVoice.speak("Wrong!");
                 }
             }
-            else if(audioSelection==="ear con"){
+            else if(question===2){
                 if((getCurrentNode().id)==="15"){
                     responsiveVoice.speak("Correct!");
 
@@ -390,7 +385,7 @@ document.onkeydown = document.onkeyup = function(e){
                     responsiveVoice.speak("Wrong!");
                 }
             }
-            else if(audioSelection==="spear con"){
+            else if(question===3){
 
 
                 if((getCurrentNode().id)==="16"){
