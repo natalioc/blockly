@@ -79,6 +79,8 @@ Blockly.Accessibility.InBlock.enterCurrentBlock = function () {
 
     this.connectionsIndex = 0;
 
+    console.log(this.selectionList[this.connectionsIndex]);
+
     return true;
 };
 
@@ -111,7 +113,7 @@ Blockly.Accessibility.InBlock.selectPrev = function () {
  * Selects the current field if a field is selected, or selects
  * the current block if a value or statement is selected
  */
-Blockly.Accessibility.Inblock.enterSelected = function () {
+Blockly.Accessibility.InBlock.enterSelected = function () {
 
 
     //See INNER_ACTION_FUNCTIONS region below for functions
