@@ -315,7 +315,13 @@ color: black;
 }
 #infoBox p{
 	margin: 6px;
+}
 
+#blockReader{
+  width: 1px;
+  height:1px;
+  position: absolute;
+  left: -999em;
 }
 </style>
 </head>
@@ -332,7 +338,7 @@ color: black;
 	<category name="Logic">
       <block type="controls_if"></block>
       <block type="logic_compare"></block>
-      <block type="logic_operation"></block>
+      <block type="logic_operation"></block> 
       <block type="logic_negate"></block>
       <block type="logic_boolean"></block>
       <block type="logic_null"></block>
@@ -545,23 +551,23 @@ color: black;
 
     <div class="commentDiv" tabindex="-1">
         <h1 tabindex="-1" align="center">Blockly Playground</h1>
-        <select onchange="changeFontDD()" id= "fontDD" role="menu" aria-haspopup="true" aria-hidden="true" tabindex="-1">
-            <option value='12'>12</option>
-            <option value='14'>14</option>
-            <option value='18'>18</option>
-            <option value='24'>24</option>
-            <option selected="selected" value='36'>36</option>
-            <option value='48'>48</option> 
-            <option value='72'>72</option>
+        <select onchange="changeFontDD()" id= "fontDD" role="combobox" aria-haspopup="true" aria-hidden="true" tabindex="-1">
+            <option role="option" value='12'>12</option>
+            <option role="option" value='14'>14</option>
+            <option role="option" value='18'>18</option>
+            <option role="option" value='24'>24</option>
+            <option role="option" value='36'selected="selected" >36</option>
+            <option role="option" value='48'>48</option> 
+            <option role="option" value='72'>72</option>
         </select>
     </div>
 
-    <p tabindex="0" id="comment">Comments go here</p>
+    <p tabindex="-1" id="comment" >Comments go here</p>
 
   <div id="primaryContentDiv">
 
         <div id="typeButtons">
-            <button type="button" value="Export to XML" onclick="toXml()">Export to XML</button>
+            <button  type="button" value="Export to XML" onclick="toXml()">Export to XML</button>
             <button type="button" value="Import from XML" onclick="fromXml()">Import from XML</button>
             <button type="button" value="To JavaScript" onclick="toCode('JavaScript')">To JavaScript</button>
             <button type="button" value="To Python" onclick="toCode('Python')">To Python</button>
@@ -569,7 +575,7 @@ color: black;
             <button type="button" value="Run JavaScript" onclick="runCode()">Run JavaScript</button>
     </div>
     
-    <textarea id="importExport">Program Output is here</textarea>
+    <textarea id="importExport" role="textbox">Program Output is here</textarea>
   <hr>
 <!--
   <p>
@@ -604,5 +610,6 @@ color: black;
     <textarea id="chatbox" style="width: 26%; height: 12em" disabled="true"></textarea>
 
   </div>
+  <div id="blockReader" tabindex="-1" aria-live="assertive"></div>
 </body>
 </html>
