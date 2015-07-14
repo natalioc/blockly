@@ -158,14 +158,26 @@ Blockly.Accessibility.InBlock.addBlock = function () {
  */
 
 //#region INNER_ACTION_FUNCTIONS
+
+/**
+ * Enters the bottom connection of the selected block
+ */
 Blockly.Accessibility.InBlock.bottomConnection = function () {
+    // This behaviour is essentially just traversing down, so do that.
     this.traverseDown();
 };
 
-Blockly.Accessibility.InBlock.topConnection = function(){
+/**
+ * Enters the top connection of the selected block
+ */
+Blockly.Accessibility.InBlock.topConnection = function () {
+    // This behaviour is essentially just traversing up, so do that.
     this.traverseUp();
 };
 
+/**
+ * Enters the currently selected block if the input isn't null
+ */
 Blockly.Accessibility.InBlock.input = function () {
     if (this.selectionList[this.connectionsIndex].connection.targetConnection != null) {
         // Find the block that's connected to this input and jump to it
@@ -174,31 +186,49 @@ Blockly.Accessibility.InBlock.input = function () {
     }
 };
 
-Blockly.Accessibility.InBlock.dropDown= function () {
+/**
+ * Allows the user to edit the selected dropDownMenu
+ */
+Blockly.Accessibility.InBlock.dropDown = function () {
     // Code to select a dropdown field to allow for remote selection here
     console.log('DROPDOWN ENTERING NOT IMPLEMENTED');
 };
 
+/**
+ * Allows the user to edit the selected textInput
+ */
 Blockly.Accessibility.InBlock.textInput = function () {
     // Code to select a textInput field to allow for remote selection here
     console.log('TEXTINPUT ENTERING NOT IMPLEMENTED');
 };
 
+/**
+ * Allows the user to choose a colour in the selected colour input
+ */
 Blockly.Accessibility.InBlock.colour = function () {
     // Code to select a colour field to allow for remote selection here
     console.log('COLOUR ENTERING NOT IMPLEMENTED');
 };
 
+/**
+ * Allows the user to check the check of the currently selected checkbox
+ */
 Blockly.Accessibility.InBlock.checkbox = function () {
     // Code to select a checkbox field to allow for remote selection here
     console.log('CHECKBOX ENTERING NOT IMPLEMENTED');
 };
 
+/**
+ * Allows the user to edit the date of the currently selected date input
+ */
 Blockly.Accessibility.InBlock.date = function () {
     // Code to select a date field to allow for remote selection here
     console.log('DATE ENTERING NOT IMPLEMENTED');
 };
 
+/**
+ * Allows the user to edit the variable of the currently selected variable input
+ */
 Blockly.Accessibility.InBlock.variable = function () {
     // Code to select a variable field to allow for remote selection here
     console.log('VARIABLE ENTERING NOT IMPLEMENTED');

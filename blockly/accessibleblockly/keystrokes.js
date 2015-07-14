@@ -92,7 +92,6 @@ document.onkeydown = document.onkeyup = function(e){
 		
 		else if(map[188]){ //Comma
 		    console.log('Comma key pressed.');
-		    Blockly.Accessibility.Navigation.enterCurrentBlock();
 			//Traverse forward within a block with fields
 		}
 		
