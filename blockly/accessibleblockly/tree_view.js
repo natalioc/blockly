@@ -369,6 +369,7 @@ Blockly.Accessibility.TreeView.getAllComments = function() {
     var blockIndex = 1;
     var emptyVisited = true;
     var previousTopBlock = null;
+    var valueArr = [];//an array that handles the regular values
     var functionArr = []; //an array to handle the function return block that behaves differently
     for (var i = 0; i <= blockArr.length - 1; i++) {
      	//will find blocks that arent connected to anything
@@ -408,6 +409,8 @@ Blockly.Accessibility.TreeView.getAllComments = function() {
 	 				functionArr.push(blockArr[i].childNodes[j].childNodes[0]);
 	 			}
 		 		else{
+		 			valueArr.push(blockArr[i].childNodes[j].childNodes[0]);
+		 			/**
 		 			oldPrefix = map[blockArr[i].childNodes[j].parentNode.getAttribute('id').toString()];
 		 			var lastPrefixStr = oldPrefix[oldPrefix.length - 1];
 		 			//if the prefix already has a letter on the end of it cut it off before adding the new prefix
@@ -418,6 +421,7 @@ Blockly.Accessibility.TreeView.getAllComments = function() {
 					map[blockArr[i].childNodes[j].childNodes[0].getAttribute('id').toString()] = oldPrefix;
 		 			lowerAlphabet++;
 		 			emptyVisited = true;
+		 			*/
 		 		}
 	 		}
 	 		//if you have a statement or going to the right
@@ -444,6 +448,30 @@ Blockly.Accessibility.TreeView.getAllComments = function() {
 	 	}
 	}
 	lowerAlphabet = 0;
+	if(valueArr.length > 0){
+		for (var i = 0; i <= valueArr.length - 1; i++) {
+			var topBlock = this.getValueTop(valueArr[i]);
+			if(previousTopBlock == null){
+				previousTopBlock = topBlock;
+			}
+			if(previousTopBlock != topBlock){
+				lowerAlphabet = 0;
+				previousTopBlock = topBlock;
+			}
+			oldPrefix = map[topBlock.getAttribute('id')];
+			var lastPrefixStr = oldPrefix[oldPrefix.length - 1];
+			//if the prefix already has a letter on the end of it cut it off before adding the new prefix
+			if(lastPrefixStr.match(/[a-z]/i)){
+				oldPrefix = oldPrefix.substring(0, oldPrefix.length - 1)
+			}
+			oldPrefix = oldPrefix + this.getAlphabetical(lowerAlphabet);
+			map[valueArr[i].getAttribute('id').toString()] = oldPrefix;
+			lowerAlphabet++;
+		}
+	}
+	topBlock = null;
+	lowerAlphabet = 0;
+
 	if(functionArr.length > 0){
 		//this for loop makes the prefixes for the function return block
 		for (var i = 0; i <= functionArr.length - 1; i++) {
