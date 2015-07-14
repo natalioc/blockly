@@ -193,8 +193,8 @@ Blockly.Accessibility.InBlock.input = function () {
  * Allows the user to edit the selected dropDownMenu
  */
 Blockly.Accessibility.InBlock.dropDown = function () {
-    // Code to select a dropdown field to allow for remote selection here
-    console.log('DROPDOWN ENTERING NOT IMPLEMENTED');
+    // Sorta complete, no way to select a specific option yet without arrow keys
+    this.selectionList[this.connectionsIndex].showEditor_();
 };
 
 /**
