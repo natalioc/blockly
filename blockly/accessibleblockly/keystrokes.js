@@ -58,15 +58,15 @@ document.onkeydown = document.onkeyup = function(e){
 		}
 		else if(map[65]){ //A
 			//Navigate to previous field
-			Blockly.Accessibility.inBlock.selectPrev();
+			Blockly.Accessibility.InBlock.selectPrev();
 		}
 		else if(map[68]){ //D
 			//Navigate to next field
-			Blockly.Accessibility.Navigation.selectNext();
+			Blockly.Accessibility.InBlock.selectNext();
 		}
 		else if(map[69]){ //E
 			console.log('E key pressed.');
-			Blockly.Accessibility.inBlock.enterSelected();
+			Blockly.Accessibility.InBlock.enterSelected();
 			keyboardState = 'hotkeyMode'; //prevent getting stuck on same block
 		}
 	}	
@@ -166,7 +166,7 @@ document.onkeydown = document.onkeyup = function(e){
 			Blockly.Accessibility.TreeView.getImportantBlocks();
 			//Edit block of code or edit comment
 			keyboardState = 'editMode';
-			Blockly.Accessibility.inBlock.enterCurrentBlock();
+			Blockly.Accessibility.InBlock.enterCurrentBlock();
 		}
 		
 		else if(map[71]){ //G
