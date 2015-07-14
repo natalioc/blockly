@@ -351,6 +351,7 @@ document.onkeydown = document.onkeyup = function(e){
 			}
 		}
 		else if(map[13]){ //Enter
+           window.alert(getCurrentNode().id)
             if(question===0){
             	if((getCurrentNode().id)==="19"){
                     responsiveVoice.speak("Correct!");
