@@ -209,30 +209,30 @@ Blockly.Accessibility.InBlock.textInput = function () {
  * Allows the user to choose a colour in the selected colour input
  */
 Blockly.Accessibility.InBlock.colour = function () {
-    // Code to select a colour field to allow for remote selection here
-    console.log('COLOUR ENTERING NOT IMPLEMENTED');
+    
+    this.selectionList[this.connectionsIndex].showEditor_();
 };
 
 /**
  * Allows the user to check the check of the currently selected checkbox
  */
 Blockly.Accessibility.InBlock.checkbox = function () {
-    // Code to select a checkbox field to allow for remote selection here
-    console.log('CHECKBOX ENTERING NOT IMPLEMENTED');
+    //Toggles the checkbox
+    this.selectionList[this.connectionsIndex].showEditor_();
 };
 
 /**
  * Allows the user to edit the date of the currently selected date input
  */
 Blockly.Accessibility.InBlock.date = function () {
-    // Code to select a date field to allow for remote selection here
-    console.log('DATE ENTERING NOT IMPLEMENTED');
+    // Not fully implemented yet
+    this.selectionList[this.connectionsIndex].showEditor_();
 };
 
 /**
  * Allows the user to edit the variable of the currently selected variable input
  */
 Blockly.Accessibility.InBlock.variable = function () {
-    // Code to select a variable field to allow for remote selection here
-    console.log('VARIABLE ENTERING NOT IMPLEMENTED');
+    // Sorta works, uses arrow keys at the moment.
+    this.selectionList[this.connectionsIndex].showEditor_();
 };
