@@ -29,6 +29,9 @@ goog.require('Blockly.Accessibility');
 var xmlDoc = null;
 var currentNode = null;
 
+// If this variable is true then updateXmlSelection will skip.  Use this in case of problematic updates
+var disableUpdate = false;
+
 var undoStack = [];
 var redoStack = [];
 
@@ -86,14 +89,19 @@ Array.prototype.contains = function(element) {
  * Loads the xmldoc based on the current blockly setting.
  * @param {boolean} Optional paramater.  If true, then don't select a block after updating the xml.
  */
-Blockly.Accessibility.Navigation.updateXmlSelection = function(noSelect) {
-	
-    var prevXml = xmlDoc;
+Blockly.Accessibility.Navigation.updateXmlSelection = function (noSelect) {
 
+    if (disableUpdate){
+        return;
+    }
+
+    var prevXml = null;
+    if (xmlDoc != null) {
+        prevXml = Blockly.Xml.domToPrettyText(xmlDoc);
+    }
 	console.log('UpdateXML');
 	
-    if (noSelect)
-    {
+    if (noSelect){
         xmlDoc = Blockly.Xml.workspaceToDom(Blockly.mainWorkspace);
         currentNode = null;
     }
@@ -121,12 +129,16 @@ Blockly.Accessibility.Navigation.updateXmlSelection = function(noSelect) {
     }
 
     // Check to see if we are adding this to the undo/redo stack
-    if(xmlDoc != prevXml)
+    if (Blockly.Xml.domToPrettyText(xmlDoc) != prevXml)
     {
         // If we are, remember the previous xml selection, and clear the redo stack.
         undoStack.push(prevXml);
         redoStack = [];
+
+        console.log('THERE WAS A CHANGE');
+        
     }
+    console.log(undoStack);
 };
 
 /**
@@ -139,8 +151,9 @@ Blockly.Accessibility.Navigation.undo = function() {
     }
 
     // Go back to the previous, keep track of stuff in case you want to redo, and update the scene.
-    redoStack.push(xmlDoc);
-    xmlDoc = undoStack.pop();
+    redoStack.push(Blockly.Xml.domToPrettyText(xmlDoc));
+    xmlDoc = Blockly.Xml.textToDom(undoStack.pop());
+    console.log(xmlDoc);
     Blockly.Accessibility.Navigation.updateBlockSelection();
 };
 
@@ -153,8 +166,8 @@ Blockly.Accessibility.Navigation.redo = function () {
     }
 
     // Go back to the previous, keep track of stuff in case you want to redo, and update the scene.
-    undoStack.push(xmlDoc);
-    xmlDoc = redoStack.pop();
+    undoStack.push(Blockly.Xml.domToPrettyText(xmlDoc));
+    xmlDoc = Blockly.Xml.textToDom(redoStack.pop());
     Blockly.Accessibility.Navigation.updateBlockSelection();
 };
 
@@ -163,9 +176,13 @@ Blockly.Accessibility.Navigation.redo = function () {
  * Import the xml into the file, and update the xml in case of id changes.
  */
 Blockly.Accessibility.Navigation.updateBlockSelection = function () {
-    Blockly.Workspace.prototype.clear();
+    console.log('updateBlockSelection called');
+    disableUpdate = true;
+    workspace.clear();
     Blockly.Xml.domToWorkspace(Blockly.mainWorkspace, xmlDoc);
-    Blockly.Accessibility.Navigation.updateXmlSelection();
+    console.log('test');
+    console.log(xmlDoc);
+    disableUpdate = false;
 };
 
 //#region JUMP_FUNCTIONS

@@ -64,16 +64,35 @@ document.onkeydown = document.onkeyup = function(e){
 			//Navigate to next field
 			Blockly.Accessibility.InBlock.selectNext();
 		}
-		else if(map[69]){ //E
+		else if (map[69]) { //E
+		    e.preventDefault(); // Prevent default in case this opens up a typing prompt
 			console.log('E key pressed.');
-			Blockly.Accessibility.InBlock.enterSelected();
-			keyboardState = 'hotkeyMode'; //prevent getting stuck on same block
+		    try { // Try block in case something breaks, we still default back to hotkeymode
+		        Blockly.Accessibility.InBlock.enterSelected();
+		    }
+		    catch (e) {
+		        console.log(e);
+		    } finally {
+		        keyboardState = 'hotkeyMode'; //prevent getting stuck on same block
+		    }
 		}
 	}	
 	
 	else if(keyboardState=='hotkeyMode'){	
 
-	    if(map[18] && map[16] && map[67]){ //Alt Shift C
+	    if (map[17] && map[89]) { //Ctrl Y
+	        console.log('Ctrl Y keys pressed');
+	        Blockly.Accessibility.Navigation.redo();
+	        e.preventDefault();
+	    }
+
+	    else if (map[17] && map[90]) { //Ctrl Z
+	        console.log('Ctrl Z keys pressed');
+	        Blockly.Accessibility.Navigation.undo();
+	        e.preventDefault();
+	    }
+
+	    else if(map[18] && map[16] && map[67]){ //Alt Shift C
 			console.log('Alt Shift C keys pressed.');
 			//Keystroke for collapsing or expanding a block
 			Blockly.Accessibility.toggleCollapse();

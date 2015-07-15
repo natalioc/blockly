@@ -167,7 +167,7 @@ Blockly.Accessibility.InBlock.addBlock = function () {
  */
 Blockly.Accessibility.InBlock.bottomConnection = function () {
     // This behaviour is essentially just traversing down, so do that.
-    this.traverseDown();
+    Blockly.Accessibility.Navigation.traverseDown();
 };
 
 /**
@@ -175,7 +175,7 @@ Blockly.Accessibility.InBlock.bottomConnection = function () {
  */
 Blockly.Accessibility.InBlock.topConnection = function () {
     // This behaviour is essentially just traversing up, so do that.
-    this.traverseUp();
+    Blockly.Accessibility.Navigation.traverseUp();
 };
 
 /**
