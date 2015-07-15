@@ -67,7 +67,6 @@ Blockly.Accessibility.TreeView.callImportantBlocks = function() {
 Blockly.Accessibility.TreeView.getImportantBlocks = function(){
 	//Check if the workspace is empty
 	if (!xmlDoc || !xmlDoc.getElementsByTagName('BLOCK')) {
-		console.log("nothings here");
         return null;
     }
     //Add all xml blocks in the to blockArr 
@@ -326,40 +325,39 @@ Blockly.Accessibility.TreeView.getValueTop = function(block){
 
 /**
  * Function will retrieve all blocks and attach a prefix to them in a hashmap
- * @return {map} a hashmap of all the blocks and their associated prefix's
+ * @return {map} a hashmap of all the blocks id's and their associated prefix's
  */
 Blockly.Accessibility.TreeView.getAllPrefixes = function() {
 	//Check if the workspace is empty
 	if (!xmlDoc || !xmlDoc.getElementsByTagName('BLOCK')) {
-		console.log("nothings here");
         return null;
     }
     //Add all xml blocks to blockArr 
     var blockArr = xmlDoc.getElementsByTagName('BLOCK');
-	var map = {}; // our hashMap for Block Id's and their associated prefix ex Block:19 , A1.3
-    var capitalAlphabet = 0;
-    var lowerAlphabet = 0;
+	var map = {}; //hashMap with Block Id's and their associated prefix ex Block:19 , A1.3
+    var capitalAlphabet = 0;//count of which letter should be chosen from the alphabet array
+    var lowerAlphabet = 0;//count of which letter should be chosen from the alphabet array
     var oldPrefix = '';
     var blockIndex = 1;
     var emptyVisited = true;
     var previousTopBlock = null;
     var previousParentValue = null;
-    var bigChange = false; //an array boolean for which prefix it should generate
+    var bigChange = false; //an array boolean for which case prefix it should generate
     var valueArr = [];//an array that handles the regular values
     var functionArr = []; //an array to handle the function return block that behaves differently
-    var emptyValueArr = []; //an array to handle empty values like the not block
+    var emptyValueArr = []; //an array to handle empty values (EX. not block)
     for (var i = 0; i <= blockArr.length - 1; i++) {
-     	//will find blocks that arent connected to anything
+     	//only the blocks that arent connected to anything
      	if(blockArr[i].parentNode.nodeName == 'XML'){
      		blockIndex = 1;
      		oldPrefix = this.getAlphabetical(capitalAlphabet).toUpperCase() + blockIndex;
      		capitalAlphabet++;
-    		map[blockArr[i].getAttribute('id').toString()] = oldPrefix;
+    		map[blockArr[i].getAttribute('id').toString()] = oldPrefix; 
     		lowerAlphabet = 0;
      		emptyVisited = true;
      		blockIndex++;
      	}
-     	//will handle blocks that have no children
+     	//only the blocks that have no children
      	if(blockArr[i].childNodes.length == 0){
      		//you need to check if a childless block has already been visited so it is not repeated
      		if(emptyVisited == true){
@@ -371,7 +369,7 @@ Blockly.Accessibility.TreeView.getAllPrefixes = function() {
      		}
      	}
 	 	for (var j = 0; j < blockArr[i].childNodes.length; j++) {
-	 		//this is for blocks nested inside of a block
+	 		//only the blocks nested inside of a block
 	 		if(blockArr[i].childNodes[j].nodeName == 'VALUE'){
 	 			emptyVisited = true;
 	 			//since the function block's children are different to other blocks we have a check for that block specifically
@@ -383,14 +381,14 @@ Blockly.Accessibility.TreeView.getAllPrefixes = function() {
 		 			valueArr.push(blockArr[i].childNodes[j].childNodes[0]);
 		 		}
 	 		}
-	 		//if you have a statement or going to the right
+	 		//if you have a statement (going outward)
 	 		else if(blockArr[i].childNodes[j].nodeName == 'STATEMENT'){
 	 			lowerAlphabet = 0;
 	 			emptyVisited = true;
 	 			oldPrefix = map[blockArr[i].childNodes[j].parentNode.getAttribute('id').toString()] + ".1";
 				map[blockArr[i].childNodes[j].childNodes[0].getAttribute('id').toString()] = oldPrefix;
 	 		}
-	 		//if you have a next block or going down
+	 		//if you have a next block (going down)
 	 		else if(blockArr[i].childNodes[j].nodeName == 'NEXT'){
 	 			lowerAlphabet = 0;
 	 			emptyVisited = true;
@@ -400,14 +398,11 @@ Blockly.Accessibility.TreeView.getAllPrefixes = function() {
 	 			oldPrefix = oldPrefix.substring(0, oldPrefix.length - 1) + (lastGoodNumber + 1);
 				map[blockArr[i].childNodes[j].childNodes[0].getAttribute('id').toString()] = oldPrefix;
 	 		}
-	 		//this is a field and we don't care to track those
-	 		else{
-
-	 		}
 	 	}
 	}
 	lowerAlphabet = 0;
-	//this handles all regular values and puts them into a logical order
+	//this handles all regular values (every value that's not a fucntion w/return block)
+	//and puts them into a logical order
 	if(valueArr.length > 0){
 		for (var i = 0; i <= valueArr.length - 1; i++) {
 			emptyVisited = true;
@@ -421,7 +416,7 @@ Blockly.Accessibility.TreeView.getAllPrefixes = function() {
 				previousTopBlock = topBlock;
 				bigChange = true;
 			}
-			//this changes the naming of the values so that they are more readable
+			//creates prefixes
 			var parentValue = valueArr[i].parentNode.parentNode;
 			if(previousParentValue == null){
 				previousParentValue = parentValue;
@@ -486,8 +481,6 @@ Blockly.Accessibility.TreeView.getAllPrefixes = function() {
 				previousTopBlock = topBlock;
 			}
 			var parentValue = functionArr[i].parentNode.parentNode;
-			//this has the names after the top block to be set in a good order if they are in
-			// a list
 			if(previousParentValue == null){
 				previousParentValue = parentValue;
 			}
