@@ -351,7 +351,7 @@ document.onkeydown = document.onkeyup = function(e){
                 }
             }
             else if(question===1){
-                if((getCurrentNode().id)==="16"){
+                if((getCurrentNode().id)==="18"){
                     responsiveVoice.speak("Correct!");
                     startTimer();
                 }
@@ -360,7 +360,7 @@ document.onkeydown = document.onkeyup = function(e){
                 }
             }
             else if(question===2){
-                if((getCurrentNode().id)==="15"){
+                if((getCurrentNode().id)==="16"){
                     responsiveVoice.speak("Correct!");
                 }
                 else{
