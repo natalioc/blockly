@@ -26,6 +26,8 @@ goog.provide('Blockly.Accessibility.InBlock');
 goog.require('Blockly.Accessibility.Navigation');
 goog.require('Blockly.Accessibility');
 
+var storedConnection = null;
+
 /**
  * Contains the array that describes whether the selected block has values, fields, or statements.
  */
@@ -147,6 +149,36 @@ Blockly.Accessibility.InBlock.enterSelected = function () {
     }
 
 };
+
+Blockly.Accessibility.InBlock.selectConnection = function () {
+
+    var relevantConnection = null;
+
+    // First find which case we're dealing with, and get the relevant connection for the case
+    if (this.selectionList[this.connectionsIndex] === 'bottomConnection') {
+        relevantConnection = Blockly.selected.nextConnection;
+    }
+    else if (this.selectionList[this.connectionsIndex] === 'topConnection') {
+        relevantConnection = Blockly.selected.previousConnection;
+    }
+    else if (this.selectionList[this.connectionsIndex] instanceof Blockly.Input) {
+        relevantConnection = this.selectionList[this.connectionsIndex].connection;
+    }
+
+    // If we don't have a sotred connection, then store one.  Otherwise connect the things.
+    if (storedConnection == null) {
+        storedConnection = relevantConnection;
+        console.log('storing');
+    }
+    else {
+        console.log('connecting');
+        try { storedConnection.connect(relevantConnection); }
+        catch (e) { console.log(e);}
+        finally {
+            storedConnection = null;
+        }
+    }
+}
 
 /**
  * If a value or statement is selected, add a block to it.

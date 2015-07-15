@@ -138,7 +138,6 @@ Blockly.Accessibility.Navigation.updateXmlSelection = function (noSelect) {
         console.log('THERE WAS A CHANGE');
         
     }
-    console.log(undoStack);
 };
 
 /**
@@ -153,7 +152,6 @@ Blockly.Accessibility.Navigation.undo = function() {
     // Go back to the previous, keep track of stuff in case you want to redo, and update the scene.
     redoStack.push(Blockly.Xml.domToPrettyText(xmlDoc));
     xmlDoc = Blockly.Xml.textToDom(undoStack.pop());
-    console.log(xmlDoc);
     Blockly.Accessibility.Navigation.updateBlockSelection();
 };
 
@@ -176,11 +174,9 @@ Blockly.Accessibility.Navigation.redo = function () {
  * Import the xml into the file, and update the xml in case of id changes.
  */
 Blockly.Accessibility.Navigation.updateBlockSelection = function () {
-    console.log('updateBlockSelection called');
     disableUpdate = true;
     workspace.clear();
     Blockly.Xml.domToWorkspace(Blockly.mainWorkspace, xmlDoc);
-    console.log('test');
     console.log(xmlDoc);
     disableUpdate = false;
 };
@@ -347,6 +343,7 @@ Blockly.Accessibility.Navigation.traverseUp = function() {
     // Otherwise just end.
     //  Otherwise just report that you've hit the bottom.
     console.log('Cannot traverse up, top of list');
+    this.previousContainer();
 };
 
 /**
@@ -385,7 +382,55 @@ Blockly.Accessibility.Navigation.traverseDown = function() {
 
     //  Otherwise just report that you've hit the bottom.
     console.log('Cannot traverse down, end of list');
+    this.nextContainer();
 };
+
+/**
+ * Jumps you to the next container based on the one you are currently in
+ */
+Blockly.Accessibility.Navigation.nextContainer = function () {
+    // Compare the region you're in to all of the other ones
+    var currentSectionNode = this.getOutermostNode(currentNode);
+    var myContainers = this.findContainers();
+
+
+    // Just jump to the next one.
+    for(var i = 0; i < myContainers.length; i++)
+    {
+        if (myContainers[i] == currentSectionNode) {
+            if(i + 1 == myContainers.length)
+            {
+                this.jumpToContainer(0);
+            }
+            else {
+                this.jumpToContainer(i + 1);
+            }
+        }
+    }
+};
+
+/**
+ * Jumps you to the previous container based on the one you are currently in
+ */
+Blockly.Accessibility.Navigation.previousContainer = function () {
+    // Compare the region you're in to all of the other ones
+    var currentSectionNode = this.getOutermostNode(currentNode);
+    var myContainers = this.findContainers();
+
+
+    // Just jump to the previous one.
+    for (var i = 0; i < myContainers.length; i++) {
+        if (myContainers[i] == currentSectionNode) {
+            if (i - 1 < 0) {
+                this.jumpToContainer(myContainers.length - 1);
+            }
+            else {
+                this.jumpToContainer(i - 1);
+            }
+        }
+    }
+};
+
 
 //#endregion
 
@@ -433,14 +478,13 @@ Blockly.Accessibility.Navigation.findBottom = function(myNode) {
  */
 Blockly.Accessibility.Navigation.findContainers = function() {
 
-
     // There is something weird going on with the xml parent child relationship.  For some reason I can't directly 
     // grab the XML node, but this seems to work.  Further investigation needed.
     // I know that the first block is always going to be a region, so this should work
     // until a more clean solution is found.
     var containers = xmlDoc.getElementsByTagName('BLOCK')[0].parentNode.childNodes;
 
-    // Need to remove parts that aren't blocks in case of #text's appearing for some reason.  we only want to deal with blocks.
+    // Need to remove parts that aren't blocks in case of #text's appearing for some reason.  We only want to deal with blocks.
     for (var i = containers.length - 1; i >= 0; i--) {
         if (containers[i].nodeName.toUpperCase() != 'BLOCK') {
             containers.splice(i, 1);
@@ -485,6 +529,34 @@ Blockly.Accessibility.Navigation.getBlockNodeById = function(id) {
     }
     // If you don't hit it return null.
     return null;
+};
+
+/**
+ * Gets the first node of the region the node is in
+ * @param {node} the node you want to find the region of
+ * @return {node} the uppermost, outermost node
+ */
+Blockly.Accessibility.Navigation.getOutermostNode = function(inputNode){
+    var myNode = inputNode;
+    // temporary node used to store the previous iteration's current node
+    var lastNode = null;
+
+    // If myNode and lastNode are equal, then we've reached the outermost block
+    while (myNode != lastNode) {
+        lastNode = myNode;
+
+        //Go to the top of the section
+        myNode = this.findTop(myNode);
+
+        //If you can pull out of the section, pull out of it
+        if (myNode.parentNode.nodeName.toUpperCase() == 'STATEMENT' ||
+        myNode.parentNode.nodeName.toUpperCase() == 'VALUE') {
+            myNode = myNode.parentNode.parentNode;
+        }
+
+    }
+
+    return myNode;
 };
 
 Blockly.Accessibility.Navigation.getCurrentNode = function() {
