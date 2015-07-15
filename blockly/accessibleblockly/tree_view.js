@@ -31,7 +31,6 @@ var importantBlockArr = []; //an array of the blocks we will be checking for com
 var prefixArr = []; //an array containing the prefix for the comment generation
 var indentationArr = []; //an array that stores the depth of the blocks for indentation
 var stateChange = false;
-var bigCapital = false; //tracks if the outter most blocks have gone into double alphabetical
 
 /**
  * Whenever the workspace is modified it updates the state so that 
@@ -156,33 +155,37 @@ Blockly.Accessibility.TreeView.displayComments = function(){
     //kills the old data in the div
     document.getElementById("comment").innerHTML = "";
 
-    var pTag = document.createElement("p"); //the p tag element 
-    pTag.setAttribute("tabindex", 0);
+    var pTag; //the p tag element
 
     var commentStr = ''; //comment string for each block
     var blockArr = xmlDoc.getElementsByTagName('BLOCK'); //all the blocks in the XML
     var commentArr = xmlDoc.getElementsByTagName('COMMENT'); //all the comments
-    var brTag = document.createElement("br");
 
     //the map holding all prefixes and their respective id's
     var map = Blockly.Accessibility.TreeView.getAllPrefixes();
 
     //There are no comments for any of the blocks on the page
     if(commentArr.length == 0){
+    	pTag = document.createElement("p"); 
     	pTag.setAttribute("id", 0);
     	commentStr = "No Comments";
+    	var pTextNode = document.createTextNode(commentStr);//add commentStr to a text node
+	    pTag.appendChild(pTextNode);//add text node to the p tag
+	    document.getElementById("comment").appendChild(pTag);//append the p tag to the comment div
     }
     else{
 	    for(var i = 0; i <= commentArr.length - 1; i++){//go through for each comment
+	    	pTag = document.createElement("p");
+    		pTag.setAttribute("tabindex", 0);
 	    	commentStr = " ";//empty the previous commentStr
 	    	pTag.setAttribute("id", i);//on each p tag there is an attribute equal to the id of the block
 	    	//look for the id in the map containing the prefixes
 	    	commentStr += map[commentArr[i].parentNode.getAttribute('id').toString()];//place the prefix in commentStr
         	commentStr += " - " + commentArr[i].childNodes[0].data;//add the comment after the prefix in commentStr
 	    
-	    var pTextNode = document.createTextNode(commentStr);//add commentStr to a text node
-	    pTag.appendChild(pTextNode);//add text node to the p tag
-	    document.getElementById("comment").appendChild(pTag);//append the p tag to the comment div
+		    var pTextNode = document.createTextNode(commentStr);//add commentStr to a text node
+		    pTag.appendChild(pTextNode);//add text node to the p tag
+		    document.getElementById("comment").appendChild(pTag);//append the p tag to the comment div
 		}
 	}
 };
@@ -240,13 +243,18 @@ Blockly.Accessibility.TreeView.infoBoxFill = function(currentNode){
 	var depthP = document.createElement('p');
 	var prefixP = document.createElement('p');
 
+
 	//Build String to put in box
 	for (var i = 0; i <= blockArr.length - 1; i++) {
-		if(bigCapital == true){//NOT WORKING -- Need to check in a for loop if there are two capital letters in the beginning of the prefix
+
+		var secondCharInPrefix = map[currentNode.getAttribute('id').toString()].substring(1,2);//the second letter of the prefix
+		var secondCharResult = parseInt(secondCharInPrefix);//either an int or NaN
+		//two capital letters at the beginning of the prefix
+		if(!secondCharResult){//true if two letters at the beginning of the prefix
 			sectionStr = map[currentNode.getAttribute('id').toString()];//get the prefix
-			sectionStr = "Section: " + sectionStr.substring(0, 	1);//get the first char from the prefix 
+			sectionStr = "Section: " + sectionStr.substring(0, 	2);//get the first char from the prefix 
 		}
-		else{//if there is only one capital letter in the prefix
+		else{//one capital letter in the prefix
 			sectionStr = map[currentNode.getAttribute('id').toString()];
 			sectionStr = "Section: " + sectionStr.charAt(0);//first char of the prefix
 		}
