@@ -273,8 +273,9 @@ Blockly.Accessibility.Navigation.traverseOut = function() {
     console.log('traverseOut called.');
     console.log('Attempting to leave ' + currentNode.nodeName + ' with id ' + currentNode.getAttribute('id'));
 	
-    // If this is within other blocks, then its parent will be a statement.
-    if (Blockly.Accessibility.Navigation.findTop(currentNode).parentNode.nodeName.toUpperCase() == 'STATEMENT') {
+    // If this is within other blocks, then its parent will be a statement, or a value
+    if (Blockly.Accessibility.Navigation.findTop(currentNode).parentNode.nodeName.toUpperCase() == 'STATEMENT' ||
+        Blockly.Accessibility.Navigation.findTop(currentNode).parentNode.nodeName.toUpperCase() == 'VALUE') {
         currentNode = Blockly.Accessibility.Navigation.findTop(currentNode).parentNode.parentNode;
         console.log('Going to ' + currentNode.nodeName + ' with id ' + currentNode.getAttribute('id'));
         Blockly.Accessibility.Navigation.updateSelection();
