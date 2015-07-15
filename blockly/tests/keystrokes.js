@@ -338,14 +338,7 @@ document.onkeydown = document.onkeyup = function(e){
 		}
 
 		else if(map[70]){//f
-    		var children = currentNode.childNodes;
-   			for (var i = 0; i < children.length; i++) {
-        		if (children[i].nodeName.toUpperCase() == 'STATEMENT') {
-        			responsiveVoice.speak("Lower level detected.");
-        			break;
-			//jumpToBottomOfSection();
-				}
-			}
+			codeReader();
 		}
 		else if(map[13]){ //Enter
             if(question===0){
