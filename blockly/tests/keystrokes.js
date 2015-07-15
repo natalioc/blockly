@@ -62,8 +62,6 @@ function shuffle(array) {
 }
 */
 
-
-
 /**
  * When a mouseup event happens, update the XML selection
  */
@@ -356,8 +354,6 @@ document.onkeydown = document.onkeyup = function(e){
             	if((getCurrentNode().id)==="19"){
                     responsiveVoice.speak("Correct!");
                     startTimer();
-                    window.alert(realTime);
-                    window.alert(realTime);
                 }
                 else{
                     responsiveVoice.speak("Wrong!");
@@ -367,9 +363,6 @@ document.onkeydown = document.onkeyup = function(e){
                 if((getCurrentNode().id)==="13"){
                     responsiveVoice.speak("Correct!");
                     startTimer();
-                    window.alert(realTime);
-                    window.alert(realTime);
-
                 }
                 else{
                     responsiveVoice.speak("Wrong!");
@@ -378,9 +371,6 @@ document.onkeydown = document.onkeyup = function(e){
             else if(question===2){
                 if((getCurrentNode().id)==="15"){
                     responsiveVoice.speak("Correct!");
-
-                    window.alert(realTime);
-                    window.alert(realTime);
                 }
                 else{
                     responsiveVoice.speak("Wrong!");
@@ -391,8 +381,6 @@ document.onkeydown = document.onkeyup = function(e){
 
                 if((getCurrentNode().id)==="16"){
                     responsiveVoice.speak("Correct!");
-                    window.alert(realTime);
-                    window.alert(realTime);
                 }
                 else{
                     responsiveVoice.speak("Wrong!");

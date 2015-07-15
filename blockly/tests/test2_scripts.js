@@ -30,11 +30,14 @@ var indent_2 = [0,0,1,1];
 var task2_3 = ["variable num equals 1", "while num < 10", "increase num by 2","print num"];
 var indent_3 = [0,0,1,1];
 //4)
-var task2_4 = ["variable sum equals 0","variable x equals 0", "repeat while x less than 10","increase x by 1","if x is divisible by 3","increase x by 2","increase sum by x","print x","print sum"];
+var task2_4 = ["variable sum equals 0","variable x equals 0", "while x less than 10","increase x by 1","if x is divisible by 3","increase x by 2","increase sum by x","print x","print sum"];
 var indent_4 = [0,0,0,1,1,2,1,1,0];
 //5)
 var task2_5 = ["variable x equals 2","variable y equals 2","variable num equals 1","while num less than 10","print num","increase num by 2","if x greater than 0","print A","else","print B","print C"];
 var indent_5 = [0,0,0,0,1,1,1,2,2,1];
 //6)
-var task2_6 = ["variable i equals 5.","variable x equals 50","if x less than equals 200","if x less than 100","if x less than equals 0","print A","if i less than equals 10","print Hello", "print C", "print B","print D"];
+var task2_6 = ["variable i equals 5.","variable x equals 5","if x less than equals 20","if x less than 10","if x is less than or equal to 0","if i less than equals 10","print Hello"];
 var indent_6 = [0,0,0,1,2,3,2,3,2,1,0];
+
+var task= ["variable i equals 3","variable j equals 5","if i + j equals 8","print i + j","while i is less than 10","if i is less than 5","increment i by 1","else","increment i by 2","print i+j"]
+var indent= [1,1,1,2,1,2,3,2,3,1]

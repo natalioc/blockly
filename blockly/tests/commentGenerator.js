@@ -444,7 +444,7 @@ function playNotes(noteToPlay,speed){
         if(i>noteToPlay.length-1||noteToPlay[i]===undefined||play===false){
             this.stop();
             if(play===false){
-                
+
             }
             play=false;
         }
@@ -564,14 +564,14 @@ function codeReader(){
     var array = [];
     var indent=[];
     if(levelReader==="normal"){
-        array = ["variable count equals 1.", " variable y equals 6.", "while count less than 6", "increase y by i", "increase count by 1", "print y." ];
-         indent= [1,-1,-1,2,-1,1];
+        array = ["variable i equals 3","variable j equals 5","if i plus j equals 8","print i plus j","while i is less than 10","if i is less than 5","increment i by 1","else","increment i by 2","print i plus j"]
+        indent= [1,-1,-1,2,1,2,3,2,3,1];
     }
     else if(levelReader==="ear con"){
-        array = ["variable sum equals 0","variable x equals 0","while x less than 10","increase x by 1"];/*,"if x is divisible by 3","increase x by 2","increase sum by x","print x","print sum"];*/    
-        indent = [1,-1,-1,2]; /*,-1,3,2,-1,1];*/
-        //array = ["variable sum equals 0","variable x equals 0","while x less than 10","increase x by 1","if x is divisible by 3","increase x by 2","increase sum by x","print x","print sum"];    
-        //indent = [1,-1,-1,2,-1,3,2,-1,1];
+     //   array = ["variable sum equals 0","variable x equals 0","while x less than 10","increase x by 1"];/*,"if x is divisible by 3","increase x by 2","increase sum by x","print x","print sum"];*/    
+       // indent = [1,-1,-1,2]; /*,-1,3,2,-1,1];*/
+        array = ["variable sum equals 0","variable x equals 0","while x less than 10","increase x by 1","if x is divisible by 3","increase x by 2","increase sum by x","print x","print sum"];    
+        indent = [1,-1,-1,2,-1,3,2,-1,1];
     }
     else if(levelReader==="spear con"){
         array = ["variable x equals 2","variable y equals 2","variable num equals 1","while num less than 10","print num","increase num by 2","if x greater than 0","print A","else","print B","print C"];
@@ -600,7 +600,7 @@ function codeReaderTrial(){
 
 function looped(i,array,levelReader,indent,speedPlay){
     if(responsiveVoice.isPlaying()===true)
-        setTimeout(function(){looped(i,array,levelReader,indent,speedPlay);},8000);
+        setTimeout(function(){looped(i,array,levelReader,indent,speedPlay);},100);
     else{
     if(indent[i]!=-1){
         if(levelReader==="normal")
@@ -616,7 +616,7 @@ function looped(i,array,levelReader,indent,speedPlay){
 
 function playString(text,speedPlay){
     if(responsiveVoice.isPlaying()===true||play===true||doneTalking===false){
-       setTimeout(function() {playString(text,speedPlay);}, speedPlay);
+       setTimeout(function() {playString(text,speedPlay);}, 100);
        return;
     }
     else{
