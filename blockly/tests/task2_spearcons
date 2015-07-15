@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Blockly Experiment Task 2: Spearcons</title>
+	<script src="http://code.responsivevoice.org/responsivevoice.js"></script>
+	<script type="text/javascript">
+		function SelectAll(id)
+		{
+			var el = document.getElementById(id);
+		    el.focus();
+		    el.select();
+		    responsiveVoice.speak(el.name);
+		}
+	</script>
+</head>
+<body>
+	<div id="titleDiv" align="center">
+		<h1 align="center">Task 2 - Spearcons</h1>
+		<a href="http://blocklytest.se.rit.edu">Blockly Test Home Page</a>
+	</div>
+	<br />
+	<div id="audioDiv" align="center">
+		<h2>Source Code Audio Description</h2>
+		<p>
+		<audio controls>
+	  		<source src="../media/task2_spearcons.mp3" type="audio/mpeg">
+		</audio>
+		</p>
+	</div>
+	<br />
+	<div  id="textDiv" name="textDiv" align="center">
+		<h2>Source Code Interpretation</h2>
+		 <textarea rows="10" name="Enter Your Input Here" id="task2text" cols="50" onfocus="SelectAll('task2text');" style="font-size:20px; width:75%">Enter your interpretation of the source code here.
+		</textarea> 
+	</div>
+</body>
+</html>
