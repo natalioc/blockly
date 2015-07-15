@@ -218,14 +218,14 @@ document.onkeydown = document.onkeyup = function(e){
 			//Navigates down through blocks
 			e.preventDefault();
 			Blockly.Accessibility.Navigation.traverseDown();
-			Blockly.Accessibility.Navigation.menuNavDown();
+			Blockly.Accessibility.menu_nav.menuNavDown();
 		}
 		
 		else if(map[87]){ //W
 			//Navigates up through blocks
 			e.preventDefault();
 			Blockly.Accessibility.Navigation.traverseUp();
-			Blockly.Accessibility.Navigation.menuNavUp(); //navigate up through the menu
+			Blockly.Accessibility.menu_nav.menuNavUp(); //navigate up through the menu
 		}
 	}
 };

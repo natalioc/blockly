@@ -1,30 +1,10 @@
 'use strict';
 
-/**
-*Copyright 2015 
-*
-*Licensed under the Apache License, Version 2.0 (the "License");
-*you may not use this file except in compliance with the License.
-*You may obtain a copy of the License at
-*
-*    http://www.apache.org/licenses/LICENSE-2.0
-*
-*Unless required by applicable law or agreed to in writing, software
-*distributed under the License is distributed on an "AS IS" BASIS,
-*WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-*See the License for the specific language governing permissions and
-*limitations under the License.
-*/
-
-/**
- * @fileoverview File for navigating through the toolbox menu.
- * @author 
- */
-
-goog.provide('Blockly.Accessibility.MenuNav');
-
-goog.require('Blockly.Accessibility.Navigation');
+goog.provide('Blockly.Accessibility.menu_nav');
 goog.require('Blockly.Accessibility');
+
+
+Blockly.Flyout.prototype.defaultShow = Blockly.Flyout.prototype.show;
 
 //called when the flyout opens
 Blockly.Flyout.prototype.show = function(xmlList){
@@ -40,7 +20,7 @@ Blockly.Flyout.prototype.show = function(xmlList){
 };
 
 //Navigate down through the menu using down arrow
-Blockly.Accessibility.MenuNav.menuNavDown = function(){
+Blockly.Accessibility.menu_nav.menuNavDown = function(){
 
     //remove last select if not the first
     if(tabCount-1 >= 0 && tabCount!= oldLength){
@@ -65,6 +45,7 @@ Blockly.Accessibility.MenuNav.menuNavDown = function(){
 
     //select next -> save last -> increase count 
     flyoutArr[tabCount].addSelect(); 
+    Blockly.Accessibility.menu_nav.readToolbox(); 
     lastTabCount = tabCount; 
     tabCount++;
 
@@ -74,7 +55,7 @@ Blockly.Accessibility.MenuNav.menuNavDown = function(){
 
 
 //traverse up through the menu using up arrow
-Blockly.Accessibility.MenuNav.menuNavUp = function(){
+Blockly.Accessibility.menu_nav.menuNavUp = function(){
     
     //remove last select if possible also remove select that gets stuck on 1 after switching directions
     if((flyoutArr[lastTabCount] != undefined && tabCount!=oldLength) || lastTabCount==oldLength+1)
@@ -96,7 +77,60 @@ Blockly.Accessibility.MenuNav.menuNavUp = function(){
         tabCount-=2;
     }
     //select next -> save last -> decrease count 
-    flyoutArr[tabCount].addSelect(); 
+    flyoutArr[tabCount].addSelect();
+    Blockly.Accessibility.menu_nav.readToolbox(); 
     lastTabCount = tabCount;         
-    tabCount--;
+    tabCount--; 
+};
+
+//#endregion
+
+/**
+ * When the selection changes, the block name is updated for screenreader
+ */
+ Blockly.Accessibility.menu_nav.readToolbox = function(){
+    var allElements = document.getElementsByTagName('*');
+    var shouldSay;
+    var selectedBlock;
+    var active = document.activeElement;
+    var lastCategory; //track the category so that it does not deselect
+
+    //if category is selected save it (all categories begin with :)
+    if(active.id[0] ==":"){
+        lastCategory = active;
+        lastCategory.setAttribute("aria-owns", "blockReader");
+    }
+
+    //go through all the elements and find the one with matching type
+    for(var i = 0; i < allElements.length; i++){
+        //get the type of block
+        var blockType = allElements[i].getAttribute("type");
+        //check if that type is selected
+        if(blockType == flyoutArr[tabCount].type){
+
+            selectedBlock = allElements[i];
+
+            var readBox = document.getElementById("blockReader");
+            //var  = selectedBlock.getAttribute("type");
+            var blockName = blockType.toUpperCase()+ "_TITLE";
+            var say = (Blockly.Msg[blockName]);
+
+            if(say !=undefined){
+                shouldSay = say;
+                if(say.includes("%1")) {
+                    shouldSay = shouldSay.replace("%1", "blank,"); 
+                }
+                if(say.includes("%2")){
+                shouldSay = shouldSay.replace("%2", "blank,");
+            }
+        }
+
+            console.log(blockType);
+            console.log(Blockly.Msg[blockName]);
+            
+
+            readBox.innerHTML = shouldSay;
+            lastCategory.setAttribute("aria-labelledBy", "blockReader");
+        }  
+    }
 };

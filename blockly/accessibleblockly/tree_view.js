@@ -20,25 +20,24 @@
  */
 
 /**
- * @fileoverview object that retrieves an array of blocks in the workspace and generates comments.
+ * @fileoverview object that names each block with its specified prefix
+ *     also creates the tree view with indentations
  * @author Amber Libby, Alex Bowen, Mary Costa, Rachael Bosley, Luna Meier
  */
 
 goog.provide('Blockly.Accessibility.TreeView');
 
-/**
- * gets all of the blocks that aren't conditionals and calls get indent on the array list it generates
- */
-Blockly.BlockSvg.prototype.defaultFireChangeEvent = Blockly.BlockSvg.prototype.fireChangeEvent;
-
-var commentableBlockArr = []; //an array of the blocks we will be checking for comments
+var importantBlockArr = []; //an array of the blocks we will be checking for comments
 var prefixArr = []; //an array containing the prefix for the comment generation
 var indentationArr = []; //an array that stores the depth of the blocks for indentation
 var stateChange = false;
-var bigCapital = false; //tracks if the outter most blocks have gone into double alphabetical
+
 /**
- * Whenever the workspace is modified it updates the state so that we better know when to call the comment generation
+ * Whenever the workspace is modified it updates the state so that 
+ * we better know when to call the comment generation
  */
+Blockly.BlockSvg.prototype.defaultFireChangeEvent = Blockly.BlockSvg.prototype.fireChangeEvent;
+
 Blockly.WorkspaceSvg.prototype.fireChangeEvent = function() {
   if (this.rendered && this.svgBlockCanvas_) {
     Blockly.fireUiEvent(this.svgBlockCanvas_, 'blocklyWorkspaceChange');
@@ -48,6 +47,7 @@ Blockly.WorkspaceSvg.prototype.fireChangeEvent = function() {
 
 /**
  * If the state has changed in the workspace it updates the comments to match the new xml
+ * NOT CURRENTLY USED
  */
 Blockly.Accessibility.TreeView.callImportantBlocks = function() {
 	if(stateChange == true) {
@@ -57,208 +57,160 @@ Blockly.Accessibility.TreeView.callImportantBlocks = function() {
 };
 
 /**
- * Adds the important blocks to an array for an easily constructed tree view 
+ * Returns an array of the important blocks
+ * (the container blocks/ the blocks that can stand complete alone) 
+ * in order of top to bottom then left to right
+ * DOES not handle custom blocks
+ * @return {array} Array of the important blocks
  */
 Blockly.Accessibility.TreeView.getImportantBlocks = function(){
 	//Check if the workspace is empty
 	if (!xmlDoc || !xmlDoc.getElementsByTagName('BLOCK')) {
-		console.log("nothings here");
         return null;
     }
-    //Add all xml blocks to blockArr 
-     var blockArr = xmlDoc.getElementsByTagName('BLOCK');
+    //Add all xml blocks in the to blockArr 
+    var blockArr = xmlDoc.getElementsByTagName('BLOCK');
 
-    commentableBlockArr = []; //empty the list from the last time it was called so that 
+	//empty importantBlockArr from previous
+    importantBlockArr = []; 
 
-    //adding any blocks which can stand on their own to commentableBlockArr 
+    //adding any blocks which can stand on their own to importantBlockArr 
     for(var i=0; i < blockArr.length; i++) {
-		var strType = blockArr[i].getAttribute('type'); //gets the type of blocks so that we can check if 
-		//they are important blocks 
+		//gets the type attribute of the block and sets value to strType
+		var strType = blockArr[i].getAttribute('type'); 
+
+		/*
+		 important blocks are able to be found by the type attribute
+		 associated with each block
+		*/
 		if(strType.match(/controls/g)){
-			commentableBlockArr.push(blockArr[i]);
+			importantBlockArr.push(blockArr[i]);
 		}
 		else if(strType.match(/procedures/g)){
-			commentableBlockArr.push(blockArr[i]);
+			importantBlockArr.push(blockArr[i]);
 		}
-		else if(strType == "beep"){
-			commentableBlockArr.push(blockArr[i]);
+		else if(strType == "beep"){//custom block check 
+			importantBlockArr.push(blockArr[i]);
 		}
 		else if(strType == "math_change") {
-			commentableBlockArr.push(blockArr[i]);
+			importantBlockArr.push(blockArr[i]);
 		}
 		else if(strType == "text_append") {
-			commentableBlockArr.push(blockArr[i]);
+			importantBlockArr.push(blockArr[i]);
 		}
 		else if(strType == "text_print") {
-			commentableBlockArr.push(blockArr[i]);
+			importantBlockArr.push(blockArr[i]);
 		}
 		else if(strType == "list_setIndex") {
-			commentableBlockArr.push(blockArr[i]);
+			importantBlockArr.push(blockArr[i]);
 		}
 		else if(strType == "variables_set") {
-			commentableBlockArr.push(blockArr[i]);
+			importantBlockArr.push(blockArr[i]);
 		}
 	}
-    Blockly.Accessibility.TreeView.getIndent(commentableBlockArr);
+	return importantBlockArr;
 };
 
 /**
- * Gets how deeply indented all the provided blocks are and passes that array into 
- * the commentPrefix along with the commentableBlockArr
- * @param {array} commentableBlockArr is the array of blocks that we are checking their indentation
+ * Gets how deeply indented the important blocks are
+ * NOT USED CURRENTLY - will not work with new prefix system
+ * @param {array} array of blocks that we are checking their indentation
  */
-Blockly.Accessibility.TreeView.getIndent = function(commentableBlockArr){
+Blockly.Accessibility.TreeView.getIndent = function(importantBlockArr){
 
-	//the string format of the current XML Doc
+	//a string format of the current XML Doc from the workspace
 	var currentXml = Blockly.Xml.domToPrettyText(Blockly.Xml.workspaceToDom(Blockly.mainWorkspace));
 	
-	var openStatementCnt; 
-	var closeStatementCnt;
-	var indexOfId;
-	var idOfBlock;
-	var miniXml;
+	var openStatementCnt; //how many opening STATEMENT
+	var closeStatementCnt; //how many closing STATEMENT
+	var indexOfId; //the index of where the id of the block is found in the currentXml string
+	var idOfBlock; 
+	var miniXml; //a substring of the currentXml from the beginning to indexOfId
+	var currNode; //the important block currently trying to get the indent of
 	var i;
-	var currNode;
+
+	//stores the int value of how indented the important blocks are (in the same order as importantBlockArr)
 	indentationArr = [];
 
-	for(i = 0; i < commentableBlockArr.length; i++){
-		currNode = commentableBlockArr[i];
+	for(i = 0; i < importantBlockArr.length; i++){
+		currNode = importantBlockArr[i];
 		idOfBlock = currNode.getAttribute('id');
 		indexOfId = currentXml.indexOf('id="'+idOfBlock+'"');
 		miniXml = currentXml.substring(0, indexOfId);
 		openStatementCnt = (miniXml.match(/<statement/g) || []).length;
 		closeStatementCnt = (miniXml.match(/statement>/g) || []).length;
+		//difference of open/close STATEMENTS is the indentation for the block
 		indentationArr[i] = openStatementCnt - closeStatementCnt;
 		indentationArr.push(indentationArr[i]);
 	}
 	indentationArr.splice(i);
 	return indentationArr;
-	Blockly.Accessibility.TreeView.createComments(commentableBlockArr, indentationArr);
 };
 
 /**
- * Based on how the comments are placed this will generate their prefixes correctly to display them
- * in the proper order based on their indentation depth.
- * @param {array} commentableBlockArr is the array of blocks that potentially have comments
- * @param {array} indentationArr is an array that tracks how deeply nested the blocks are
- * @return {array} prefixArr is an array of the prefixes built for each block indent
+ * Retrieves the comments and places them into the comment div on the page
+ * Puts all the comment blocks into p tags
  */
-Blockly.Accessibility.TreeView.commentPrefix = function(commentableBlockArr, indentationArr){
-	var zeroCount = 1;
-    var allCount = 0;
-    var prefixStringPrev; //prefix of the previous node
-    prefixArr = []; //prefix arr to store all the prefix to comments
-
-    for (var i = 0; i < indentationArr.length; i++) {
-        if(indentationArr[i].toString() == "0"){
-            prefixArr[i] = "*" + zeroCount.toString();
-            zeroCount++;
-            //console.log("this is level 0");
-        }
-        else{
-            var currentIndent = indentationArr[i];
-            var prevIndent = indentationArr[i-1];
-
-            if(currentIndent == prevIndent){
-                //at the same indent level
-
-                var shortStr = prefixArr[i-1].length-1;
-                var prevCount = prefixArr[i-1].substring(shortStr);
-
-                var newCount = parseInt(prevCount);
-                newCount++;
-
-                var preString = prefixArr[i-1].substring(0, shortStr);
-
-                prefixArr[i] = preString + newCount;
-            }
-            else if(currentIndent > prevIndent){
-                //there is another indent
-                prefixArr[i] = prefixArr[i-1] + ".1";
-                prefixStringPrev = prefixArr[i];
-            }
-            else if(currentIndent < prevIndent){
-                //there is one less indent here
-                var indentDiff = prevIndent - currentIndent;
-                var takeStr = indentDiff * 2;
-
-                var prevPrefixStr = prefixArr[i-1];
-                var prevPrefixStrLength = prevPrefixStr.length;
-                var subStrVal = prevPrefixStrLength - takeStr;
-
-                var thePrevPre = prevPrefixStr.substring(subStrVal);
-               //x is the prev prefix string name we need
-                var x = prevPrefixStr.substring(0, subStrVal-2);
-
-                //get the last char of the prev indent and up that value by 1 
-                //and append to the end of the prev string and set equal to the new prefix
-
-                var lastNum = prevPrefixStr.substring(subStrVal-1, subStrVal);
-                var num = parseInt(lastNum);
-                num++;
-                prefixArr[i] = x + "." + num;
-            }
-        }
-    }
-    return prefixArr;
-};
-
-/**
- * Generates the comments and places them into the div in the HTML to display the comments on the page
- * with the right format of prefixes. It puts all the comment blocks into <p> tags so they properly
- * display on the web.
- * @param {array} commentableBlockArr is the array of blocks that potentially have comments
- * @param {array} indentationArr is an array that tracks how deeply nested the blocks are
- */
-Blockly.Accessibility.TreeView.createComments = function(){//commentableBlockArr, indentationArr){
-  //clears the comment div of old data
+Blockly.Accessibility.TreeView.displayComments = function(){
+    //kills the old data in the div
     document.getElementById("comment").innerHTML = "";
-    map = Blockly.Accessibility.TreeView.getAllComments();
-    var pTag; 
-    var commentStr = '';
-    var blockArr = xmlDoc.getElementsByTagName('BLOCK');
-    var commentArr = xmlDoc.getElementsByTagName('COMMENT');
-    map = Blockly.Accessibility.TreeView.getAllComments();
+
+    var pTag; //the p tag element
+
+    var commentStr = ''; //comment string for each block
+    var blockArr = xmlDoc.getElementsByTagName('BLOCK'); //all the blocks in the XML
+    var commentArr = xmlDoc.getElementsByTagName('COMMENT'); //all the comments
+
+    //the map holding all prefixes and their respective id's
+    var map = Blockly.Accessibility.TreeView.getAllPrefixes();
+
+    //There are no comments for any of the blocks on the page
     if(commentArr.length == 0){
-    	pTag = document.createElement("p");
-    	pTag.setAttribute("tabindex", 0);
+    	pTag = document.createElement("p"); 
     	pTag.setAttribute("id", 0);
     	commentStr = "No Comments";
+    	var pTextNode = document.createTextNode(commentStr);//add commentStr to a text node
+	    pTag.appendChild(pTextNode);//add text node to the p tag
+	    document.getElementById("comment").appendChild(pTag);//append the p tag to the comment div
     }
     else{
-	    for(var i = 0; i <= commentArr.length - 1; i++){
+	    for(var i = 0; i <= commentArr.length - 1; i++){//go through for each comment
 	    	pTag = document.createElement("p");
-	    	pTag.setAttribute("tabindex", 0);
-	    	pTag.setAttribute("id", i);
-	    	commentStr += map[commentArr[i].parentNode.getAttribute('id').toString()];
-        	commentStr += " " + commentArr[i].childNodes[0].data;
-	    }
+    		pTag.setAttribute("tabindex", 0);
+	    	commentStr = " ";//empty the previous commentStr
+	    	pTag.setAttribute("id", i);//on each p tag there is an attribute equal to the id of the block
+	    	//look for the id in the map containing the prefixes
+	    	commentStr += map[commentArr[i].parentNode.getAttribute('id').toString()];//place the prefix in commentStr
+        	commentStr += " - " + commentArr[i].childNodes[0].data;//add the comment after the prefix in commentStr
+	    
+		    var pTextNode = document.createTextNode(commentStr);//add commentStr to a text node
+		    pTag.appendChild(pTextNode);//add text node to the p tag
+		    document.getElementById("comment").appendChild(pTag);//append the p tag to the comment div
+		}
 	}
-    var pTextNode = document.createTextNode(commentStr);
-    pTag.appendChild(pTextNode);
-    document.getElementById("comment").appendChild(pTag);
 };
 
 /**
-* Uses the currently selected comment to jump to the block with the corresponding id.
+* Jumps from a block(on the workspace) to a comment(in the comment div) AND
+* from a comment(in the comment div) to a block(on the workspace)
 */
 Blockly.Accessibility.TreeView.commentOrBlockJump = function(){
-	//checks if something is not selected which would throw errors
-	console.log(document.activeElement);
-	
-    if(getCurrentNode() != null && document.activeElement.id != "importExport") {
-    	//jump from block to comment 
+	//check - currentNode isn't null AND the activeElement's id is not importExport
+	//importExport is a special case for the button
+    if(currentNode != null && document.activeElement.id != "importExport") {
+    	//jump from comment to block
     	if(document.activeElement.id) {
-    		var eleId = document.activeElement.id;
-    		var blockId = commentableBlockArr[eleId].getAttribute('id');
-    		jumpToID(blockId);
+    		var eleId = document.activeElement.id;//current comment id
+    		var blockId = importantBlockArr[eleId].getAttribute('id');
+    		Blockly.Accessibility.Navigation.jumpToID(blockId); 
     	}
     	else {
-    		//jump from comment to block
-    		var highlightedBlock = getCurrentNode();
-			for (var i = 0; i < commentableBlockArr.length; i++) {
-	    		if(commentableBlockArr[i].getAttribute('id') == highlightedBlock.getAttribute('id')) {
-	    			document.getElementById(i).focus();
+    		//jump from block to comment
+    		var highlightedBlock = currentNode;
+			for (var i = 0; i < importantBlockArr.length; i++) { 
+				//if the current block in importantBlockArr id is the same as the highlighted block id
+	    		if(importantBlockArr[i].getAttribute('id') == highlightedBlock.getAttribute('id')) {
+	    			document.getElementById(i).focus(); //give focus to the comment with the id i
 	    		}
 	    	}
     	}
@@ -266,54 +218,67 @@ Blockly.Accessibility.TreeView.commentOrBlockJump = function(){
 };
 
 /**
- * Generates the information in the info box based on the block you are on.
- * (@param int) the id of the current node we are on
+ * Generates the information in the info box (on the workspace corner) 
+ * 
+ * @param {currentNode} the current node
  */
-Blockly.Accessibility.TreeView.infoBoxFill = function(currentNode){
-	Blockly.Accessibility.TreeView.createComments();
-	var map = Blockly.Accessibility.TreeView.getAllComments();
+Blockly.Accessibility.TreeView.infoBoxFill = function(currentNode){	
+	//checks if the workspace is empty
 	if (!xmlDoc || !xmlDoc.getElementsByTagName('BLOCK')) {
         return null;
     }
-    //erases any pre-existing text in the div
+
+	this.displayComments();
+	var map = this.getAllPrefixes();
+    //kills previous text in the div
 	document.getElementById("infoBox").innerHTML = "";
+
     //Add all xml blocks to blockArr 
     var blockArr = xmlDoc.getElementsByTagName('BLOCK');
-	var sectionStr = '';
-	var depthStr = '';
-	var prefixStr = '';
+	var sectionStr = '';//overall section of the current block
+	var depthStr = '';//depth of the current block
+	var prefixStr = '';//prefix of the current block
+	//html p elements for section, depth, prefix
 	var sectionP = document.createElement('p');
 	var depthP = document.createElement('p');
 	var prefixP = document.createElement('p');
 
+
 	//Build String to put in box
 	for (var i = 0; i <= blockArr.length - 1; i++) {
-		if(bigCapital == true){
-			sectionStr = map[currentNode.getAttribute('id').toString()];
-			sectionStr = "Section: " + sectionStr.substring(0, 1);
+
+		var secondCharInPrefix = map[currentNode.getAttribute('id').toString()].substring(1,2);//the second letter of the prefix
+		var secondCharResult = parseInt(secondCharInPrefix);//either an int or NaN
+		//two capital letters at the beginning of the prefix
+		if(!secondCharResult){//true if two letters at the beginning of the prefix
+			sectionStr = map[currentNode.getAttribute('id').toString()];//get the prefix
+			sectionStr = "Section: " + sectionStr.substring(0, 	2);//get the first char from the prefix 
 		}
-		else{
+		else{//one capital letter in the prefix
 			sectionStr = map[currentNode.getAttribute('id').toString()];
-			sectionStr = "Section: " + sectionStr.charAt(0);
+			sectionStr = "Section: " + sectionStr.charAt(0);//first char of the prefix
 		}
-		depthStr = map[currentNode.getAttribute('id').toString()];
-		depthStr = "Depth: " + (depthStr.match(/./g).length / 2);
-		prefixStr = map[currentNode.getAttribute('id').toString()];
+		depthStr = map[currentNode.getAttribute('id').toString()];//currentNode id
+		depthStr = "Depth: " + (depthStr.match(/./g).length / 2);//count how many '.' in the prefix
+		prefixStr = map[currentNode.getAttribute('id').toString()]; //the prefix
 	}
-	//puts the text onto the page and in the div
+	//add the strings from above to textNodes
 	var sectionTextNode = document.createTextNode(sectionStr);
 	var depthTextNode = document.createTextNode(depthStr);
 	var prefixTextNode = document.createTextNode(prefixStr);
+	//add the textNodes to the p elements
 	sectionP.appendChild(sectionTextNode);
 	depthP.appendChild(depthTextNode);
 	prefixP.appendChild(prefixTextNode);
+	//append the p elements to the infoBox div
 	document.getElementById('infoBox').appendChild(sectionP);
 	document.getElementById('infoBox').appendChild(depthP);
 	document.getElementById('infoBox').appendChild(prefixP);
 };
 
 /**
- * Will toggle the information box visible or invisible
+ * Toggles the information box visible or invisible
+ * Dependent on what the current style is
  */
 Blockly.Accessibility.TreeView.getInfoBox = function(){
 	if(document.getElementById('infoBox').style.visibility == 'visible'){
@@ -325,69 +290,82 @@ Blockly.Accessibility.TreeView.getInfoBox = function(){
 };
 
 /**
- * A function that will generate the alphabetical representation of the number you give it
- * @param (int) a int that you want to be converted into it's alphabetical representation
- * @return (str) a string will be returned of either single alphabetical or a double alphabettical
+ * Generates the alphabetical representation of the number you give it
+ * @param {int} int to be converted into it's alphabetical representation
+ * @return {str} a string will be returned of either single alphabetical or a double alphabetical
  * if the regular alphabet is exceeded
  */
 Blockly.Accessibility.TreeView.getAlphabetical = function(number) {
 	var alphabetList = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 
 	'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z'];
-	var numberCount = 0;
-	var repeatLetter = '';
-	var bigLetter = '';
-	while(number > 26) {
-		repeatLetter = alphabetList[numberCount];
+	var numberCount = 0;//used to tell the first letter when there are 2 letters together
+	var repeatLetter = '';//the first letter in the grouped letters
+	var bigLetter = '';//the complete letter
+	while(number > 25) {//only in here if there is 2 letters grouped together
+		repeatLetter = alphabetList[numberCount];//first letter 
 		numberCount++;
-		number = number - 26;
+		number = number - 26;//new index of the next letter
 	}
-	if(numberCount > 0)
+	if(numberCount > 0)//only in here if there is 2 or more letters together
 	{
-		bigLetter = repeatLetter + alphabetList[number];
+		bigLetter = repeatLetter + alphabetList[number];//gets the first letter and adds the second letter
 		return bigLetter;
 	}
+	//only one letter
 	return alphabetList[number];
 };
 
 /**
+* returns the top parent of a VALUE block
+* recursively finds the parents of the VALUE until the top parent is reached
+* to be called only when currently inside of a VALUE
+* @return {node} the top block of a value
+*/
+Blockly.Accessibility.TreeView.getValueTop = function(block){
+
+	if(block.parentNode.nodeName.toUpperCase() == 'VALUE'){
+		block = block.parentNode.parentNode;//set the new block equal to the parent of the current block
+		return this.getValueTop(block);//checks this new block to see if it is also the top parent of a VALUE block
+	}
+	//When block is the top parent of a VALUE block - simply return
+	return block;
+};
+
+/**
  * Function will retrieve all blocks and attach a prefix to them in a hashmap
- * @return (map) a hashmap of all the blocks and their associated prefix's
+ * @return {map} a hashmap of all the blocks id's and their associated prefix's
  */
-Blockly.Accessibility.TreeView.getAllComments = function() {
+Blockly.Accessibility.TreeView.getAllPrefixes = function() {
 	//Check if the workspace is empty
 	if (!xmlDoc || !xmlDoc.getElementsByTagName('BLOCK')) {
-		console.log("nothings here");
         return null;
     }
     //Add all xml blocks to blockArr 
     var blockArr = xmlDoc.getElementsByTagName('BLOCK');
-	var map = {}; // our hashMap for Block Id's and their associated prefix ex Block:19 , A1.3
-    var capitalAlphabet = 0;
-    var lowerAlphabet = 0;
+	var map = {}; //hashMap with Block Id's and their associated prefix ex Block:19 , A1.3
+    var capitalAlphabet = 0;//count of which letter should be chosen from the alphabet array
+    var lowerAlphabet = 0;//count of which letter should be chosen from the alphabet array
     var oldPrefix = '';
     var blockIndex = 1;
     var emptyVisited = true;
     var previousTopBlock = null;
     var previousParentValue = null;
-    var bigChange = false; //an array boolean for which prefix it should generate
+    var bigChange = false; //an array boolean for which case prefix it should generate
     var valueArr = [];//an array that handles the regular values
     var functionArr = []; //an array to handle the function return block that behaves differently
-    var emptyValueArr = []; //an array to handle empty values like the not block
+    var emptyValueArr = []; //an array to handle empty values (EX. not block)
     for (var i = 0; i <= blockArr.length - 1; i++) {
-     	//will find blocks that arent connected to anything
+     	//only the blocks that arent connected to anything
      	if(blockArr[i].parentNode.nodeName == 'XML'){
      		blockIndex = 1;
      		oldPrefix = this.getAlphabetical(capitalAlphabet).toUpperCase() + blockIndex;
      		capitalAlphabet++;
-    		map[blockArr[i].getAttribute('id').toString()] = oldPrefix;
+    		map[blockArr[i].getAttribute('id').toString()] = oldPrefix; 
     		lowerAlphabet = 0;
      		emptyVisited = true;
      		blockIndex++;
-     		if(capitalAlphabet >= 26){
-     			bigCapital = true;
-     		}
      	}
-     	//will handle blocks that have no children
+     	//only the blocks that have no children
      	if(blockArr[i].childNodes.length == 0){
      		//you need to check if a childless block has already been visited so it is not repeated
      		if(emptyVisited == true){
@@ -399,7 +377,7 @@ Blockly.Accessibility.TreeView.getAllComments = function() {
      		}
      	}
 	 	for (var j = 0; j < blockArr[i].childNodes.length; j++) {
-	 		//this is for blocks nested inside of a block
+	 		//only the blocks nested inside of a block
 	 		if(blockArr[i].childNodes[j].nodeName == 'VALUE'){
 	 			emptyVisited = true;
 	 			//since the function block's children are different to other blocks we have a check for that block specifically
@@ -411,14 +389,14 @@ Blockly.Accessibility.TreeView.getAllComments = function() {
 		 			valueArr.push(blockArr[i].childNodes[j].childNodes[0]);
 		 		}
 	 		}
-	 		//if you have a statement or going to the right
+	 		//if you have a statement (going outward)
 	 		else if(blockArr[i].childNodes[j].nodeName == 'STATEMENT'){
 	 			lowerAlphabet = 0;
 	 			emptyVisited = true;
 	 			oldPrefix = map[blockArr[i].childNodes[j].parentNode.getAttribute('id').toString()] + ".1";
 				map[blockArr[i].childNodes[j].childNodes[0].getAttribute('id').toString()] = oldPrefix;
 	 		}
-	 		//if you have a next block or going down
+	 		//if you have a next block (going down)
 	 		else if(blockArr[i].childNodes[j].nodeName == 'NEXT'){
 	 			lowerAlphabet = 0;
 	 			emptyVisited = true;
@@ -428,14 +406,11 @@ Blockly.Accessibility.TreeView.getAllComments = function() {
 	 			oldPrefix = oldPrefix.substring(0, oldPrefix.length - 1) + (lastGoodNumber + 1);
 				map[blockArr[i].childNodes[j].childNodes[0].getAttribute('id').toString()] = oldPrefix;
 	 		}
-	 		//this is a field and we don't care to track those
-	 		else{
-
-	 		}
 	 	}
 	}
 	lowerAlphabet = 0;
-	//this handles all regular values and puts them into a logical order
+	//this handles all regular values (every value that's not a fucntion w/return block)
+	//and puts them into a logical order
 	if(valueArr.length > 0){
 		for (var i = 0; i <= valueArr.length - 1; i++) {
 			emptyVisited = true;
@@ -449,7 +424,7 @@ Blockly.Accessibility.TreeView.getAllComments = function() {
 				previousTopBlock = topBlock;
 				bigChange = true;
 			}
-			//this changes the naming of the values so that they are more readable
+			//creates prefixes
 			var parentValue = valueArr[i].parentNode.parentNode;
 			if(previousParentValue == null){
 				previousParentValue = parentValue;
@@ -514,8 +489,6 @@ Blockly.Accessibility.TreeView.getAllComments = function() {
 				previousTopBlock = topBlock;
 			}
 			var parentValue = functionArr[i].parentNode.parentNode;
-			//this has the names after the top block to be set in a good order if they are in
-			// a list
 			if(previousParentValue == null){
 				previousParentValue = parentValue;
 			}
@@ -539,31 +512,4 @@ Blockly.Accessibility.TreeView.getAllComments = function() {
 		}
 	}
     return map;
-};
-/**
-* returns the top parent of a value block
-* @return{block} the top block of a value
-*/
-Blockly.Accessibility.TreeView.getValueTop = function(block){
-	if(block.parentNode.nodeName.toUpperCase() == 'VALUE'){
-		block = block.parentNode.parentNode;
-		return this.getValueTop(block);
-	}
-	return block;
-};
-
-/**
- * A function that will generate the integer representation of the char you give it
- * @param (str) a str you want to be converted into an int
- * @return (int) a int representation of a string
- */
-Blockly.Accessibility.TreeView.alphabeticalToInt = function(alpha) {
-	console.log(alpha);
-	var alphabetList = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 
-	'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z'];
-	for (var i = 0; i < alphabetList.length; i++) {
-		if(alphabetList[i] == alpha){
-			return i;
-		}
-	}
 };
