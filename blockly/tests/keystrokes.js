@@ -24,7 +24,6 @@ goog.require('Blockly.Workspace');
 //var meSpeak=require("mespeak");
 
 
-var question=0;
 var map = [];
 var keyboardState = 'hotkeyMode';
 meSpeak.loadConfig("mespeak_config.json");
