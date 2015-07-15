@@ -351,7 +351,7 @@ document.onkeydown = document.onkeyup = function(e){
 		else if(map[13]){ //Enter
            window.alert(getCurrentNode().id)
             if(question===0){
-            	if((getCurrentNode().id)==="19"){
+            	if((getCurrentNode().id)==="18"){
                     responsiveVoice.speak("Correct!");
                     startTimer();
                 }
@@ -360,7 +360,7 @@ document.onkeydown = document.onkeyup = function(e){
                 }
             }
             else if(question===1){
-                if((getCurrentNode().id)==="13"){
+                if((getCurrentNode().id)==="16"){
                     responsiveVoice.speak("Correct!");
                     startTimer();
                 }
@@ -379,7 +379,7 @@ document.onkeydown = document.onkeyup = function(e){
             else if(question===3){
 
 
-                if((getCurrentNode().id)==="16"){
+                if((getCurrentNode().id)==="18"){
                     responsiveVoice.speak("Correct!");
                 }
                 else{
