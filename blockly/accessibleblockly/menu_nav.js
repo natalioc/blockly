@@ -137,20 +137,31 @@ Blockly.Accessibility.menu_nav.menuNavUp = function(){
 
 
 Blockly.Accessibility.menu_nav.flyoutToWorkspace = function(){
+    var workspaceBlocksString = "";//text of what is on the workspace
+    var workspaceBlocks;//xml of what is on the workspace
+    var incompleteXml;//xml string before the chosen block has been added
+    var completeXmlStr;//string of xml to be added to workspace
+    var xml;//dom version of the xml to be added to the workspace
+
     var input = Blockly.Xml.blockToDom_(flyoutArr[tabCount+1]);//the current block tab on from the flyout
     var textInput = Blockly.Xml.domToText(input);//the svg turned into pain text
     //taking the xml declaration from the block after domToText adds it in
     var partOne = textInput.substring(0, 7);//before the xml declaration
     var partTwo = textInput.substring(44, textInput.length);//after the xml declaration
-    var blockString = '<xml xmlns="http://www.w3.org/1999/xhtml">' +partOne + partTwo + '</xml>';//the 
+    var blockString = partOne + partTwo + '</xml>'; //the complete block str from the flyout that we want to add
 
-    var worksapceBlocks = Blockly.Xml.workspaceToDom(Blockly.mainWorkspace);
+    workspaceBlocks = Blockly.Xml.workspaceToDom(Blockly.mainWorkspace);//the workspace as an xml doc
+    workspaceBlocksString = Blockly.Xml.domToText(workspaceBlocks);//the text version of what is currently on the workspace
+    
+    incompleteXml = workspaceBlocksString.substring(0, workspaceBlocksString.length-6);//the xml before the chosen block has been added...stripped the </xml>
+    completeXmlStr = incompleteXml + blockString;//the completeXML string to be added to the workspace
+    
 
+    xml = Blockly.Xml.textToDom(completeXmlStr);//take the complete xml string and change to dom
 
-
-    var xml = Blockly.Xml.textToDom(blockString);
-
+    Blockly.mainWorkspace.clear();//clears the previous blocks on the workspace
     Blockly.Xml.domToWorkspace(Blockly.mainWorkspace, xml);//adds the xml var to the main workspace
-    Blockly.Accessibility.Navigation.updateXmlSelection();
+
+    Blockly.Accessibility.Navigation.updateXmlSelection();//updates the xml
     Blockly.hideChaff();//hides the toolbox once done
 };
