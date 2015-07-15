@@ -125,12 +125,32 @@ Blockly.Accessibility.menu_nav.menuNavUp = function(){
             }
         }
 
-            console.log(blockType);
-            console.log(Blockly.Msg[blockName]);
+           // console.log(blockType);
+            //console.log(Blockly.Msg[blockName]);
             
 
             readBox.innerHTML = shouldSay;
             lastCategory.setAttribute("aria-labelledBy", "blockReader");
         }  
     }
+};
+
+
+Blockly.Accessibility.menu_nav.flyoutToWorkspace = function(){
+    var input = Blockly.Xml.blockToDom_(flyoutArr[tabCount+1]);//the current block tab on from the flyout
+    var textInput = Blockly.Xml.domToText(input);//the svg turned into pain text
+    //taking the xml declaration from the block after domToText adds it in
+    var partOne = textInput.substring(0, 7);//before the xml declaration
+    var partTwo = textInput.substring(44, textInput.length);//after the xml declaration
+    var blockString = '<xml xmlns="http://www.w3.org/1999/xhtml">' +partOne + partTwo + '</xml>';//the 
+
+    var worksapceBlocks = Blockly.Xml.workspaceToDom(Blockly.mainWorkspace);
+
+
+
+    var xml = Blockly.Xml.textToDom(blockString);
+
+    Blockly.Xml.domToWorkspace(Blockly.mainWorkspace, xml);//adds the xml var to the main workspace
+    Blockly.Accessibility.Navigation.updateXmlSelection();
+    Blockly.hideChaff();//hides the toolbox once done
 };
