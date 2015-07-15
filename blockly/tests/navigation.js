@@ -358,7 +358,7 @@ function increment(){
     if(secs<10)
         secs="0"+secs;
     if(tenths<10)
-        tenths="0"+secs;
+        tenths="0"+tenths;
     realTime=mins+":"+secs+":"+tenths;
 }
 
