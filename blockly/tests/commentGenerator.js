@@ -600,7 +600,7 @@ function codeReaderTrial(){
 
 function looped(i,array,levelReader,indent,speedPlay){
     if(responsiveVoice.isPlaying()===true)
-        setTimeout(function(){looped(i,array,levelReader,indent,speedPlay);},200);
+        setTimeout(function(){looped(i,array,levelReader,indent,speedPlay);},1500);
     else{
     if(indent[i]!=-1){
         if(levelReader==="normal")
@@ -616,7 +616,7 @@ function looped(i,array,levelReader,indent,speedPlay){
 
 function playString(text,speedPlay){
     if(responsiveVoice.isPlaying()===true||play===true||doneTalking===false){
-       setTimeout(function() {playString(text,speedPlay);}, 200);
+       setTimeout(function() {playString(text,speedPlay);}, 1500);
        return;
     }
     else{
@@ -627,7 +627,7 @@ function playString(text,speedPlay){
 
 function playStringNormal(indent){
     if(responsiveVoice.isPlaying()===true){
-       setTimeout(function() {playStringNormal(indent);}, 200);
+       setTimeout(function() {playStringNormal(indent);}, 100);
        return;
     }
     else{
