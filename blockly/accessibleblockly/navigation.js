@@ -35,18 +35,13 @@ var disableUpdate = false;
 var undoStack = [];
 var redoStack = [];
 
-//variables for toolbox navigation
-var flyoutArr = [];   //everytime the flyout opens the blocks in it are added to this array
-var oldLength = 0;    //size of the array before a new tab opened 
-var tabCount  = 0;    //current position in array/toolbox
-var lastTabCount = 0; //last position for switching up and down
+
 
 //#region XML_UPDATING
 
 // Default functions for our hooks.
 Blockly.BlockSvg.prototype.defaultSelect = Blockly.BlockSvg.prototype.select;
 Blockly.BlockSvg.prototype.defaultDispose = Blockly.BlockSvg.prototype.dispose;
-Blockly.Flyout.prototype.defaultShow = Blockly.Flyout.prototype.show;
 /**
  * Select this block.  Highlight it visually.
  */
