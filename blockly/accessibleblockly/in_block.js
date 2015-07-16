@@ -188,10 +188,15 @@ Blockly.Accessibility.InBlock.selectConnection = function () {
     if (storedConnection == null) {
         storedConnection = relevantConnection;
         console.log('storing');
+        this.selectionList = [];
     }
     else {
         console.log('connecting');
-        try { storedConnection.connect(relevantConnection); }
+        storedConnection.unhighlight();
+        try {
+            this.unhighlightSelection();
+            storedConnection.connect(relevantConnection);
+        }
         catch (e) { console.log(e);}
         finally {
             storedConnection = null;
