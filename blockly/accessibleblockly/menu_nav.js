@@ -51,7 +51,6 @@ Blockly.Accessibility.menu_nav.menuNavDown = function(){
     flyoutArr[tabCount].addSelect(); 
     Blockly.Accessibility.menu_nav.readToolbox(); 
     lastTabCount = tabCount; 
-
     tabCount++;
 
 };
@@ -167,7 +166,7 @@ Blockly.Accessibility.menu_nav.blockToString = function(type){
             result = " 'A' equals 'B'"; 
             break;
         case "logic_operation": 
-            result = " 'A' and 'B'"; 
+            result = " 'A' and or 'B'"; 
             break;
         case "logic_negate": 
             result = "not"; 
@@ -188,10 +187,10 @@ Blockly.Accessibility.menu_nav.blockToString = function(type){
             result = "repeat 'while' or 'until'";
             break;
         case "controls_for":
-            result = "count with 'i' from '1' to '10' by '1' do 'A'";
+            result = "count with 'i' from '1' to '10' by '1'";
             break;
         case "controls_forEach":
-            result = "for each item 'i' in in list 'A' do 'B'";
+            result = "for each item 'i' in in list";
             break;
         case "controls_flow_statements":
             result = "break out of loop";
@@ -200,7 +199,7 @@ Blockly.Accessibility.menu_nav.blockToString = function(type){
             result = "number";
             break; 
         case "math_arithmetic":
-            result = "'A' math operation 'B'";
+            result = "'A' + 'B'";
             break; 
         case "math_single":
             result = "Do math function on 'A'";
@@ -209,7 +208,7 @@ Blockly.Accessibility.menu_nav.blockToString = function(type){
             result = "trig";
             break; 
         case "math_constant":
-            result = "constants";
+            result = "pi and constants";
             break; 
         case "math_number_property":
             result = "is type of number (even, odd, prime etc.)";
@@ -227,10 +226,10 @@ Blockly.Accessibility.menu_nav.blockToString = function(type){
             result = "remainder of 'A' divided by 'B'";
             break; 
         case "math_constrain":
-            result = "constrain 'A' between 'low number' and 'high number'";
+            result = "constrain 'A' between low '1' and high '100'";
             break; 
         case "math_random_int":
-            result = "random integer from 'low number' to 'high number'";
+            result = "random integer from '1' to '100'";
             break; 
         case "math_random_float":
             result = "random fraction";
@@ -251,19 +250,19 @@ Blockly.Accessibility.menu_nav.blockToString = function(type){
             result = "'A' is empty";
             break; 
         case "text_indexOf":
-            result = "in 'text' find 'first' or 'last' occurence of text";
+            result = "in 'text' find 'first' or 'last' occurence of text 'A'";
             break; 
         case "text_charAt":
-            result = "in 'text' get letter at 'index' ";
+            result = "in 'text' get letter at 'index' 'A's";
             break; 
         case "text_getSubstring":
-            result = "in 'text' get substring from letter 'index' to letter 'index'";
+            result = "in 'text' get substring from letter 'index' 'A' to letter 'index' 'B'";
             break; 
         case "text_changeCase":
-            result = "'text' to upper or lower case";
+            result = " to upper or lower case";
             break; 
         case "text_trim":
-            result = "trim spaces from 'both sides' of block";
+            result = "trim spaces from 'both sides' of";
             break; 
         case "text_print":
             result = "print";
@@ -287,7 +286,7 @@ Blockly.Accessibility.menu_nav.blockToString = function(type){
             result = "'list' is empty";
             break;
         case "lists_indexOf":
-            result = "in list 'list' find 'first' occurence of item 'A'";
+            result = "in'list' find 'first' occurence of item 'A'";
             break;
         case "lists_getIndex":
             result = "in 'list' get 'index' 'A'";
@@ -308,7 +307,7 @@ Blockly.Accessibility.menu_nav.blockToString = function(type){
             result = "random colour";
             break;
         case "colour_rgb":
-            result = "colour with red 'value' blue 'value' green 'value' ";
+            result = "colour with: red 'value', blue 'value', green 'value' ";
             break;
         case "colour_blend":
             result = "blend colour 1 'colour' and colour 2 'colour' with ratio 'decimal'";
@@ -324,6 +323,9 @@ Blockly.Accessibility.menu_nav.blockToString = function(type){
             break;
         case "variables_set":
             result = "set 'variable' to 'A'";
+            break;
+        case "variables_get":
+            result ="get 'variable'";
             break;
         default: 
             result = "custom"; 
