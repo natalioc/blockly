@@ -27,16 +27,38 @@ Blockly.Flyout.prototype.show = function(xmlList){
 Blockly.Accessibility.menu_nav.menuNavDown = function(){
 
     //remove last select if not the first
-    if(tabCount-1 >= 0 && tabCount!= oldLength){
+    if(tabCount-1 >= 0 && !(tabCount<= oldLength) && flyoutArr.length-oldLength != 2 ){
         flyoutArr[tabCount-1].removeSelect();
     }
-
     //handle loops
-    // if tabcount too high       || in variables menu                 || switching directions at the bottom of the menu
-    if(tabCount>=flyoutArr.length || (flyoutArr.length-oldLength == 2) || (lastTabCount == tabCount+1 && tabCount+2>=flyoutArr.length)){
+    // if tabcount too high       ||  switching directions at the bottom of the menu               && in variables menu 
+    if(tabCount>=flyoutArr.length ||  (lastTabCount == tabCount+1 && tabCount+2>=flyoutArr.length) && !(flyoutArr.length-oldLength == 2)){
         tabCount = oldLength;
         lastTabCount=flyoutArr.length-1; 
         flyoutArr[lastTabCount].removeSelect();
+    }
+
+    //handle variables menu because it only has 2 blocks
+    //for an unknown reason this technique does not work going up the menu
+    if(flyoutArr.length-oldLength == 2){
+
+        //if the tab count is too high (bottom block)
+        if(tabCount >= flyoutArr.length-1){
+            tabCount = oldLength;
+            flyoutArr[tabCount].addSelect();
+
+            lastTabCount = flyoutArr.length-1;
+            flyoutArr[lastTabCount].removeSelect();
+        }
+        //if the tabcount is too low (top block)
+        else if(tabCount <= oldLength){
+            tabCount = flyoutArr.length-1;
+            flyoutArr[tabCount].addSelect();
+
+            lastTabCount = oldLength;
+            flyoutArr[lastTabCount].removeSelect();
+        }
+        Blockly.Accessibility.menu_nav.readToolbox(); 
     }
 
    //handle switching from up to down
@@ -46,13 +68,14 @@ Blockly.Accessibility.menu_nav.menuNavDown = function(){
         tabCount+=2;
     }
 
-
+    //for everything except variables
     //select next -> save last -> increase count 
-    flyoutArr[tabCount].addSelect(); 
-    Blockly.Accessibility.menu_nav.readToolbox(); 
-    lastTabCount = tabCount; 
-    tabCount++;
-
+    if(flyoutArr.length-oldLength != 2){
+        flyoutArr[tabCount].addSelect(); 
+        Blockly.Accessibility.menu_nav.readToolbox(); 
+        lastTabCount = tabCount; 
+        tabCount++;
+    }
 };
 
 
@@ -60,18 +83,47 @@ Blockly.Accessibility.menu_nav.menuNavDown = function(){
 
 //traverse up through the menu using up arrow
 Blockly.Accessibility.menu_nav.menuNavUp = function(){
-    
     //remove last select if possible also remove select that gets stuck on 1 after switching directions
-    if((flyoutArr[lastTabCount] != undefined && tabCount!=oldLength) || lastTabCount==oldLength+1)
+    if((flyoutArr[lastTabCount] != undefined && tabCount!=oldLength) || lastTabCount==oldLength+1 || flyoutArr.length-oldLength != 2)
     {
         flyoutArr[lastTabCount].removeSelect();
     }
+
     //handle loops 
-    //if tabcount is too low   || In variables menu (only 2 blocks)   || In audio menu (only 1 block)        || trying to switch directions at the top of the menu
-    if(tabCount <= oldLength-1 || (flyoutArr.length - oldLength == 2) || (flyoutArr.length - oldLength == 1) || (lastTabCount == tabCount-1 && tabCount-2<oldLength)){
+    //if tabcount is too low    || In audio menu (only 1 block)        || trying to switch directions at the top of the menu  && In variables menu (only 2 blocks)   
+    if(tabCount <= oldLength-1  || (flyoutArr.length - oldLength == 1) || (lastTabCount == tabCount-1 && tabCount-2<oldLength && (flyoutArr.length - oldLength != 2))){
         lastTabCount = oldLength;
         tabCount = flyoutArr.length-1;
         flyoutArr[lastTabCount].removeSelect();
+    }
+
+
+
+    //handle variables menu because it only has 2 blocks
+    if(flyoutArr.length-oldLength == 2){
+        //first time through base select on last tab count
+        if(lastTabCount == flyoutArr.length-1){
+            tabCount = flyoutArr.length-1;
+            flyoutArr[tabCount].addSelect();
+
+            lastTabCount = oldLength;
+            flyoutArr[lastTabCount].removeSelect();
+        }
+        //Otherwise switch blocks
+        //bottom block
+        else if(tabCount == flyoutArr.length-1){
+            tabCount = oldLength;
+            flyoutArr[tabCount].addSelect();
+            flyoutArr[flyoutArr.length-1].removeSelect();
+        }
+        //top block
+        else if(tabCount == oldLength){
+            tabCount = flyoutArr.length-1;
+            flyoutArr[tabCount].addSelect();
+            flyoutArr[oldLength].removeSelect();
+        }
+
+        Blockly.Accessibility.menu_nav.readToolbox(); 
     }
 
     //handle switching from down to up
@@ -80,11 +132,15 @@ Blockly.Accessibility.menu_nav.menuNavUp = function(){
         flyoutArr[lastTabCount].removeSelect();
         tabCount-=2;
     }
-    //select next -> save last -> decrease count 
-    flyoutArr[tabCount].addSelect();
-    Blockly.Accessibility.menu_nav.readToolbox(); 
-    lastTabCount = tabCount;         
-    tabCount--; 
+
+    if(flyoutArr.length-oldLength != 2){
+        //select next -> save last -> decrease count 
+        flyoutArr[tabCount].addSelect();
+        Blockly.Accessibility.menu_nav.readToolbox(); 
+        lastTabCount = tabCount;
+
+        tabCount--; 
+    }
 };
 
 //#endregion
@@ -202,7 +258,7 @@ Blockly.Accessibility.menu_nav.blockToString = function(type){
             result = "'A' + 'B'";
             break; 
         case "math_single":
-            result = "Do math function on 'A'";
+            result = "'square root' or functions on 'A'";
             break; 
         case "math_trig":
             result = "trig";
@@ -220,7 +276,7 @@ Blockly.Accessibility.menu_nav.blockToString = function(type){
             result = "round";
             break; 
         case "math_on_list":
-            result = "do math on list";
+            result = "sum of list";
             break; 
         case "math_modulo":
             result = "remainder of 'A' divided by 'B'";
@@ -253,7 +309,7 @@ Blockly.Accessibility.menu_nav.blockToString = function(type){
             result = "in 'text' find 'first' or 'last' occurence of text 'A'";
             break; 
         case "text_charAt":
-            result = "in 'text' get letter at 'index' 'A's";
+            result = "in 'text' get letter at 'index' 'A'";
             break; 
         case "text_getSubstring":
             result = "in 'text' get substring from letter 'index' 'A' to letter 'index' 'B'";
