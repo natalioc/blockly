@@ -338,7 +338,9 @@ Blockly.Accessibility.Navigation.traverseUp = function() {
     // Otherwise just end.
     //  Otherwise just report that you've hit the bottom.
     console.log('Cannot traverse up, top of list');
-    this.previousContainer();
+    if (currentNode == this.getOutermostNode(currentNode)) {
+        this.previousContainer();
+    }
 };
 
 /**
@@ -377,7 +379,11 @@ Blockly.Accessibility.Navigation.traverseDown = function() {
 
     //  Otherwise just report that you've hit the bottom.
     console.log('Cannot traverse down, end of list');
-    this.nextContainer();
+
+    // Check to make sure we're on the first layer before doing anything.
+    if (currentNode == this.findBottom(this.getOutermostNode(currentNode))) {
+        this.nextContainer();
+    }
 };
 
 /**
@@ -460,7 +466,7 @@ Blockly.Accessibility.Navigation.findBottom = function(myNode) {
         // If you do find a next, then we're moving straight to the block under.
         if (children[i].nodeName.toUpperCase() == 'NEXT') {
             myNode = children[i].getElementsByTagName('BLOCK')[0];
-            return findBottom(myNode);
+            return this.findBottom(myNode);
         }
     }
     // If you can't find a next, you're at the bottom.

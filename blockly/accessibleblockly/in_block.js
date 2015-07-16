@@ -49,6 +49,10 @@ Blockly.Accessibility.InBlock.enterCurrentBlock = function () {
         return false;
     }
 
+    if (this.selectionList != []) {
+        this.unhighlightSelection();
+    }
+
     // Check the bottom and top connections and only add them to the list if it's meaningful to do so.
     this.selectionList = [];
     if (Blockly.selected.nextConnection != null) {
@@ -84,6 +88,8 @@ Blockly.Accessibility.InBlock.enterCurrentBlock = function () {
 
     console.log(this.selectionList[this.connectionsIndex]);
 
+    this.highlightSelection();
+
     return true;
 };
 
@@ -91,18 +97,23 @@ Blockly.Accessibility.InBlock.enterCurrentBlock = function () {
  * Selects the next value or field within the current block
  */
 Blockly.Accessibility.InBlock.selectNext = function () {
+    this.unhighlightSelection();
+
     this.connectionsIndex++;
     if (this.connectionsIndex >= this.selectionList.length) {
         this.connectionsIndex = 0;
     }
 
     console.log(this.selectionList[this.connectionsIndex]);
+
+    this.highlightSelection();
 };
 
 /**
  * Selects the previous value or field within the current block
  */
 Blockly.Accessibility.InBlock.selectPrev = function () {
+    this.unhighlightSelection();
 
     this.connectionsIndex--;
     if (this.connectionsIndex < 0) {
@@ -110,6 +121,8 @@ Blockly.Accessibility.InBlock.selectPrev = function () {
     }
 
     console.log(this.selectionList[this.connectionsIndex]);
+
+    this.highlightSelection();
 };
 
 /**
@@ -148,8 +161,14 @@ Blockly.Accessibility.InBlock.enterSelected = function () {
         this.variable();
     }
 
+    this.unhighlightSelection();
+
 };
 
+/**
+ * Stores a connection that you will be connecting to, or if a
+ * connection is already stored then it connects the two connections.
+ */
 Blockly.Accessibility.InBlock.selectConnection = function () {
 
     var relevantConnection = null;
@@ -177,6 +196,38 @@ Blockly.Accessibility.InBlock.selectConnection = function () {
         finally {
             storedConnection = null;
         }
+    }
+}
+
+/**
+ * Highlights the currently selected input
+ */
+Blockly.Accessibility.InBlock.highlightSelection = function(){
+    //See INNER_ACTION_FUNCTIONS region below for functions
+    if (this.selectionList[this.connectionsIndex] === 'bottomConnection') {
+        Blockly.selected.nextConnection.highlight();
+    }
+    else if (this.selectionList[this.connectionsIndex] === 'topConnection') {
+        Blockly.selected.previousConnection.highlight();
+    }
+    else if (this.selectionList[this.connectionsIndex] instanceof Blockly.Input) {
+        this.selectionList[this.connectionsIndex].connection.highlight();
+    }
+}
+
+/**
+ * Unhighlights the currently selected input
+ */
+Blockly.Accessibility.InBlock.unhighlightSelection = function () {
+    //See INNER_ACTION_FUNCTIONS region below for functions
+    if (this.selectionList[this.connectionsIndex] === 'bottomConnection') {
+        Blockly.selected.nextConnection.unhighlight();
+    }
+    else if (this.selectionList[this.connectionsIndex] === 'topConnection') {
+        Blockly.selected.previousConnection.unhighlight();
+    }
+    else if (this.selectionList[this.connectionsIndex] instanceof Blockly.Input) {
+        this.selectionList[this.connectionsIndex].connection.unhighlight();
     }
 }
 
