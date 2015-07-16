@@ -26,22 +26,40 @@ goog.provide('Blockly.Accessibility.Navigation');
 
 goog.require('Blockly.Accessibility');
 
+
+/**
+ * The xml dom that describes the current scene in the Blockly workspace
+ */
 var xmlDoc = null;
-var currentNode = null;
 
-// If this variable is true then updateXmlSelection will skip.  Use this in case of problematic updates
-var disableUpdate = false;
+/**
+ * The current node that is selected in Blockly.
+ */
+Blockly.Accessibility.Navigation.currentNode = null;
 
-var undoStack = [];
-var redoStack = [];
+/**
+ * If this variable is true then updateXmlSelection will skip.
+ * Use in cases where the updating will be problematic
+ */
+Blockly.Accessibility.Navigation.disableUpdate = false;
 
+/**
+ * The stack holding all of the previous iterations of the workspace
+ */
+Blockly.Accessibility.Navigation.undoStack = [];
 
+/**
+ * Temporary storage of future scenes if undo is used.
+ * On scene change this stack empties.
+ */
+Blockly.Accessibility.Navigation.redoStack = [];
 
 //#region XML_UPDATING
 
 // Default functions for our hooks.
 Blockly.BlockSvg.prototype.defaultSelect = Blockly.BlockSvg.prototype.select;
 Blockly.BlockSvg.prototype.defaultDispose = Blockly.BlockSvg.prototype.dispose;
+
 /**
  * Select this block.  Highlight it visually.
  */
@@ -50,7 +68,7 @@ Blockly.BlockSvg.prototype.select = function () {
     this.defaultSelect();
 
     if (Blockly.Accessibility.Navigation.getBlockNodeById(this.id)) {
-        currentNode = Blockly.Accessibility.Navigation.getBlockNodeById(this.id);
+        this.currentNode = Blockly.Accessibility.Navigation.getBlockNodeById(this.id);
 
         console.log(this.id);
         console.log(this);
@@ -81,12 +99,12 @@ Array.prototype.contains = function(element) {
 
 
 /**
- * Loads the xmldoc based on the current blockly setting.
+ * Loads the xmlDoc based on the current blockly setting.
  * @param {boolean} Optional paramater.  If true, then don't select a block after updating the xml.
  */
 Blockly.Accessibility.Navigation.updateXmlSelection = function (noSelect) {
 
-    if (disableUpdate){
+    if (this.disableUpdate){
         return;
     }
 
@@ -98,15 +116,15 @@ Blockly.Accessibility.Navigation.updateXmlSelection = function (noSelect) {
 	
     if (noSelect){
         xmlDoc = Blockly.Xml.workspaceToDom(Blockly.mainWorkspace);
-        currentNode = null;
+        this.currentNode = null;
     }
 
 
    // console.log('Updating XML.');
     // If you currently have a node, make sure that if all block id's change you are still selecting the same block.
-    if (currentNode) {
+    if (this.currentNode) {
         //console.log('Maintaining Position');
-        var pastId = parseInt(currentNode.getAttribute('id'));
+        var pastId = parseInt(this.currentNode.getAttribute('id'));
         var idDifference = parseInt(Blockly.Accessibility.Navigation.findContainers()[0].getAttribute('id'));
 
         xmlDoc = Blockly.Xml.workspaceToDom(Blockly.mainWorkspace);
@@ -119,7 +137,7 @@ Blockly.Accessibility.Navigation.updateXmlSelection = function (noSelect) {
         //console.log('Finding block.');
         xmlDoc = Blockly.Xml.workspaceToDom(Blockly.mainWorkspace);
         if (!xmlDoc.getElementsByTagName('BLOCK')) {
-            currentNode = xmlDoc.getElementsByTagName('BLOCK')[0];
+            this.currentNode = xmlDoc.getElementsByTagName('BLOCK')[0];
         }
     }
 
@@ -127,8 +145,8 @@ Blockly.Accessibility.Navigation.updateXmlSelection = function (noSelect) {
     if (Blockly.Xml.domToPrettyText(xmlDoc) != prevXml)
     {
         // If we are, remember the previous xml selection, and clear the redo stack.
-        undoStack.push(prevXml);
-        redoStack = [];
+        this.undoStack.push(prevXml);
+        this.redoStack = [];
 
         console.log('THERE WAS A CHANGE');
         
@@ -139,14 +157,14 @@ Blockly.Accessibility.Navigation.updateXmlSelection = function (noSelect) {
  * Undo the previous action
  */
 Blockly.Accessibility.Navigation.undo = function() {
-    if(undoStack.length <= 1)
+    if(this.undoStack.length <= 1)
     {
         return;
     }
 
     // Go back to the previous, keep track of stuff in case you want to redo, and update the scene.
-    redoStack.push(Blockly.Xml.domToPrettyText(xmlDoc));
-    xmlDoc = Blockly.Xml.textToDom(undoStack.pop());
+    this.redoStack.push(Blockly.Xml.domToPrettyText(xmlDoc));
+    xmlDoc = Blockly.Xml.textToDom(this.undoStack.pop());
     Blockly.Accessibility.Navigation.updateBlockSelection();
 };
 
@@ -154,13 +172,13 @@ Blockly.Accessibility.Navigation.undo = function() {
  * Undo your undo.
  */
 Blockly.Accessibility.Navigation.redo = function () {
-    if (redoStack.length == 0) {
+    if (this.redoStack.length == 0) {
         return;
     }
 
     // Go back to the previous, keep track of stuff in case you want to redo, and update the scene.
-    undoStack.push(Blockly.Xml.domToPrettyText(xmlDoc));
-    xmlDoc = Blockly.Xml.textToDom(redoStack.pop());
+    this.undoStack.push(Blockly.Xml.domToPrettyText(xmlDoc));
+    xmlDoc = Blockly.Xml.textToDom(this.redoStack.pop());
     Blockly.Accessibility.Navigation.updateBlockSelection();
 };
 
@@ -169,11 +187,11 @@ Blockly.Accessibility.Navigation.redo = function () {
  * Import the xml into the file, and update the xml in case of id changes.
  */
 Blockly.Accessibility.Navigation.updateBlockSelection = function () {
-    disableUpdate = true;
+    this.disableUpdate = true;
     workspace.clear();
     Blockly.Xml.domToWorkspace(Blockly.mainWorkspace, xmlDoc);
     console.log(xmlDoc);
-    disableUpdate = false;
+    this.disableUpdate = false;
 };
 
 //#region JUMP_FUNCTIONS
@@ -183,14 +201,14 @@ Blockly.Accessibility.Navigation.updateBlockSelection = function () {
  */
 Blockly.Accessibility.Navigation.jumpToTopOfSection = function() {
 
-    if (!currentNode) {
+    if (!this.currentNode) {
         console.log('Nothing Selected.')
         return;
     }
 
     console.log('Jumping to top of section.');
-    currentNode = Blockly.Accessibility.Navigation.findTop(currentNode);
-    console.log('Going to ' + currentNode.nodeName + ' with id ' + currentNode.getAttribute('id') + ' via cycle.');
+    this.currentNode = Blockly.Accessibility.Navigation.findTop(this.currentNode);
+    console.log('Going to ' + this.currentNode.nodeName + ' with id ' + this.currentNode.getAttribute('id') + ' via cycle.');
     Blockly.Accessibility.Navigation.updateSelection();
 };
 
@@ -199,14 +217,14 @@ Blockly.Accessibility.Navigation.jumpToTopOfSection = function() {
  */
 Blockly.Accessibility.Navigation.jumpToBottomOfSection = function () {
 
-    if (!currentNode) {
+    if (!this.currentNode) {
         console.log('Nothing Selected.')
         return;
     }
 
     console.log('Jumping to bottom of section.');
-    currentNode = Blockly.Accessibility.Navigation.findTop(currentNode);
-    console.log('Going to ' + currentNode.nodeName + ' with id ' + currentNode.getAttribute('id') + ' via cycle.');
+    this.currentNode = Blockly.Accessibility.Navigation.findTop(this.currentNode);
+    console.log('Going to ' + this.currentNode.nodeName + ' with id ' + this.currentNode.getAttribute('id') + ' via cycle.');
     Blockly.Accessibility.Navigation.updateSelection();
 };
 
@@ -221,8 +239,8 @@ Blockly.Accessibility.Navigation.jumpToContainer = function(containerNumber) {
 
     // Jump to the appropriate section.
     if (containers[containerNumber]) {
-        currentNode = containers[containerNumber];
-        console.log('Going to ' + currentNode.nodeName + ' with id ' + currentNode.getAttribute('id'));
+        this.currentNode = containers[containerNumber];
+        console.log('Going to ' + this.currentNode.nodeName + ' with id ' + this.currentNode.getAttribute('id'));
         Blockly.Accessibility.Navigation.updateSelection();
         return;
     }
@@ -238,8 +256,8 @@ Blockly.Accessibility.Navigation.jumpToID = function(id) {
     console.log('Jumping to block with id ' + id);
     var jumpTo = Blockly.Accessibility.Navigation.getBlockNodeById(id);
     if (jumpTo) {
-        currentNode = jumpTo;
-        console.log('Going to ' + currentNode.nodeName + ' with id ' + currentNode.getAttribute('id'));
+        this.currentNode = jumpTo;
+        console.log('Going to ' + this.currentNode.nodeName + ' with id ' + this.currentNode.getAttribute('id'));
         Blockly.Accessibility.Navigation.updateSelection();
         return;
     }
@@ -256,19 +274,19 @@ Blockly.Accessibility.Navigation.jumpToID = function(id) {
  */
 Blockly.Accessibility.Navigation.traverseOut = function() {
 
-    if (!currentNode) {
+    if (!this.currentNode) {
         console.log('Nothing Selected.')
         return;
     }
 
     console.log('traverseOut called.');
-    console.log('Attempting to leave ' + currentNode.nodeName + ' with id ' + currentNode.getAttribute('id'));
+    console.log('Attempting to leave ' + this.currentNode.nodeName + ' with id ' + this.currentNode.getAttribute('id'));
 	
     // If this is within other blocks, then its parent will be a statement, or a value
-    if (Blockly.Accessibility.Navigation.findTop(currentNode).parentNode.nodeName.toUpperCase() == 'STATEMENT' ||
-        Blockly.Accessibility.Navigation.findTop(currentNode).parentNode.nodeName.toUpperCase() == 'VALUE') {
-        currentNode = Blockly.Accessibility.Navigation.findTop(currentNode).parentNode.parentNode;
-        console.log('Going to ' + currentNode.nodeName + ' with id ' + currentNode.getAttribute('id'));
+    if (Blockly.Accessibility.Navigation.findTop(this.currentNode).parentNode.nodeName.toUpperCase() == 'STATEMENT' ||
+        Blockly.Accessibility.Navigation.findTop(this.currentNode).parentNode.nodeName.toUpperCase() == 'VALUE') {
+        this.currentNode = Blockly.Accessibility.Navigation.findTop(this.currentNode).parentNode.parentNode;
+        console.log('Going to ' + this.currentNode.nodeName + ' with id ' + this.currentNode.getAttribute('id'));
         Blockly.Accessibility.Navigation.updateSelection();
         return;
     }
@@ -281,21 +299,21 @@ Blockly.Accessibility.Navigation.traverseOut = function() {
  */
 Blockly.Accessibility.Navigation.traverseIn = function() {
 
-    if (!currentNode) {
+    if (!this.currentNode) {
         console.log('Nothing Selected.')
         return;
     }
 
     console.log('traverseIn called.');
-    console.log('Attempting to leave ' + currentNode.nodeName + ' with id ' + currentNode.getAttribute('id'));
+    console.log('Attempting to leave ' + this.currentNode.nodeName + ' with id ' + this.currentNode.getAttribute('id'));
 
     // Grab the children nodes of the current node, and see if any of them are a statement.
-    var children = currentNode.childNodes;
+    var children = this.currentNode.childNodes;
     for (var i = 0; i < children.length; i++) {
         // If you do find a statement, then we're moving straight to that node's child, which is a block.
         if (children[i].nodeName.toUpperCase() == 'STATEMENT') {
-            currentNode = children[i].getElementsByTagName('BLOCK')[0];
-            console.log('Going to ' + currentNode.nodeName + ' with id ' + currentNode.getAttribute('id'));
+            this.currentNode = children[i].getElementsByTagName('BLOCK')[0];
+            console.log('Going to ' + this.currentNode.nodeName + ' with id ' + this.currentNode.getAttribute('id'));
             Blockly.Accessibility.Navigation.updateSelection();
             return;
         }
@@ -309,18 +327,18 @@ Blockly.Accessibility.Navigation.traverseIn = function() {
  */
 Blockly.Accessibility.Navigation.traverseUp = function() {
 
-    if (!currentNode) {
+    if (!this.currentNode) {
         console.log('Nothing Selected.')
         return;
     }
 
     console.log('traverseUp called.');
-    console.log('Attempting to leave ' + currentNode.nodeName + ' with id ' + currentNode.getAttribute('id'));
+    console.log('Attempting to leave ' + this.currentNode.nodeName + ' with id ' + this.currentNode.getAttribute('id'));
 
     // If your parent is a next, then its parent must be a block.  So move to it. 
-    if (currentNode.parentNode.nodeName.toUpperCase() == 'NEXT') {
-        currentNode = currentNode.parentNode.parentNode;
-        console.log('Going to ' + currentNode.nodeName + ' with id ' + currentNode.getAttribute('id'));
+    if (this.currentNode.parentNode.nodeName.toUpperCase() == 'NEXT') {
+        this.currentNode = this.currentNode.parentNode.parentNode;
+        console.log('Going to ' + this.currentNode.nodeName + ' with id ' + this.currentNode.getAttribute('id'));
         Blockly.Accessibility.Navigation.updateSelection();
         return;
     }
@@ -329,8 +347,8 @@ Blockly.Accessibility.Navigation.traverseUp = function() {
 
     // If cycle is enabled go to the bottom
     if (doCycle) {
-        currentNode = findBottom(currentNode);
-        console.log('Going to ' + currentNode.nodeName + ' with id ' + currentNode.getAttribute('id') + ' via cycle.');
+        this.currentNode = findBottom(this.currentNode);
+        console.log('Going to ' + this.currentNode.nodeName + ' with id ' + this.currentNode.getAttribute('id') + ' via cycle.');
         Blockly.Accessibility.Navigation.updateSelection();
         return;
     }
@@ -338,7 +356,7 @@ Blockly.Accessibility.Navigation.traverseUp = function() {
     // Otherwise just end.
     //  Otherwise just report that you've hit the bottom.
     console.log('Cannot traverse up, top of list');
-    if (currentNode == this.getOutermostNode(currentNode)) {
+    if (this.currentNode == this.getOutermostNode(this.currentNode)) {
         this.previousContainer();
     }
 };
@@ -348,21 +366,21 @@ Blockly.Accessibility.Navigation.traverseUp = function() {
  */
 Blockly.Accessibility.Navigation.traverseDown = function() {
 
-    if (!currentNode) {
+    if (!this.currentNode) {
         console.log('Nothing Selected.')
         return;
     }
 
     console.log('traverseDown called.');
-    console.log('Attempting to leave ' + currentNode.nodeName + ' with id ' + currentNode.getAttribute('id'));
+    console.log('Attempting to leave ' + this.currentNode.nodeName + ' with id ' + this.currentNode.getAttribute('id'));
 
     // Grab the children nodes of the current node, and see if any of them are a next.
-    var children = currentNode.childNodes;
+    var children = this.currentNode.childNodes;
     for (var i = 0; i < children.length; i++) {
         // If you do find a next, then we're moving straight to that node.
         if (children[i].nodeName.toUpperCase() == 'NEXT') {
-            currentNode = children[i].getElementsByTagName('BLOCK')[0];
-            console.log('Going to ' + currentNode.nodeName + ' with id ' + currentNode.getAttribute('id'));
+            this.currentNode = children[i].getElementsByTagName('BLOCK')[0];
+            console.log('Going to ' + this.currentNode.nodeName + ' with id ' + this.currentNode.getAttribute('id'));
             Blockly.Accessibility.Navigation.updateSelection();
             return;
         }
@@ -371,8 +389,8 @@ Blockly.Accessibility.Navigation.traverseDown = function() {
 
     // Cycle back to the top node if cycle is enabled
     if (doCycle) {
-        currentNode = Blockly.Accessibility.Navigation.findTop(currentNode);
-        console.log('Going to ' + currentNode.nodeName + ' with id ' + currentNode.getAttribute('id') + ' via cycle.');
+        this.currentNode = Blockly.Accessibility.Navigation.findTop(this.currentNode);
+        console.log('Going to ' + this.currentNode.nodeName + ' with id ' + this.currentNode.getAttribute('id') + ' via cycle.');
         Blockly.Accessibility.Navigation.updateSelection();
         return;
     }
@@ -381,7 +399,7 @@ Blockly.Accessibility.Navigation.traverseDown = function() {
     console.log('Cannot traverse down, end of list');
 
     // Check to make sure we're on the first layer before doing anything.
-    if (currentNode == this.findBottom(this.getOutermostNode(currentNode))) {
+    if (this.currentNode == this.findBottom(this.getOutermostNode(this.currentNode))) {
         this.nextContainer();
     }
 };
@@ -391,7 +409,7 @@ Blockly.Accessibility.Navigation.traverseDown = function() {
  */
 Blockly.Accessibility.Navigation.nextContainer = function () {
     // Compare the region you're in to all of the other ones
-    var currentSectionNode = this.getOutermostNode(currentNode);
+    var currentSectionNode = this.getOutermostNode(this.currentNode);
     var myContainers = this.findContainers();
 
 
@@ -415,7 +433,7 @@ Blockly.Accessibility.Navigation.nextContainer = function () {
  */
 Blockly.Accessibility.Navigation.previousContainer = function () {
     // Compare the region you're in to all of the other ones
-    var currentSectionNode = this.getOutermostNode(currentNode);
+    var currentSectionNode = this.getOutermostNode(this.currentNode);
     var myContainers = this.findContainers();
 
 
@@ -500,14 +518,14 @@ Blockly.Accessibility.Navigation.findContainers = function() {
  */
 Blockly.Accessibility.Navigation.updateSelection = function() {
 
-    if (!currentNode) {
+    if (!this.currentNode) {
         console.log('Nothing Selected.')
         return;
     }
 
-    Blockly.Block.getById(parseInt(currentNode.getAttribute('id')), workspace).select();
+    Blockly.Block.getById(parseInt(this.currentNode.getAttribute('id')), workspace).select();
 
-    Blockly.Accessibility.TreeView.infoBoxFill(currentNode);
+    Blockly.Accessibility.TreeView.infoBoxFill(this.currentNode);
 };
 
 /**
@@ -561,7 +579,7 @@ Blockly.Accessibility.Navigation.getOutermostNode = function(inputNode){
 };
 
 Blockly.Accessibility.Navigation.getCurrentNode = function() {
-    return currentNode;
+    return this.currentNode;
 };
 
 Blockly.Accessibility.Navigation.playAudioBlock = function() {

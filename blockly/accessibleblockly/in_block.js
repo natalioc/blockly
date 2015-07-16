@@ -26,7 +26,7 @@ goog.provide('Blockly.Accessibility.InBlock');
 goog.require('Blockly.Accessibility.Navigation');
 goog.require('Blockly.Accessibility');
 
-var storedConnection = null;
+Blockly.Accessibility.InBlock.storedConnection = null;
 
 /**
  * Contains the array that describes whether the selected block has values, fields, or statements.
@@ -185,21 +185,21 @@ Blockly.Accessibility.InBlock.selectConnection = function () {
     }
 
     // If we don't have a sotred connection, then store one.  Otherwise connect the things.
-    if (storedConnection == null) {
-        storedConnection = relevantConnection;
+    if (this.storedConnection == null) {
+        this.storedConnection = relevantConnection;
         console.log('storing');
         this.selectionList = [];
     }
     else {
         console.log('connecting');
-        storedConnection.unhighlight();
+        this.storedConnection.unhighlight();
         try {
             this.unhighlightSelection();
-            storedConnection.connect(relevantConnection);
+            this.storedConnection.connect(relevantConnection);
         }
         catch (e) { console.log(e);}
         finally {
-            storedConnection = null;
+            this.storedConnection = null;
         }
     }
 }
