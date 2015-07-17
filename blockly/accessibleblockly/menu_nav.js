@@ -49,6 +49,7 @@ Blockly.Accessibility.menu_nav.menuNavDown = function(){
 
             lastTabCount = flyoutArr.length-1;
             flyoutArr[lastTabCount].removeSelect();
+            lastTabCount = oldLength;
         }
         //if the tabcount is too low (top block)
         else if(tabCount <= oldLength){
@@ -57,6 +58,8 @@ Blockly.Accessibility.menu_nav.menuNavDown = function(){
 
             lastTabCount = oldLength;
             flyoutArr[lastTabCount].removeSelect();
+            lastTabCount = flyoutArr.length-1;
+
         }
         Blockly.Accessibility.menu_nav.readToolbox(); 
     }
@@ -83,8 +86,9 @@ Blockly.Accessibility.menu_nav.menuNavDown = function(){
 
 //traverse up through the menu using up arrow
 Blockly.Accessibility.menu_nav.menuNavUp = function(){
-    //remove last select if possible also remove select that gets stuck on 1 after switching directions
-    if((flyoutArr[lastTabCount] != undefined && tabCount!=oldLength) || lastTabCount==oldLength+1 || flyoutArr.length-oldLength != 2)
+
+    // not in variables category       &&  not first selected  || not second item on list
+    if(flyoutArr.length-oldLength != 2 &&  tabCount!=oldLength || lastTabCount==oldLength+1)
     {
         flyoutArr[lastTabCount].removeSelect();
     }
@@ -97,28 +101,23 @@ Blockly.Accessibility.menu_nav.menuNavUp = function(){
         flyoutArr[lastTabCount].removeSelect();
     }
 
-
-
     //handle variables menu because it only has 2 blocks
     if(flyoutArr.length-oldLength == 2){
-        //first time through base select on last tab count
-        if(lastTabCount == flyoutArr.length-1){
-            tabCount = flyoutArr.length-1;
-            flyoutArr[tabCount].addSelect();
 
-            lastTabCount = oldLength;
-            flyoutArr[lastTabCount].removeSelect();
-        }
         //Otherwise switch blocks
         //bottom block
-        else if(tabCount == flyoutArr.length-1){
+        if(tabCount == flyoutArr.length-1){
+
             tabCount = oldLength;
+            lastTabCount = oldLength;
             flyoutArr[tabCount].addSelect();
             flyoutArr[flyoutArr.length-1].removeSelect();
         }
         //top block
         else if(tabCount == oldLength){
+
             tabCount = flyoutArr.length-1;
+            lastTabCount = flyoutArr.length-1;
             flyoutArr[tabCount].addSelect();
             flyoutArr[oldLength].removeSelect();
         }
@@ -185,7 +184,7 @@ Blockly.Accessibility.menu_nav.flyoutToWorkspace = function(){
     var completeXmlStr;//string of xml to be added to workspace
     var xml;//dom version of the xml to be added to the workspace
 
-    var input = Blockly.Xml.blockToDom_(flyoutArr[tabCount+1]);//the current block tab on from the flyout
+    var input = Blockly.Xml.blockToDom_(flyoutArr[lastTabCount]);//the current block tab on from the flyout
     var textInput = Blockly.Xml.domToText(input);//the svg turned into pain text
     //taking the xml declaration from the block after domToText adds it in
     var partOne = textInput.substring(0, 7);//before the xml declaration
