@@ -87,7 +87,7 @@ document.onkeydown = document.onkeyup = function(e){
 	}	
 	
 	else if(keyboardState == 'selectConnectionMode'){
-		else if(map[65]){ //A
+	    if(map[65]){ //A
 			//Navigate out
 			Blockly.Accessibility.Navigation.traverseOut();
 		}
