@@ -1,7 +1,7 @@
 'use strict';
 
 var numberOfBlocks=0;
-
+var question=0;
 /**
 *Copyright [2015] [Rachael Bosley, Luna Meier]
 *
@@ -29,7 +29,7 @@ var keyboardState = 'hotkeyMode';
 meSpeak.loadConfig("mespeak_config.json");
 meSpeak.loadVoice("voices/en/en-us.json");
 var speedSpeak = 175;
-//var audioSelection = 'normal';
+var audioSelection = 'normal';
 responsiveVoice.setDefaultVoice("US English Female");
 var quickSelect=false;
 // ['normal','ear con','spear con'];
@@ -300,25 +300,22 @@ document.onkeydown = document.onkeyup = function(e){
 		}
 
 		else if(map[45]){//insert
-			switch(question)
+			switch(audioSelection)
 			{
-				case 0:
-					question=1;
+				case "normal":
+					audioSelection="ear con";
 					break;
-				case 1:
-					question=2;
+				case "ear con":
+					audioSelection="spear con";
 					break;
-				case 2:
-					question=3;
-					break;
-				case 3:
-					question=0;
+				case "spear con":
+					audioSelection="normal";
 					break;
 				default:
-					question=0;
+					audioSelection="normal";
 					break;
 			}
-			responsiveVoice.speak("question "+question);
+			responsiveVoice.speak(audioSelection);
 		}
 		else if (map[73]){//i
 			codeReader();
@@ -338,7 +335,7 @@ document.onkeydown = document.onkeyup = function(e){
 		}
 
 		else if(map[70]){//f
-			codeReader();
+			;
 		}
 		else if(map[13]){ //Enter
             if(question===0){

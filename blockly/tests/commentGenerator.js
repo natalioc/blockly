@@ -640,7 +640,7 @@ function playStringNormal(indent){
 function playStringEar(indent,speedPlay){
     if(responsiveVoice.isPlaying()===true||play===true){
         console.log(play);
-       setTimeout(function() {playStringEar(indent);}, 400);
+       setTimeout(function() {playStringEar(indent);}, 1000);
        return;
     }
     else{
@@ -693,7 +693,7 @@ function playStringEar(indent,speedPlay){
 };
 function playStringSpear(indent){
     if(responsiveVoice.isPlaying()===true||doneTalking===false){
-       setTimeout(function() {playStringSpear(indent);}, 100);
+       setTimeout(function() {playStringSpear(indent);}, 1500);
        return;
     }
     else{

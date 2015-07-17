@@ -104,7 +104,7 @@ Blockly.Css.setCursor = function(cursor) {
   if (cursor == Blockly.Css.Cursor.OPEN) {
     var xy = '8 5';
   } else {
-    var xy = '7 3';
+    var xy = '7 3'; v
   }
   var url = 'url(' + Blockly.Css.mediaPath_ + '/' + cursor +
       '.cur) ' + xy + ', auto';
@@ -136,7 +136,7 @@ Blockly.Css.setCursor = function(cursor) {
  */
 Blockly.Css.CONTENT = [
   '.blocklySvg {',
-  '  background-color: #FEFEFE;',
+  '  background-color: #000000;',
   '  outline: none;',
   '  overflow: hidden;',  /* IE overflows by default. */
   '}',
@@ -189,8 +189,8 @@ Blockly.Css.CONTENT = [
   '}',
 
   '.blocklySelected>.blocklyPath {',
-  '  stroke: #000;',
-  '  stroke-width: 3px;',
+  '  stroke: #ff0000;',
+  '  stroke-width: 6px;',
   '}',
 
   '.blocklySelected>.blocklyPathLight {',
