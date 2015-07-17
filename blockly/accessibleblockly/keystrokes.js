@@ -56,14 +56,17 @@ document.onkeydown = document.onkeyup = function(e){
 			keyboardState = 'hotkeyMode';
 			Blockly.Accessibility.Navigation.updateXmlSelection();
 		}
+		
 		else if(map[65]){ //A
 			//Navigate to previous field
 			Blockly.Accessibility.InBlock.selectPrev();
 		}
+		
 		else if(map[68]){ //D
 			//Navigate to next field
 			Blockly.Accessibility.InBlock.selectNext();
 		}
+		
 		else if (map[69]) { //E
 		    e.preventDefault(); // Prevent default in case this opens up a typing prompt
 			console.log('E key pressed.');
@@ -76,7 +79,79 @@ document.onkeydown = document.onkeyup = function(e){
 		        keyboardState = 'hotkeyMode'; //prevent getting stuck on same block
 		    }
 		}
+		
+		else if(map[67]){ //C
+			Blockly.Accessibility.InBlock.selectConnection();
+			keyboardState = 'selectConnectionMode';
+		}
 	}	
+	
+	else if(keyboardState == 'selectConnectionMode'){
+		else if(map[65]){ //A
+			//Navigate out
+			Blockly.Accessibility.Navigation.traverseOut();
+		}
+		
+		else if(map[68]){ //D
+			//Navigate in
+			Blockly.Accessibility.Navigation.traverseIn();
+		}
+		
+		else if(map[83]){ //S
+			//Navigates down through blocks
+			e.preventDefault();
+			Blockly.Accessibility.Navigation.traverseDown();
+		}
+		
+		else if(map[87]){ //W
+			//Navigates up through blocks
+			e.preventDefault();
+			Blockly.Accessibility.Navigation.traverseUp();
+		}
+		
+		else if(map[69]){ //E
+			console.log('E key pressed.');
+			//Edit block of code or edit comment
+			keyboardState = 'connectBlocksMode';
+			Blockly.Accessibility.InBlock.enterCurrentBlock();
+		}
+	}
+	
+	else if(keyboardState=='connectBlocksMode'){
+		if(map[27]){ //Escape
+			console.log('Escape key pressed.');
+			keyboardState = 'hotkeyMode';
+			Blockly.Accessibility.Navigation.updateXmlSelection();
+		}
+		
+		else if(map[65]){ //A
+			//Navigate to previous field
+			Blockly.Accessibility.InBlock.selectPrev();
+		}
+		
+		else if(map[68]){ //D
+			//Navigate to next field
+			Blockly.Accessibility.InBlock.selectNext();
+		}
+		
+		else if(map[67]){ //C
+			Blockly.Accessibility.InBlock.selectConnection();
+			keyboardState = 'hotkeyMode';
+		}
+		
+		else if (map[69]) { //E
+		    e.preventDefault(); // Prevent default in case this opens up a typing prompt
+			console.log('E key pressed.');
+		    try { // Try block in case something breaks, we still default back to hotkeymode
+		        Blockly.Accessibility.InBlock.enterSelected();
+		    }
+		    catch (e) {
+		        console.log(e);
+		    } finally {
+		        keyboardState = 'hotkeyMode'; //prevent getting stuck on same block
+		    }
+		}
+	}
 	
 	else if(keyboardState=='hotkeyMode'){	
 
