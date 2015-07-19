@@ -751,7 +751,7 @@ function clickAudio(){
     workspace.playAudio(Blockly.Blocks[now].returnAudio());
 }
 
-function speakAudio(){
+function speakAudio(type){
     if(responsiveVoice.isPlaying()===true||play===true||doneTalking===false){
         if(play===true){
             setTimeout(function() {speakNow();}, noteLength);
@@ -763,6 +763,12 @@ function speakAudio(){
             setTimeout(function() {speakAudio();}, 50);
         }
         return;
+    }
+    else if(type==='t'){
+        var here=getCurrentNode();
+        var now=here.getAttribute('type');
+        var playHere=Blockly.Blocks[now].returnAudio(here);
+        responsiveVoice.speak(playHere);
     }
     else if(arrayStack.length>1)
     {

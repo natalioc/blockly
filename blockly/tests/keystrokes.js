@@ -260,7 +260,7 @@ document.onkeydown = document.onkeyup = function(e){
 			traverseDown();    
 		}
 		else if(map[84]){//t
-			speakAudio(speedSpeak);
+			speakAudio('t');
 		}
 		else if(map[89]){//y
 			try{
@@ -295,6 +295,7 @@ document.onkeydown = document.onkeyup = function(e){
 		else if(map[61]){ //+
 			speedSpeak+=20;
 		}
+
 		else if(map[173]){//-
 			speedSpeak-=20;
 		}
@@ -335,7 +336,8 @@ document.onkeydown = document.onkeyup = function(e){
 		}
 
 		else if(map[70]){//f
-			;
+			Blockly.Css.CONTENT[1]='#fefefe';
+			Blockly.inject('blocklyMainBackground');
 		}
 		else if(map[13]){ //Enter
             if(question===0){
