@@ -1,7 +1,7 @@
 'use strict';
 
 var numberOfBlocks=0;
-var question=0;
+//var question=0;
 /**
 *Copyright [2015] [Rachael Bosley, Luna Meier]
 *
