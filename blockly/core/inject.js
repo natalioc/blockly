@@ -143,16 +143,19 @@ Blockly.parseOptions_ = function(options) {
     hasCss = true;
   }
   var grid = options['grid'] || {};
+  /*grid['spacing']=0;
+  grid['colour']='#000';
+  grid['length']=0;*/
   if (!grid['spacing']) {
     grid['spacing'] = 0;
   } else {
     grid['spacing'] = parseFloat(grid['spacing']);
   }
   if (!grid['colour']) {
-    grid['colour'] = '#888';
+    grid['colour'] = '#000';
   }
   if (!grid['length']) {
-    grid['length'] = 1;
+    grid['length'] = 0;
   } else {
     grid['length'] = parseFloat(grid['length']);
   }
