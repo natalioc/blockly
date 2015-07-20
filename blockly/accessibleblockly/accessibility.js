@@ -105,8 +105,12 @@ Blockly.Toolbox.TreeNode.prototype.onKeyDown = function(e) {
  */
 Blockly.Accessibility.addComment = function(){
 	if(!Blockly.selected.comment){
-		Blockly.selected.setCommentText('');
-	}	
+	    Blockly.selected.setCommentText('');
+
+	}
+	//Blockly.selected.comment.createEditor_();
+	Blockly.selected.comment.setVisible(true);
+	Blockly.selected.comment.textareaFocus_();
 };
 
 /**

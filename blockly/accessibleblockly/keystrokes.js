@@ -248,6 +248,7 @@ document.onkeydown = document.onkeyup = function(e){
 			//Add a comment
 			console.log('C key pressed.');
 			Blockly.Accessibility.addComment();
+			e.preventDefault();
 		}
 		
 		else if(map[68]){ //D
