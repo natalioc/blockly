@@ -58,6 +58,7 @@ Blockly.Accessibility.Navigation.redoStack = [];
 
 // Default functions for our hooks.
 Blockly.BlockSvg.prototype.defaultSelect = Blockly.BlockSvg.prototype.select;
+Blockly.BlockSvg.prototype.defaultUnselect = Blockly.BlockSvg.prototype.unselect
 Blockly.BlockSvg.prototype.defaultDispose = Blockly.BlockSvg.prototype.dispose;
 
 /**
@@ -68,11 +69,19 @@ Blockly.BlockSvg.prototype.select = function () {
     this.defaultSelect();
 
     if (Blockly.Accessibility.Navigation.getBlockNodeById(this.id)) {
-        this.currentNode = Blockly.Accessibility.Navigation.getBlockNodeById(this.id);
+        Blockly.Accessibility.Navigation.currentNode = Blockly.Accessibility.Navigation.getBlockNodeById(this.id);
 
         console.log(this.id);
         console.log(this);
     }
+};
+
+/**
+ * Unselect this block.  Remove its highlighting.
+ */
+Blockly.BlockSvg.prototype.unselect = function () {
+    this.defaultUnselect();
+    Blockly.Accessibility.Navigation.currentNode = null;
 };
 
 /**
@@ -274,8 +283,8 @@ Blockly.Accessibility.Navigation.jumpToID = function(id) {
  */
 Blockly.Accessibility.Navigation.traverseOut = function() {
 
-    if (!this.currentNode) {
-        console.log('Nothing Selected.')
+    // Make sure we have something selected
+    if (this.checkForNull()) {
         return;
     }
 
@@ -299,8 +308,8 @@ Blockly.Accessibility.Navigation.traverseOut = function() {
  */
 Blockly.Accessibility.Navigation.traverseIn = function() {
 
-    if (!this.currentNode) {
-        console.log('Nothing Selected.')
+    // Make sure we have something selected
+    if (this.checkForNull()) {
         return;
     }
 
@@ -327,8 +336,8 @@ Blockly.Accessibility.Navigation.traverseIn = function() {
  */
 Blockly.Accessibility.Navigation.traverseUp = function() {
 
-    if (!this.currentNode) {
-        console.log('Nothing Selected.')
+    // Make sure we have something selected
+    if (this.checkForNull()) {
         return;
     }
 
@@ -366,8 +375,8 @@ Blockly.Accessibility.Navigation.traverseUp = function() {
  */
 Blockly.Accessibility.Navigation.traverseDown = function() {
 
-    if (!this.currentNode) {
-        console.log('Nothing Selected.')
+    // Make sure we have something selected
+    if (this.checkForNull()) {
         return;
     }
 
@@ -495,7 +504,11 @@ Blockly.Accessibility.Navigation.findBottom = function(myNode) {
 /**
  * Finds all of the containers in the current xmlstring and returns them.
  */
-Blockly.Accessibility.Navigation.findContainers = function() {
+Blockly.Accessibility.Navigation.findContainers = function () {
+
+    if (!xmlDoc) {
+        return [];
+    }
 
     // There is something weird going on with the xml parent child relationship.  For some reason I can't directly 
     // grab the XML node, but this seems to work.  Further investigation needed.
@@ -577,6 +590,19 @@ Blockly.Accessibility.Navigation.getOutermostNode = function(inputNode){
 
     return myNode;
 };
+
+/**
+ * Checks to see if nothing is selected, and if so, moves onto the first region.
+ * @return {bool} True if nothing is selected, false otherwise.
+ */
+Blockly.Accessibility.Navigation.checkForNull = function () {
+    if (!this.currentNode) {
+        console.log('Nothing Selected.');
+        this.jumpToContainer(0);
+        return true;
+    }
+    return false;
+}
 
 Blockly.Accessibility.Navigation.getCurrentNode = function() {
     return this.currentNode;
