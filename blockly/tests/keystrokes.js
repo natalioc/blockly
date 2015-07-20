@@ -29,7 +29,6 @@ var keyboardState = 'hotkeyMode';
 meSpeak.loadConfig("mespeak_config.json");
 meSpeak.loadVoice("voices/en/en-us.json");
 var speedSpeak = 175;
-var audioSelection = 'normal';
 responsiveVoice.setDefaultVoice("US English Female");
 var quickSelect=false;
 // ['normal','ear con','spear con'];
