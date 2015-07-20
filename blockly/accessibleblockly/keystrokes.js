@@ -19,11 +19,11 @@
 goog.provide('Blockly.Accessibility.Keystrokes');
 goog.require('Blockly.Accessibility');
 goog.require('Blockly.Accessibility.Navigation');
+goog.require('Blockly.Accessibility.Speech');
 goog.require('Blockly.Accessibility.TreeView');
 
 var map = [];
 var keyboardState = 'hotkeyMode';
-
 /**
  * When a mouseup event happens, update the XML selection
  */
@@ -241,7 +241,7 @@ document.onkeydown = document.onkeyup = function(e){
 		
 		else if(map[65]){ //A
 			//Navigate out
-			Blockly.Accessibility.Navigation.traverseOut();
+			Blockly.Accessibility.Navigation.traverseIn();
 		}
 		
 		else if(map[67]){ //C
@@ -252,7 +252,7 @@ document.onkeydown = document.onkeyup = function(e){
 		
 		else if(map[68]){ //D
 			//Navigate in
-			Blockly.Accessibility.Navigation.traverseIn();
+			Blockly.Accessibility.Navigation.traverseOut();
 		}
 		
 		else if(map[69]){ //E
@@ -292,15 +292,29 @@ document.onkeydown = document.onkeyup = function(e){
 		else if(map[83]){ //S
 			//Navigates down through blocks
 			e.preventDefault();
-			Blockly.Accessibility.Navigation.traverseDown();
-			Blockly.Accessibility.menu_nav.menuNavDown();
+			var active = document.activeElement;
+
+			if(active.id[0] ==":"){
+				Blockly.Accessibility.menu_nav.menuNavDown();
+			}
+
+			else{
+				Blockly.Accessibility.Navigation.traverseDown();
+			}
 		}
 		
 		else if(map[87]){ //W
 			//Navigates up through blocks
 			e.preventDefault();
-			Blockly.Accessibility.Navigation.traverseUp();
-			Blockly.Accessibility.menu_nav.menuNavUp(); //navigate up through the menu
+			var active = document.activeElement;
+
+			if(active.id[0] ==":"){
+				Blockly.Accessibility.menu_nav.menuNavUp();
+			}
+
+			else{
+				Blockly.Accessibility.Navigation.traverseUp();
+			}		
 		}
 	}
 };

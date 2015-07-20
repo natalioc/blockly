@@ -1542,6 +1542,8 @@ goog.addDependency("../../../" + dir + "/accessibleblockly/tree_view.js", ['Bloc
 goog.addDependency("../../../" + dir + "/accessibleblockly/keystrokes.js", ['Blockly.Accessibility.Keystrokes'], []);
 goog.addDependency("../../../" + dir + "/accessibleblockly/in_block.js", ['Blockly.Accessibility.InBlock'], []);
 goog.addDependency("../../../" + dir + "/accessibleblockly/menu_nav.js", ['Blockly.Accessibility.MenuNav'], []);
+goog.addDependency("../../../" + dir + "/accessibleblockly/speech.js", ['Blockly.Accessibility.Speech'], []);
+
 
 // Load Blockly.
 goog.require('Blockly');
