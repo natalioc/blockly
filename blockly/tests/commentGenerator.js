@@ -409,15 +409,9 @@ function earNestLevel(currentNode){
                     }
                 } 
                 var tempNotes=[];
-                var notes= 41;
                 for(var j=0;j<nestArray.length;j++){
                     if(nestArray[j]===-1){
                         var speed=tempNotes.length;
-                        for(var i=0;i<tempNotes.length-1;i++){
-                            tempNotes[i]=notes;
-
-                        }
-                        notes++;
                         T.soundfont.preload(tempNotes);
                         playNotes(tempNotes,speed);
                         tempNotes=[];
@@ -580,8 +574,8 @@ function codeReader(){
         indent = [1,-1,-1,2,-1,3,2,-1,1];
     }
     else if(levelReader==="spear con"){
-        array = ["variable x equals 2","variable y equals 2","variable num equals 1","while num less than 10","print num","increase num by 2","if x greater than 0","print\"A\"","else","print B","print C"];
-        indent = [1,-1,-1,-1,2,-1,-1,3,2,3,2];
+        array = ["variable x equals 2","variable y equals 2","variable num equals 1","while num less than 10","print num","increase num by 2","if x greater than 0","print x","else","print y","print num"," "];
+        indent = [1,-1,-1,-1,2,-1,-1,3,2,3,2,1];
     }
     var i=0;
     speedPlay=100;
@@ -605,16 +599,18 @@ function codeReaderTrial(){
 };
 
 function looped(i,array,levelReader,indent,speedPlay){
-    if(responsiveVoice.isPlaying()===true)
-        setTimeout(function(){looped(i,array,levelReader,indent,speedPlay);},1500);
+    if(responsiveVoice.isPlaying()===true||play===true||doneTalking===false)
+        setTimeout(function(){looped(i,array,levelReader,indent,speedPlay);},1800);
     else{
     if(indent[i]!=-1){
-        if(levelReader==="normal")
-            playStringNormal(indent[i]);
-        else if(levelReader==="spear con")
-            playStringSpear(indent[i]);
+        if(levelReader==="normal"){
+            setTimeout(playStringNormal(indent[i]),1800);
+        } 
+        else if(levelReader==="spear con"){
+            setTimeout(playStringSpear(indent[i]),1800);
+        }
         else if(levelReader==="ear con")
-            speedPlay=playStringEar(indent[i],speedPlay);
+            speedPlay=setTimeout(playStringEar(indent[i],speedPlay),1800);
     }
     playString(array[i],speedPlay);
     }
@@ -622,7 +618,7 @@ function looped(i,array,levelReader,indent,speedPlay){
 
 function playString(text,speedPlay){
     if(responsiveVoice.isPlaying()===true||play===true||doneTalking===false){
-       setTimeout(function() {playString(text,speedPlay);}, 1500);
+       setTimeout(function() {playString(text,speedPlay);}, 1800);
        return;
     }
     else{
@@ -633,7 +629,7 @@ function playString(text,speedPlay){
 
 function playStringNormal(indent){
     if(responsiveVoice.isPlaying()===true){
-       setTimeout(function() {playStringNormal(indent);}, 300);
+       setTimeout(function() {playStringNormal(indent);}, 1800);
        return;
     }
     else{
@@ -646,7 +642,7 @@ function playStringNormal(indent){
 function playStringEar(indent,speedPlay){
     if(responsiveVoice.isPlaying()===true||play===true){
         console.log(play);
-       setTimeout(function() {playStringEar(indent);}, 1000);
+       setTimeout(function() {playStringEar(indent);}, 1800);
        return;
     }
     else{
