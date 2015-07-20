@@ -409,9 +409,15 @@ function earNestLevel(currentNode){
                     }
                 } 
                 var tempNotes=[];
+                var notes= 41;
                 for(var j=0;j<nestArray.length;j++){
                     if(nestArray[j]===-1){
                         var speed=tempNotes.length;
+                        for(var i=0;i<tempNotes.length-1;i++){
+                            tempNotes[i]=notes;
+
+                        }
+                        notes++;
                         T.soundfont.preload(tempNotes);
                         playNotes(tempNotes,speed);
                         tempNotes=[];
@@ -574,7 +580,7 @@ function codeReader(){
         indent = [1,-1,-1,2,-1,3,2,-1,1];
     }
     else if(levelReader==="spear con"){
-        array = ["variable x equals 2","variable y equals 2","variable num equals 1","while num less than 10","print num","increase num by 2","if x greater than 0","print A","else","print B","print C"];
+        array = ["variable x equals 2","variable y equals 2","variable num equals 1","while num less than 10","print num","increase num by 2","if x greater than 0","print\"A\"","else","print B","print C"];
         indent = [1,-1,-1,-1,2,-1,-1,3,2,3,2];
     }
     var i=0;
@@ -627,7 +633,7 @@ function playString(text,speedPlay){
 
 function playStringNormal(indent){
     if(responsiveVoice.isPlaying()===true){
-       setTimeout(function() {playStringNormal(indent);}, 100);
+       setTimeout(function() {playStringNormal(indent);}, 300);
        return;
     }
     else{
