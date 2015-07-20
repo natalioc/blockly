@@ -207,6 +207,35 @@ Blockly.Accessibility.menu_nav.flyoutToWorkspace = function(){
     Blockly.hideChaff();//hides the toolbox once done
 };
 
+Blockly.Accessibility.menu_nav.addNext = function(){
+    //var workspaceBlockId = Blockly.Accessibility.Navigation.getRetainedNode();// the selected block on the workspace
+    //console.log(workspaceBlockId)
+    var blockIdStr = '<xml> <block type="controls_if" id="8" inline="false" x="11" y="11">'//"id=\"" + "8" + "\"";
+    console.log(blockIdStr);
+
+    var input = Blockly.Xml.blockToDom_(flyoutArr[lastTabCount]);//the current block tab on from the flyout
+    var textInput = Blockly.Xml.domToText(input);//the svg turned into pain text
+    //taking the xml declaration from the block after domToText adds it in
+    var partOne = textInput.substring(0, 7);//before the xml declaration
+    var partTwo = textInput.substring(44, textInput.length);//after the xml declaration
+    var blockString = '<statement name="DO0">' + partOne + partTwo + '</statement>'; //the complete block str from the flyout that we want to add
+    console.log(blockString);
+    var workspaceBlocks = Blockly.Xml.workspaceToDom(Blockly.mainWorkspace);//the workspace as an xml doc
+    var workspaceBlocksString = Blockly.Xml.domToText(workspaceBlocks);//the text version of what is currently on the workspace
+    var completeXmlStr = blockIdStr + blockString + '</block>' + '</xml>';
+    console.log(completeXmlStr);
+    var xml = Blockly.Xml.textToDom(completeXmlStr);//take the complete xml string and change to dom
+
+    Blockly.mainWorkspace.clear();//clears the previous blocks on the workspace
+    Blockly.Xml.domToWorkspace(Blockly.mainWorkspace, xml);//adds the xml var to the main workspace
+
+    Blockly.Accessibility.Navigation.updateXmlSelection();//updates the xml
+    Blockly.hideChaff();//hides the toolbox once done
+
+
+    //console.log(workspaceBlocksString.indexOf(blockIdStr));
+};
+
 Blockly.Accessibility.menu_nav.blockToString = function(type){
     var result;
 
