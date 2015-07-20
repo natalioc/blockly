@@ -538,7 +538,7 @@ Blockly.Accessibility.Navigation.updateSelection = function() {
 
     Blockly.Block.getById(parseInt(this.currentNode.getAttribute('id')), workspace).select();
 
-    Blockly.Accessibility.TreeView.infoBoxFill(this.currentNode);
+    Blockly.Accessibility.Prefixes.infoBoxFill(this.currentNode);
 };
 
 /**

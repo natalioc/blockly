@@ -21,6 +21,7 @@ goog.require('Blockly.Accessibility');
 goog.require('Blockly.Accessibility.Navigation');
 goog.require('Blockly.Accessibility.Speech');
 goog.require('Blockly.Accessibility.TreeView');
+goog.require('Blockly.Accessibility.Prefixes');
 
 var map = [];
 var keyboardState = 'hotkeyMode';
@@ -30,7 +31,6 @@ var keyboardState = 'hotkeyMode';
 document.onmouseup = function(e){
 	console.log('Mouse Up');
 	Blockly.Accessibility.Navigation.updateXmlSelection();
-	Blockly.Accessibility.TreeView.callImportantBlocks();
 };
 
 /**
@@ -241,7 +241,7 @@ document.onkeydown = document.onkeyup = function(e){
 		
 		else if(map[65]){ //A
 			//Navigate out
-			Blockly.Accessibility.Navigation.traverseIn();
+			Blockly.Accessibility.Navigation.traverseOut();
 		}
 		
 		else if(map[67]){ //C
@@ -252,7 +252,7 @@ document.onkeydown = document.onkeyup = function(e){
 		
 		else if(map[68]){ //D
 			//Navigate in
-			Blockly.Accessibility.Navigation.traverseOut();
+			Blockly.Accessibility.Navigation.traverseIn();
 		}
 		
 		else if(map[69]){ //E
@@ -279,7 +279,7 @@ document.onkeydown = document.onkeyup = function(e){
 		
 		else if(map[78]){ //N
 			console.log('N key pressed.');
-			Blockly.Accessibility.TreeView.getInfoBox();//currently placed here until button is found to hide and show the infobox
+			Blockly.Accessibility.Prefixes.getInfoBox();//currently placed here until button is found to hide and show the infobox
 			//Initiate a navigate search function
 		}
 		
