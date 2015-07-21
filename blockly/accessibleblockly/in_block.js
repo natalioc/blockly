@@ -221,6 +221,9 @@ Blockly.Accessibility.InBlock.highlightSelection = function(){
     else if (this.selectionList[this.connectionsIndex] instanceof Blockly.Input) {
         this.highlightList.push(this.selectionList[this.connectionsIndex].connection.returnHighlight());
     }
+    else if (this.selectionList[this.connectionsIndex] instanceof Blockly.Field) {
+        this.highlightList.push(this.selectionList[this.connectionsIndex].highlight());
+    }
 }
 
 /**
@@ -379,5 +382,30 @@ Blockly.Accessibility.InBlock.clearHighlights = function () {
     }
     this.highlightList = [];
 };
+
+/**
+ * Highlights a field as needed for selection.
+ * @return {svgElement} The highlight that is produced
+ */
+Blockly.Field.prototype.highlight = function () {
+
+    var width = this.borderRect_.width.baseVal.value;
+
+    var steps = 'm -5,5 v -19 h ' + width + ' v 19 h ' + (-width - 2);
+
+    // This is the only way I've found that allows me to find the relative position of the field
+    var mat = this.fieldGroup_.transform.baseVal[0].matrix
+    var x = mat.e;
+    var y = mat.f;
+
+    return Blockly.createSvgElement('path',
+        {
+            'class': 'blocklyHighlightedConnectionPath',
+            'd': steps,
+            transform: 'translate(' + x + ', ' + y + ')'
+        },
+        this.sourceBlock_.getSvgRoot());
+};
+
 
 //#endregion
