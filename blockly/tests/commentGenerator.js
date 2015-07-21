@@ -588,7 +588,7 @@ function codeReaderTrial(){
     var levelReader=audioSelection;
     var array = [];
     var indent=[];
-    var array = ["variable count equals 1.", " variable y equals 6.", "while count less than 6", "increase y by i", "increase count by 1", "print y." ];
+    var array = ["variable count equals 1.", " variable y equals 6.", "while count less than 6", "increase y by 1", "increase count by 1", "print y." ];
     var indent = [1,-1,-1,2,-1,1];
     var i=0;
     play=false;

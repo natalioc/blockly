@@ -765,6 +765,7 @@ function speakAudio(type){
         return;
     }
     else if(type==='t'){
+        pausecomp(100);
         var here=getCurrentNode();
         var now=here.getAttribute('type');
         var playHere=Blockly.Blocks[now].returnAudio(here);
@@ -775,6 +776,7 @@ function speakAudio(type){
         arrayStack.pop();
     }
     else{
+        pausecomp(100);
         var here=getCurrentNode();
         var now=here.getAttribute('type');
         var playHere=Blockly.Blocks[now].returnAudio(here);

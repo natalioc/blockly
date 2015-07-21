@@ -29,7 +29,7 @@ var keyboardState = 'hotkeyMode';
 meSpeak.loadConfig("mespeak_config.json");
 meSpeak.loadVoice("voices/en/en-us.json");
 var speedSpeak = 175;
-responsiveVoice.setDefaultVoice("UK English Male");
+responsiveVoice.setDefaultVoice("UK English Female");
 var quickSelect=false;
 // ['normal','ear con','spear con'];
 /*var codeSelection = [1,2,3];
@@ -284,7 +284,7 @@ document.onkeydown = document.onkeyup = function(e){
 			else{
 				question6(1);
 			}
-			responsiveVoice.speak("Root Block Selected","UK English Male");
+			responsiveVoice.speak("Root Block Selected");
 			updateXmlSelection();
 			var blockArr = xmlDoc.getElementsByTagName('BLOCK');
 			var firstBlock=blockArr[0].getAttribute('ID');
@@ -335,9 +335,7 @@ document.onkeydown = document.onkeyup = function(e){
 		}
 
 		else if(map[70]){//f
-			var voicelist = responsiveVoice.getVoices();
-			for(var i=0;i<voicelist.length-1;i++)
-				console.log(voicelist[i]);
+			codeReaderTrial();
 		}
 		else if(map[13]){ //Enter
             if(question===0){
