@@ -80,6 +80,11 @@ Blockly.Accessibility.InBlock.enterCurrentBlock = function () {
         }
     }
 
+    if (Blockly.selected.outputConnection != null) {
+        this.selectionList.push('outputConnection');
+    }
+
+
     if (this.selectionList.length == 0) {
         return false;
     }
@@ -140,6 +145,9 @@ Blockly.Accessibility.InBlock.enterSelected = function () {
     else if (this.selectionList[this.connectionsIndex] === 'topConnection') {
         this.topConnection();
     }
+    else if (this.selectionList[this.connectionsIndex] === 'outputConnection') {
+        this.outputConnection();
+    }
     else if (this.selectionList[this.connectionsIndex] instanceof Blockly.Input) {
         this.input();
     }
@@ -180,11 +188,14 @@ Blockly.Accessibility.InBlock.selectConnection = function () {
     else if (this.selectionList[this.connectionsIndex] === 'topConnection') {
         relevantConnection = Blockly.selected.previousConnection;
     }
+    else if (this.selectionList[this.connectionsIndex] === 'outputConnection') {
+        relevantConnection = Blockly.selected.outputConnection;
+    }
     else if (this.selectionList[this.connectionsIndex] instanceof Blockly.Input) {
         relevantConnection = this.selectionList[this.connectionsIndex].connection;
     }
 
-    // If we don't have a sotred connection, then store one.  Otherwise connect the things.
+    // If we don't have a stored connection, then store one.  Otherwise connect the things.
     if (this.storedConnection == null) {
         this.storedConnection = relevantConnection;
         console.log('storing');
@@ -217,6 +228,9 @@ Blockly.Accessibility.InBlock.highlightSelection = function(){
     }
     else if (this.selectionList[this.connectionsIndex] === 'topConnection') {
         this.highlightList.push(Blockly.selected.previousConnection.returnHighlight());
+    }
+    else if (this.selectionList[this.connectionsIndex] === 'outputConnection') {
+        this.highlightList.push(Blockly.selected.outputConnection.returnHighlight());
     }
     else if (this.selectionList[this.connectionsIndex] instanceof Blockly.Input) {
         this.highlightList.push(this.selectionList[this.connectionsIndex].connection.returnHighlight());
@@ -261,6 +275,17 @@ Blockly.Accessibility.InBlock.bottomConnection = function () {
 Blockly.Accessibility.InBlock.topConnection = function () {
     // This behaviour is essentially just traversing up, so do that.
     Blockly.Accessibility.Navigation.traverseUp();
+};
+
+/**
+ * Enters the output of a block
+ */
+Blockly.Accessibility.InBlock.outputConnection = function () {
+    if (Blockly.selected.outputConnection.targetConnection != null) {
+        // Find the block that's connected to this input and jump to it
+        Blockly.Accessibility.Navigation.jumpToID(
+            Blockly.selected.outputConnection.targetConnection.sourceBlock_.id);
+    }
 };
 
 /**
@@ -321,6 +346,8 @@ Blockly.Accessibility.InBlock.variable = function () {
     // Sorta works, uses arrow keys at the moment.
     this.selectionList[this.connectionsIndex].showEditor_();
 };
+
+//#endregion
 
 // We need to change the way highlighting works if we want to store our own highlights
 //#region HIGHLIGHT_CODE
