@@ -260,8 +260,10 @@ document.onkeydown = document.onkeyup = function(e){
 			console.log('E key pressed.');
 			Blockly.Accessibility.TreeView.getImportantBlocks();
 			//Edit block of code or edit comment
-			keyboardState = 'editMode';
-			Blockly.Accessibility.InBlock.enterCurrentBlock();
+			if (Blockly.Accessibility.InBlock.enterCurrentBlock()) { // Returns false if nothing is selected
+			    keyboardState = 'editMode';
+			}
+		   
 		}
 		
 		else if(map[71]){ //G

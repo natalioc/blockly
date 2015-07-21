@@ -50,7 +50,7 @@ Blockly.Accessibility.InBlock.enterCurrentBlock = function () {
     }
 
     if (this.selectionList != []) {
-        this.unhighlightSelection();
+        this.clearHighlights();
     }
 
     // Check the bottom and top connections and only add them to the list if it's meaningful to do so.

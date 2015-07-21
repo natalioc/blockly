@@ -82,6 +82,13 @@ Blockly.BlockSvg.prototype.select = function () {
 Blockly.BlockSvg.prototype.unselect = function () {
     this.defaultUnselect();
     Blockly.Accessibility.Navigation.currentNode = null;
+
+    // Handle if you're leaving edit mode.
+
+    if (keyboardState == 'editMode') {
+        keyboardState = 'hotkeyMode';
+        Blockly.Accessibility.InBlock.clearHighlights();
+    }
 };
 
 /**
