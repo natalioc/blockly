@@ -578,7 +578,7 @@ function codeReader(){
         indent = [1,-1,-1,-1,2,-1,-1,3,2,3,2,1];
     }
     var i=0;
-    speedPlay=100;
+    speedPlay=300;
     for(i;i<array.length;i++){
         looped(i,array,levelReader,indent,speedPlay);
     }
@@ -592,36 +592,36 @@ function codeReaderTrial(){
     var indent = [1,-1,-1,2,-1,1];
     var i=0;
     play=false;
-    speedPlay=100;
+    speedPlay=300;
     for(i;i<array.length;i++){
         looped(i,array,levelReader,indent,speedPlay);
     }
 };
 
 function looped(i,array,levelReader,indent,speedPlay){
-    if(responsiveVoice.isPlaying()===true||play===true||doneTalking===false)
-        setTimeout(function(){looped(i,array,levelReader,indent,speedPlay);},1800);
-    else{
+ //   else{
     if(indent[i]!=-1){
-        if(levelReader==="normal"){
-            setTimeout(playStringNormal(indent[i]),1800);
-        } 
-        else if(levelReader==="spear con"){
-            setTimeout(playStringSpear(indent[i]),1800);
-        }
+        if(levelReader==="normal") 
+           playStringNormal(indent[i]);
+        else if(levelReader==="spear con")
+            playStringSpear(indent[i]);
         else if(levelReader==="ear con")
-            speedPlay=setTimeout(playStringEar(indent[i],speedPlay),1800);
+            speedPlay=playStringEar(indent[i],speedPlay);
     }
     playString(array[i],speedPlay);
-    }
+   // }
 }
 
 function playString(text,speedPlay){
     if(responsiveVoice.isPlaying()===true||play===true||doneTalking===false){
-       setTimeout(function() {playString(text,speedPlay);}, 1800);
+        if(audioSelection==="ear con")
+            setTimeout(function(){playString(text,speedPlay);},2000)
+        else
+            setTimeout(function() {playString(text,speedPlay);}, 100);
        return;
     }
     else{
+        pausecomp(2000);
         responsiveVoice.speak(text);
         return;
     }
@@ -629,10 +629,11 @@ function playString(text,speedPlay){
 
 function playStringNormal(indent){
     if(responsiveVoice.isPlaying()===true){
-       setTimeout(function() {playStringNormal(indent);}, 1800);
+       setTimeout(function() {playStringNormal(indent);}, 100);
        return;
     }
     else{
+        pausecomp(2000);
         var normalText="Level "+indent;
         responsiveVoice.speak(normalText);
         return;
@@ -642,7 +643,7 @@ function playStringNormal(indent){
 function playStringEar(indent,speedPlay){
     if(responsiveVoice.isPlaying()===true||play===true){
         console.log(play);
-       setTimeout(function() {playStringEar(indent);}, 1800);
+       setTimeout(function() {playStringEar(indent);}, 2000);
        return;
     }
     else{
@@ -662,10 +663,10 @@ function playStringEar(indent,speedPlay){
         var normalText="Level "+indent;
         var j=0;
         var toggle = false;
-        var newSpeed=420/indent;
-        noteLength=instrument.length*440;
-        speedPlay=indent*440;
- //       T.soundfont.preload(instrument);
+        var newSpeed=540/indent;
+        noteLength=instrument.length*560;
+        speedPlay=indent*560;
+        T.soundfont.preload(instrument);
         play=true;
         var t = T("interval", {interval:newSpeed,timeout:"55sec"},function(){
             if(j>instrument.length-1||instrument[j]===undefined){
@@ -695,10 +696,11 @@ function playStringEar(indent,speedPlay){
 };
 function playStringSpear(indent){
     if(responsiveVoice.isPlaying()===true||doneTalking===false){
-       setTimeout(function() {playStringSpear(indent);}, 1500);
+       setTimeout(function() {playStringSpear(indent);}, 100);
        return;
     }
     else{
+        pausecomp(2000);
         doneTalking=false;
         var normalText="Level "+indent;
         meSpeak.speak(normalText, {speed: 600},meSpeakDone);
@@ -710,6 +712,11 @@ function playStringSpear(indent){
 function meSpeakDone(){
     doneTalking=true;
 }
+
+function pausecomp(ms) {
+    ms += new Date().getTime();
+    while (new Date() < ms){;}
+} 
 /*
 function getIndent(current){
     var speakLevel="";

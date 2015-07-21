@@ -29,7 +29,7 @@ var keyboardState = 'hotkeyMode';
 meSpeak.loadConfig("mespeak_config.json");
 meSpeak.loadVoice("voices/en/en-us.json");
 var speedSpeak = 175;
-responsiveVoice.setDefaultVoice("US English Female");
+responsiveVoice.setDefaultVoice("UK English Male");
 var quickSelect=false;
 // ['normal','ear con','spear con'];
 /*var codeSelection = [1,2,3];
@@ -284,7 +284,7 @@ document.onkeydown = document.onkeyup = function(e){
 			else{
 				question6(1);
 			}
-			responsiveVoice.speak("Root Block Selected");
+			responsiveVoice.speak("Root Block Selected","UK English Male");
 			updateXmlSelection();
 			var blockArr = xmlDoc.getElementsByTagName('BLOCK');
 			var firstBlock=blockArr[0].getAttribute('ID');
@@ -299,7 +299,7 @@ document.onkeydown = document.onkeyup = function(e){
 			speedSpeak-=20;
 		}
 
-		else if(map[45]){//insert
+		else if(map[16]){//insert
 			switch(audioSelection)
 			{
 				case "normal":
@@ -335,8 +335,9 @@ document.onkeydown = document.onkeyup = function(e){
 		}
 
 		else if(map[70]){//f
-			Blockly.Css.CONTENT[1]='#fefefe';
-			Blockly.inject('blocklyMainBackground');
+			var voicelist = responsiveVoice.getVoices();
+			for(var i=0;i<voicelist.length-1;i++)
+				console.log(voicelist[i]);
 		}
 		else if(map[13]){ //Enter
             if(question===0){
