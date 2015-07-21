@@ -131,6 +131,7 @@ Blockly.Accessibility.InBlock.selectPrev = function () {
  */
 Blockly.Accessibility.InBlock.enterSelected = function () {
 
+    this.clearHighlights();
 
     //See INNER_ACTION_FUNCTIONS region below for functions
     if (this.selectionList[this.connectionsIndex] === 'bottomConnection') {
@@ -161,7 +162,6 @@ Blockly.Accessibility.InBlock.enterSelected = function () {
         this.variable();
     }
 
-    this.unhighlightSelection();
 
 };
 
@@ -189,6 +189,7 @@ Blockly.Accessibility.InBlock.selectConnection = function () {
         this.storedConnection = relevantConnection;
         console.log('storing');
         this.selectionList = [];
+        this.storedHighlight = this.storedConnection.returnHighlight();
     }
     else {
         console.log('connecting');
@@ -199,6 +200,8 @@ Blockly.Accessibility.InBlock.selectConnection = function () {
         }
         catch (e) { console.log(e);}
         finally {
+            Blockly.Connection.removeHighlight(this.storedHighlight);
+            this.storedHighlight = null;
             this.storedConnection = null;
         }
     }
@@ -210,13 +213,13 @@ Blockly.Accessibility.InBlock.selectConnection = function () {
 Blockly.Accessibility.InBlock.highlightSelection = function(){
     //See INNER_ACTION_FUNCTIONS region below for functions
     if (this.selectionList[this.connectionsIndex] === 'bottomConnection') {
-        Blockly.selected.nextConnection.highlight();
+        this.highlightList.push(Blockly.selected.nextConnection.returnHighlight());
     }
     else if (this.selectionList[this.connectionsIndex] === 'topConnection') {
-        Blockly.selected.previousConnection.highlight();
+        this.highlightList.push(Blockly.selected.previousConnection.returnHighlight());
     }
     else if (this.selectionList[this.connectionsIndex] instanceof Blockly.Input) {
-        this.selectionList[this.connectionsIndex].connection.highlight();
+        this.highlightList.push(this.selectionList[this.connectionsIndex].connection.returnHighlight());
     }
 }
 
@@ -224,16 +227,7 @@ Blockly.Accessibility.InBlock.highlightSelection = function(){
  * Unhighlights the currently selected input
  */
 Blockly.Accessibility.InBlock.unhighlightSelection = function () {
-    //See INNER_ACTION_FUNCTIONS region below for functions
-    if (this.selectionList[this.connectionsIndex] === 'bottomConnection') {
-        Blockly.selected.nextConnection.unhighlight();
-    }
-    else if (this.selectionList[this.connectionsIndex] === 'topConnection') {
-        Blockly.selected.previousConnection.unhighlight();
-    }
-    else if (this.selectionList[this.connectionsIndex] instanceof Blockly.Input) {
-        this.selectionList[this.connectionsIndex].connection.unhighlight();
-    }
+    this.clearHighlights();
 }
 
 /**
@@ -324,3 +318,66 @@ Blockly.Accessibility.InBlock.variable = function () {
     // Sorta works, uses arrow keys at the moment.
     this.selectionList[this.connectionsIndex].showEditor_();
 };
+
+// We need to change the way highlighting works if we want to store our own highlights
+//#region HIGHLIGHT_CODE
+
+/**
+ * Stores all highlights in the scene.
+ */
+Blockly.Accessibility.InBlock.highlightList = [];
+
+/**
+ * Stores a specific highlight for use in connections/additions
+ */
+Blockly.Accessibility.InBlock.storedHighlight = null;
+
+/**
+ * Add highlighting around this connection.
+ * @return {svgElement} The highlight that is produced
+ */
+Blockly.Connection.prototype.returnHighlight = function () {
+    var steps;
+    if (this.type == Blockly.INPUT_VALUE || this.type == Blockly.OUTPUT_VALUE) {
+        var tabWidth = this.sourceBlock_.RTL ? -Blockly.BlockSvg.TAB_WIDTH :
+            Blockly.BlockSvg.TAB_WIDTH;
+        steps = 'm 0,0 v 5 c 0,10 ' + -tabWidth + ',-8 ' + -tabWidth + ',7.5 s ' +
+                tabWidth + ',-2.5 ' + tabWidth + ',7.5 v 5';
+    } else {
+        if (this.sourceBlock_.RTL) {
+            steps = 'm 20,0 h -5 ' + Blockly.BlockSvg.NOTCH_PATH_RIGHT + ' h -5';
+        } else {
+            steps = 'm -20,0 h 5 ' + Blockly.BlockSvg.NOTCH_PATH_LEFT + ' h 5';
+        }
+    }
+    var xy = this.sourceBlock_.getRelativeToSurfaceXY();
+    var x = this.x_ - xy.x;
+    var y = this.y_ - xy.y;
+    return Blockly.createSvgElement('path',
+        {
+            'class': 'blocklyHighlightedConnectionPath',
+            'd': steps,
+            transform: 'translate(' + x + ', ' + y + ')'
+        },
+        this.sourceBlock_.getSvgRoot());
+};
+
+/**
+ * Remove the highlighting around the passed in connection.
+ * @param {svgElement} Highlighting to be removed
+ */
+Blockly.Connection.removeHighlight = function (highlight) {
+    goog.dom.removeNode(highlight);
+};
+
+/**
+ * Clears all highlights from the scene that are not part of the separate storage
+ */
+Blockly.Accessibility.InBlock.clearHighlights = function () {
+    for (var i = 0; i < this.highlightList.length; i++) {
+        Blockly.Connection.removeHighlight(this.highlightList[i])
+    }
+    this.highlightList = [];
+};
+
+//#endregion
