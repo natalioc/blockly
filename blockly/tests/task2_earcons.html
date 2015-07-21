@@ -9,7 +9,6 @@
 			var el = document.getElementById(id);
 		    el.focus();
 		    el.select();
-		    responsiveVoice.speak(el.name);
 		}
 	</script>
 </head>
@@ -22,7 +21,7 @@
 	<div id="audioDiv" align="center">
 		<h2>Source Code Audio Description</h2>
 		<p>
-		<audio controls>
+		<audio controls onplay="SelectAll('task2text');">
 	  		<source src="../media/task2_earcons.mp3" type="audio/mpeg">
 		</audio>
 		</p>
@@ -30,7 +29,7 @@
 	<br />
 	<div  id="textDiv" name="textDiv" align="center">
 		<h2>Source Code Interpretation</h2>
-		 <textarea rows="10" name="Enter Your Input Here" id="task2text" cols="50" onfocus="SelectAll('task2text');" style="font-size:20px; width:75%">Enter your interpretation of the source code here.
+		 <textarea rows="10" id="task2text" cols="50" style="font-size:20px; width:75%">Enter your interpretation of the source code here.
 		</textarea> 
 	</div>
 </body>
