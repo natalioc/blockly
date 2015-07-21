@@ -284,7 +284,7 @@ document.onkeydown = document.onkeyup = function(e){
 			else{
 				question6(1);
 			}
-			responsiveVoice.speak("Root Block Selected","UK English Male");
+			responsiveVoice.speak("Root Block Selected");
 			updateXmlSelection();
 			var blockArr = xmlDoc.getElementsByTagName('BLOCK');
 			var firstBlock=blockArr[0].getAttribute('ID');
