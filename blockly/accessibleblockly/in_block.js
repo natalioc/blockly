@@ -219,6 +219,25 @@ Blockly.Accessibility.InBlock.selectConnection = function () {
 }
 
 /**
+ * Disconnects the currently selected connection.
+ */
+Blockly.Accessibility.InBlock.disconnectSelection = function () {
+    // Find which case we're dealing with, then just disconnect.
+    if (this.selectionList[this.connectionsIndex] === 'bottomConnection') {
+        Blockly.selected.nextConnection.disconnect();
+    }
+    else if (this.selectionList[this.connectionsIndex] === 'topConnection') {
+        Blockly.selected.previousConnection.disconnect();
+    }
+    else if (this.selectionList[this.connectionsIndex] === 'outputConnection') {
+        Blockly.selected.outputConnection.disconnect();
+    }
+    else if (this.selectionList[this.connectionsIndex] instanceof Blockly.Input) {
+        this.selectionList[this.connectionsIndex].connection.disconnect();
+    }
+}
+
+/**
  * Highlights the currently selected input
  */
 Blockly.Accessibility.InBlock.highlightSelection = function(){
