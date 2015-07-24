@@ -189,19 +189,15 @@ Blockly.Accessibility.menu_nav.flyoutToWorkspace = function(){
     //taking the xml declaration from the block after domToText adds it in
     var partOne = textInput.substring(0, 7);//before the xml declaration
     var partTwo = textInput.substring(44, textInput.length);//after the xml declaration
-    var blockString = partOne + partTwo + '</xml>'; //the complete block str from the flyout that we want to add
-
-    workspaceBlocks = Blockly.Xml.workspaceToDom(Blockly.mainWorkspace);//the workspace as an xml doc
-    workspaceBlocksString = Blockly.Xml.domToText(workspaceBlocks);//the text version of what is currently on the workspace
+    var blockString = '<xml>' + partOne + partTwo + '</xml>'; //the complete block str from the flyout that we want to add
     
     incompleteXml = workspaceBlocksString.substring(0, workspaceBlocksString.length-6);//the xml before the chosen block has been added...stripped the </xml>
-    completeXmlStr = incompleteXml + blockString;//the completeXML string to be added to the workspace
+    completeXmlStr = blockString;//incompleteXml + blockString;//the completeXML string to be added to the workspace
     
 
     xml = Blockly.Xml.textToDom(completeXmlStr);//take the complete xml string and change to dom
 
-    Blockly.mainWorkspace.clear();//clears the previous blocks on the workspace
-    Blockly.Xml.domToWorkspace(Blockly.mainWorkspace, xml);//adds the xml var to the main workspace
+    Blockly.Xml.domToWorkspace(workspace, xml);//adds the xml var to the main workspace
 
     Blockly.Accessibility.Navigation.updateXmlSelection();//updates the xml
     Blockly.hideChaff();//hides the toolbox once done
@@ -234,6 +230,10 @@ Blockly.Accessibility.menu_nav.addNext = function(){
 
 
     //console.log(workspaceBlocksString.indexOf(blockIdStr));
+};
+
+Blockly.Accessibility.menu_nav.getMenuSelection = function(){
+    return flyoutArr[lastTabCount];
 };
 
 Blockly.Accessibility.menu_nav.blockToString = function(type){

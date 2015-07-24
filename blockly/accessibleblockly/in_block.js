@@ -27,7 +27,6 @@ goog.require('Blockly.Accessibility.Navigation');
 goog.require('Blockly.Accessibility');
 
 Blockly.Accessibility.InBlock.storedConnection = null;
-
 /**
  * Contains the array that describes whether the selected block has values, fields, or statements.
  */
@@ -270,7 +269,69 @@ Blockly.Accessibility.InBlock.unhighlightSelection = function () {
  * If a value or statement is selected, add a block to it.
  */
 Blockly.Accessibility.InBlock.addBlock = function () {
-
+    //this.storedConnection;
+    if(this.storedConnection.check_ != null){
+        for (var i = 0; i < this.storedConnection.check_.length; i++) {
+            var selectedNode = Blockly.Accessibility.menu_nav.getMenuSelection();
+            if(this.storedConnection.type == 1){
+                if(selectedNode.outputConnection.check_[0] == this.storedConnection.check_[i]){
+                    Blockly.Accessibility.menu_nav.flyoutToWorkspace();
+                    Blockly.Accessibility.Navigation.updateXmlSelection(true);
+                    var blockArr = xmlDoc.getElementsByTagName('BLOCK');
+                    var newBlock = Blockly.Block.getById(blockArr[0].getAttribute('id'), workspace);
+                    this.storedConnection.connect(newBlock.outputConnection);
+                }
+            }
+            else if(this.storedConnection.type == 2){
+                if(selectedNode.inputList[0].connection.check_[0] == this.storedConnection.check_[i]){
+                    Blockly.Accessibility.menu_nav.flyoutToWorkspace();
+                    Blockly.Accessibility.Navigation.updateXmlSelection(true);
+                    var blockArr = xmlDoc.getElementsByTagName('BLOCK');
+                    var newBlock = Blockly.Block.getById(blockArr[0].getAttribute('id'), workspace);
+                    this.storedConnection.connect(newBlock.inputConnection);
+                }
+            }
+            //these blocks are not compatable
+            else{
+                console.log("these blocks are not compatable");
+            }
+        }
+    }
+    //these blocks are compatable because anything can connect to this block
+    else{
+        if(this.storedConnection.type == 1){
+            Blockly.Accessibility.menu_nav.flyoutToWorkspace();
+            Blockly.Accessibility.Navigation.updateXmlSelection(true);
+            var blockArr = xmlDoc.getElementsByTagName('BLOCK');
+            var newBlock = Blockly.Block.getById(blockArr[0].getAttribute('id'), workspace);
+            this.storedConnection.connect(newBlock.outputConnection);
+        }
+        /**
+        * This one is acting funny I dont know whats wrong with the connection part
+        *
+        */
+        else if(this.storedConnection.type == 2){
+            Blockly.Accessibility.menu_nav.flyoutToWorkspace();
+            Blockly.Accessibility.Navigation.updateXmlSelection(true);
+            var blockArr = xmlDoc.getElementsByTagName('BLOCK');
+            var newBlock = Blockly.Block.getById(blockArr[0].getAttribute('id'), workspace);
+            this.storedConnection.connect(newBlock.inputList[0].connection);
+        }
+        else if(this.storedConnection.type == 3){
+            Blockly.Accessibility.menu_nav.flyoutToWorkspace();
+            Blockly.Accessibility.Navigation.updateXmlSelection(true);
+            var blockArr = xmlDoc.getElementsByTagName('BLOCK');
+            var newBlock = Blockly.Block.getById(blockArr[0].getAttribute('id'), workspace);
+            this.storedConnection.connect(newBlock.previousConnection);
+        }
+        else if(this.storedConnection.type == 4){
+            Blockly.Accessibility.menu_nav.flyoutToWorkspace();
+            Blockly.Accessibility.Navigation.updateXmlSelection(true);
+            var blockArr = xmlDoc.getElementsByTagName('BLOCK');
+            var newBlock = Blockly.Block.getById(blockArr[0].getAttribute('id'), workspace);
+            this.storedConnection.connect(newBlock.nextConnection);
+        }
+    }
 };
 
 
