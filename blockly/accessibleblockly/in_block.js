@@ -208,7 +208,26 @@ Blockly.Accessibility.InBlock.selectConnection = function () {
             this.unhighlightSelection();
             this.storedConnection.connect(relevantConnection);
         }
-        catch (e) { console.log(e);}
+        catch (e) {
+
+            console.log(e);
+
+            // This error is unlikely to happen.  Pre-checking is probably just going to be
+            // a waste of time, so we'll handle it here.
+            if (e == 'Source connection already connected (block).' || 'Can only do a mid-stack connection with the top of a block.') {
+                if (this.storedConnection.targetConnection != relevantConnection) {
+                    var lower = this.storedConnection.isSuperior() ? relevantConnection : this.storedConnection;
+                    lower.sourceBlock_.unplug(false, false);
+                    try {
+                        this.storedConnection.connect(relevantConnection);
+                        console.log('Handled previous error, disregard');
+                    }
+                    catch (e) {
+                        console.log(e);
+                    }
+                }
+            }
+        }
         finally {
             Blockly.Connection.removeHighlight(this.storedHighlight);
             this.storedHighlight = null;
