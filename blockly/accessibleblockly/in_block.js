@@ -353,6 +353,36 @@ Blockly.Accessibility.InBlock.addBlock = function () {
     }
 };
 
+/**
+* Function will disable blocks in the toolbox that are incompatable with the selected connection
+*/
+Blockly.Accessibility.InBlock.disableIncompatableBlocks = function(){
+    if(this.storedConnection.check_ != null){
+        var toolboxChoices = Blockly.Accessibility.menu_nav.getToolboxChoices();  
+        for(var i = 0; i < toolboxChoices.length; i++) {
+            if(this.storedConnection.type == 1){
+                if(toolboxChoices[i].outputConnection != null){
+                    if(toolboxChoices[i].outputConnection.check_ != null){
+                        if(toolboxChoices[i].outputConnection.check_[0] != this.storedConnection.check_[0]){
+                            toolboxChoices[i].disabled = true;
+                        }
+                    }
+                }
+                //
+                else{
+                    toolboxChoices[i].disabled = true;
+                }
+            }
+            //types dont match disable those blocks
+            else{
+                toolboxChoices[i].disabled = true;
+            }
+        }
+    }
+    else{
+        console.log('This connection can connect to anything');
+    }
+};
 
 /**
  * All of the following are separated so that they can be described as hooks

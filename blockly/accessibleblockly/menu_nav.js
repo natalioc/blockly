@@ -7,6 +7,7 @@ var flyoutArr = [];   //everytime the flyout opens the blocks in it are added to
 var oldLength = 0;    //size of the array before a new tab opened 
 var tabCount  = 0;    //current position in array/toolbox
 var lastTabCount = 0; //last position for switching up and down
+var currentFlyoutArr = []; //the current flyoutarray
 
 Blockly.Flyout.prototype.defaultShow = Blockly.Flyout.prototype.show;
 
@@ -21,6 +22,11 @@ Blockly.Flyout.prototype.show = function(xmlList){
 
     this.defaultShow(xmlList);    //call default and update flyoutArr
     flyoutArr = menuBlocksArr;
+
+    currentFlyoutArr = [];
+    for(var i = flyoutArr.length-oldLength; i < flyoutArr.length; i++){
+        currentFlyoutArr.push(flyoutArr[i]);
+    }
 };
 
 //Navigate down through the menu using down arrow
@@ -86,7 +92,6 @@ Blockly.Accessibility.menu_nav.menuNavDown = function(){
 
 //traverse up through the menu using up arrow
 Blockly.Accessibility.menu_nav.menuNavUp = function(){
-
     // not in variables category       &&  not first selected  || not second item on list
     if(flyoutArr.length-oldLength != 2 &&  tabCount!=oldLength || lastTabCount==oldLength+1)
     {
@@ -140,6 +145,7 @@ Blockly.Accessibility.menu_nav.menuNavUp = function(){
 
         tabCount--; 
     }
+     console.log(flyoutArr[lastTabCount]);
 };
 
 //#endregion
@@ -230,6 +236,10 @@ Blockly.Accessibility.menu_nav.addNext = function(){
 
 
     //console.log(workspaceBlocksString.indexOf(blockIdStr));
+};
+
+Blockly.Accessibility.menu_nav.getToolboxChoices = function(){
+    return currentFlyoutArr;
 };
 
 Blockly.Accessibility.menu_nav.getMenuSelection = function(){
