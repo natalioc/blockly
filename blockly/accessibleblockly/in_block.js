@@ -364,17 +364,21 @@ Blockly.Accessibility.InBlock.disableIncompatableBlocks = function(){
                 if(toolboxChoices[i].outputConnection != null){
                     if(toolboxChoices[i].outputConnection.check_ != null){
                         if(toolboxChoices[i].outputConnection.check_[0] != this.storedConnection.check_[0]){
+                            toolboxChoices[i].setColour(0);
                             toolboxChoices[i].disabled = true;
                         }
                     }
                 }
                 //
                 else{
+                    
+                    toolboxChoices[i].setColour(0);
                     toolboxChoices[i].disabled = true;
                 }
             }
             //types dont match disable those blocks
             else{
+                toolboxChoices[i].setColour(0);
                 toolboxChoices[i].disabled = true;
             }
         }
