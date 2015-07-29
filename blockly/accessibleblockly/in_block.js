@@ -363,28 +363,75 @@ Blockly.Accessibility.InBlock.disableIncompatableBlocks = function(){
             if(this.storedConnection.type == 1){
                 if(toolboxChoices[i].outputConnection != null){
                     if(toolboxChoices[i].outputConnection.check_ != null){
+                        //if their compatibilites don't match up
                         if(toolboxChoices[i].outputConnection.check_[0] != this.storedConnection.check_[0]){
-                            toolboxChoices[i].setColour(0);
+                            toolboxChoices[i].setColour(500);
                             toolboxChoices[i].disabled = true;
                         }
                     }
                 }
-                //
+                //its the null block and anything like it
                 else{
-                    
-                    toolboxChoices[i].setColour(0);
+                    toolboxChoices[i].setColour(500);
                     toolboxChoices[i].disabled = true;
                 }
             }
+            
+            else if(this.storedConnection.type == 3){
+                if(toolboxChoices[i].previousConnection != null){
+                    if(toolboxChoices[i].previousConnection.check_ != null){
+                        //if their compatibilites don't match up
+                        if(toolboxChoices[i].previousConnection.check_[0] != this.storedConnection.check_[0]){
+                            toolboxChoices[i].setColour(500);
+                            toolboxChoices[i].disabled = true;
+                        }
+                    }
+                }
+                //its the null block and anything like it
+                else{
+                    toolboxChoices[i].setColour(500);
+                    toolboxChoices[i].disabled = true;
+                }
+            }
+
+
+            /**
+            ***************************************
+            * Type 2 blocks are not yet handled   *
+            ***************************************
+            */
+
+
             //types dont match disable those blocks
             else{
-                toolboxChoices[i].setColour(0);
+                toolboxChoices[i].setColour(500);
                 toolboxChoices[i].disabled = true;
             }
         }
     }
     else{
-        console.log('This connection can connect to anything');
+        var toolboxChoices = Blockly.Accessibility.menu_nav.getToolboxChoices();  
+        for(var i = 0; i < toolboxChoices.length; i++) {
+            if(this.storedConnection.type == 3){
+                if(toolboxChoices[i].outputConnection != null){ 
+                    if(toolboxChoices[i].outputConnection.type == 1 || 2){
+                        toolboxChoices[i].setColour(500);
+                        toolboxChoices[i].disabled = true;
+                    }
+                }
+            }
+            else if(this.storedConnection.type == 4){
+                if(toolboxChoices[i].outputConnection != null){ 
+                    if(toolboxChoices[i].outputConnection.type == 1 || 2){
+                        toolboxChoices[i].setColour(500);
+                        toolboxChoices[i].disabled = true;
+                    }
+                }
+            }
+            else{
+                console.log("Not handled yet");
+            }
+        }
     }
 };
 
