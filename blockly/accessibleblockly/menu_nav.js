@@ -3,6 +3,28 @@
 goog.provide('Blockly.Accessibility.menu_nav');
 goog.require('Blockly.Accessibility');
 
+
+/*
+*Licensed under the Apache License, Version 2.0 (the "License");
+*you may not use this file except in compliance with the License.
+*You may obtain a copy of the License at
+*
+*    http://www.apache.org/licenses/LICENSE-2.0
+*
+*Unless required by applicable law or agreed to in writing, software
+*distributed under the License is distributed on an "AS IS" BASIS,
+*WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+*See the License for the specific language governing permissions and
+*limitations under the License.
+*/
+
+/*
+* File overview: this file handles using the keyboard to navigate the menu
+*/
+
+
+
+
 var flyoutArr = [];   //everytime the flyout opens the blocks in it are added to this array
 var oldLength = 0;    //size of the array before a new tab opened 
 var tabCount  = 0;    //current position in array/toolbox
@@ -14,7 +36,9 @@ Blockly.Flyout.prototype.defaultShow = Blockly.Flyout.prototype.show;
 //called when the flyout opens
 Blockly.Flyout.prototype.show = function(xmlList){
 
+
     oldLength = flyoutArr.length; //update the length of the last array 
+
 
     if(oldLength>0){              //ignore first case
         tabCount  = oldLength;
@@ -254,22 +278,22 @@ Blockly.Accessibility.menu_nav.blockToString = function(type){
             result = "beep frequency 'A' duration 'B' time until played 'C'";
             break;
         case "controls_if"    : 
-            result = "if 'A', do 'B'";
+            result = "if 'A', do";
             break;
         case "logic_compare"  :
-            result = " 'A' equals 'B'"; 
+            result = " 'A' 'equals' 'B'"; 
             break;
         case "logic_operation": 
-            result = " 'A' and or 'B'"; 
+            result = " 'A' 'and or' 'B'"; 
             break;
         case "logic_negate": 
-            result = "not"; 
+            result = "not ' '"; 
             break;
         case "logic_boolean":
-            result = "true or false"; 
+            result = "'true or false'"; 
             break;
         case "logic_null":
-            result = "null";
+            result = "''null";
             break;
         case "logic_ternary":
             result = "Test 'A', if true do 'B', if false do 'C'";
@@ -278,43 +302,43 @@ Blockly.Accessibility.menu_nav.blockToString = function(type){
             result = "repeat '10' times";
             break;
         case "controls_whileUntil":
-            result = "repeat 'while' or 'until'";
+            result = "repeat 'while or until' ' '";
             break;
         case "controls_for":
             result = "count with 'i' from '1' to '10' by '1'";
             break;
         case "controls_forEach":
-            result = "for each item 'i' in in list";
+            result = "for each item 'i' in in list ''";
             break;
         case "controls_flow_statements":
-            result = "break out of loop";
+            result = "'break out' of loop";
             break; 
         case "math_number":
-            result = "number";
+            result = "'number'";
             break; 
         case "math_arithmetic":
-            result = "'A' + 'B'";
+            result = "'A' '+' 'B'";
             break; 
         case "math_single":
-            result = "'square root' or functions on 'A'";
+            result = "'square root' of 'A'";
             break; 
         case "math_trig":
-            result = "trig";
+            result = "'trig' ''";
             break; 
         case "math_constant":
-            result = "pi and constants";
+            result = "'pi and constants'";
             break; 
         case "math_number_property":
-            result = "is type of number (even, odd, prime etc.)";
+            result = "' ' is 'even'";
             break; 
         case "math_change":
             result = "change 'variable' by '1'";
             break; 
         case "math_round":
-            result = "round";
+            result = "'round' ''";
             break; 
         case "math_on_list":
-            result = "sum of list";
+            result = "'sum' of list ''";
             break; 
         case "math_modulo":
             result = "remainder of 'A' divided by 'B'";
@@ -326,73 +350,73 @@ Blockly.Accessibility.menu_nav.blockToString = function(type){
             result = "random integer from '1' to '100'";
             break; 
         case "math_random_float":
-            result = "random fraction";
+            result = "''random fraction";
             break; 
         case "text":
-            result = "blank text";
+            result = "'empty' text";
             break; 
         case "text_join":
-            result = "Join text 'A' with 'B'";
+            result = "Create text with 'A' combined with 'B'";
             break; 
         case "text_append":
-            result = "append text to variable";
+            result = "to 'item' append text ''";
             break; 
         case "text_length":
-            result = "length of text";
+            result = "length of 'text'";
             break; 
         case "text_isEmpty":
             result = "'A' is empty";
             break; 
         case "text_indexOf":
-            result = "in 'text' find 'first' or 'last' occurence of text 'A'";
+            result = "in 'text' find 'first or last' occurence of text 'A'";
             break; 
         case "text_charAt":
-            result = "in 'text' get letter at 'index' 'A'";
+            result = "in text 'text' get 'character at index' 'A'";
             break; 
         case "text_getSubstring":
-            result = "in 'text' get substring from letter 'index' 'A' to letter 'index' 'B'";
+            result = "in text 'text' get substring from ',index' 'A' to 'index' 'B' ";
             break; 
         case "text_changeCase":
-            result = " to upper or lower case";
+            result = " to 'upper or lower' case ''";
             break; 
         case "text_trim":
-            result = "trim spaces from 'both sides' of";
+            result = "trim spaces from 'both sides' of ''";
             break; 
         case "text_print":
-            result = "print";
+            result = "print ''";
             break; 
         case "text_prompt_ext":
-            result = "prompt for 'text' with message 'blank text'";
+            result = "prompt for 'text' with message ' text'";
             break; 
         case "lists_create_empty":
             result = "create empty list";
             break; 
         case "lists_create_with":
-            result = "create list with values 'A' 'B' 'C'";
+            result = "create list with values 'A', 'B', 'C'";
             break;  
         case "lists_repeat":
             result = "create list with item 'A' repeated '5' times";
             break;
         case "lists_length":
-            result = "length of";
+            result = "length of '' list";
             break;
         case "lists_isEmpty":
-            result = "'list' is empty";
+            result = "the list 'list' is empty";
             break;
         case "lists_indexOf":
-            result = "in'list' find 'first' occurence of item 'A'";
+            result = "in the list 'list' find 'first' occurence of item 'A'";
             break;
         case "lists_getIndex":
-            result = "in 'list' get 'index' 'A'";
+            result = "in the list 'list' 'get' 'index' 'A'";
             break;
         case "lists_setIndex":
-            result = "in 'list' 'set' 'index' 'A' as 'B'";
+            result = "in the list 'list' 'set' 'index' 'A' as 'B'";
             break;
         case "lists_getSublist":
-            result = "in 'list' get sub-list from 'index' 'A' to 'index' 'B'";
+            result = "in the list 'list' get sub-list from 'index' 'A' to ',index' 'B'";
             break;
         case "lists_split":
-            result = "make list from text 'A' with delimiter 'comma'";
+            result = "make 'list from text' 'A' with delimiter 'comma'";
             break;
         case "colour_picker":
             result = "colour";
@@ -401,16 +425,16 @@ Blockly.Accessibility.menu_nav.blockToString = function(type){
             result = "random colour";
             break;
         case "colour_rgb":
-            result = "colour with: red 'value', blue 'value', green 'value' ";
+            result = "colour with: red 'Value', blue 'value,', green ',value' ";
             break;
         case "colour_blend":
             result = "blend colour 1 'colour' and colour 2 'colour' with ratio 'decimal'";
             break; 
         case "procedures_defnoreturn":
-            result = "function to do something";
+            result = "function 'do something'";
             break;
         case "procedures_defreturn":
-            result = "function to do something then return 'A'";
+            result = "function 'do something' then return 'A'";
             break;
         case "procedures_ifreturn":
             result = "if 'A' then return 'B'";
