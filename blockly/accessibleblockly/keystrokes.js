@@ -87,10 +87,12 @@ document.onkeydown = document.onkeyup = function(e){
 
 		else if (map[70]) { //F Add a block to the scene
 		    Blockly.Accessibility.InBlock.selectConnection();
-		    keyboardState = 'addBlockMode';
+		    keyboardState = 'addBlockToConnectionMode';
+		    var firstCategory = document.getElementById(":1");
+		    firstCategory.focus();
 		}
 	}
-	else if (keyboardState == 'addBlockMode') {
+	else if (keyboardState == 'addBlockToConnectionMode') {
 	    if (map[70]) { //F
 	        keyboardState = 'hotkeyMode';
 	        Blockly.Accessibility.InBlock.addBlock();
@@ -173,6 +175,24 @@ document.onkeydown = document.onkeyup = function(e){
 		        keyboardState = 'hotkeyMode'; //prevent getting stuck on same block
 		    }
 		}
+	}
+	else if(keyboardState == 'addBlockMode'){
+        if (map[70]) { //F
+	        keyboardState = 'hotkeyMode';
+	        Blockly.Accessibility.menu_nav.flyoutToWorkspace();
+	    }
+
+        else if (map[83]) { //S
+        //Navigates down through blocks
+	        e.preventDefault();
+	        Blockly.Accessibility.menu_nav.menuNavDown();
+	    }
+
+        else if (map[87]) { //W
+        //Navigates up through blocks
+	        e.preventDefault();
+	        Blockly.Accessibility.menu_nav.menuNavUp();
+	    }
 	}
 	
 	else if(keyboardState=='hotkeyMode'){	
@@ -287,6 +307,13 @@ document.onkeydown = document.onkeyup = function(e){
 			    keyboardState = 'editMode';
 			}
 		   
+		}
+
+		else if (map[70]) { //F Add a block to the scene
+
+		    keyboardState = 'addBlockMode';
+		    var firstCategory = document.getElementById(":1");
+		    firstCategory.focus();
 		}
 		
 		else if(map[71]){ //G
