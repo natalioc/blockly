@@ -84,8 +84,30 @@ document.onkeydown = document.onkeyup = function(e){
 			Blockly.Accessibility.InBlock.selectConnection();
 			keyboardState = 'selectConnectionMode';
 		}
-	}	
-	
+
+		else if (map[70]) { //F Add a block to the scene
+		    Blockly.Accessibility.InBlock.selectConnection();
+		    keyboardState = 'addBlockMode';
+		}
+	}
+	else if (keyboardState == 'addBlockMode') {
+	    if (map[70]) { //F
+	        keyboardState = 'hotkeyMode';
+	        Blockly.Accessibility.InBlock.addBlock();
+	    }
+
+	    else if (map[83]) { //S
+	        //Navigates down through blocks
+	        e.preventDefault();
+	        Blockly.Accessibility.menu_nav.menuNavDown();
+	    }
+
+	    else if (map[87]) { //W
+	        //Navigates up through blocks
+	        e.preventDefault();
+	        Blockly.Accessibility.menu_nav.menuNavUp();
+	    }
+	}
 	else if(keyboardState == 'selectConnectionMode'){
 	    if(map[65]){ //A
 			//Navigate out

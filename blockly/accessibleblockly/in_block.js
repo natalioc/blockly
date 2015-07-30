@@ -288,7 +288,7 @@ Blockly.Accessibility.InBlock.unhighlightSelection = function () {
  * If a value or statement is selected, add a block to it.
  */
 Blockly.Accessibility.InBlock.addBlock = function () {
-    //this.storedConnection;
+
     if(this.storedConnection.check_ != null){
         for (var i = 0; i < this.storedConnection.check_.length; i++) {
             var selectedNode = Blockly.Accessibility.menu_nav.getMenuSelection();
@@ -351,6 +351,10 @@ Blockly.Accessibility.InBlock.addBlock = function () {
             this.storedConnection.connect(newBlock.nextConnection);
         }
     }
+
+    Blockly.Connection.removeHighlight(this.storedHighlight);
+    this.storedHighlight = null;
+    this.storedConnection = null;
 };
 
 /**
