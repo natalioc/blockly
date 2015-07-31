@@ -90,6 +90,7 @@ document.onkeydown = document.onkeyup = function(e){
 		    keyboardState = 'addBlockToConnectionMode';
 		    var firstCategory = document.getElementById(":1");
 		    firstCategory.focus();
+		    Blockly.selected = null;
 		}
 	}
 	else if (keyboardState == 'addBlockToConnectionMode') {
@@ -314,6 +315,7 @@ document.onkeydown = document.onkeyup = function(e){
 		    keyboardState = 'addBlockMode';
 		    var firstCategory = document.getElementById(":1");
 		    firstCategory.focus();
+		    Blockly.selected = null;
 		}
 		
 		else if(map[71]){ //G

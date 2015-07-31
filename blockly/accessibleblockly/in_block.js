@@ -294,19 +294,13 @@ Blockly.Accessibility.InBlock.addBlock = function () {
             var selectedNode = Blockly.Accessibility.menu_nav.getMenuSelection();
             if(this.storedConnection.type == 1){
                 if(selectedNode.outputConnection.check_[0] == this.storedConnection.check_[i]){
-                    Blockly.Accessibility.menu_nav.flyoutToWorkspace();
-                    Blockly.Accessibility.Navigation.updateXmlSelection(true);
-                    var blockArr = xmlDoc.getElementsByTagName('BLOCK');
-                    var newBlock = Blockly.Block.getById(blockArr[0].getAttribute('id'), workspace);
+                    var newBlock = Blockly.Accessibility.menu_nav.flyoutToWorkspace();
                     this.storedConnection.connect(newBlock.outputConnection);
                 }
             }
             else if(this.storedConnection.type == 2){
                 if(selectedNode.inputList[0].connection.check_[0] == this.storedConnection.check_[i]){
-                    Blockly.Accessibility.menu_nav.flyoutToWorkspace();
-                    Blockly.Accessibility.Navigation.updateXmlSelection(true);
-                    var blockArr = xmlDoc.getElementsByTagName('BLOCK');
-                    var newBlock = Blockly.Block.getById(blockArr[0].getAttribute('id'), workspace);
+                    var newBlock = Blockly.Accessibility.menu_nav.flyoutToWorkspace();
                     this.storedConnection.connect(newBlock.inputConnection);
                 }
             }
@@ -319,10 +313,7 @@ Blockly.Accessibility.InBlock.addBlock = function () {
     //these blocks are compatable because anything can connect to this block
     else{
         if(this.storedConnection.type == 1){
-            Blockly.Accessibility.menu_nav.flyoutToWorkspace();
-            Blockly.Accessibility.Navigation.updateXmlSelection(true);
-            var blockArr = xmlDoc.getElementsByTagName('BLOCK');
-            var newBlock = Blockly.Block.getById(blockArr[0].getAttribute('id'), workspace);
+            var newBlock = Blockly.Accessibility.menu_nav.flyoutToWorkspace();
             this.storedConnection.connect(newBlock.outputConnection);
         }
         /**
@@ -330,24 +321,15 @@ Blockly.Accessibility.InBlock.addBlock = function () {
         *
         */
         else if(this.storedConnection.type == 2){
-            Blockly.Accessibility.menu_nav.flyoutToWorkspace();
-            Blockly.Accessibility.Navigation.updateXmlSelection(true);
-            var blockArr = xmlDoc.getElementsByTagName('BLOCK');
-            var newBlock = Blockly.Block.getById(blockArr[0].getAttribute('id'), workspace);
+            var newBlock = Blockly.Accessibility.menu_nav.flyoutToWorkspace();
             this.storedConnection.connect(newBlock.inputList[0].connection);
         }
         else if(this.storedConnection.type == 3){
-            Blockly.Accessibility.menu_nav.flyoutToWorkspace();
-            Blockly.Accessibility.Navigation.updateXmlSelection(true);
-            var blockArr = xmlDoc.getElementsByTagName('BLOCK');
-            var newBlock = Blockly.Block.getById(blockArr[0].getAttribute('id'), workspace);
+            var newBlock = Blockly.Accessibility.menu_nav.flyoutToWorkspace();
             this.storedConnection.connect(newBlock.previousConnection);
         }
         else if(this.storedConnection.type == 4){
-            Blockly.Accessibility.menu_nav.flyoutToWorkspace();
-            Blockly.Accessibility.Navigation.updateXmlSelection(true);
-            var blockArr = xmlDoc.getElementsByTagName('BLOCK');
-            var newBlock = Blockly.Block.getById(blockArr[0].getAttribute('id'), workspace);
+            var newBlock = Blockly.Accessibility.menu_nav.flyoutToWorkspace();
             this.storedConnection.connect(newBlock.nextConnection);
         }
     }

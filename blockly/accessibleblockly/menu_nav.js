@@ -215,7 +215,7 @@ Blockly.Accessibility.menu_nav.flyoutToWorkspace = function(){
     var xml;//dom version of the xml to be added to the workspace
 
     var input = Blockly.Xml.blockToDom_(flyoutArr[lastTabCount]);//the current block tab on from the flyout
-    var textInput = Blockly.Xml.domToText(input);//the svg turned into pain text
+    var textInput = Blockly.Xml.domToText(input);//the svg turned into pain text'
     //taking the xml declaration from the block after domToText adds it in
     var partOne = textInput.substring(0, 7);//before the xml declaration
     var partTwo = textInput.substring(44, textInput.length);//after the xml declaration
@@ -227,10 +227,29 @@ Blockly.Accessibility.menu_nav.flyoutToWorkspace = function(){
 
     xml = Blockly.Xml.textToDom(completeXmlStr);//take the complete xml string and change to dom
 
+    
+    // The following allows us to immediately identify the block in the scene and grab it.
+    var commentNode = Blockly.Xml.textToDom('<xml><comment pinned="true" h="80" w="160">`4*K</comment></xml>');
+    xml.childNodes[0].appendChild(commentNode.childNodes[0]);
+
     Blockly.Xml.domToWorkspace(workspace, xml);//adds the xml var to the main workspace
 
     Blockly.Accessibility.Navigation.updateXmlSelection();//updates the xml
     Blockly.hideChaff();//hides the toolbox once done
+
+    var comments = xmlDoc.getElementsByTagName('COMMENT');
+    
+    console.log(comments);
+
+    for (var i = 0; i < comments.length; i++) {
+        if (comments[i].childNodes[0].nodeValue == '`4*K') {
+            var block = Blockly.Block.getById(comments[i].parentNode.getAttribute('ID'), Blockly.mainWorkspace)
+            block.setCommentText(null);
+            return block;
+        }
+    }
+    console.log("WARNING. ADDED BLOCK NOT FOUND");
+    return null;
 };
 
 Blockly.Accessibility.menu_nav.addNext = function(){
