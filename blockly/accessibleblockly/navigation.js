@@ -25,6 +25,7 @@
 goog.provide('Blockly.Accessibility.Navigation');
 
 goog.require('Blockly.Accessibility');
+goog.require('Blockly.Accessibility.Speech');
 
 
 /**
@@ -71,8 +72,9 @@ Blockly.BlockSvg.prototype.select = function () {
     if (Blockly.Accessibility.Navigation.getBlockNodeById(this.id)) {
         Blockly.Accessibility.Navigation.currentNode = Blockly.Accessibility.Navigation.getBlockNodeById(this.id);
 
-        console.log(this.id);
-        console.log(this);
+        //console.log(this.id);
+        //console.log(this);
+        Blockly.Accessibility.Speech.updateBlockReader(this.type, this);
     }
 };
 
