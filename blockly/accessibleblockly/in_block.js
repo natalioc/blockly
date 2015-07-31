@@ -203,36 +203,40 @@ Blockly.Accessibility.InBlock.selectConnection = function () {
     }
     else {
         console.log('connecting');
-        this.storedConnection.unhighlight();
-        try {
-            this.unhighlightSelection();
-            this.storedConnection.connect(relevantConnection);
-        }
-        catch (e) {
+        this.safeConnect(relevantConnection);
+    }
+}
 
-            console.log(e);
+Blockly.Accessibility.InBlock.safeConnect = function(relevantConnection){
+    this.storedConnection.unhighlight();
+    try {
+        this.unhighlightSelection();
+        this.storedConnection.connect(relevantConnection);
+    }
+    catch (e) {
 
-            // This error is unlikely to happen.  Pre-checking is probably just going to be
-            // a waste of time, so we'll handle it here.
-            if (e == 'Source connection already connected (block).' || 'Can only do a mid-stack connection with the top of a block.') {
-                if (this.storedConnection.targetConnection != relevantConnection) {
-                    var lower = this.storedConnection.isSuperior() ? relevantConnection : this.storedConnection;
-                    lower.sourceBlock_.unplug(false, false);
-                    try {
-                        this.storedConnection.connect(relevantConnection);
-                        console.log('Handled previous error, disregard');
-                    }
-                    catch (e) {
-                        console.log(e);
-                    }
+        console.log(e);
+
+        // This error is unlikely to happen.  Pre-checking is probably just going to be
+        // a waste of time, so we'll handle it here.
+        if (e == 'Source connection already connected (block).' || 'Can only do a mid-stack connection with the top of a block.') {
+            if (this.storedConnection.targetConnection != relevantConnection) {
+                var lower = this.storedConnection.isSuperior() ? relevantConnection : this.storedConnection;
+                lower.sourceBlock_.unplug(false, false);
+                try {
+                    this.storedConnection.connect(relevantConnection);
+                    console.log('Handled previous error, disregard');
+                }
+                catch (e) {
+                    console.log(e);
                 }
             }
         }
-        finally {
-            Blockly.Connection.removeHighlight(this.storedHighlight);
-            this.storedHighlight = null;
-            this.storedConnection = null;
-        }
+    }
+    finally {
+        Blockly.Connection.removeHighlight(this.storedHighlight);
+        this.storedHighlight = null;
+        this.storedConnection = null;
     }
 }
 
@@ -295,13 +299,13 @@ Blockly.Accessibility.InBlock.addBlock = function () {
             if(this.storedConnection.type == 1){
                 if(selectedNode.outputConnection.check_[0] == this.storedConnection.check_[i]){
                     var newBlock = Blockly.Accessibility.menu_nav.flyoutToWorkspace();
-                    this.storedConnection.connect(newBlock.outputConnection);
+                    this.safeConnect(newBlock.outputConnection);
                 }
             }
             else if(this.storedConnection.type == 2){
                 if(selectedNode.inputList[0].connection.check_[0] == this.storedConnection.check_[i]){
                     var newBlock = Blockly.Accessibility.menu_nav.flyoutToWorkspace();
-                    this.storedConnection.connect(newBlock.inputConnection);
+                    this.safeConnect(newBlock.inputConnection);
                 }
             }
             //these blocks are not compatable
@@ -314,7 +318,7 @@ Blockly.Accessibility.InBlock.addBlock = function () {
     else{
         if(this.storedConnection.type == 1){
             var newBlock = Blockly.Accessibility.menu_nav.flyoutToWorkspace();
-            this.storedConnection.connect(newBlock.outputConnection);
+            this.safeConnect(newBlock.outputConnection);
         }
         /**
         * This one is acting funny I dont know whats wrong with the connection part
@@ -322,19 +326,19 @@ Blockly.Accessibility.InBlock.addBlock = function () {
         */
         else if(this.storedConnection.type == 2){
             var newBlock = Blockly.Accessibility.menu_nav.flyoutToWorkspace();
-            this.storedConnection.connect(newBlock.inputList[0].connection);
+            this.safeConnect(newBlock.inputList[0].connection);
         }
         else if(this.storedConnection.type == 3){
             var newBlock = Blockly.Accessibility.menu_nav.flyoutToWorkspace();
-            this.storedConnection.connect(newBlock.previousConnection);
+            this.safeConnect(newBlock.previousConnection);
         }
         else if(this.storedConnection.type == 4){
             var newBlock = Blockly.Accessibility.menu_nav.flyoutToWorkspace();
-            this.storedConnection.connect(newBlock.nextConnection);
+            this.safeConnect(newBlock.nextConnection);
         }
     }
 
-    Blockly.Connection.removeHighlight(this.storedHighlight);
+    //Blockly.Connection.removeHighlight(this.storedHighlight);
     this.storedHighlight = null;
     this.storedConnection = null;
 };
