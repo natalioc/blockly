@@ -73,7 +73,7 @@ Blockly.BlockSvg.prototype.select = function () {
         Blockly.Accessibility.Navigation.currentNode = Blockly.Accessibility.Navigation.getBlockNodeById(this.id);
 
         //console.log(this.id);
-        //console.log(this);
+        console.log(this);
         Blockly.Accessibility.Speech.updateBlockReader(this.type, this);
     }
 };
@@ -290,26 +290,41 @@ Blockly.Accessibility.Navigation.jumpToID = function(id) {
 /**
  * Goes out of a block to go up a level
  */
-Blockly.Accessibility.Navigation.traverseOut = function() {
+Blockly.Accessibility.Navigation.traverseOut = function () {
 
-    // Make sure we have something selected
-    if (this.checkForNull()) {
+    // Null check
+    if (Blockly.selected == null) {
+        console.log('Cannot traverse outwards from here.');
         return;
     }
 
-    console.log('traverseOut called.');
-    console.log('Attempting to leave ' + this.currentNode.nodeName + ' with id ' + this.currentNode.getAttribute('id'));
-	
-    // If this is within other blocks, then its parent will be a statement, or a value
-    if (Blockly.Accessibility.Navigation.findTop(this.currentNode).parentNode.nodeName.toUpperCase() == 'STATEMENT' ||
-        Blockly.Accessibility.Navigation.findTop(this.currentNode).parentNode.nodeName.toUpperCase() == 'VALUE') {
-        this.currentNode = Blockly.Accessibility.Navigation.findTop(this.currentNode).parentNode.parentNode;
-        console.log('Going to ' + this.currentNode.nodeName + ' with id ' + this.currentNode.getAttribute('id'));
-        Blockly.Accessibility.Navigation.updateSelection();
+    // Case where we're looking at an output block.
+    if (Blockly.selected.outputConnection != null) {
+        if (Blockly.selected.outputConnection.targetConnection != null) {
+            Blockly.selected.outputConnection.targetConnection.sourceBlock_.select();
+        }
+        else {
+            console.log('Cannot traverse outwards from here.');
+        }
         return;
+
     }
-    // If it's not, then do nothing, you cannot go in.
-    console.log('Cannot traverse outwards from here.');
+
+    // Elaborate series of checks for nulls, but if it comes out to be true then that means this is inside of a statement.
+    if (
+        Blockly.selected.previousConnection != null && 
+        Blockly.selected.previousConnection.targetConnection != null && (
+        Blockly.selected.previousConnection.targetConnection.sourceBlock_.nextConnection == null || //If any of the following are null, then we're safe
+        Blockly.selected.previousConnection.targetConnection.sourceBlock_.nextConnection.targetConnection == null ||
+        Blockly.selected.previousConnection.targetConnection.sourceBlock_.nextConnection.targetConnection.sourceBlock_ != Blockly.selected)) {
+
+
+            Blockly.selected.previousConnection.targetConnection.sourceBlock_.select();
+
+    }
+    else {
+        console.log('Cannot traverse outwards from here.');
+    }
 };
 
 /** 
@@ -317,26 +332,27 @@ Blockly.Accessibility.Navigation.traverseOut = function() {
  */
 Blockly.Accessibility.Navigation.traverseIn = function() {
 
-    // Make sure we have something selected
-    if (this.checkForNull()) {
+    // Null check
+    if (Blockly.selected == null) {
+        console.log('Cannot traverse inwards from here.');
         return;
     }
 
-    console.log('traverseIn called.');
-    console.log('Attempting to leave ' + this.currentNode.nodeName + ' with id ' + this.currentNode.getAttribute('id'));
+    for (var i = 0; i < Blockly.selected.inputList.length; i++) {
 
-    // Grab the children nodes of the current node, and see if any of them are a statement.
-    var children = this.currentNode.childNodes;
-    for (var i = 0; i < children.length; i++) {
-        // If you do find a statement, then we're moving straight to that node's child, which is a block.
-        if (children[i].nodeName.toUpperCase() == 'STATEMENT') {
-            this.currentNode = children[i].getElementsByTagName('BLOCK')[0];
-            console.log('Going to ' + this.currentNode.nodeName + ' with id ' + this.currentNode.getAttribute('id'));
-            Blockly.Accessibility.Navigation.updateSelection();
+        if (Blockly.selected.inputList[i].connection != null &&
+            Blockly.selected.inputList[i].connection.type == 3) {
+
+            // We always want to return at this point, since we are only concerned with the first example.
+            if (Blockly.selected.inputList[i].connection.targetConnection != null) {
+                Blockly.selected.inputList[i].connection.targetConnection.sourceBlock_.select();
+            }
+
             return;
+
         }
     }
-    // If you don't, then do nothing, you cannot go in.
+
     console.log('Cannot traverse inwards from here.');
 };
 
@@ -345,38 +361,23 @@ Blockly.Accessibility.Navigation.traverseIn = function() {
  */
 Blockly.Accessibility.Navigation.traverseUp = function() {
 
-    // Make sure we have something selected
-    if (this.checkForNull()) {
+    // Null check
+    if (Blockly.selected == null) {
+        console.log('Cannot traverse up from here.');
         return;
     }
 
-    console.log('traverseUp called.');
-    console.log('Attempting to leave ' + this.currentNode.nodeName + ' with id ' + this.currentNode.getAttribute('id'));
-
-    // If your parent is a next, then its parent must be a block.  So move to it. 
-    if (this.currentNode.parentNode.nodeName.toUpperCase() == 'NEXT') {
-        this.currentNode = this.currentNode.parentNode.parentNode;
-        console.log('Going to ' + this.currentNode.nodeName + ' with id ' + this.currentNode.getAttribute('id'));
-        Blockly.Accessibility.Navigation.updateSelection();
-        return;
+    if (Blockly.selected.previousConnection != null &&
+        Blockly.selected.previousConnection.targetConnection != null) {
+        Blockly.selected.previousConnection.targetConnection.sourceBlock_.select();
     }
-
-    // If it's not you're at the top, so then...
-
-    // If cycle is enabled go to the bottom
-    if (doCycle) {
-        this.currentNode = findBottom(this.currentNode);
-        console.log('Going to ' + this.currentNode.nodeName + ' with id ' + this.currentNode.getAttribute('id') + ' via cycle.');
-        Blockly.Accessibility.Navigation.updateSelection();
-        return;
+    else {
+        console.log('Cannot traverse up, top of list');
+        if (this.currentNode == this.getOutermostNode(this.currentNode)) {
+            this.previousContainer();
+        }
     }
-
-    // Otherwise just end.
-    //  Otherwise just report that you've hit the bottom.
-    console.log('Cannot traverse up, top of list');
-    if (this.currentNode == this.getOutermostNode(this.currentNode)) {
-        this.previousContainer();
-    }
+    
 };
 
 /**
@@ -384,42 +385,27 @@ Blockly.Accessibility.Navigation.traverseUp = function() {
  */
 Blockly.Accessibility.Navigation.traverseDown = function() {
 
-    // Make sure we have something selected
-    if (this.checkForNull()) {
+    // Null check
+    if (Blockly.selected == null) {
+        console.log('Cannot traverse down from here.');
         return;
     }
 
-    console.log('traverseDown called.');
-    console.log('Attempting to leave ' + this.currentNode.nodeName + ' with id ' + this.currentNode.getAttribute('id'));
+    if (Blockly.selected.nextConnection != null &&
+        Blockly.selected.nextConnection.targetConnection != null) {
+        Blockly.selected.nextConnection.targetConnection.sourceBlock_.select();
+    }
+    else {
+        //  Otherwise just report that you've hit the bottom.
+        console.log('Cannot traverse down, end of list');
 
-    // Grab the children nodes of the current node, and see if any of them are a next.
-    var children = this.currentNode.childNodes;
-    for (var i = 0; i < children.length; i++) {
-        // If you do find a next, then we're moving straight to that node.
-        if (children[i].nodeName.toUpperCase() == 'NEXT') {
-            this.currentNode = children[i].getElementsByTagName('BLOCK')[0];
-            console.log('Going to ' + this.currentNode.nodeName + ' with id ' + this.currentNode.getAttribute('id'));
-            Blockly.Accessibility.Navigation.updateSelection();
-            return;
+        // Check to make sure we're on the first layer before doing anything.
+        if (this.currentNode == this.findBottom(this.getOutermostNode(this.currentNode))) {
+            this.nextContainer();
         }
     }
-    // If you don't find a next then...
 
-    // Cycle back to the top node if cycle is enabled
-    if (doCycle) {
-        this.currentNode = Blockly.Accessibility.Navigation.findTop(this.currentNode);
-        console.log('Going to ' + this.currentNode.nodeName + ' with id ' + this.currentNode.getAttribute('id') + ' via cycle.');
-        Blockly.Accessibility.Navigation.updateSelection();
-        return;
-    }
-
-    //  Otherwise just report that you've hit the bottom.
-    console.log('Cannot traverse down, end of list');
-
-    // Check to make sure we're on the first layer before doing anything.
-    if (this.currentNode == this.findBottom(this.getOutermostNode(this.currentNode))) {
-        this.nextContainer();
-    }
+   
 };
 
 /**
