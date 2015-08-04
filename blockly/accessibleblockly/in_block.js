@@ -294,7 +294,9 @@ Blockly.Accessibility.InBlock.unhighlightSelection = function () {
 Blockly.Accessibility.InBlock.addBlock = function () {
 
     if(this.storedConnection.check_ != null){
-        for (var i = 0; i < this.storedConnection.check_.length; i++){
+        //sometimes get an error when we don't predefine the variable
+        var loopDistance = this.storedConnection.check_.length;
+        for (var i = 0; i < loopDistance; i++){
             var selectedNode = Blockly.Accessibility.menu_nav.getMenuSelection();
             if(this.storedConnection.type == 1){
                 if(selectedNode.outputConnection.check_[0] == this.storedConnection.check_[i]){
