@@ -51,8 +51,6 @@ Blockly.Flyout.prototype.show = function(xmlList){
     for(var i = flyoutArr.length-oldLength; i < flyoutArr.length; i++){
         currentFlyoutArr.push(flyoutArr[i]);
     }
-
-    Blockly.Accessibility.InBlock.disableIncompatibleBlocks();
 };
 
 //Navigate down through the menu using down arrow
@@ -184,7 +182,7 @@ Blockly.Accessibility.menu_nav.menuNavUp = function(){
     var selectedBlock;
     var active = document.activeElement;
     var lastCategory; //track the category so that it does not deselect
-    var blockSvg = flyoutArr[tabCount];
+
     //if category is selected save it (all categories begin with :)
     if(active.id[0] ==":"){
         lastCategory = active;
@@ -200,8 +198,8 @@ Blockly.Accessibility.menu_nav.menuNavUp = function(){
         //check if that type is selected
         if(blockType == currType || typeSlice == "procedures" || typeSlice == "variables"){
             selectedBlock = allElements[i];
+            var say = this.blockToString(currType);
 
-            var say = this.blockToString(currType, blockSvg.disabled);
             var readBox = document.getElementById("blockReader");
             readBox.innerHTML = say;
             lastCategory.setAttribute("aria-labelledBy", "blockReader"); 
@@ -291,9 +289,8 @@ Blockly.Accessibility.menu_nav.getMenuSelection = function(){
     return flyoutArr[lastTabCount];
 };
 
-Blockly.Accessibility.menu_nav.blockToString = function(type, disabled){
+Blockly.Accessibility.menu_nav.blockToString = function(type){
     var result;
-    var disabledText = "";
 
     switch (type){
         case "beep":
@@ -303,7 +300,7 @@ Blockly.Accessibility.menu_nav.blockToString = function(type, disabled){
             result = "if 'A', do";
             break;
         case "logic_compare"  :
-            result = " 'A,' 'equals' 'B'"; 
+            result = " 'A' 'equals' 'B'"; 
             break;
         case "logic_operation": 
             result = " 'A' 'and or' 'B'"; 
@@ -315,7 +312,7 @@ Blockly.Accessibility.menu_nav.blockToString = function(type, disabled){
             result = "'true or false'"; 
             break;
         case "logic_null":
-            result = " null ''";
+            result = "''null";
             break;
         case "logic_ternary":
             result = "Test 'A', if true do 'B', if false do 'C'";
@@ -471,14 +468,7 @@ Blockly.Accessibility.menu_nav.blockToString = function(type, disabled){
             result = "custom"; 
             break;
      }
-
-     console.log("here" + disabled);
-
-    if(disabled){
-        disabledText = "connection doesn't match ";
-    }
-
-     return disabledText + result + " block.";
+     return result + " block.";
 };
 
 

@@ -294,8 +294,7 @@ Blockly.Accessibility.InBlock.unhighlightSelection = function () {
 Blockly.Accessibility.InBlock.addBlock = function () {
 
     if(this.storedConnection.check_ != null){
-        var loopDistance = this.storedConnection.check_.length;
-        for (var i = 0; i < loopDistance; i++) {
+        for (var i = 0; i < this.storedConnection.check_.length; i++) {
             var selectedNode = Blockly.Accessibility.menu_nav.getMenuSelection();
             if(this.storedConnection.type == 1){
                 if(selectedNode.outputConnection.check_[0] == this.storedConnection.check_[i]){
@@ -347,74 +346,26 @@ Blockly.Accessibility.InBlock.addBlock = function () {
 /**
 * Function will disable blocks in the toolbox that are incompatable with the selected connection
 */
-Blockly.Accessibility.InBlock.disableIncompatibleBlocks = function(){
-    if(this.storedConnection){
-        if(this.storedConnection.check_ != null){
-            var toolboxChoices = Blockly.Accessibility.menu_nav.getToolboxChoices();  
-            for(var i = 0; i < toolboxChoices.length; i++) {
-                if(this.storedConnection.type == 1){
-                    if(toolboxChoices[i].outputConnection != null){
-                        if(toolboxChoices[i].outputConnection.check_ != null){
-                            //if their compatibilites don't match up
-                            if(toolboxChoices[i].outputConnection.check_[0] != this.storedConnection.check_[0]){
-                                toolboxChoices[i].setColour(500);
-                                toolboxChoices[i].disabled = true;
-                                var childrenBlocks = toolboxChoices[i].childBlocks_.length;
-                                while(childrenBlocks != 0){
-                                    var childSVG = toolboxChoices[i].childBlocks_[childrenBlocks - 1].setColour(500);
-                                    childrenBlocks--;
-                                }
+Blockly.Accessibility.InBlock.disableIncompatableBlocks = function(){
+    if(this.storedConnection.check_ != null){
+        var toolboxChoices = Blockly.Accessibility.menu_nav.getToolboxChoices();  
+        for(var i = 0; i < toolboxChoices.length; i++) {
+            if(this.storedConnection.type == 1){
+                if(toolboxChoices[i].outputConnection != null){
+                    if(toolboxChoices[i].outputConnection.check_ != null){
+                        //if their compatibilites don't match up
+                        if(toolboxChoices[i].outputConnection.check_[0] != this.storedConnection.check_[0]){
+                            toolboxChoices[i].setColour(500);
+                            toolboxChoices[i].disabled = true;
+                            var childrenBlocks = toolboxChoices[i].childBlocks_.length;
+                            while(childrenBlocks != 0){
+                                var childSVG = toolboxChoices[i].childBlocks_[childrenBlocks - 1].setColour(500);
+                                childrenBlocks--;
                             }
                         }
                     }
-                    //its the null block and anything like it
-                    else{
-                        toolboxChoices[i].setColour(500);
-                        toolboxChoices[i].disabled = true;
-                        var childrenBlocks = toolboxChoices[i].childBlocks_.length;
-                        while(childrenBlocks != 0){
-                            var childSVG = toolboxChoices[i].childBlocks_[childrenBlocks - 1].setColour(500);
-                            childrenBlocks--;
-                        }
-                    }
                 }
-                
-                else if(this.storedConnection.type == 3){
-                    if(toolboxChoices[i].previousConnection != null){
-                        if(toolboxChoices[i].previousConnection.check_ != null){
-                            //if their compatibilites don't match up
-                            if(toolboxChoices[i].previousConnection.check_[0] != this.storedConnection.check_[0]){
-                                toolboxChoices[i].setColour(500);
-                                toolboxChoices[i].disabled = true;
-                                var childrenBlocks = toolboxChoices[i].childBlocks_.length;
-                                while(childrenBlocks != 0){
-                                    var childSVG = toolboxChoices[i].childBlocks_[childrenBlocks - 1].setColour(500);
-                                    childrenBlocks--;
-                                }
-                            }
-                        }
-                    }
-                    //its the null block and anything like it
-                    else{
-                        toolboxChoices[i].setColour(500);
-                        toolboxChoices[i].disabled = true;
-                        var childrenBlocks = toolboxChoices[i].childBlocks_.length;
-                        while(childrenBlocks != 0){
-                            var childSVG = toolboxChoices[i].childBlocks_[childrenBlocks - 1].setColour(500);
-                            childrenBlocks--;
-                        }
-                    }
-                }
-
-
-                /**
-                ***************************************
-                * Type 2 blocks are not yet handled   *
-                ***************************************
-                */
-
-
-                //types dont match disable those blocks
+                //its the null block and anything like it
                 else{
                     toolboxChoices[i].setColour(500);
                     toolboxChoices[i].disabled = true;
@@ -425,13 +376,12 @@ Blockly.Accessibility.InBlock.disableIncompatibleBlocks = function(){
                     }
                 }
             }
-        }
-        else{
-            var toolboxChoices = Blockly.Accessibility.menu_nav.getToolboxChoices();  
-            for(var i = 0; i < toolboxChoices.length; i++) {
-                if(this.storedConnection.type == 3){
-                    if(toolboxChoices[i].outputConnection != null){ 
-                        if(toolboxChoices[i].outputConnection.type == 1 || 2){
+            
+            else if(this.storedConnection.type == 3){
+                if(toolboxChoices[i].previousConnection != null){
+                    if(toolboxChoices[i].previousConnection.check_ != null){
+                        //if their compatibilites don't match up
+                        if(toolboxChoices[i].previousConnection.check_[0] != this.storedConnection.check_[0]){
                             toolboxChoices[i].setColour(500);
                             toolboxChoices[i].disabled = true;
                             var childrenBlocks = toolboxChoices[i].childBlocks_.length;
@@ -442,22 +392,69 @@ Blockly.Accessibility.InBlock.disableIncompatibleBlocks = function(){
                         }
                     }
                 }
-                else if(this.storedConnection.type == 4){
-                    if(toolboxChoices[i].outputConnection != null){ 
-                        if(toolboxChoices[i].outputConnection.type == 1 || 2){
-                            toolboxChoices[i].setColour(500);
-                            toolboxChoices[i].disabled = true;
-                            var childrenBlocks = toolboxChoices[i].childBlocks_.length;
-                            while(childrenBlocks != 0){
-                                var childSVG = toolboxChoices[i].childBlocks_[childrenBlocks - 1].setColour(500);
-                                childrenBlocks--;
-                            }
-                        }
-                    }
-                }
+                //its the null block and anything like it
                 else{
-                    console.log("Not handled yet");
+                    toolboxChoices[i].setColour(500);
+                    toolboxChoices[i].disabled = true;
+                    var childrenBlocks = toolboxChoices[i].childBlocks_.length;
+                    while(childrenBlocks != 0){
+                        var childSVG = toolboxChoices[i].childBlocks_[childrenBlocks - 1].setColour(500);
+                        childrenBlocks--;
+                    }
                 }
+            }
+
+
+            /**
+            ***************************************
+            * Type 2 blocks are not yet handled   *
+            ***************************************
+            */
+
+
+            //types dont match disable those blocks
+            else{
+                toolboxChoices[i].setColour(500);
+                toolboxChoices[i].disabled = true;
+                var childrenBlocks = toolboxChoices[i].childBlocks_.length;
+                while(childrenBlocks != 0){
+                    var childSVG = toolboxChoices[i].childBlocks_[childrenBlocks - 1].setColour(500);
+                    childrenBlocks--;
+                }
+            }
+        }
+    }
+    else{
+        var toolboxChoices = Blockly.Accessibility.menu_nav.getToolboxChoices();  
+        for(var i = 0; i < toolboxChoices.length; i++) {
+            if(this.storedConnection.type == 3){
+                if(toolboxChoices[i].outputConnection != null){ 
+                    if(toolboxChoices[i].outputConnection.type == 1 || 2){
+                        toolboxChoices[i].setColour(500);
+                        toolboxChoices[i].disabled = true;
+                        var childrenBlocks = toolboxChoices[i].childBlocks_.length;
+                        while(childrenBlocks != 0){
+                            var childSVG = toolboxChoices[i].childBlocks_[childrenBlocks - 1].setColour(500);
+                            childrenBlocks--;
+                        }
+                    }
+                }
+            }
+            else if(this.storedConnection.type == 4){
+                if(toolboxChoices[i].outputConnection != null){ 
+                    if(toolboxChoices[i].outputConnection.type == 1 || 2){
+                        toolboxChoices[i].setColour(500);
+                        toolboxChoices[i].disabled = true;
+                        var childrenBlocks = toolboxChoices[i].childBlocks_.length;
+                        while(childrenBlocks != 0){
+                            var childSVG = toolboxChoices[i].childBlocks_[childrenBlocks - 1].setColour(500);
+                            childrenBlocks--;
+                        }
+                    }
+                }
+            }
+            else{
+                console.log("Not handled yet");
             }
         }
     }
