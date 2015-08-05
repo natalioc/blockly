@@ -320,9 +320,10 @@ document.onkeydown = document.onkeyup = function(e){
 		
 		else if(map[71]){ //G
 			console.log('G key pressed.');
-			Blockly.Accessibility.TreeView.commentOrBlockJump();
+			//Blockly.Accessibility.TreeView.commentOrBlockJump();
 			//Goto the block the comment that is currently selected is from
 			//Alternatively goto the comment that is connected to the currently selected block
+			Blockly.Accessibility.InBlock.addBlock();
 		}
 		
 		else if(map[77]){ //M
