@@ -51,6 +51,7 @@ Blockly.Flyout.prototype.show = function(xmlList){
     for(var i = flyoutArr.length-oldLength; i < flyoutArr.length; i++){
         currentFlyoutArr.push(flyoutArr[i]);
     }
+    Blockly.Accessibility.InBlock.disableIncompatibleBlocks();
 };
 
 //Navigate down through the menu using down arrow
@@ -178,6 +179,7 @@ Blockly.Accessibility.menu_nav.menuNavUp = function(){
  * When the selection changes, the block name is updated for screenreader
  */
  Blockly.Accessibility.menu_nav.readToolbox = function(){
+    var blockSvg = flyoutArr[tabCount];
     var allElements = document.getElementsByTagName('*');
     var selectedBlock;
     var active = document.activeElement;
@@ -198,10 +200,11 @@ Blockly.Accessibility.menu_nav.menuNavUp = function(){
         //check if that type is selected
         if(blockType == currType || typeSlice == "procedures" || typeSlice == "variables"){
             selectedBlock = allElements[i];
-            var say = this.blockToString(currType);
+            var say = this.blockToString(currType, blockSvg.disabled);
 
             var readBox = document.getElementById("blockReader");
             readBox.innerHTML = say;
+            console.log(say);
             lastCategory.setAttribute("aria-labelledBy", "blockReader"); 
         }
     }
@@ -289,8 +292,9 @@ Blockly.Accessibility.menu_nav.getMenuSelection = function(){
     return flyoutArr[lastTabCount];
 };
 
-Blockly.Accessibility.menu_nav.blockToString = function(type){
+Blockly.Accessibility.menu_nav.blockToString = function(type, disabled){
     var result;
+    var disabledText = "";
 
     switch (type){
         case "beep":
@@ -468,7 +472,11 @@ Blockly.Accessibility.menu_nav.blockToString = function(type){
             result = "custom"; 
             break;
      }
-     return result + " block.";
+
+     if(disabled){
+        disabledText = "connection doesn't match ";
+     }
+     return disabledText + result + " block.";
 };
 
 
