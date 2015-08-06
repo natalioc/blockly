@@ -316,7 +316,7 @@ Blockly.Accessibility.menu_nav.blockToString = function(type, disabled){
             result = "'true or false'"; 
             break;
         case "logic_null":
-            result = "''null";
+            result = "'' null";
             break;
         case "logic_ternary":
             result = "Test 'A', if true do 'B', if false do 'C'";
@@ -376,7 +376,7 @@ Blockly.Accessibility.menu_nav.blockToString = function(type, disabled){
             result = "''random fraction";
             break; 
         case "text":
-            result = "'empty' text";
+            result = "text ''";
             break; 
         case "text_join":
             result = "Create text with 'A' combined with 'B'";
@@ -466,7 +466,7 @@ Blockly.Accessibility.menu_nav.blockToString = function(type, disabled){
             result = "set 'variable' to 'A'";
             break;
         case "variables_get":
-            result ="get 'variable'";
+            result ="get variable 'A'";
             break;
         default: 
             result = "custom"; 

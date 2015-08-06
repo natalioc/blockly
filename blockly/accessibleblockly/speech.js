@@ -75,10 +75,9 @@ Blockly.Accessibility.Speech.changeString = function(defaultStr, block, blockSvg
 
 	//switch the input order of blocks if necessary
 	var readOrderArr = this.switchInputOrder(blockType, inputsArr);
-
+    
 	//go through any blocks or inputs that would change speech
 	for(var i = 0; i < inputsArr.length; i++){ 
-
 
 		//If there are potential fields in the block (dropdowns or textboxes)
 		if(getInputs.length >0 && block.childNodes[i]!= undefined && block.childNodes[i].textContent != undefined){
@@ -88,14 +87,19 @@ Blockly.Accessibility.Speech.changeString = function(defaultStr, block, blockSvg
 
 				//names arnt changing so stay the same
 				if(block.lastChild.getAttribute("name") == "NAME"){ 
-					newName = this.fieldNameChange("",blockType);	
+
+					newName = this.fieldNameChange("",blockType);
+					newStr = newStr.replace(readOrderArr[i], newName);
+
 				}
 
 				//get the text content of a changed field
 				else{
-					newName = this.fieldNameChange(getInputs[i].textContent, blockType);
-				}
 
+					newName = this.fieldNameChange(getInputs[i].textContent, blockType);
+				    newStr = newStr.replace(readOrderArr[i], newName);
+
+				}
 			}
 			//blocks with multiple inline inputs such as create list with and create text with have mutations that will throw errors if not handled separately
 			if(getInputs[i].tagName == "MUTATION" && blockSvg.childBlocks_[i] != undefined){
@@ -103,6 +107,7 @@ Blockly.Accessibility.Speech.changeString = function(defaultStr, block, blockSvg
 				var mutationType = Blockly.Accessibility.menu_nav.blockToString(blockSvg.childBlocks_[i].type);
 				var changedName = this.changeString(mutationType, block.lastChild.lastChild, blockSvg.childBlocks_[i]);
 				newName = this.fieldNameChange(changedName, blockType);
+
 
 			}
 
@@ -112,23 +117,16 @@ Blockly.Accessibility.Speech.changeString = function(defaultStr, block, blockSvg
 				newName = this.fieldNameChange(getInputs[i].textContent, blockType);
 				newStr = newStr.replace(inputsArr[i-1],newName);
 				i--;
-			}
-
-			else{
-				newStr = newStr.replace(readOrderArr[i], newName);
-			}
+			}			
 
 		}
 
-		//if there is an inner block get its type and update the string
+		//if there is an inner   block get its type and update the string
 		if(blockSvg.childBlocks_[i] != undefined){
 			innerType = blockSvg.childBlocks_[i].type;
 			var blockAdded   = Blockly.Accessibility.menu_nav.blockToString(innerType); //get default string for that block
-
-
 			//block connected to block
-			if(blockSvg.childBlocks_[i].childBlocks_[0] != undefined) {
-
+			if(blockSvg.childBlocks_[i].childBlocks_[0] != undefined ) {
 				//set up variables to call blockToString and changeString
 				var childSvg   = blockSvg.childBlocks_[i].childBlocks_[0];
 				var childBlock = block.firstChild.firstChild;
@@ -140,10 +138,10 @@ Blockly.Accessibility.Speech.changeString = function(defaultStr, block, blockSvg
 
 				//combination of the two attached blocks
 				blockAdded = blockAdded.replace(blockAdded,newChildStr);
+				blockAdded = blockAdded.replace("block.", " "); //remove the block suffix from combined block
+				newStr = defaultStr.replace(inputsArr[i],blockAdded);
 
-				blockAdded = blockAdded.replace("block.", " ");               //remove the block suffix from combined block
-				newStr = newStr.replace(getInputs[i].textContent, blockAdded);//update the string
-			}
+			 }
 
 			else{
 			    blockAdded = blockAdded.replace("block.", " "); 
@@ -152,13 +150,21 @@ Blockly.Accessibility.Speech.changeString = function(defaultStr, block, blockSvg
 		}
 	}
 	//blocks with >3 inputs do not replace all of the text
-	if(newStr.includes("'") && getInputs[readOrderArr.length-1] != undefined){
+	if((newStr.indexOf("'") != -1) && getInputs[readOrderArr.length-1] != undefined){
 		var re2 = /'([^']*)'/g;  //gets everything between single quotes
 		var leftOverArr = newStr.match(re2); //array of the possible inputs to change
 		newStr = newStr.replace(leftOverArr[0], getInputs[readOrderArr.length-1].textContent); //replace the last bit of text
 	}
-	console.log(newStr);
+
+	//fix blocks that read "block." 
+	var suffixCnt = (newStr.match(/block/g) || []).length;
+	if(suffixCnt >= 1 && getInputs.length > 1){
+		newStr = newStr.replace(newStr.match(/ block. /), " ");
+	}
+
+	//console.log(newStr);
 	return newStr;
+
 };
 
 
