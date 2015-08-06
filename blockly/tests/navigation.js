@@ -362,10 +362,6 @@ function increment(){
     realTime=mins+":"+secs+":"+tenths;
 }
 
-//#endregion
-
-//#region TRAVERSAL_FUNCTIONS
-
 /**
  * Goes out of a block to go up a level
  */
@@ -387,6 +383,7 @@ function traverseOut() {
         console.log('Going to ' + currentNode.nodeName + ' with id ' + currentNode.getAttribute('id'));
         updateSelection();
         arrayStack.push(1);
+        //plays nest level followed by name of the block.
         if(audioSelection==="normal"){
             nestLevel(getCurrentNode());
         }
@@ -436,7 +433,8 @@ function traverseIn() {
             currentNode = children[i].getElementsByTagName('BLOCK')[0];
             console.log('Going to ' + currentNode.nodeName + ' with id ' + currentNode.getAttribute('id'));
             updateSelection();
-            arrayStack.push(1);
+            arrayStack.push(1);//allows users to quickly switch between different blocks.
+            //plays nest level followed by name of the block.
             if(audioSelection==="normal"){
                 nestLevel(getCurrentNode());
             }
@@ -485,6 +483,7 @@ function traverseUp() {
         console.log('Going to ' + currentNode.nodeName + ' with id ' + currentNode.getAttribute('id'));
         updateSelection();
         arrayStack.push(1);
+        //plays nest level followed by name of the block.
         if(audioSelection==="normal"){
             nestLevel(getCurrentNode());
         }
@@ -506,6 +505,7 @@ function traverseUp() {
         console.log('Going to ' + currentNode.nodeName + ' with id ' + currentNode.getAttribute('id') + ' via cycle.');
         updateSelection();
         arrayStack.push(1);
+        //plays nest level followed by name of the block.
         if(audioSelection==="normal"){
             nestLevel(getCurrentNode());
         }
@@ -558,6 +558,7 @@ function traverseDown() {
             console.log('Going to ' + currentNode.nodeName + ' with id ' + currentNode.getAttribute('id'));
             updateSelection();
             arrayStack.push(1);
+            //plays nest level followed by name of the block.
             if(audioSelection==="normal"){
                 nestLevel(getCurrentNode());
             }
@@ -579,6 +580,7 @@ function traverseDown() {
         console.log('Going to ' + currentNode.nodeName + ' with id ' + currentNode.getAttribute('id') + ' via cycle.');
         updateSelection();
         arrayStack.push(1);
+        //plays nest level followed by name of the block.
         if(audioSelection==="normal"){
             nestLevel(getCurrentNode());
         }
@@ -605,7 +607,6 @@ function traverseDown() {
     }
     console.log('Cannot traverse down, end of list');
 }
-
 //#endregion
 
 //#region HELPER_FUNCTIONS
@@ -707,6 +708,11 @@ function getBlockNodeById(id) {
     return null;
 }
 
+/**
+ * Returns the block id that the user currently has selcted
+ * @return {node} returns the current node
+ */
+
 function getCurrentNode() {
     return currentNode;
 }
@@ -744,14 +750,21 @@ function duplicateSelected(){
 function helpSelectedBlock(){
 	Blockly.selected.showHelp_();
 }
-
+/*Not used anymore
 function clickAudio(){
     var here=getCurrentNode();
     var now=here.getAttribute('type');
     workspace.playAudio(Blockly.Blocks[now].returnAudio());
-}
+}*/
+
+/**
+ * Speaks the audio of the current block
+ * @param {type} type determines wheter the audio is being selected using "t" keystroke or the arrow keys. 
+ */
 
 function speakAudio(type){
+    //set timeout function will constant call itself to check if audio is currently playing. If it is,
+    //keeps calling itself until audio has finished playing.
     if(responsiveVoice.isPlaying()===true||play===true||doneTalking===false){
         if(play===true){
             setTimeout(function() {speakNow();}, noteLength);
@@ -764,19 +777,20 @@ function speakAudio(type){
         }
         return;
     }
+    //if function is called using "t" keystroke,simply plays the name of the current block
     else if(type==='t'){
-        pausecomp(100);
         var here=getCurrentNode();
         var now=here.getAttribute('type');
         var playHere=Blockly.Blocks[now].returnAudio(here);
         responsiveVoice.speak(playHere);
     }
+    //pops any built up audio in the queue to prevent the from stating redundant information..
     else if(arrayStack.length>1)
     {
         arrayStack.pop();
     }
+    //If there are nothing in the queue, simply plays the name of the block.
     else{
-        pausecomp(100);
         var here=getCurrentNode();
         var now=here.getAttribute('type');
         var playHere=Blockly.Blocks[now].returnAudio(here);
@@ -785,7 +799,9 @@ function speakAudio(type){
         return;
     }
 }
-
+/**
+ * Allows the text reader to talk over any current midi files being played
+ */
 function speakNow(){
     var here=getCurrentNode();
     var now=here.getAttribute('type');
@@ -793,24 +809,5 @@ function speakNow(){
     responsiveVoice.speak(playHere);
     return;
 }
-
-function depthAudio(){
-    try{
-        var x = new Instrument(25);
-        x.playSingleNote(42);
-    }
-    catch(err){
-        window.alert(err);
-    }
-}
-
-
-/*
-function depthAudio(dlevel){
-    var depthSound = new Instrument(dlevel);
-    depthSound.playSingleNote(64);
-}
-*/
-
 
 //#endregion

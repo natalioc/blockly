@@ -322,8 +322,8 @@ function infoBoxFill(currentNode){
 /**
 * Function that takes in the current node, gets its id attribute, finds the element's position
 * in the perfectArr array, and uses that position to identify the current node's level
-* of nesting in the parentArr array and returns it.
-* @param nesting level
+* of nesting in the parentArr array and returns it as a normal voice.
+* @param the current node that is selected
 * Added by: Wil Merchant (6/26/15)
 */
 function nestLevel(currentNode){
@@ -334,17 +334,17 @@ function nestLevel(currentNode){
         for (var i = 0; i < arrLength; i++) {
             if(currentNode.getAttribute('id') == perfectArr[i].getAttribute('id')){
                var nestInfo = prefixArr[i].substring(1);
-               var nestArray = nestInfo.split(".");
+               var nestArray = nestInfo.split(".");//removes all "." gotten from prefix Arr
                for(var j=0;j<nestArray.length;j++){
                     if(j<nestArray.length-1){
-                        speakLevel+=nestArray[j];
+                        speakLevel+=nestArray[j];//puts all levels together in a single array
                         speakLevel+=" point ";
                     }
                     else{
                         speakLevel+=nestArray[j];
                     }
                 }
-                while(responsiveVoice.isPlaying())
+                while(responsiveVoice.isPlaying())//cancels voice to preent program from talking over itself
                     responsiveVoice.cancel();
                 responsiveVoice.speak(speakLevel);
                 break;
@@ -352,9 +352,14 @@ function nestLevel(currentNode){
         }
     }
 }; 
-
+/**
+* Function that takes in the current node, gets its id attribute, finds the element's position
+* in the perfectArr array, and uses that position to identify the current node's level
+* of nesting in the parentArr array and returns it as a spearcon.
+* @param the current node that is being selected
+*/
 function spearNestLevel(currentNode){
-    meSpeak.stop();
+    meSpeak.stop();//prevents any current spearcons from playing
     if(currentNode!=null){
         var speakLevel="Level ";
         var addition="";
@@ -362,10 +367,10 @@ function spearNestLevel(currentNode){
         for (var i = 0; i < arrLength; i++) {
             if(currentNode.getAttribute('id') == perfectArr[i].getAttribute('id')){
                 var nestInfo = prefixArr[i].substring(1);
-                var nestArray = nestInfo.split(".");
+                var nestArray = nestInfo.split(".");//removes the decimals from the commented level
                 for(var j=0;j<nestArray.length;j++){
                     if(j<nestArray.length-1){
-                        speakLevel+=nestArray[j];
+                        speakLevel+=nestArray[j];//adds enteire level to array
                         speakLevel+=" point ";
                     }
                     else{
@@ -373,30 +378,40 @@ function spearNestLevel(currentNode){
                     }
                 }
                 doneTalking=false;
-                meSpeak.speak(speakLevel, {speed: 600},meSpeakDone);
+                meSpeak.speak(speakLevel, {speed: 600},meSpeakDone);//says spearcon and jumps to other function for timeout to work properly
                 break;
             }
         }
     }
 };
+/**
+* Function that takes in the current node, gets its id attribute, finds the element's position
+* in the perfectArr array, and uses that position to identify the current node's level
+* of nesting in the parentArr array and returns it as an earcon by playing individual notes.
+* @param The current node that is selected
+*/
 function earNestLevel(currentNode){
     if(currentNode!=null){
-        play=false;
+        play=false;//stops and current notes from playing
         noteLength=0;
         var speakLevel="";
         var arrLength = perfectArr.length; //The length of the parentArr and perfectArr arrays
         for (var i = 0; i < arrLength; i++) {
             if(currentNode.getAttribute('id') === perfectArr[i].getAttribute('id')){
                 var nestInfo = prefixArr[i].substring(1);
-                var initialArray = nestInfo.split(".");
+                var initialArray = nestInfo.split(".");//removes decimals from current level
                 var nestArray=[];
                 for(var j=0;j<initialArray.length;j++){
                     for(var k=0;k<initialArray[j];k++){
-                        nestArray.push(initialArray[j]);
+                        nestArray.push(initialArray[j]);//adds the level to a single variable
                     }
                     nestArray.push("-1");
                 }
                 for(var j=0;j<nestArray.length;j++){
+                    //changes the vales in the nest array so that they'll actually play midi files in accordance with the timbre function
+                    //all of the notes are changed so that the higher the level the value that is passed in, the higher the pitch of the 
+                    //note will sound. Eg. 43 will play a higher pitched sound than 41. -1 represent where a "." was and treats it as a 
+                    //break in the level of the notes
                     switch (nestArray[j])
                     {
                         case "-1": nestArray[j]=-1; break;
@@ -410,15 +425,17 @@ function earNestLevel(currentNode){
                 } 
                 var tempNotes=[];
                 for(var j=0;j<nestArray.length;j++){
+                //stores all similar notes in array so that similar notes will played at once at a simalar speed. Eg. If the array contains
+                //42,42,43; the two 42 will passed into playnotes
                     if(nestArray[j]===-1){
-                        var speed=tempNotes.length;
-                        T.soundfont.preload(tempNotes);
-                        playNotes(tempNotes,speed);
-                        tempNotes=[];
+                        var speed=tempNotes.length;//the length of the notes will shorten as the number of notes increase
+                        T.soundfont.preload(tempNotes);//preloads notes to play to increase quality
+                        playNotes(tempNotes,speed);//plays notes that are all currently stored in the array
+                        tempNotes=[];//emptys array so that new notes can be pused in
                     }
                     else{
                         tempNotes.push(nestArray[j]);
-                        noteLength+=560;
+                        noteLength+=560;//increases notelength to create a system where notes don't run over each other.
                     }
                 }
                 break;
@@ -426,34 +443,37 @@ function earNestLevel(currentNode){
         }
     }
 };
-var t;
+/**
+* Plays all notes that are passed into the function one a time with a short pause after each notes played
+* @param noteToPlay: The array of notes to be played.
+* @param speed: The number of notes in the array of notes passed in
+*/
+//var t;
 function playNotes(noteToPlay,speed){
-    if(play===true){
+    if(play===true){//times itself out and calls itself until current notes are done playing.
         setTimeout(function() {
             playNotes(noteToPlay,speed);
         }, 400);
-        return;
-    }
-    if(t)
-        t.stop();
+        return;3
+    }3
+    //if(t)3
+      //  t.stop();3
     var i=0;
-    var toggle = false;
-    var newSpeed=540/speed;
-    play=true;
+    var toggle = false;//toggle is used to aid in the notes not running over each other
+    var newSpeed=540/speed;//Sets how fast the notes will be played.
+    play=true;//lets the program know that music is currently playing
+    //this function essentially works like a for loop
     t = T("interval", {interval:newSpeed,timeout:"55sec"},function(){
         if(i>noteToPlay.length-1||noteToPlay[i]===undefined||play===false){
-            this.stop();
-            if(play===false){
-
-            }
+            this.stop();//stops when no more valid notes can be found or program tells function to stop playing notes
             play=false;
         }
         if(!toggle){
             if(!noteToPlay[i]){
-                this.stop();
+                this.stop();//stops any notes from playing no more valid notes are passed in
                 play = false;
             }
-            T.soundfont.play(noteToPlay[i]);
+            T.soundfont.play(noteToPlay[i]);//plays a single note at a time to prevent the notes from playing over each other.
             i++;
             toggle = !toggle;
         }
@@ -466,19 +486,10 @@ function playNotes(noteToPlay,speed){
     }).start();
     return;
 };
-
-//function switchPlay(){
-  //    play=false;
-//}
-
-/*
-function playNestAudio(pitch)
-{
-    var x=new Instrument(1);
-    //x.setCollection(pitch);
-    x.playDataSet(,0,pitch.length);
-};*/
-
+/**
+* lists the xml code and IDs of the current entire selection that is currently highlighted. Useful to know
+* exact code of the blocks
+*/
 function blockLister(){
     //check if the workspace is empty
     if (!xmlDoc || !xmlDoc.getElementsByTagName('BLOCK')) {
@@ -493,83 +504,26 @@ function blockLister(){
     for(var i = 0; i<listLen; i++){
         idList[i] = blockList[i].getAttribute('type');
      };
-
-
-
      var parArrLen = parentArr.length;
      window.alert(parentArr);
-     /*
-     for(var i = 0; i<parArrLen; i++){
-        window.alert(parentArr[i].toString());
-     }
-     */
-
-    /*
-    var childList =[];
-    for (var i = 0 < listLen; i++){
-       childList[i]  = blockList[i].getChildren();
-    };
-
-    window.alert(childList);
-   
-
-    window.alert(idList);
-     */
+     //gets the current XML
     var currentXml = Blockly.Xml.domToPrettyText(Blockly.Xml.workspaceToDom(Blockly.mainWorkspace));
     window.alert(currentXml);
-     //perfectArr = [];
-
-     /*
-    //adding any blocks which can stand on their own to perfectArr
-    for(var i=0; i < blockArr.length; i++){
-
-        var strType = blockArr[i].getAttribute('type');
-
-        if(strType.match(/controls/g)){
-            perfectArr.push(blockArr[i]);
-        }
-        else if(strType.match(/procedures/g)){
-            perfectArr.push(blockArr[i]);
-        }
-        else if(strType == "beep"){
-            perfectArr.push(blockArr[i]);
-        }
-        else if(strType == "math_change") {
-            perfectArr.push(blockArr[i]);
-        }
-        else if(strType == "text_append") {
-            perfectArr.push(blockArr[i]);
-        }
-        else if(strType == "text_print") {
-            perfectArr.push(blockArr[i]);
-        }
-        else if(strType == "list_setIndex") {
-            perfectArr.push(blockArr[i]);
-        }
-        else if(strType == "variables_set") {
-            perfectArr.push(blockArr[i]);
-        }
-        else{
-            
-        }
-
-    }*/
-
-    // var currentXml = Blockly.Xml.domToPrettyText(Blockly.Xml.workspaceToDom(Blockly.mainWorkspace));
-    // window.alert(currentXml);
 }//end of getImportantBlocks
-
+/**
+* This function stores the text that is used in the audio that is read by the screen reader. The text that is read changes depending on
+* what type of audio cue the user currently has selected. Indentation are used to determine when audio cues are played as audio cues will
+* only play when the level of nesting of the function changes.
+*/
 function codeReader(){
     var levelReader=audioSelection;
-    var array = [];
-    var indent=[];
+    var array = [];//stores array of letters to be played
+    var indent=[]; //stores indentation of level to be played.
     if(levelReader==="normal"){
         array = ["variable i equals 3","variable j equals 5",/*"if i plus j equals 8","print i plus j",*/"while i is less than 10","if i is less than 5","increment i by 1","else","increment i by 2","print i plus j"];
-        indent= [1,-1,/*-1,2,*/-1,2,3,2,3,1];
+        indent= [1,-1,-1,2,3,2,3,1];
     }
     else if(levelReader==="ear con"){
-     //   array = ["variable sum equals 0","variable x equals 0","while x less than 10","increase x by 1"];/*,"if x is divisible by 3","increase x by 2","increase sum by x","print x","print sum"];*/    
-       // indent = [1,-1,-1,2]; /*,-1,3,2,-1,1];*/
         array = ["variable sum equals 0","variable x equals 0","while x less than 10","increase x by 1","if x is divisible by 3","increase x by 2","increase sum by x","print x","print sum"];    
         indent = [1,-1,-1,2,-1,3,2,-1,1];
     }
@@ -578,28 +532,38 @@ function codeReader(){
         indent = [1,-1,-1,-1,2,-1,-1,3,2,3,2,1];
     }
     var i=0;
-    speedPlay=300;
+    speedPlay=300;//how long a pause will be given to each of the notes
     for(i;i<array.length;i++){
-        looped(i,array,levelReader,indent,speedPlay);
+        looped(i,array,levelReader,indent,speedPlay);//a loop function which will be basically each part of the text one at a time.
     }
 };
-
+/**
+* This function stores the text that is used in the audio that is read by the screen reader. The text that is read changes depending on
+* what type of audio cue the user currently has selected. Indentation are used to determine when audio cues are played as audio cues will
+* only play when the level of nesting of the function changes.
+*/
 function codeReaderTrial(){
     var levelReader=audioSelection;
-    var array = [];
-    var indent=[];
+    var array = [];//the text that will be read for trial 2 of the experiment
+    var indent=[];//the indentation level of the text that will be played
     var array = ["variable count equals 1.", " variable y equals 6.", "while count less than 6", "increase y by 1", "increase count by 1", "print y." ];
     var indent = [1,-1,-1,2,-1,1];
     var i=0;
-    play=false;
     speedPlay=300;
     for(i;i<array.length;i++){
         looped(i,array,levelReader,indent,speedPlay);
     }
 };
-
+/**
+* This function loops through the text array and plays each index of the array one at a time. It calls the correct audio cue 
+* to play accordingly
+* @param i: the counter for the array to track what index the array is at.
+* @param array: the array of text that will be read by resposive voice
+* @param levelReader: The current audio that has been selected by the user
+* @param indent: An array that holds the indent level of the current text.
+* @param speedPlay: The length of the pause for the earcon
+*/
 function looped(i,array,levelReader,indent,speedPlay){
- //   else{
     if(indent[i]!=-1){
         if(levelReader==="normal") 
            playStringNormal(indent[i]);
@@ -608,12 +572,15 @@ function looped(i,array,levelReader,indent,speedPlay){
         else if(levelReader==="ear con")
             speedPlay=playStringEar(indent[i],speedPlay);
     }
-    playString(array[i],speedPlay);
-   // }
+    playString(array[i],speedPlay);//will read the index of the text passed in
 }
-
+/**
+* This function reads the text that is passed in by the array of text. It makes sure to stop any other audio before playing.
+* @param text: The text that responsive voice will play after the level is played
+* @speedPlay: The length of the earcon that will be played
+*/
 function playString(text,speedPlay){
-    if(responsiveVoice.isPlaying()===true||play===true||doneTalking===false){
+    if(responsiveVoice.isPlaying()===true||play===true||doneTalking===false){//sets timeout to give 
         if(audioSelection==="ear con")
             setTimeout(function(){playString(text,speedPlay);},2000)
         else
@@ -626,20 +593,30 @@ function playString(text,speedPlay){
         return;
     }
 };
-
+/**
+* This function reads the level of the function being read in the code reader in the form of normal speech
+* @param indent: the indentation level that will be read by the program.
+*/
 function playStringNormal(indent){
     if(responsiveVoice.isPlaying()===true){
        setTimeout(function() {playStringNormal(indent);}, 100);
        return;
     }
     else{
-        pausecomp(2000);
+        pausecomp(2000);//gives 2 second pause to give listener time to react to what they heard
         var normalText="Level "+indent;
-        responsiveVoice.speak(normalText);
+        responsiveVoice.speak(normalText);//reads the level of the current block.
         return;
     }
 };
+/**
+* This function reads the level of the function being read in the code reader in the form of a earcon.
+* @param indent: the indentation level that will be read by the program.
+* @param speedPlay: The length of the pause given by the earcon.
+* @return speedPlay: Returns the length of time to wait for the earcon to finish playing.
+*/
 
+//see comments for line 393 function to understand how this function works.
 function playStringEar(indent,speedPlay){
     if(responsiveVoice.isPlaying()===true||play===true){
         console.log(play);
@@ -675,7 +652,6 @@ function playStringEar(indent,speedPlay){
             }
             if(!toggle){
                 if(!instrument[j]){
-               //     window.alert(i);
                     this.stop();
                     play=false;
                 }
@@ -692,39 +668,39 @@ function playStringEar(indent,speedPlay){
         }).start();
         return speedPlay;
     }
-//    setTimeout(function() {return;}, 720);
 };
+/**
+* This function reads the level of the function being read in the code reader in the form of a spearcon.
+* @param indent: the indentation level that will be read by the program.
+*/
 function playStringSpear(indent){
     if(responsiveVoice.isPlaying()===true||doneTalking===false){
        setTimeout(function() {playStringSpear(indent);}, 100);
        return;
     }
     else{
-        pausecomp(2000);
+        pausecomp(2000);//puts a 2 second pause for the second trial that will give the listener time to react to what they are listening to.
         doneTalking=false;
         var normalText="Level "+indent;
-        meSpeak.speak(normalText, {speed: 600},meSpeakDone);
+        meSpeak.speak(normalText, {speed: 600},meSpeakDone);//reads the level in a sped up fashion.
         return;
     }
 };
 
-
+/**
+* This function is set as a workaround function for the settimeout function for spearcons. It only servers to let the program know that
+* the program is done using spearcons.
+*/
 function meSpeakDone(){
     doneTalking=true;
 }
-
+/**
+* This function will stop program execution for the given amount of time as put in. While this is a terrible javscript practive, this function
+* was needed to incorporate reliable pauses into the program without the use of jquery. If possible, I would highly suggest incorporating 
+* jquery into this program to making timing run a lot smoother.
+* @param ms: The variable will cause the program to pause for the given amount of time in milliseconds
+*/
 function pausecomp(ms) {
     ms += new Date().getTime();
     while (new Date() < ms){;}
 } 
-/*
-function getIndent(current){
-    var speakLevel="";
-    var arrLength = perfectArr.length; //The length of the parentArr and perfectArr arrays
-    for (var i = 0; i < arrLength; i++) {
-        if(currentNode.getAttribute('id') === perfectArr[i].getAttribute('id')){
-            var nestInfo = prefixArr[i].substring(1);
-            return nestInfo;
-        }
-    }
-}*/

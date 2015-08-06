@@ -238,10 +238,6 @@ document.onkeydown = document.onkeyup = function(e){
 			console.log("R key pressed.");
 			jumpToTopOfSection();
 		}
-	/*	else if(map[13]){ //Enter
-			console.log('Enter key pressed.');
-			updateXmlSelection();
-		}*/
 		
 		//Arrow keys for development purposes.  Switch as needed for proper usage.
 		
@@ -258,9 +254,12 @@ document.onkeydown = document.onkeyup = function(e){
 		else if(map[40] || map[83]){ //down arrow or S
 			traverseDown();    
 		}
+		//reads the names of the block that the user currently has selected
 		else if(map[84]){//t
-			speakAudio('t');
+			speakAudio('t');//speaks audio without removing from a stack.
 		}
+		//plays the level of the code that the user is currently located. Sound varies depending on
+		//what auditory cues is currently selected
 		else if(map[89]){//y
 			try{
 			if(audioSelection==='normal')
@@ -274,9 +273,10 @@ document.onkeydown = document.onkeyup = function(e){
 				window.alert(err+err.lineNumber);
 			}
 		}
+		//Brings up a pregenerated set of blocks that will be used for the experiment.
 		else if(map[88]){//x
 			if(question===0)
-				question1(1);
+				question1(1);//only used for training
 			else if(question===1)
 				question4(1);
 			else if(question===2)
@@ -284,22 +284,14 @@ document.onkeydown = document.onkeyup = function(e){
 			else{
 				question6(1);
 			}
-			responsiveVoice.speak("Root Block Selected");
-			updateXmlSelection();
-			var blockArr = xmlDoc.getElementsByTagName('BLOCK');
+			updateXmlSelection();//updates workspace to recognize current blocks
+			var blockArr = xmlDoc.getElementsByTagName('BLOCK');//selects top block of the generated blocks
 			var firstBlock=blockArr[0].getAttribute('ID');
 			jumpToID(firstBlock);
+			responsiveVoice.speak("Root Block Selected");
 		}
-
-		else if(map[61]){ //+
-			speedSpeak+=20;
-		}
-
-		else if(map[173]){//-
-			speedSpeak-=20;
-		}
-
-		else if(map[16]){//insert
+		//toggles between the different auditory cues
+		else if(map[16]){//select
 			switch(audioSelection)
 			{
 				case "normal":
@@ -317,27 +309,52 @@ document.onkeydown = document.onkeyup = function(e){
 			}
 			responsiveVoice.speak(audioSelection);
 		}
+		//plays the audio description (part 2 of study) for the source code associated with the current selected audio cue
 		else if (map[73]){//i
 			codeReader();
 		}
-
+		//switches the pregenerated question that the user currently has selected
 		else if(map[74]){ //J 
-			blockLister();
+			switch(question)
+			{
+				case 0:
+					question=1;
+					break;
+				case 1:
+					question=2;
+					break;
+				case 2:
+					question=3;
+					break;
+				case 3:
+					question=0;
+					break;
+				default:
+					question=0;
+					break;
+			}
+			var questionSpeak="Question "+question;
+			responsiveVoice.speak(questionSpeak);
 		}	
-		
+		//returns the user to the top of a set of blocks.
 		else if(map[86])//v
 		{
-			responsiveVoice.speak("Root Block Selected");
-			updateXmlSelection();
-			var blockArr = xmlDoc.getElementsByTagName('BLOCK');
-			var firstBlock=blockArr[0].getAttribute('ID');
+			var blockArr = xmlDoc.getElementsByTagName('BLOCK');//puts all blocks in workspace intro an array
+			var firstBlock=blockArr[0].getAttribute('ID'); //finds first block and jumps to it
 			jumpToID(firstBlock);
+			responsiveVoice.speak("Root Block Selected");
 		}
 
+		//plays the audio description (part 2 of study) for the source code associated with the training session
 		else if(map[70]){//f
+			console.log('F key pressed');
 			codeReaderTrial();
 		}
+		//Checks to see if the user has the correct block selected in one of the trials.
+		//Basically, checks the ID of the block and, if correct, audibly tells the user "correct" 
 		else if(map[13]){ //Enter
+			console.log('Enter key pressed.');
+			//updateXmlSelection();
             if(question===0){
             	if((getCurrentNode().id)==="19"){
                     responsiveVoice.speak("Correct!");
