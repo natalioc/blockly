@@ -24,6 +24,7 @@
 goog.provide('Blockly.Accessibility.InBlock');
 
 goog.require('Blockly.Accessibility.Navigation');
+goog.require('Blockly.Accessibility.Speech');
 goog.require('Blockly.Accessibility');
 
 Blockly.Accessibility.InBlock.storedConnection = null;
@@ -70,6 +71,7 @@ Blockly.Accessibility.InBlock.enterCurrentBlock = function () {
                 if (!(Blockly.selected.inputList[i].fieldRow[j] instanceof Blockly.FieldLabel) &&
                     !(Blockly.selected.inputList[i].fieldRow[j] instanceof Blockly.FieldImage)) {
                     this.selectionList.push(Blockly.selected.inputList[i].fieldRow[j]);
+
                 }
             }
         }
@@ -90,8 +92,8 @@ Blockly.Accessibility.InBlock.enterCurrentBlock = function () {
 
     this.connectionsIndex = 0;
 
-    console.log(this.selectionList[this.connectionsIndex]);
-
+    //console.log(this.selectionList[this.connectionsIndex]);
+    Blockly.Accessibility.Speech.readConnection(this.selectionList[this.connectionsIndex].name, this.connectionsIndex);
     this.highlightSelection();
 
     return true;
@@ -110,6 +112,8 @@ Blockly.Accessibility.InBlock.selectNext = function () {
 
     console.log(this.selectionList[this.connectionsIndex]);
 
+    Blockly.Accessibility.Speech.readConnection(this.selectionList[this.connectionsIndex].name, this.connectionsIndex);
+
     this.highlightSelection();
 };
 
@@ -126,6 +130,7 @@ Blockly.Accessibility.InBlock.selectPrev = function () {
 
     console.log(this.selectionList[this.connectionsIndex]);
 
+    Blockly.Accessibility.Speech.readConnection(this.selectionList[this.connectionsIndex].name, this.connectionsIndex);
     this.highlightSelection();
 };
 

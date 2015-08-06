@@ -2,6 +2,7 @@
 
 goog.provide('Blockly.Accessibility.Speech');
 goog.require('Blockly.Accessibility');
+goog.require('Blockly.Accessibility.InBlock');
 
 /*
 *Licensed under the Apache License, Version 2.0 (the "License");
@@ -55,6 +56,78 @@ Blockly.Accessibility.Speech.updateBlockReader = function(type, blockSvg){
     
 	//update the blockReader
     blockReader.innerHTML = newStr;
+};
+
+/*
+* Reads the selected connection out loud 
+* @param_name...name of the connection selected
+* Aparam_index..index of the connection selected
+*/
+Blockly.Accessibility.Speech.readConnection = function(name, index){
+	var blockReader = document.getElementById("blockReader");	
+	var active 		= document.activeElement;
+	var say;
+
+	//top and bottom connections are named undefined
+	if(name == undefined)
+	{
+		switch(index){
+			case 0:
+				name = "bottom"
+				break;
+			case 1:
+				name = "top";
+				break;
+			case 2:
+				name = "input";
+				break;
+			case 3:
+				name = "previous";
+				break;
+			case 4:
+				name = "next connection";
+				break;
+			default:
+				name = "select a";
+				break;
+		}
+	}
+	//some names are not descriptive
+	switch(name){
+		case "VAR":
+			name = "variable";
+			break;
+		case "OP":
+			name = "drop down";
+			break;
+		default:
+			break;
+	}
+
+	//blocks with multiple outputs like create list with are named add0 add1 etc. so put in a space to make it readable
+	for(var i = 0; i< name.length; i++){
+
+		if(name.indexOf(i) > -1){
+			var iIndex = name.indexOf(i);
+		    name = name.substring(0,iIndex) + " ";
+
+			if(name.indexOf('ADD') > -1){
+				console.log("INHERE");
+				name = name + i;
+			}
+		}
+	}
+	
+	//screenreaders sometimes read words in all uppercase as individual letters
+	name = name.toLowerCase();
+	say = name + " connection."
+
+   	//apply aria attributes in order to update the user audibly when anything on the workspace changes
+    active.setAttribute("aria-owns", "blockReader");
+    active.setAttribute("aria-labelledBy", "blockReader");
+
+    //update the blockReader
+    blockReader.innerHTML = say;
 };
 
 
