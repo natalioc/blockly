@@ -117,7 +117,7 @@ Blockly.Procedures.findLegalName = function(name, block) {
  * procedures already defined.
  * @param {string} name The questionable name.
  * @param {!Blockly.Workspace} workspace The workspace to scan for collisions.
- * @param {Blockly.Block} opt_exclude Optional block to exclude from
+ * @param {Blockly.Block=} opt_exclude Optional block to exclude from
  *     comparisons (one doesn't want to collide with oneself).
  * @return {boolean} True if the name is legal.
  */
@@ -174,21 +174,18 @@ Blockly.Procedures.flyoutCategory = function(blocks, gaps, margin, workspace) {
     var block = Blockly.Block.obtain(workspace, 'procedures_defnoreturn');
     block.initSvg();
     blocks.push(block);
-    menuBlocksArr.push(block);//added for blockly navigation.js
     gaps.push(margin * 2);
   }
   if (Blockly.Blocks['procedures_defreturn']) {
     var block = Blockly.Block.obtain(workspace, 'procedures_defreturn');
     block.initSvg();
     blocks.push(block);
-    menuBlocksArr.push(block);//added for blockly navigation.js
     gaps.push(margin * 2);
   }
   if (Blockly.Blocks['procedures_ifreturn']) {
     var block = Blockly.Block.obtain(workspace, 'procedures_ifreturn');
     block.initSvg();
     blocks.push(block);
-    menuBlocksArr.push(block);//added for blockly navigation.js
     gaps.push(margin * 2);
   }
   if (gaps.length) {

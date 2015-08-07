@@ -36,7 +36,7 @@ goog.require('goog.userAgent');
 /**
  * Inject a Blockly editor into the specified container element (usually a div).
  * @param {!Element|string} container Containing element or its ID.
- * @param {Object} opt_options Optional dictionary of options.
+ * @param {Object=} opt_options Optional dictionary of options.
  * @return {!Blockly.Workspace} Newly created main workspace.
  */
 Blockly.inject = function(container, opt_options) {
@@ -71,7 +71,7 @@ Blockly.inject = function(container, opt_options) {
 /**
  * Parse the provided toolbox tree into a consistent DOM format.
  * @param {Node|string} tree DOM tree of blocks, or text representation of same.
- * @return {Node} DOM tree of blocks or null.
+ * @return {Node} DOM tree of blocks, or null.
  * @private
  */
 Blockly.parseToolboxTree_ = function(tree) {
@@ -386,7 +386,7 @@ Blockly.createMainWorkspace_ = function(svg, options) {
   // The SVG is now fully assembled.
   Blockly.svgResize(mainWorkspace);
   Blockly.WidgetDiv.createDom();
-  Blockly.Tooltip.createDom()
+  Blockly.Tooltip.createDom();
   return mainWorkspace;
 };
 
@@ -412,8 +412,6 @@ Blockly.init_ = function(mainWorkspace) {
   // Also, 'keydown' has to be on the whole document since the browser doesn't
   // understand a concept of focus on the SVG image.
 
-  Blockly.bindEvent_(svg, 'touchstart', null,
-                     function(e) {Blockly.longStart_(e, null);});
   Blockly.bindEvent_(window, 'resize', null,
                      function() {Blockly.svgResize(mainWorkspace);});
 
@@ -489,7 +487,7 @@ Blockly.init_ = function(mainWorkspace) {
  * Modify the block tree on the existing toolbox.
  * @param {Node|string} tree DOM tree of blocks, or text representation of same.
  */
-Blockly.updateToolbox = function(tree, workspace) {
+Blockly.updateToolbox = function(tree) {
   console.warn('Deprecated call to Blockly.updateToolbox, ' +
                'use workspace.updateToolbox instead.');
   Blockly.getMainWorkspace().updateToolbox(tree);

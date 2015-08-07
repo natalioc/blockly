@@ -36,7 +36,7 @@ goog.require('goog.userAgent');
 /**
  * Class for an editable text field.
  * @param {string} text The initial content of the field.
- * @param {Function} opt_changeHandler An optional function that is called
+ * @param {Function=} opt_changeHandler An optional function that is called
  *     to validate any constraints on what the user entered.  Takes the new
  *     text as an argument and returns either the accepted text, a replacement
  *     text, or null to abort the change.
@@ -45,18 +45,9 @@ goog.require('goog.userAgent');
  */
 Blockly.FieldTextInput = function(text, opt_changeHandler) {
   Blockly.FieldTextInput.superClass_.constructor.call(this, text);
-  this.changeHandler_ = opt_changeHandler;
+  this.setChangeHandler(opt_changeHandler);
 };
 goog.inherits(Blockly.FieldTextInput, Blockly.Field);
-
-/**
- * Clone this FieldTextInput.
- * @return {!Blockly.FieldTextInput} The result of calling the constructor again
- *   with the current values of the arguments used during construction.
- */
-Blockly.FieldTextInput.prototype.clone = function() {
-  return new Blockly.FieldTextInput(this.getText(), this.changeHandler_);
-};
 
 /**
  * Mouse cursor style when over the hotspot that initiates the editor.
@@ -258,10 +249,13 @@ Blockly.FieldTextInput.prototype.widgetDispose_ = function() {
     // Save the edit (if it validates).
     var text = htmlInput.value;
     if (thisField.sourceBlock_ && thisField.changeHandler_) {
-      text = thisField.changeHandler_(text);
-      if (text === null) {
+      var text1 = thisField.changeHandler_(text);
+      if (text1 === null) {
         // Invalid edit.
         text = htmlInput.defaultValue;
+      } else if (text1 !== undefined) {
+        // Change handler has changed the text.
+        text = text1;
       }
     }
     thisField.setText(text);
@@ -285,6 +279,7 @@ Blockly.FieldTextInput.numberValidator = function(text) {
   if (text === null) {
     return null;
   }
+  text = String(text);
   // TODO: Handle cases like 'ten', '1.203,14', etc.
   // 'O' is sometimes mistaken for '0' by inexperienced users.
   text = text.replace(/O/ig, '0');

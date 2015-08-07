@@ -41,21 +41,21 @@ Blockly.Css.Cursor = {
 
 /**
  * Current cursor (cached value).
- * @type string
+ * @type {string}
  * @private
  */
 Blockly.Css.currentCursor_ = '';
 
 /**
  * Large stylesheet added by Blockly.Css.inject.
- * @type Element
+ * @type {Element}
  * @private
  */
 Blockly.Css.styleSheet_ = null;
 
 /**
  * Path to media directory, with any trailing slash removed.
- * @type string
+ * @type {string}
  * @private
  */
 Blockly.Css.mediaPath_ = '';
@@ -79,6 +79,9 @@ Blockly.Css.inject = function(hasCss, pathToMedia) {
   var text = '.blocklyDraggable {}\n';
   if (hasCss) {
     text += Blockly.Css.CONTENT.join('\n');
+    if (Blockly.FieldDate) {
+      text += Blockly.FieldDate.CSS.join('\n');
+    }
   }
   // Strip off any trailing slash (either Unix or Windows).
   Blockly.Css.mediaPath_ = pathToMedia.replace(/[\\\/]$/, '');
@@ -136,7 +139,7 @@ Blockly.Css.setCursor = function(cursor) {
  */
 Blockly.Css.CONTENT = [
   '.blocklySvg {',
-  '  background-color: #FEFEFE;',
+  '  background-color: #fff;',
   '  outline: none;',
   '  overflow: hidden;',  /* IE overflows by default. */
   '}',
@@ -178,18 +181,18 @@ Blockly.Css.CONTENT = [
 
   '.blocklyHighlightedConnectionPath {',
   '  fill: none;',
-  '  stroke: #FE9A2E;',
+  '  stroke: #fc3;',
   '  stroke-width: 4px;',
   '}',
 
   '.blocklyPathLight {',
   '  fill: none;',
   '  stroke-linecap: round;',
-  '  stroke-width: 2;',
+  '  stroke-width: 1;',
   '}',
 
   '.blocklySelected>.blocklyPath {',
-  '  stroke: #000;',
+  '  stroke: #fc3;',
   '  stroke-width: 3px;',
   '}',
 
@@ -313,14 +316,8 @@ Blockly.Css.CONTENT = [
   '  fill-opacity: .8;',
   '}',
 
-  '.blocklyColourBackground {',
-  '  fill: #666;',
-  '}',
-
   '.blocklyScrollbarBackground {',
-  '  fill: #fff;',
-  '  stroke: #e4e4e4;',
-  '  stroke-width: 1;',
+  '  opacity: 0;',
   '}',
 
   '.blocklyScrollbarKnob {',
@@ -330,6 +327,17 @@ Blockly.Css.CONTENT = [
   '.blocklyScrollbarBackground:hover+.blocklyScrollbarKnob,',
   '.blocklyScrollbarKnob:hover {',
   '  fill: #bbb;',
+  '}',
+
+  /* Darken flyout scrollbars due to being on a grey background. */
+  /* By contrast, workspace scrollbars are on a white background. */
+  '.blocklyFlyout .blocklyScrollbarKnob {',
+  '  fill: #bbb;',
+  '}',
+
+  '.blocklyFlyout .blocklyScrollbarBackground:hover+.blocklyScrollbarKnob,',
+  '.blocklyFlyout .blocklyScrollbarKnob:hover {',
+  '  fill: #aaa;',
   '}',
 
   '.blocklyInvalidInput {',
@@ -514,161 +522,6 @@ Blockly.Css.CONTENT = [
   '  color: #fff;',
   '}',
 
-  /* Copied from: goog/css/datepicker.css */
-  /*
-   * Copyright 2009 The Closure Library Authors. All Rights Reserved.
-   *
-   * Use of this source code is governed by the Apache License, Version 2.0.
-   * See the COPYING file for details.
-   */
-
-  /*
-   * Standard styling for a goog.ui.DatePicker.
-   *
-   * @author arv@google.com (Erik Arvidsson)
-   */
-
-  '.blocklyWidgetDiv .goog-date-picker,',
-  '.blocklyWidgetDiv .goog-date-picker th,',
-  '.blocklyWidgetDiv .goog-date-picker td {',
-  '  font: 13px Arial, sans-serif;',
-  '}',
-
-  '.blocklyWidgetDiv .goog-date-picker {',
-  '  -moz-user-focus: normal;',
-  '  -moz-user-select: none;',
-  '  position: relative;',
-  '  border: 1px solid #000;',
-  '  float: left;',
-  '  padding: 2px;',
-  '  color: #000;',
-  '  background: #c3d9ff;',
-  '  cursor: default;',
-  '}',
-
-  '.blocklyWidgetDiv .goog-date-picker th {',
-  '  text-align: center;',
-  '}',
-
-  '.blocklyWidgetDiv .goog-date-picker td {',
-  '  text-align: center;',
-  '  vertical-align: middle;',
-  '  padding: 1px 3px;',
-  '}',
-
-  '.blocklyWidgetDiv .goog-date-picker-menu {',
-  '  position: absolute;',
-  '  background: threedface;',
-  '  border: 1px solid gray;',
-  '  -moz-user-focus: normal;',
-  '  z-index: 1;',
-  '  outline: none;',
-  '}',
-
-  '.blocklyWidgetDiv .goog-date-picker-menu ul {',
-  '  list-style: none;',
-  '  margin: 0px;',
-  '  padding: 0px;',
-  '}',
-
-  '.blocklyWidgetDiv .goog-date-picker-menu ul li {',
-  '  cursor: default;',
-  '}',
-
-  '.blocklyWidgetDiv .goog-date-picker-menu-selected {',
-  '  background: #ccf;',
-  '}',
-
-  '.blocklyWidgetDiv .goog-date-picker th {',
-  '  font-size: .9em;',
-  '}',
-
-  '.blocklyWidgetDiv .goog-date-picker td div {',
-  '  float: left;',
-  '}',
-
-  '.blocklyWidgetDiv .goog-date-picker button {',
-  '  padding: 0px;',
-  '  margin: 1px 0;',
-  '  border: 0;',
-  '  color: #20c;',
-  '  font-weight: bold;',
-  '  background: transparent;',
-  '}',
-
-  '.blocklyWidgetDiv .goog-date-picker-date {',
-  '  background: #fff;',
-  '}',
-
-  '.blocklyWidgetDiv .goog-date-picker-week,',
-  '.blocklyWidgetDiv .goog-date-picker-wday {',
-  '  padding: 1px 3px;',
-  '  border: 0;',
-  '  border-color: #a2bbdd;',
-  '  border-style: solid;',
-  '}',
-
-  '.blocklyWidgetDiv .goog-date-picker-week {',
-  '  border-right-width: 1px;',
-  '}',
-
-  '.blocklyWidgetDiv .goog-date-picker-wday {',
-  '  border-bottom-width: 1px;',
-  '}',
-
-  '.blocklyWidgetDiv .goog-date-picker-head td {',
-  '  text-align: center;',
-  '}',
-
-  /** Use td.className instead of !important */
-  '.blocklyWidgetDiv td.goog-date-picker-today-cont {',
-  '  text-align: center;',
-  '}',
-
-  /** Use td.className instead of !important */
-  '.blocklyWidgetDiv td.goog-date-picker-none-cont {',
-  '  text-align: center;',
-  '}',
-
-  '.blocklyWidgetDiv .goog-date-picker-month {',
-  '  min-width: 11ex;',
-  '  white-space: nowrap;',
-  '}',
-
-  '.blocklyWidgetDiv .goog-date-picker-year {',
-  '  min-width: 6ex;',
-  '  white-space: nowrap;',
-  '}',
-
-  '.blocklyWidgetDiv .goog-date-picker-monthyear {',
-  '  white-space: nowrap;',
-  '}',
-
-  '.blocklyWidgetDiv .goog-date-picker table {',
-  '  border-collapse: collapse;',
-  '}',
-
-  '.blocklyWidgetDiv .goog-date-picker-other-month {',
-  '  color: #888;',
-  '}',
-
-  '.blocklyWidgetDiv .goog-date-picker-wkend-start,',
-  '.blocklyWidgetDiv .goog-date-picker-wkend-end {',
-  '  background: #eee;',
-  '}',
-
-  /** Use td.className instead of !important */
-  '.blocklyWidgetDiv td.goog-date-picker-selected {',
-  '  background: #c3d9ff;',
-  '}',
-
-  '.blocklyWidgetDiv .goog-date-picker-today {',
-  '  background: #9ab;',
-  '  font-weight: bold !important;',
-  '  border-color: #246 #9bd #9bd #246;',
-  '  color: #fff;',
-  '}',
-
   /* Copied from: goog/css/menu.css */
   /*
    * Copyright 2009 The Closure Library Authors. All Rights Reserved.
@@ -694,6 +547,9 @@ Blockly.Css.CONTENT = [
   '  outline: none;',
   '  padding: 4px 0;',
   '  position: absolute;',
+  '  overflow-y: auto;',
+  '  overflow-x: hidden;',
+  '  max-height: 100%;',
   '  z-index: 20000;',  /* Arbitrary, but some apps depend on it... */
   '}',
 
