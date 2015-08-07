@@ -1593,6 +1593,7 @@ goog.require('Blockly.WorkspaceSvg');
 goog.require('Blockly.Xml');
 goog.require('Blockly.inject');
 goog.require('Blockly.utils');
+goog.require('Blockly.Overwrites');
 goog.require('Blockly.Accessibility');
 goog.require('Blockly.Accessibility.Navigation');
 goog.require('Blockly.Accessibility.TreeView');
@@ -1600,7 +1601,7 @@ goog.require('Blockly.Accessibility.Prefixes');
 goog.require('Blockly.Accessibility.MenuNav');
 goog.require('Blockly.Accessibility.InBlock');
 goog.require('Blockly.Accessibility.Keystrokes');
-goog.require('Blockly.Overwrites');
+
 goog.require('rtclient');
 
 delete this.BLOCKLY_DIR;
