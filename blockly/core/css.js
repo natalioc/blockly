@@ -41,21 +41,21 @@ Blockly.Css.Cursor = {
 
 /**
  * Current cursor (cached value).
- * @type {string}
+ * @type string
  * @private
  */
 Blockly.Css.currentCursor_ = '';
 
 /**
  * Large stylesheet added by Blockly.Css.inject.
- * @type {Element}
+ * @type Element
  * @private
  */
 Blockly.Css.styleSheet_ = null;
 
 /**
  * Path to media directory, with any trailing slash removed.
- * @type {string}
+ * @type string
  * @private
  */
 Blockly.Css.mediaPath_ = '';
@@ -139,7 +139,7 @@ Blockly.Css.setCursor = function(cursor) {
  */
 Blockly.Css.CONTENT = [
   '.blocklySvg {',
-  '  background-color: #fff;',
+  '  background-color: #FEFEFE;',
   '  outline: none;',
   '  overflow: hidden;',  /* IE overflows by default. */
   '}',
@@ -181,18 +181,18 @@ Blockly.Css.CONTENT = [
 
   '.blocklyHighlightedConnectionPath {',
   '  fill: none;',
-  '  stroke: #fc3;',
+  '  stroke: #FE9A2E;',
   '  stroke-width: 4px;',
   '}',
 
   '.blocklyPathLight {',
   '  fill: none;',
   '  stroke-linecap: round;',
-  '  stroke-width: 1;',
+  '  stroke-width: 2;',
   '}',
 
   '.blocklySelected>.blocklyPath {',
-  '  stroke: #fc3;',
+  '  stroke: #000;',
   '  stroke-width: 3px;',
   '}',
 
@@ -316,8 +316,15 @@ Blockly.Css.CONTENT = [
   '  fill-opacity: .8;',
   '}',
 
+  '.blocklyColourBackground {',
+  '  fill: #666;',
+  '}',
+
   '.blocklyScrollbarBackground {',
   '  opacity: 0;',
+  '  fill: #fff;',
+  '  stroke: #e4e4e4;',
+  '  stroke-width: 1;',
   '}',
 
   '.blocklyScrollbarKnob {',
