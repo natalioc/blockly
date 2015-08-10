@@ -56,6 +56,7 @@ Blockly.Accessibility.Speech.updateBlockReader = function(type, blockSvg){
     
 	//update the blockReader
     blockReader.innerHTML = newStr;
+    console.log(newStr);
 };
 
 /*
@@ -112,12 +113,11 @@ Blockly.Accessibility.Speech.readConnection = function(name, index){
 		    name = name.substring(0,iIndex) + " ";
 
 			if(name.indexOf('ADD') > -1){
-				console.log("INHERE");
 				name = name + i;
 			}
 		}
 	}
-	
+
 	//screenreaders sometimes read words in all uppercase as individual letters
 	name = name.toLowerCase();
 	say = name + " connection."
@@ -128,6 +128,7 @@ Blockly.Accessibility.Speech.readConnection = function(name, index){
 
     //update the blockReader
     blockReader.innerHTML = say;
+    console.log(say);
 };
 
 

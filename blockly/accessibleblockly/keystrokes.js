@@ -50,6 +50,7 @@ document.onkeydown = document.onkeyup = function(e){
 		return;
 	}	
 
+//===========================================EDITING BLOCKS=======================================
 	else if(keyboardState=='editMode'){ //if you are in editMode, normal hotkeys are disabled
 		if(map[27]){ //Escape
 			console.log('Escape key pressed.');
@@ -93,6 +94,8 @@ document.onkeydown = document.onkeyup = function(e){
 		    Blockly.selected = null;
 		}
 	}
+
+//===========================================Adding block to connection =======================================
 	else if (keyboardState == 'addBlockToConnectionMode') {
 	    if (map[70]) { //F
 	        keyboardState = 'hotkeyMode';
@@ -102,15 +105,20 @@ document.onkeydown = document.onkeyup = function(e){
 	    else if (map[83]) { //S
 	        //Navigates down through blocks
 	        e.preventDefault();
-	        Blockly.Accessibility.menu_nav.menuNavDown();
+			if(active.id[0] ==":"){
+				Blockly.Accessibility.menu_nav.menuNavDown();
+			}
 	    }
 
 	    else if (map[87]) { //W
 	        //Navigates up through blocks
 	        e.preventDefault();
-	        Blockly.Accessibility.menu_nav.menuNavUp();
+			if(active.id[0] ==":"){
+				Blockly.Accessibility.menu_nav.menuNavUp();
+			}
 	    }
 	}
+//===========================================SELECTING A CONNECTION=============================================
 	else if(keyboardState == 'selectConnectionMode'){
 	    if(map[65]){ //A
 			//Navigate out
@@ -141,7 +149,7 @@ document.onkeydown = document.onkeyup = function(e){
 			Blockly.Accessibility.InBlock.enterCurrentBlock();
 		}
 	}
-	
+//===========================================EDITING BLOCKS====================================================
 	else if(keyboardState=='connectBlocksMode'){
 		if(map[27]){ //Escape
 			console.log('Escape key pressed.');
@@ -177,6 +185,7 @@ document.onkeydown = document.onkeyup = function(e){
 		    }
 		}
 	}
+//===========================================ADDING BLOCKS=======================================
 	else if(keyboardState == 'addBlockMode'){
         if (map[70]) { //F
 	        keyboardState = 'hotkeyMode';
@@ -195,7 +204,7 @@ document.onkeydown = document.onkeyup = function(e){
 	        Blockly.Accessibility.menu_nav.menuNavUp();
 	    }
 	}
-	
+//===========================================NORMAL HOTKEYS=======================================
 	else if(keyboardState=='hotkeyMode'){	
 
 	    if (map[17] && map[89]) { //Ctrl Y
@@ -268,7 +277,6 @@ document.onkeydown = document.onkeyup = function(e){
 		else if(map[13]){ //Enter
 			console.log('Enter key pressed.');
 			Blockly.Accessibility.Navigation.updateXmlSelection();
-			//temporarily navigates menu
 		}
 		
 		else if(map[27]){ //Escape
@@ -313,8 +321,8 @@ document.onkeydown = document.onkeyup = function(e){
 		else if (map[70]) { //F Add a block to the scene
 
 		    keyboardState = 'addBlockMode';
-		    var firstCategory = document.getElementById(":1");
-		    firstCategory.focus();
+		    // var firstCategory = document.getElementById(":1");
+		    // firstCategory.focus();
 		    Blockly.selected = null;
 		}
 		
@@ -371,6 +379,21 @@ document.onkeydown = document.onkeyup = function(e){
 			else{
 				Blockly.Accessibility.Navigation.traverseUp();
 			}		
+		}
+
+		//============Jumping to specific category===============
+		else{
+			//loop through the numbers on keyboard to access menu
+			for(var i = 49; i < 58; i++){
+				if(map[i]){
+					var count = i % 48;
+					var tempName = ":" + count;
+					var category = document.getElementById(tempName);
+
+					category.focus();
+					count++;
+				}
+			}
 		}
 	}
 };
