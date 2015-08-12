@@ -59,17 +59,29 @@ Blockly.Toolbox.TreeNode.prototype.onKeyDown = function(e) {
           e.preventDefault();
           break;
     case goog.events.KeyCodes.RIGHT:
-    case goog.events.KeyCodes.ENTER:
+    case goog.events.KeyCodes.SPACE:
+    case 65:
+    case 68:
       if (e.altKey) {
         break;
       }
+
+
+
       // Expand icon.
       if (this.hasChildren() && this.isUserCollapsible_) {
         this.setExpanded(true);
         this.select();
-      } 
+      }
+
+      if(this.expanded_){
+        this.setExpanded(false);
+        this.getTree().setSelectedItem(null);
+
+      }
       else{
         this.select();
+        this.setExpanded(true);
       }
       break;
     case goog.events.KeyCodes.LEFT:

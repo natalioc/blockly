@@ -297,7 +297,7 @@ Blockly.Accessibility.InBlock.unhighlightSelection = function () {
  * If a value or statement is selected, add a block to it.
  */
 Blockly.Accessibility.InBlock.addBlock = function () {
-
+    var newBlock;
     if(this.storedConnection.check_ != null){
         //sometimes get an error when we don't predefine the variable
         var loopDistance = this.storedConnection.check_.length;
@@ -305,13 +305,13 @@ Blockly.Accessibility.InBlock.addBlock = function () {
             var selectedNode = Blockly.Accessibility.menu_nav.getMenuSelection();
             if(this.storedConnection.type == 1){
                 if(selectedNode.outputConnection.check_[0] == this.storedConnection.check_[i]){
-                    var newBlock = Blockly.Accessibility.menu_nav.flyoutToWorkspace();
+                    newBlock = Blockly.Accessibility.menu_nav.flyoutToWorkspace();
                     this.safeConnect(newBlock.outputConnection);
                 }
             }
             else if(this.storedConnection.type == 2){
                 if(selectedNode.inputList[0].connection.check_[0] == this.storedConnection.check_[i]){
-                    var newBlock = Blockly.Accessibility.menu_nav.flyoutToWorkspace();
+                    newBlock = Blockly.Accessibility.menu_nav.flyoutToWorkspace();
                     this.safeConnect(newBlock.inputList[0].connection);
                 }
             }
@@ -324,23 +324,22 @@ Blockly.Accessibility.InBlock.addBlock = function () {
     //these blocks are compatable because anything can connect to this block
     else{
         if(this.storedConnection.type == 1){
-            var newBlock = Blockly.Accessibility.menu_nav.flyoutToWorkspace();
+            newBlock = Blockly.Accessibility.menu_nav.flyoutToWorkspace();
             this.safeConnect(newBlock.outputConnection);
         }
         else if(this.storedConnection.type == 2){
-            var newBlock = Blockly.Accessibility.menu_nav.flyoutToWorkspace();
+            newBlock = Blockly.Accessibility.menu_nav.flyoutToWorkspace();
             this.safeConnect(newBlock.inputList[0].connection);
         }
         else if(this.storedConnection.type == 3){
-            var newBlock = Blockly.Accessibility.menu_nav.flyoutToWorkspace();
+            newBlock = Blockly.Accessibility.menu_nav.flyoutToWorkspace();
             this.safeConnect(newBlock.previousConnection);
         }
         else if(this.storedConnection.type == 4){
-            var newBlock = Blockly.Accessibility.menu_nav.flyoutToWorkspace();
+            newBlock = Blockly.Accessibility.menu_nav.flyoutToWorkspace();
             this.safeConnect(newBlock.nextConnection);
         }
     }
-
     //Blockly.Connection.removeHighlight(this.storedHighlight);
     this.storedHighlight = null;
     this.storedConnection = null;

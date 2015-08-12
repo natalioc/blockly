@@ -200,15 +200,20 @@ Blockly.Accessibility.Speech.changeString = function(defaultStr, block, blockSvg
 			innerType = blockSvg.childBlocks_[i].type;
 			var blockAdded   = Blockly.Accessibility.menu_nav.blockToString(innerType); //get default string for that block
 			//block connected to block
-			if(blockSvg.childBlocks_[i].childBlocks_[0] != undefined ) {
+			if(blockSvg.childBlocks_[i].childBlocks_[0] != undefined) {
 				//set up variables to call blockToString and changeString
 				var childSvg   = blockSvg.childBlocks_[i].childBlocks_[0];
 				var childBlock = block.firstChild.firstChild;
 
 				//get the child block and its string
-				var childType  = childBlock.getAttribute("type");
+				//this sometimes throws an error when getting the attribute but does not cause reading issues
+				try{
+				var childType  = childBlock[0].getAttribute("type");
 				var defChildStr= Blockly.Accessibility.menu_nav.blockToString(childType);
 				var newChildStr = this.changeString(defChildStr, childBlock, childSvg);
+				}
+				catch(e){
+				}
 
 				//combination of the two attached blocks
 				blockAdded = blockAdded.replace(blockAdded,newChildStr);

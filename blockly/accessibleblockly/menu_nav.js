@@ -29,14 +29,36 @@ var flyoutArr = [];   //everytime the flyout opens the blocks in it are added to
 var oldLength = 0;    //size of the array before a new tab opened 
 var tabCount  = 0;    //current position in array/toolbox
 var lastTabCount = 0; //last position for switching up and down
+var notOpened = true; //keep track of the flyout opening and closing
 var currentFlyoutArr = []; //the current flyoutarray
 
 Blockly.Flyout.prototype.defaultShow = Blockly.Flyout.prototype.show;
 
+    /**
+     * Hide and empty the flyout.
+     */
+    Blockly.Flyout.prototype.hide = function() {
+      notOpened = true;
+      if (!this.isVisible()) {
+        return;
+      }
+      this.svgGroup_.style.display = 'none';
+      // Delete all the event listeners.
+      for (var x = 0, listen; listen = this.listeners_[x]; x++) {
+        Blockly.unbindEvent_(listen);
+      }
+      this.listeners_.length = 0;
+      if (this.reflowWrapper_) {
+        Blockly.unbindEvent_(this.reflowWrapper_);
+        this.reflowWrapper_ = null;
+      }
+      // Do NOT delete the blocks here.  Wait until Flyout.show.
+      // https://neil.fraser.name/news/2014/08/09/
+    };
+
 //called when the flyout opens
 Blockly.Flyout.prototype.show = function(xmlList){
-
-
+    notOpened = false;
     oldLength = flyoutArr.length; //update the length of the last array 
 
 
@@ -44,7 +66,6 @@ Blockly.Flyout.prototype.show = function(xmlList){
         tabCount  = oldLength;
     }
 
-    this.hide();
     // Delete any blocks from a previous showing.
     var blocks = this.workspace_.getTopBlocks(false);
     for (var x = 0, block; block = blocks[x]; x++) {
@@ -131,6 +152,8 @@ Blockly.Flyout.prototype.show = function(xmlList){
             block.removeSelect));
     }
 
+
+
     // IE 11 is an incompetant browser that fails to fire mouseout events.
     // When the mouse is over the background, deselect all blocks.
     var deselectAll = function (e) {
@@ -164,7 +187,9 @@ Blockly.Flyout.prototype.show = function(xmlList){
 
 //Navigate down through the menu using down arrow
 Blockly.Accessibility.menu_nav.menuNavDown = function(){
-
+    if(notOpened){
+        return;
+    }
     //remove last select if not the first
     if(tabCount-1 >= 0 && !(tabCount<= oldLength) && flyoutArr.length-oldLength != 2 ){
         flyoutArr[tabCount-1].removeSelect();
@@ -225,6 +250,9 @@ Blockly.Accessibility.menu_nav.menuNavDown = function(){
 
 //traverse up through the menu using up arrow
 Blockly.Accessibility.menu_nav.menuNavUp = function(){
+    if(notOpened){
+        return;
+    }
     // not in variables category       &&  not first selected  || not second item on list
     if(flyoutArr.length-oldLength != 2 &&  tabCount!=oldLength || lastTabCount==oldLength+1)
     {
@@ -278,7 +306,6 @@ Blockly.Accessibility.menu_nav.menuNavUp = function(){
 
         tabCount--; 
     }
-     console.log(flyoutArr[lastTabCount]);
 };
 
 //#endregion
@@ -338,7 +365,6 @@ Blockly.Accessibility.menu_nav.flyoutToWorkspace = function(){
 
     xml = Blockly.Xml.textToDom(completeXmlStr);//take the complete xml string and change to dom
 
-    
     // The following allows us to immediately identify the block in the scene and grab it.
     var commentNode = Blockly.Xml.textToDom('<xml><comment pinned="true" h="80" w="160">`4*K</comment></xml>');
     xml.childNodes[0].appendChild(commentNode.childNodes[0]);
@@ -350,8 +376,16 @@ Blockly.Accessibility.menu_nav.flyoutToWorkspace = function(){
 
     var comments = xmlDoc.getElementsByTagName('COMMENT');
     
-    console.log(comments);
+    //console.log(comments);
 
+    //auto select what was just added
+    var newId = flyoutArr[flyoutArr.length-1].id;
+    newId = parseInt(newId);
+    newId ++;
+    var test  = newId;
+    Blockly.Accessibility.Navigation.jumpToID(newId);
+
+    //set comment text to null
     for (var i = 0; i < comments.length; i++) {
         if (comments[i].childNodes[0].nodeValue == '`4*K') {
             var block = Blockly.Block.getById(comments[i].parentNode.getAttribute('ID'), Blockly.mainWorkspace)
@@ -399,6 +433,8 @@ Blockly.Accessibility.menu_nav.getToolboxChoices = function(){
 Blockly.Accessibility.menu_nav.getMenuSelection = function(){
     return flyoutArr[lastTabCount];
 };
+
+
 
 Blockly.Accessibility.menu_nav.blockToString = function(type, disabled){
     var result;
