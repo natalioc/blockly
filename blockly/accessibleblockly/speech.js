@@ -157,13 +157,14 @@ Blockly.Accessibility.Speech.changeString = function(defaultStr, block, blockSvg
 		if(getInputs.length >0 && block.childNodes[i]!= undefined && block.childNodes[i].textContent != undefined){
 			var newName; //the updated name of the field or dropdown in the block
 
-			if((block.lastChild !=null && block.lastChild.innerHTML != "")){
+			if((block.lastChild !=null && block.lastChild.innerHTML != "" && blockType.indexOf("procedures") == -1)){
 
 				//names arnt changing so stay the same
-				if(block.lastChild.getAttribute("name") == "NAME"){ 
+				if(block.lastChild.getAttribute("name") == "NAME" ){ 
 
 					newName = this.fieldNameChange("",blockType);
 					newStr = newStr.replace(readOrderArr[i], newName);
+
 
 				}
 
@@ -187,14 +188,19 @@ Blockly.Accessibility.Speech.changeString = function(defaultStr, block, blockSvg
 
 			//functions need a special case for matching the getInputs array and inputsArr getinputs[i+1] == inputsArr[i-1]
 			if(blockType == "procedures_defnoreturn" || blockType == "procedures_defreturn"){
-				i++;
-				newName = this.fieldNameChange(getInputs[i].textContent, blockType);
-				newStr = newStr.replace(inputsArr[i-1],newName);
-				i--;
+				newName = this.fieldNameChange(getInputs[1].innerHTML, blockType);
+				newStr =  newStr.replace(inputsArr[0], newName);
+
+				//return block
+				if(blockType == "procedures_defreturn" && getInputs.length == 3){
+					var nameLoc = getInputs[2].lastChild.lastChild;
+					var newName2 = this.fieldNameChange(nameLoc.innerHTML, blockType);
+					newStr =  newStr.replace('A', newName2);
+				}
 			}			
 
 		}
-
+		
 		//if there is an inner   block get its type and update the string
 		if(blockSvg.childBlocks_[i] != undefined){
 			innerType = blockSvg.childBlocks_[i].type;
@@ -372,6 +378,7 @@ Blockly.Accessibility.Speech.fieldNameChange = function(defaultNm, blockType){
 			newName = "text from list";
 			break;
 		default:
+			defaultNm = defaultNm + ' ';
 			newName = defaultNm.toLowerCase();
 			break;
 	}

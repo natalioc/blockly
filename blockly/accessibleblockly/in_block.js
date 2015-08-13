@@ -298,6 +298,7 @@ Blockly.Accessibility.InBlock.unhighlightSelection = function () {
  */
 Blockly.Accessibility.InBlock.addBlock = function () {
     var newBlock;
+    isConnecting = false;
     if(this.storedConnection.check_ != null){
         //sometimes get an error when we don't predefine the variable
         var loopDistance = this.storedConnection.check_.length;
@@ -483,7 +484,7 @@ Blockly.Accessibility.InBlock.disableIncompatibleBlocks = function(){
                     }
                 }
                 else{
-                    conosle.log(this.storedConnection);
+                    //console.log(this.storedConnection);
                     console.log("Not handled yet");
                 }
             }

@@ -23,6 +23,7 @@
 
 goog.provide('Blockly.Accessibility');
 
+var blockSelected = false;
 
 //#region ACCESSIBILITY_OVERRIDES
 
@@ -56,41 +57,81 @@ Blockly.Toolbox.TreeNode.prototype.onKeyDown = function(e) {
     case 67:
     case 70:
     case 86:
-          e.preventDefault();
-          break;
-    case goog.events.KeyCodes.RIGHT:
-    case goog.events.KeyCodes.SPACE:
     case 65:
-    case 68:
+      e.preventDefault();
+      break;
+    //=======navigating the menu==========  
+    //up
+    case 87:
+      Blockly.Accessibility.menu_nav.menuNavUp();
+      blockSelected = true;
+      break;
+    //down
+    case 83:
+      Blockly.Accessibility.menu_nav.menuNavDown();
+      blockSelected = true;
+      break;
+
+    //=====Open and close the menu and add blocks======
+    case goog.events.KeyCodes.ENTER:
       if (e.altKey) {
         break;
       }
+      // // Expand icon. 
+      // if (this.hasChildren() && this.isUserCollapsible_) {
+      //   this.setExpanded(true);
+      //   this.select();
+      // }
 
-
-
-      // Expand icon.
-      if (this.hasChildren() && this.isUserCollapsible_) {
-        this.setExpanded(true);
+      //open the flyout
+      if(!this.expanded_){
         this.select();
+        blockSelected  = true;
+        this.setExpanded(true);
+
+        Blockly.Accessibility.menu_nav.menuNavDown();
       }
 
-      if(this.expanded_){
-        this.setExpanded(false);
-        this.getTree().setSelectedItem(null);
+      //selecting and connecting blocks
+       else if(this.expanded_){
+        //connect to a block on the workspace
+        if(isConnecting && blockSelected){
 
-      }
-      else{
-        this.select();
-        this.setExpanded(true);
+          isConnecting   = false;
+          blockSelected  = false;
+          this.setExpanded(false);
+
+          Blockly.Accessibility.InBlock.addBlock();
+          document.getElementById("blockReader").focus();
+        }
+
+        //put block on workspace unconnected
+        else if(!isConnecting && blockSelected){
+
+          blockSelected  = false;
+          this.setExpanded(false);
+
+          Blockly.Accessibility.menu_nav.flyoutToWorkspace();
+          document.getElementById("blockReader").focus();
+
+        }
+
+        //toggle closed
+        else{
+          blockSelected  = false;
+          this.setExpanded(false);
+          this.getTree().setSelectedItem(null);
+        }
       }
       break;
+
     case goog.events.KeyCodes.LEFT:
-      if (e.altKey) {
-        break;
-      }
+
+      blockSelected  = false;
       this.setExpanded(false);
       this.getTree().setSelectedItem(null);
       break;
+
     default:
       handled = false;
   }

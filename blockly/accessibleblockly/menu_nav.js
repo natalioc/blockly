@@ -173,7 +173,7 @@ Blockly.Flyout.prototype.show = function(xmlList){
     // Fire a resize event to update the flyout's scrollbar.
     Blockly.fireUiEventNow(window, 'resize');
     this.reflowWrapper_ = Blockly.bindEvent_(this.workspace_.getCanvas(),
-        'blocklyWorkspaceChange', this, this.reflow);
+    'blocklyWorkspaceChange', this, this.reflow);
     this.workspace_.fireChangeEvent();
 
     flyoutArr = menuBlocksArr;
@@ -315,54 +315,42 @@ Blockly.Accessibility.menu_nav.menuNavUp = function(){
  */
  Blockly.Accessibility.menu_nav.readToolbox = function(){
     var blockSvg = flyoutArr[tabCount];
-    var allElements = document.getElementsByTagName('*');
-    var selectedBlock;
-    var active = document.activeElement;
+    var active   = document.activeElement;
     var lastCategory; //track the category so that it does not deselect
 
-    //if category is selected save it (all categories begin with :)
+    var say = this.blockToString(blockSvg.type, blockSvg.disabled);
+    var readBox       = document.getElementById("blockReader");
+    readBox.innerHTML = say;
+
+    //if category is selected save it (all categories begin with : )
+    //then label with aria attributes so that any change will be announced
     if(active.id[0] ==":"){
         lastCategory = active;
         lastCategory.setAttribute("aria-owns", "blockReader");
+        lastCategory.setAttribute("aria-labelledBy", "blockReader"); 
     }
-
-    //go through all the elements and find the one with matching type
-    for(var i = 0; i < allElements.length; i++){
-        //get the type of block
-        var blockType  = allElements[i].getAttribute("type");
-        var currType   = flyoutArr[tabCount].type;
-        var typeSlice = currType.slice(0, currType.indexOf('_'));
-        //check if that type is selected
-        if(blockType == currType || typeSlice == "procedures" || typeSlice == "variables"){
-            selectedBlock = allElements[i];
-            var say = this.blockToString(currType, blockSvg.disabled);
-
-            var readBox = document.getElementById("blockReader");
-            readBox.innerHTML = say;
-            console.log(say);
-            lastCategory.setAttribute("aria-labelledBy", "blockReader"); 
-        }
-    }
+    console.log(say);
 };
 
 Blockly.Accessibility.menu_nav.flyoutToWorkspace = function(){
-    var workspaceBlocksString = "";//text of what is on the workspace
-    var workspaceBlocks;//xml of what is on the workspace
-    var incompleteXml;//xml string before the chosen block has been added
-    var completeXmlStr;//string of xml to be added to workspace
-    var xml;//dom version of the xml to be added to the workspace
+    isConnecting = false;
 
-    var input = Blockly.Xml.blockToDom_(flyoutArr[lastTabCount]);//the current block tab on from the flyout
-    var textInput = Blockly.Xml.domToText(input);//the svg turned into pain text'
+    var workspaceBlocksString = "";//text of what is on the workspace
+    var workspaceBlocks;           //xml of what is on the workspace
+    var incompleteXml;             //xml string before the chosen block has been added
+    var completeXmlStr;            //string of xml to be added to workspace
+    var xml;                       //dom version of the xml to be added to the workspace
+
+    var input     = Blockly.Xml.blockToDom_(flyoutArr[lastTabCount]);//the current block tab on from the flyout
+    var textInput = Blockly.Xml.domToText(input);                    //the svg turned into pain text'
+
     //taking the xml declaration from the block after domToText adds it in
-    var partOne = textInput.substring(0, 7);//before the xml declaration
-    var partTwo = textInput.substring(44, textInput.length);//after the xml declaration
+    var partOne = textInput.substring(0, 7);                  //before the xml declaration
+    var partTwo = textInput.substring(44, textInput.length);  //after the xml declaration
     var blockString = '<xml>' + partOne + partTwo + '</xml>'; //the complete block str from the flyout that we want to add
     
-    incompleteXml = workspaceBlocksString.substring(0, workspaceBlocksString.length-6);//the xml before the chosen block has been added...stripped the </xml>
-    completeXmlStr = blockString;//incompleteXml + blockString;//the completeXML string to be added to the workspace
-    
-
+    incompleteXml  = workspaceBlocksString.substring(0, workspaceBlocksString.length-6);//the xml before the chosen block has been added...stripped the </xml>
+    completeXmlStr = blockString;               //incompleteXml + blockString;//the completeXML string to be added to the workspace
     xml = Blockly.Xml.textToDom(completeXmlStr);//take the complete xml string and change to dom
 
     // The following allows us to immediately identify the block in the scene and grab it.
@@ -380,9 +368,8 @@ Blockly.Accessibility.menu_nav.flyoutToWorkspace = function(){
 
     //auto select what was just added
     var newId = flyoutArr[flyoutArr.length-1].id;
-    newId = parseInt(newId);
+    newId     = parseInt(newId);
     newId ++;
-    var test  = newId;
     Blockly.Accessibility.Navigation.jumpToID(newId);
 
     //set comment text to null
@@ -403,27 +390,28 @@ Blockly.Accessibility.menu_nav.addNext = function(){
     var blockIdStr = '<xml> <block type="controls_if" id="8" inline="false" x="11" y="11">'//"id=\"" + "8" + "\"";
     console.log(blockIdStr);
 
-    var input = Blockly.Xml.blockToDom_(flyoutArr[lastTabCount]);//the current block tab on from the flyout
+    var input     = Blockly.Xml.blockToDom_(flyoutArr[lastTabCount]);//the current block tab on from the flyout
     var textInput = Blockly.Xml.domToText(input);//the svg turned into pain text
+
     //taking the xml declaration from the block after domToText adds it in
-    var partOne = textInput.substring(0, 7);//before the xml declaration
+    var partOne = textInput.substring(0, 7)                 //before the xml declaration
     var partTwo = textInput.substring(44, textInput.length);//after the xml declaration
+
     var blockString = '<statement name="DO0">' + partOne + partTwo + '</statement>'; //the complete block str from the flyout that we want to add
     console.log(blockString);
-    var workspaceBlocks = Blockly.Xml.workspaceToDom(Blockly.mainWorkspace);//the workspace as an xml doc
-    var workspaceBlocksString = Blockly.Xml.domToText(workspaceBlocks);//the text version of what is currently on the workspace
-    var completeXmlStr = blockIdStr + blockString + '</block>' + '</xml>';
+
+    var workspaceBlocks       = Blockly.Xml.workspaceToDom(Blockly.mainWorkspace);//the workspace as an xml doc
+    var workspaceBlocksString = Blockly.Xml.domToText(workspaceBlocks);           //the text version of what is currently on the workspace
+    var completeXmlStr        = blockIdStr + blockString + '</block>' + '</xml>';
     console.log(completeXmlStr);
+
     var xml = Blockly.Xml.textToDom(completeXmlStr);//take the complete xml string and change to dom
 
-    Blockly.mainWorkspace.clear();//clears the previous blocks on the workspace
+    Blockly.mainWorkspace.clear();                         //clears the previous blocks on the workspace
     Blockly.Xml.domToWorkspace(Blockly.mainWorkspace, xml);//adds the xml var to the main workspace
 
     Blockly.Accessibility.Navigation.updateXmlSelection();//updates the xml
-    Blockly.hideChaff();//hides the toolbox once done
-
-
-    //console.log(workspaceBlocksString.indexOf(blockIdStr));
+    Blockly.hideChaff();                                  //hides the toolbox once done
 };
 
 Blockly.Accessibility.menu_nav.getToolboxChoices = function(){
@@ -601,7 +589,7 @@ Blockly.Accessibility.menu_nav.blockToString = function(type, disabled){
             result = "function 'do something'";
             break;
         case "procedures_defreturn":
-            result = "function 'do something' then return 'A'";
+            result = "function 'do something' then return A";
             break;
         case "procedures_ifreturn":
             result = "if 'A' then return 'B'";

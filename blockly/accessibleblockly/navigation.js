@@ -73,7 +73,7 @@ Blockly.BlockSvg.prototype.select = function () {
         Blockly.Accessibility.Navigation.currentNode = Blockly.Accessibility.Navigation.getBlockNodeById(this.id);
 
         //console.log(this.id);
-        console.log(this);
+        //console.log(this);
         Blockly.Accessibility.Speech.updateBlockReader(this.type, this);
     }
 };
@@ -166,7 +166,7 @@ Blockly.Accessibility.Navigation.updateXmlSelection = function (noSelect) {
         this.undoStack.push(prevXml);
         this.redoStack = [];
 
-        console.log('THERE WAS A CHANGE');
+        //console.log('THERE WAS A CHANGE');
         
     }
 };
@@ -271,7 +271,7 @@ Blockly.Accessibility.Navigation.jumpToContainer = function(containerNumber) {
  * @param {int} The id of the block that you are jumping to
  */
 Blockly.Accessibility.Navigation.jumpToID = function(id) {
-    console.log('Jumping to block with id ' + id);
+    //console.log('Jumping to block with id ' + id);
     var jumpTo = Blockly.Accessibility.Navigation.getBlockNodeById(id);
     if (jumpTo) {
         this.currentNode = jumpTo;

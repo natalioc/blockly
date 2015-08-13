@@ -71,6 +71,8 @@ Blockly.Procedures.flyoutCategory = function (blocks, gaps, margin, workspace) {
             block.setProcedureParameters(procedureList[x][1], tempIds);
             block.initSvg();
             blocks.push(block);
+            menuBlocksArr.push(block);//added for blockly navigation.js
+
             gaps.push(margin * 2);
         }
     }

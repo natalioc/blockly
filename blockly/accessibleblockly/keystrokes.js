@@ -155,22 +155,6 @@ document.onkeydown = document.onkeyup = function(e){
 	        keyboardState = 'hotkeyMode';
 	        Blockly.Accessibility.InBlock.addBlock();
 	    }
-
-	    else if (map[83]) { //S
-	        //Navigates down through blocks
-	        e.preventDefault();
-			if(active.id[0] ==":"){
-				Blockly.Accessibility.menu_nav.menuNavDown();
-			}
-	    }
-
-	    else if (map[87]) { //W
-	        //Navigates up through blocks
-	        e.preventDefault();
-			if(active.id[0] ==":"){
-				Blockly.Accessibility.menu_nav.menuNavUp();
-			}
-	    }
 	}
 //===========================================SELECTING A CONNECTION=============================================
 	else if(keyboardState == 'selectConnectionMode'){
@@ -329,23 +313,10 @@ document.onkeydown = document.onkeyup = function(e){
 			e.preventDefault();
 		}
 		
-		else if(map[13]){ //Enter
-			console.log('Enter key pressed.');	
-			//connect two blocks
-			if(isConnecting && (lastTabCount >= oldLength) && oldLength!=0)
-			{
-				console.log("IS CONNECTING");
-				Blockly.Accessibility.InBlock.addBlock();
-				isConnecting = false;
-				document.getElementById("blockReader").focus();
-			}
-			//put block on workspace unconnected
-			else if(lastTabCount >= oldLength && !isConnecting && document.activeElement.id[0]== ":" && (tabCount - lastTabCount) !=0){
-				Blockly.Accessibility.menu_nav.flyoutToWorkspace();
-				document.getElementById("blockReader").focus();
-			}
-			Blockly.Accessibility.Navigation.updateXmlSelection();
-		}
+		// else if(map[13]){ //Enter
+		// 	console.log('Enter key pressed.');
+		// 	Blockly.Accessibility.Navigation.updateXmlSelection();
+		// }
 
 		else if(map[27]){ //Escape
 			console.log('Escape key pressed.');
@@ -418,33 +389,25 @@ document.onkeydown = document.onkeyup = function(e){
 		else if(map[82]){ //R
 			//Jumps to the top of the currently selected container
 			console.log('R key pressed.');
-			//Blockly.Accessibility.Navigation.jumpToTopOfSection();
-			Blockly.Accessibility.Navigation.jumpToID(8);
+			Blockly.Accessibility.Navigation.jumpToTopOfSection();
 		}
 		
 		else if(map[83]){ //S
 			//Navigates down through blocks
 			e.preventDefault();
-
 			var active = document.activeElement;
 
-			if(active.id[0] ==":"){
-				Blockly.Accessibility.menu_nav.menuNavDown();
-			}
-			else{
+			if(active.getAttribute("class") == "blocklySvg"){
 				Blockly.Accessibility.Navigation.traverseDown();
 			}
+		
 		}
 		
 		else if(map[87]){ //W
 			e.preventDefault();
-			var active = document.activeElement;
-			//navigate through the menu
-			if(active.id[0] ==":"){
-				Blockly.Accessibility.menu_nav.menuNavUp();
-			}
 			//navigate between blocks when not connecting
-			else if(!isConnecting){
+			var active = document.activeElement;
+			if(active.getAttribute("class") == "blocklySvg"){
 				Blockly.Accessibility.Navigation.traverseUp();
 			}		
 		}
