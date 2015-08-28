@@ -1,148 +1,350 @@
-'use strict';
-/**
- * @license
- * Visual Blocks Editor
- *
- * Copyright 2012 Google Inc.
- * https://developers.google.com/blockly/
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *   http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
+// Copyright 2010 The Closure Library Authors. All Rights Reserved.
+//
+// Licensed under the Apache License, Version 2.0 (the "License");
+// you may not use this file except in compliance with the License.
+// You may obtain a copy of the License at
+//
+//      http://www.apache.org/licenses/LICENSE-2.0
+//
+// Unless required by applicable law or agreed to in writing, software
+// distributed under the License is distributed on an "AS-IS" BASIS,
+// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+// See the License for the specific language governing permissions and
+// limitations under the License.
+goog.provide('Blockly.Tests.Testdata');
 
-/**
- * @fileoverview object that creates the tree view with indentations 
- * @author Amber Libby, Alex Bowen, Mary Costa, Rachael Bosley, Luna Meier
- */
+var testData = [];
+var $ = goog.dom.getElement;
+var tree, clipboardNode;
 
-goog.provide('Blockly.Accessibility.TreeView');
+var firstRun = 1;
 
-var importantBlockArr = []; //an array of the blocks we will be checking for comments
-var indentationArr = []; //an array that stores the depth of the blocks for indentation
+Blockly.Tests.Testdata.makeTree = function() {
+  //global isn't instantiated 
+  if(!this.firstRun){
+  	this.firstRun = 1;
+  }
+  document.getElementById("comment").innerHTML = "";
+  var treeConfig = goog.ui.tree.TreeControl.defaultConfig;
+  treeConfig['cleardotPath'] = './images/tree/cleardot.gif';
+  tree = new goog.ui.tree.TreeControl('root', treeConfig);
+  console.log(this.firstRun);
+  if(this.firstRun == 1){
+  	Blockly.Tests.Testdata.testDataVar();
+  	console.log(this.testData);
+  	this.firstRun = 2;
+  }
+  this.createTreeFromTestData(tree, this.testData);
 
-/**
- * Returns an array of the important blocks
- * (the container blocks/ the blocks that can stand complete alone) 
- * in order of top to bottom then left to right
- * DOES not handle custom blocks
- * @return {array} Array of the important blocks
- */
-Blockly.Accessibility.TreeView.getImportantBlocks = function(){
-	//Check if the workspace is empty
-	if (!xmlDoc || !xmlDoc.getElementsByTagName('BLOCK')) {
-        return null;
+  tree.render($('comment'));
+}
+
+
+Blockly.Tests.Testdata.createTreeFromTestData = function(node, data) {
+  node.setHtml(data[0]);
+  if (data.length > 1) {
+    var children = data[1];
+    var childNotCollapsible = null; // Hard coded to reduce randomness.
+    for (var i = 0; i < children.length; i++) {
+      var child = children[i];
+      var childNode = node.getTree().createNode('');
+
+      node.add(childNode);
+      this.createTreeFromTestData(childNode, child);
+
+      if (i == childNotCollapsible && child.length > 1) {
+        childNode.setIsUserCollapsible(false);
+        childNode.setExpanded(true);
+        nonCollapseNode = childNode;
+      }
+
     }
-    //Add all xml blocks in the to blockArr 
-    var blockArr = xmlDoc.getElementsByTagName('BLOCK');
+  }
+}
 
-	//empty importantBlockArr from previous
-    importantBlockArr = []; 
+Blockly.Tests.Testdata.toggleNonCollapseNode = function() {
+  nonCollapseNode.setIsUserCollapsible(!nonCollapseNode.isUserCollapsible());
 
-    //adding any blocks which can stand on their own to importantBlockArr 
-    for(var i=0; i < blockArr.length; i++) {
-		//gets the type attribute of the block and sets value to strType
-		var strType = blockArr[i].getAttribute('type'); 
+}
 
-		/*
-		 important blocks are able to be found by the type attribute
-		 associated with each block
-		*/
-		if(strType.match(/controls/g)){
-			importantBlockArr.push(blockArr[i]);
-		}
-		else if(strType.match(/procedures/g)){
-			importantBlockArr.push(blockArr[i]);
-		}
-		else if(strType == "beep"){//custom block check 
-			importantBlockArr.push(blockArr[i]);
-		}
-		else if(strType == "math_change") {
-			importantBlockArr.push(blockArr[i]);
-		}
-		else if(strType == "text_append") {
-			importantBlockArr.push(blockArr[i]);
-		}
-		else if(strType == "text_print") {
-			importantBlockArr.push(blockArr[i]);
-		}
-		else if(strType == "list_setIndex") {
-			importantBlockArr.push(blockArr[i]);
-		}
-		else if(strType == "variables_set") {
-			importantBlockArr.push(blockArr[i]);
-		}
-	}
-	return importantBlockArr;
+Blockly.Tests.Testdata.cut = function() {
+  if (tree.getSelectedItem()) {
+    clipboardNode = tree.getSelectedItem();
+    if (clipboardNode.getParent()) {
+      clipboardNode.getParent().remove(clipboardNode);
+    }
+  }
+}
+
+Blockly.Tests.Testdata.paste = function() {
+  if (tree.getSelectedItem() && clipboardNode) {
+    tree.getSelectedItem().add(clipboardNode);
+    clipboardNode = null;
+  }
+}
+
+
+Blockly.Tests.Testdata.testDataVar = function(){
+this.testData =
+['Countries', [['A', [['Afghanistan'],
+['Albania'],
+['Algeria'],
+['American Samoa'],
+['Andorra'],
+['Angola'],
+['Anguilla'],
+['Antarctica'],
+['Antigua and Barbuda'],
+['Argentina'],
+['Armenia'],
+['Aruba'],
+['Australia'],
+['Austria'],
+['Azerbaijan']]],
+['B', [['Bahamas'],
+['Bahrain'],
+['Bangladesh'],
+['Barbados'],
+['Belarus'],
+['Belgium'],
+['Belize'],
+['Benin'],
+['Bermuda'],
+['Bhutan'],
+['Bolivia'],
+['Bosnia and Herzegovina'],
+['Botswana'],
+['Bouvet Island'],
+['Brazil'],
+['British Indian Ocean Territory'],
+['Brunei Darussalam'],
+['Bulgaria'],
+['Burkina Faso'],
+['Burundi']]],
+['C', [['Cambodia'],
+['Cameroon'],
+['Canada'],
+['Cape Verde'],
+['Cayman Islands'],
+['Central African Republic'],
+['Chad'],
+['Chile'],
+['China'],
+['Christmas Island'],
+['Cocos (Keeling) Islands'],
+['Colombia'],
+['Comoros'],
+['Congo'],
+['Congo, the Democratic Republic of the'],
+['Cook Islands'],
+['Costa Rica'],
+['Croatia'],
+['Cuba'],
+['Cyprus'],
+['Czech Republic'],
+['C\u00f4te d\u2019Ivoire']]],
+['D', [['Denmark'],
+['Djibouti'],
+['Dominica'],
+['Dominican Republic']]],
+['E', [['Ecuador'],
+['Egypt'],
+['El Salvador'],
+['Equatorial Guinea'],
+['Eritrea'],
+['Estonia'],
+['Ethiopia']]],
+['F', [['Falkland Islands (Malvinas)'],
+['Faroe Islands'],
+['Fiji'],
+['Finland'],
+['France'],
+['French Guiana'],
+['French Polynesia'],
+['French Southern Territories']]],
+['G', [['Gabon'],
+['Gambia'],
+['Georgia'],
+['Germany'],
+['Ghana'],
+['Gibraltar'],
+['Greece'],
+['Greenland'],
+['Grenada'],
+['Guadeloupe'],
+['Guam'],
+['Guatemala'],
+['Guernsey'],
+['Guinea'],
+['Guinea-Bissau'],
+['Guyana']]],
+['H', [['Haiti'],
+['Heard Island and McDonald Islands'],
+['Holy See (Vatican City State)'],
+['Honduras'],
+['Hong Kong'],
+['Hungary']]],
+['I', [['Iceland'],
+['India'],
+['Indonesia'],
+['Iran, Islamic Republic of'],
+['Iraq'],
+['Ireland'],
+['Isle of Man'],
+['Israel'],
+['Italy']]],
+['J', [['Jamaica'],
+['Japan'],
+['Jersey'],
+['Jordan']]],
+['K', [['Kazakhstan'],
+['Kenya'],
+['Kiribati'],
+['Korea, Democratic People\u2019s Republic of'],
+['Korea, Republic of'],
+['Kuwait'],
+['Kyrgyzstan']]],
+['L', [['Lao People\u2019s Democratic Republic'],
+['Latvia'],
+['Lebanon'],
+['Lesotho'],
+['Liberia'],
+['Libyan Arab Jamahiriya'],
+['Liechtenstein'],
+['Lithuania'],
+['Luxembourg']]],
+['M', [['Macao'],
+['Macedonia, the former Yugoslav Republic of'],
+['Madagascar'],
+['Malawi'],
+['Malaysia'],
+['Maldives'],
+['Mali'],
+['Malta'],
+['Marshall Islands'],
+['Martinique'],
+['Mauritania'],
+['Mauritius'],
+['Mayotte'],
+['Mexico'],
+['Micronesia, Federated States of'],
+['Moldova, Republic of'],
+['Monaco'],
+['Mongolia'],
+['Montenegro'],
+['Montserrat'],
+['Morocco'],
+['Mozambique'],
+['Myanmar']]],
+['N', [['Namibia'],
+['Nauru'],
+['Nepal'],
+['Netherlands'],
+['Netherlands Antilles'],
+['New Caledonia'],
+['New Zealand'],
+['Nicaragua'],
+['Niger'],
+['Nigeria'],
+['Niue'],
+['Norfolk Island'],
+['Northern Mariana Islands'],
+['Norway']]],
+['O', [['Oman']]],
+['P', [['Pakistan'],
+['Palau'],
+['Palestinian Territory, Occupied'],
+['Panama'],
+['Papua New Guinea'],
+['Paraguay'],
+['Peru'],
+['Philippines'],
+['Pitcairn'],
+['Poland'],
+['Portugal'],
+['Puerto Rico']]],
+['Q', [['Qatar']]],
+['R', [['Romania'],
+['Russian Federation'],
+['Rwanda'],
+['R\u00e9union']]],
+['S', [['Saint Barth\u00e9lemy'],
+['Saint Helena'],
+['Saint Kitts and Nevis'],
+['Saint Lucia'],
+['Saint Martin (French part)'],
+['Saint Pierre and Miquelon'],
+['Saint Vincent and the Grenadines'],
+['Samoa'],
+['San Marino'],
+['Sao Tome and Principe'],
+['Saudi Arabia'],
+['Senegal'],
+['Serbia'],
+['Seychelles'],
+['Sierra Leone'],
+['Singapore'],
+['Slovakia'],
+['Slovenia'],
+['Solomon Islands'],
+['Somalia'],
+['South Africa'],
+['South Georgia and the South Sandwich Islands'],
+['Spain'],
+['Sri Lanka'],
+['Sudan'],
+['Suriname'],
+['Svalbard and Jan Mayen'],
+['Swaziland'],
+['Sweden'],
+['Switzerland'],
+['Syrian Arab Republic']]],
+['T', [['Taiwan, Province of China'],
+['Tajikistan'],
+['Tanzania, United Republic of'],
+['Thailand'],
+['Timor-Leste'],
+['Togo'],
+['Tokelau'],
+['Tonga'],
+['Trinidad and Tobago'],
+['Tunisia'],
+['Turkey'],
+['Turkmenistan'],
+['Turks and Caicos Islands'],
+['Tuvalu']]],
+['U', [['Uganda'],
+['Ukraine'],
+['United Arab Emirates'],
+['United Kingdom'],
+['United States'],
+['United States Minor Outlying Islands'],
+['Uruguay'],
+['Uzbekistan']]],
+['V', [['Vanuatu'],
+['Venezuela'],
+['Viet Nam'],
+['Virgin Islands, British'],
+['Virgin Islands, U.S.']]],
+['W', [['Wallis and Futuna'],
+['Western Sahara']]],
+['Y', [['Yemen']]],
+['Z', [['Zambia'],
+['Zimbabwe']]],
+['\u00c5', [['\u00c5land Islands']]]]]
+//return testData;
 };
 
-/**
- * Gets how deeply indented the important blocks are
- * NOT USED CURRENTLY - will not work with new prefix system
- * @param {array} array of blocks that we are checking their indentation
- */
-Blockly.Accessibility.TreeView.getIndent = function(importantBlockArr){
 
-	//a string format of the current XML Doc from the workspace
-	var currentXml = Blockly.Xml.domToPrettyText(Blockly.Xml.workspaceToDom(Blockly.mainWorkspace));
-	
-	var openStatementCnt; //how many opening STATEMENT
-	var closeStatementCnt; //how many closing STATEMENT
-	var indexOfId; //the index of where the id of the block is found in the currentXml string
-	var idOfBlock; 
-	var miniXml; //a substring of the currentXml from the beginning to indexOfId
-	var currNode; //the important block currently trying to get the indent of
-	var i;
+Blockly.Tests.Testdata.changeData = function(){
+	console.log("test");
+	var testData2 = this.testData;
+	console.log(testData2);
+	var catagory = testData2[[1]];
+	catagory[26] = ["ZZ", [["ZZTop"], ["ZZBottom"]]];
+	console.log(testData2);
+	this.testData = testData2;
+	console.log(this.testData);
+	Blockly.Tests.Testdata.makeTree();
 
-	//stores the int value of how indented the important blocks are (in the same order as importantBlockArr)
-	indentationArr = [];
-
-	for(i = 0; i < importantBlockArr.length; i++){
-		currNode = importantBlockArr[i];
-		idOfBlock = currNode.getAttribute('id');
-		indexOfId = currentXml.indexOf('id="'+idOfBlock+'"');
-		miniXml = currentXml.substring(0, indexOfId);
-		openStatementCnt = (miniXml.match(/<statement/g) || []).length;
-		closeStatementCnt = (miniXml.match(/statement>/g) || []).length;
-		//difference of open/close STATEMENTS is the indentation for the block
-		indentationArr[i] = openStatementCnt - closeStatementCnt;
-		indentationArr.push(indentationArr[i]);
-	}
-	indentationArr.splice(i);
-	return indentationArr;
-};
-
-/**
-* Jumps from a block(on the workspace) to a comment(in the comment div) AND
-* from a comment(in the comment div) to a block(on the workspace)
-*/
-Blockly.Accessibility.TreeView.commentOrBlockJump = function(){
-	//check - currentNode isn't null AND the activeElement's id is not importExport
-	//importExport is a special case for the button
-    if(currentNode != null && document.activeElement.id != "importExport") {
-    	//jump from comment to block
-    	if(document.activeElement.id) {
-    		var eleId = document.activeElement.id;//current comment id
-    		var blockId = importantBlockArr[eleId].getAttribute('id');
-    		Blockly.Accessibility.Navigation.jumpToID(blockId); 
-    	}
-    	else {
-    		//jump from block to comment
-    		var highlightedBlock = currentNode;
-			for (var i = 0; i < importantBlockArr.length; i++) { 
-				//if the current block in importantBlockArr id is the same as the highlighted block id
-	    		if(importantBlockArr[i].getAttribute('id') == highlightedBlock.getAttribute('id')) {
-	    			document.getElementById(i).focus(); //give focus to the comment with the id i
-	    		}
-	    	}
-    	}
-	}
 };

@@ -606,5 +606,42 @@ color: black;
   </div>
   <!--This is where the screen reader is updated-->
   <div id="blockReader" tabindex="-1" aria-live="assertive"></div>
+  
+  <script src="testdata.js"></script>
+  <link rel="stylesheet" href="./css/tree.css">
+  <!--<div id="treeContainer" style="width:400px"></div>-->
+  <script>Blockly.Tests.Testdata.makeTree()</script>
+  <style>
+  .goog-tree-children {
+      background-repeat: repeat-y;
+      background-image: url("./images/tree/I.png") !important;
+      background-position-y: 1px !important; /* IE only */
+      font: icon;
+    }
+
+    .goog-tree-icon {
+      background-image:url("./images/tree/tree.png");
+    }
+
+    .goog-tree-item-label {
+      font: bold 10pt Tahoma, Arial, sans-serif;
+      color: #333;
+      text-decoration: none;
+    }
+
+    .goog-tree-item-label a {
+      font: normal 10pt Tahoma, Arial, sans-serif;
+      color: #333;
+      text-decoration: none;
+    }
+
+    .goog-tree-item-label a:hover {
+      color: #00f;
+      text-decoration: underline;
+    }
+  </style>
+
+
+  
 </body>
 </html>

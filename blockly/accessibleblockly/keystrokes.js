@@ -389,7 +389,9 @@ document.onkeydown = document.onkeyup = function(e){
 		else if(map[82]){ //R
 			//Jumps to the top of the currently selected container
 			console.log('R key pressed.');
-			Blockly.Accessibility.Navigation.jumpToTopOfSection();
+			//Blockly.Accessibility.Navigation.jumpToTopOfSection();
+			//Blockly.Accessibility.TreeView.initTree();
+			Blockly.Tests.Testdata.changeData();
 		}
 		
 		else if(map[83]){ //S
