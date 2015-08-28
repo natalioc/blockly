@@ -570,7 +570,6 @@ color: black;
     </div>
     
     <textarea id="importExport" role="textbox">Program Output is here</textarea>
-  <hr>
 <!--
   <p>
     Stress test:
@@ -607,10 +606,9 @@ color: black;
   <!--This is where the screen reader is updated-->
   <div id="blockReader" tabindex="-1" aria-live="assertive"></div>
   
-  <script src="testdata.js"></script>
   <link rel="stylesheet" href="./css/tree.css">
   <!--<div id="treeContainer" style="width:400px"></div>-->
-  <script>Blockly.Tests.Testdata.makeTree()</script>
+  <script>Blockly.Accessibility.TreeView.makeTree()</script>
   <style>
   .goog-tree-children {
       background-repeat: repeat-y;
