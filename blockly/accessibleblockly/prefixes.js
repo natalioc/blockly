@@ -365,4 +365,3 @@ Blockly.Accessibility.Prefixes.getAllPrefixes = function() {
 	}
     return map;
 };
-

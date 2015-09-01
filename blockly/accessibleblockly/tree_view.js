@@ -325,3 +325,17 @@ Blockly.Accessibility.TreeView.changeData = function(){
 	this.makeTree();
 
 };
+
+/**
+*Function will go through all the prefixes and set up the data so that it can be
+* setup as a tree
+*/
+Blockly.Accessibility.TreeView.addBlockComments = function(){
+	var map = Blockly.Accessibility.Prefixes.getAllPrefixes();
+	console.log(map);
+	for (var key in map) {
+  		if (map.hasOwnProperty(key)) {
+  			console.log(map[key]);
+  		}
+	}
+};
