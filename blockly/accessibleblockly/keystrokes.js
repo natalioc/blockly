@@ -348,7 +348,6 @@ document.onkeydown = document.onkeyup = function(e){
 		
 		else if(map[69]){ //E
 			console.log('E key pressed.');
-			Blockly.Accessibility.TreeView.getImportantBlocks();
 			//Edit block of code or edit comment
 			if (Blockly.Accessibility.InBlock.enterCurrentBlock()) { // Returns false if nothing is selected
 			    keyboardState = 'editMode';
@@ -390,7 +389,8 @@ document.onkeydown = document.onkeyup = function(e){
 			//Jumps to the top of the currently selected container
 			console.log('R key pressed.');
 			//Blockly.Accessibility.Navigation.jumpToTopOfSection();
-			Blockly.Accessibility.TreeView.addBlockComments();
+			Blockly.Accessibility.TreeView.makeTree();
+			//Blockly.Accessibility.TreeView.addBlockComments();
 		}
 		
 		else if(map[83]){ //S

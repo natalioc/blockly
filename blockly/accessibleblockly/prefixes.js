@@ -167,6 +167,25 @@ Blockly.Accessibility.Prefixes.getAlphabetical = function(number) {
 	return alphabetList[number];
 };
 
+Blockly.Accessibility.Prefixes.getNumberFromAlphabetical = function(str) {
+	var alphabetList = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 
+	'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z'];
+	if(str.length != 1){
+		var firstLetter = alphabetList.indexOf(str[0].toLowerCase());
+		var secondLetter = alphabetList.indexOf(str[1].toLowerCase());
+		if(firstLetter == 0){
+			firstLetter = 26;
+		} 
+		else{
+			firstLetter = firstLetter * 26;
+		}
+		return firstLetter + secondLetter;
+	}
+	else{
+		return alphabetList.indexOf(str.toLowerCase());
+	}
+};
+
 /**
 * returns the top parent of a VALUE block
 * recursively finds the parents of the VALUE until the top parent is reached
