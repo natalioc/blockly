@@ -442,13 +442,13 @@ Blockly.Accessibility.menu_nav.blockToString = function(type, disabled){
             result = " 'A' 'and or' 'B'"; 
             break;
         case "logic_negate": 
-            result = "not ' '"; 
+            result = "not ''"; 
             break;
         case "logic_boolean":
             result = "'true or false'"; 
             break;
         case "logic_null":
-            result = "'' null";
+            result = "null";
             break;
         case "logic_ternary":
             result = "Test 'A', if true do 'B', if false do 'C'";

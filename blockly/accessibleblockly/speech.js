@@ -1,3 +1,4 @@
+
 'use strict';
 
 goog.provide('Blockly.Accessibility.Speech');
@@ -147,9 +148,15 @@ Blockly.Accessibility.Speech.changeString = function(defaultStr, block, blockSvg
 	var getInputs = block.childNodes;     //all possible inputs for block
 	var blockType = block.getAttribute("type"); 
 
+
 	//switch the input order of blocks if necessary
 	var readOrderArr = this.switchInputOrder(blockType, inputsArr);
     
+     //if there is nothing in the string to change then return it as is
+	if(inputsArr == null){
+		return newStr;
+	}
+
 	//go through any blocks or inputs that would change speech
 	for(var i = 0; i < inputsArr.length; i++){ 
 
@@ -157,23 +164,38 @@ Blockly.Accessibility.Speech.changeString = function(defaultStr, block, blockSvg
 		if(getInputs.length >0 && block.childNodes[i]!= undefined && block.childNodes[i].textContent != undefined){
 			var newName; //the updated name of the field or dropdown in the block
 
-			if((block.lastChild !=null && block.lastChild.innerHTML != "" && blockType.indexOf("procedures") == -1)){
+
+			//check that the block exists
+			if((block.lastChild !=null && block.lastChild.innerHTML != "") && blockSvg.childBlocks_[i]){
+
+				//inner container blocks should not be read.
+				if(getInputs[i].tagName == "STATEMENT"){
+					return newStr;
+				}
+
+				if(blockSvg.childBlocks_[i].type == "logic_null"){
+
+					var childType   = "logic_null";
+					var childStr    = Blockly.Accessibility.menu_nav.blockToString(childType);
+
+					newStr = newStr.replace(readOrderArr[1], childStr);    //update the string
+					newStr = newStr.replace(newStr.match(/block\./), ""); //fix blocks that have an extra "block." 
+				}
 
 				//names arnt changing so stay the same
-				if(block.lastChild.getAttribute("name") == "NAME" ){ 
+				else if(block.lastChild.getAttribute("name") == "NAME"){ 
 
 					newName = this.fieldNameChange("",blockType);
 					newStr = newStr.replace(readOrderArr[i], newName);
 
-
 				}
+
 
 				//get the text content of a changed field
 				else{
 
 					newName = this.fieldNameChange(getInputs[i].textContent, blockType);
 				    newStr = newStr.replace(readOrderArr[i], newName);
-
 				}
 			}
 			//blocks with multiple inline inputs such as create list with and create text with have mutations that will throw errors if not handled separately
@@ -188,38 +210,28 @@ Blockly.Accessibility.Speech.changeString = function(defaultStr, block, blockSvg
 
 			//functions need a special case for matching the getInputs array and inputsArr getinputs[i+1] == inputsArr[i-1]
 			if(blockType == "procedures_defnoreturn" || blockType == "procedures_defreturn"){
-				newName = this.fieldNameChange(getInputs[1].innerHTML, blockType);
-				newStr =  newStr.replace(inputsArr[0], newName);
-
-				//return block
-				if(blockType == "procedures_defreturn" && getInputs.length == 3){
-					var nameLoc = getInputs[2].lastChild.lastChild;
-					var newName2 = this.fieldNameChange(nameLoc.innerHTML, blockType);
-					newStr =  newStr.replace('A', newName2);
-				}
+				i++;
+				newName = this.fieldNameChange(getInputs[i].textContent, blockType);
+				newStr = newStr.replace(inputsArr[i-1],newName);
+				i--;
 			}			
 
 		}
-		
+
 		//if there is an inner   block get its type and update the string
 		if(blockSvg.childBlocks_[i] != undefined){
 			innerType = blockSvg.childBlocks_[i].type;
 			var blockAdded   = Blockly.Accessibility.menu_nav.blockToString(innerType); //get default string for that block
 			//block connected to block
-			if(blockSvg.childBlocks_[i].childBlocks_[0] != undefined) {
+			if(blockSvg.childBlocks_[i].childBlocks_[0] != undefined ) {
 				//set up variables to call blockToString and changeString
 				var childSvg   = blockSvg.childBlocks_[i].childBlocks_[0];
 				var childBlock = block.firstChild.firstChild;
 
 				//get the child block and its string
-				//this sometimes throws an error when getting the attribute but does not cause reading issues
-				try{
-				var childType  = childBlock[0].getAttribute("type");
+				var childType  = childBlock.getAttribute("type");
 				var defChildStr= Blockly.Accessibility.menu_nav.blockToString(childType);
 				var newChildStr = this.changeString(defChildStr, childBlock, childSvg);
-				}
-				catch(e){
-				}
 
 				//combination of the two attached blocks
 				blockAdded = blockAdded.replace(blockAdded,newChildStr);
@@ -378,7 +390,6 @@ Blockly.Accessibility.Speech.fieldNameChange = function(defaultNm, blockType){
 			newName = "text from list";
 			break;
 		default:
-			defaultNm = defaultNm + ' ';
 			newName = defaultNm.toLowerCase();
 			break;
 	}
