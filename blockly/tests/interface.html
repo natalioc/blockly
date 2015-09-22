@@ -189,15 +189,15 @@ var spaghettiXml = [
 
 //========change the boxes font size dynamically=========
 function changeFontDD(){
-  var e = document.getElementById("fontDD");
+  var e            = document.getElementById("fontDD");
   var selectedSize = e.options[e.selectedIndex].value;
-  var commentBox = document.getElementById("comment");
-  commentBox.style.fontSize =selectedSize + "px";
+  var commentBox   = document.getElementById("comment");
+  commentBox.style.fontSize = selectedSize + "px";
  
-  var outputBox = document.getElementById("importExport");
-  outputBox.style.fontSize = selectedSize+"px";
+  var outputBox             = document.getElementById("importExport");
+  outputBox.style.fontSize  = selectedSize + "px";
 
-  var infoBox = document.getElementById("infoBox");
+  var infoBox            = document.getElementById("infoBox");
   infoBox.style.fontSize = selectedSize+"px";
 }
 </script>

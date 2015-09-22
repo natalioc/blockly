@@ -430,19 +430,19 @@ Blockly.Accessibility.menu_nav.blockToString = function(type, disabled){
 
     switch (type){
         case "beep":
-            result = "beep frequency 'A' duration 'B' time until played 'C'";
+            result = "beep frequency (A) duration (B) time until played (C)";
             break;
         case "controls_if"    : 
-            result = "if 'A', do";
+            result = "if (A), do";
             break;
         case "logic_compare"  :
-            result = " 'A' 'equals' 'B'"; 
+            result = " (A) 'equals' (B)"; 
             break;
         case "logic_operation": 
-            result = " 'A' 'and or' 'B'"; 
+            result = " (A) 'and or' (B)"; 
             break;
         case "logic_negate": 
-            result = "not ''"; 
+            result = "not ()"; 
             break;
         case "logic_boolean":
             result = "'true or false'"; 
@@ -451,19 +451,19 @@ Blockly.Accessibility.menu_nav.blockToString = function(type, disabled){
             result = "null";
             break;
         case "logic_ternary":
-            result = "Test 'A', if true do 'B', if false do 'C'";
+            result = "Test (A), if true do (B), if false do (C)";
             break;
         case "controls_repeat_ext":
-            result = "repeat '10' times";
+            result = "repeat (10) times";
             break;
         case "controls_whileUntil":
-            result = "repeat 'while or until' ' '";
+            result = "repeat 'while or until' ( )";
             break;
         case "controls_for":
-            result = "count with 'i' from '1' to '10' by '1'";
+            result = "count with 'i' from (1) to (10) by (1)";
             break;
         case "controls_forEach":
-            result = "for each item 'i' in in list ''";
+            result = "for each item 'i' in in list ()";
             break;
         case "controls_flow_statements":
             result = "'break out' of loop";
@@ -472,73 +472,73 @@ Blockly.Accessibility.menu_nav.blockToString = function(type, disabled){
             result = "'number'";
             break; 
         case "math_arithmetic":
-            result = "'A' '+' 'B'";
+            result = "(A) '+' (B)";
             break; 
         case "math_single":
-            result = "'square root' of 'A'";
+            result = "'square root' of (A)";
             break; 
         case "math_trig":
-            result = "'trig' ''";
+            result = "'trig' ()";
             break; 
         case "math_constant":
             result = "'pi and constants'";
             break; 
         case "math_number_property":
-            result = "' ' is 'even'";
+            result = "( ) is 'even'";
             break; 
         case "math_change":
-            result = "change 'variable' by '1'";
+            result = "change (variable) by (1)";
             break; 
         case "math_round":
-            result = "'round' ''";
+            result = "'round' ()";
             break; 
         case "math_on_list":
-            result = "'sum' of list ''";
+            result = "'sum' of list ()";
             break; 
         case "math_modulo":
-            result = "remainder of 'A' divided by 'B'";
+            result = "remainder of (A) divided by (B)";
             break; 
         case "math_constrain":
-            result = "constrain 'A' between low '1' and high '100'";
+            result = "constrain (A) between low (1) and high (100)";
             break; 
         case "math_random_int":
-            result = "random integer from '1' to '100'";
+            result = "random integer from (1) to (100)";
             break; 
         case "math_random_float":
-            result = "''random fraction";
+            result = "random fraction";
             break; 
         case "text":
             result = "text ''";
             break; 
         case "text_join":
-            result = "Create text with 'A' combined with 'B'";
+            result = "Create text with (A) combined with (B)";
             break; 
         case "text_append":
-            result = "to 'item' append text ''";
+            result = "to 'item' append text ()";
             break; 
         case "text_length":
-            result = "length of 'text'";
+            result = "length of (text)";
             break; 
         case "text_isEmpty":
-            result = "'A' is empty";
+            result = "(A) is empty";
             break; 
         case "text_indexOf":
-            result = "in 'text' find 'first or last' occurence of text 'A'";
+            result = "in (text) find 'first or last' occurence of text (A)";
             break; 
         case "text_charAt":
-            result = "in text 'text' get 'character at index' 'A'";
+            result = "in text (text) get 'character at index' (A)";
             break; 
         case "text_getSubstring":
-            result = "in text 'text' get substring from ',index' 'A' to 'index' 'B' ";
+            result = "in text (text) get substring from ',index' (A) to 'index' (B) ";
             break; 
         case "text_changeCase":
-            result = " to 'upper or lower' case ''";
+            result = " to 'upper or lower' case ()";
             break; 
         case "text_trim":
-            result = "trim spaces from 'both sides' of ''";
+            result = "trim spaces from 'both sides' of ()";
             break; 
         case "text_print":
-            result = "print ''";
+            result = "print ()";
             break; 
         case "text_prompt_ext":
             result = "prompt for 'text' with message ' text'";
@@ -547,31 +547,31 @@ Blockly.Accessibility.menu_nav.blockToString = function(type, disabled){
             result = "create empty list";
             break; 
         case "lists_create_with":
-            result = "create list with values 'A', 'B', 'C'";
+            result = "create list with values (A), (B), (C)";
             break;  
         case "lists_repeat":
-            result = "create list with item 'A' repeated '5' times";
+            result = "create list with item (A) repeated (5) times";
             break;
         case "lists_length":
-            result = "length of '' list";
+            result = "length of () list";
             break;
         case "lists_isEmpty":
-            result = "the list 'list' is empty";
+            result = "the list (list) is empty";
             break;
         case "lists_indexOf":
-            result = "in the list 'list' find 'first' occurence of item 'A'";
+            result = "in the list (list) find 'first' occurence of item (A)";
             break;
         case "lists_getIndex":
-            result = "in the list 'list' 'get' 'index' 'A'";
+            result = "in the list (list) 'get' 'index' (A)";
             break;
         case "lists_setIndex":
-            result = "in the list 'list' 'set' 'index' 'A' as 'B'";
+            result = "in the list (list) 'set' 'index' (A) as (B)";
             break;
         case "lists_getSublist":
-            result = "in the list 'list' get sub-list from 'index' 'A' to ',index' 'B'";
+            result = "in the list (list) get sub-list from 'index' (A) to ',index' (B)";
             break;
         case "lists_split":
-            result = "make 'list from text' 'A' with delimiter 'comma'";
+            result = "make 'list from text' (A) with delimiter 'comma'";
             break;
         case "colour_picker":
             result = "colour";
@@ -589,16 +589,16 @@ Blockly.Accessibility.menu_nav.blockToString = function(type, disabled){
             result = "function 'do something'";
             break;
         case "procedures_defreturn":
-            result = "function 'do something' then return A";
+            result = "function 'do something' then return ()";
             break;
         case "procedures_ifreturn":
-            result = "if 'A' then return 'B'";
+            result = "if (A) then return (B)";
             break;
         case "variables_set":
-            result = "set 'variable' to 'A'";
+            result = "set 'variable' to (A)";
             break;
         case "variables_get":
-            result ="get variable 'A'";
+            result ="get variable (A)";
             break;
         default: 
             result = "custom"; 

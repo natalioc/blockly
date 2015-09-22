@@ -31,7 +31,7 @@ var isConnecting  = false;
  * When a mouseup event happens, update the XML selection
  */
 document.onmouseup = function(e){
-	console.log('Mouse Up');
+	//console.log('Mouse Up');
 	Blockly.Accessibility.Navigation.updateXmlSelection();
 };
  
@@ -93,7 +93,7 @@ document.onkeydown = document.onkeyup = function(e){
 		    catch (e) {
 		        console.log(e);
 		    } finally {
-		        keyboardState = 'hotkeyMode'; //prevent getting stuck on same block
+		        keyboardState = 'typingMode'; //prevent getting stuck on same block
 
 		    }
 		}
@@ -415,6 +415,7 @@ document.onkeydown = document.onkeyup = function(e){
 
 		//============Jumping to specific category===============
 		else{
+			console.log(keyboardState);
 			//loop through the numbers on keyboard to access menu
 			for(var i = 49; i < 58; i++){
 				if(map[i]){

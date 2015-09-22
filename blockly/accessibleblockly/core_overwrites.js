@@ -127,38 +127,44 @@ Blockly.Variables.flyoutCategory = function (blocks, gaps, margin, workspace) {
 
 //need avoid calling hotkeys while typing in text input
 Blockly.FieldTextInput.prototype.onHtmlInputKeyDown_ = function(e) {
+  
   keyboardState = "typingMode";
+  
   var htmlInput = Blockly.FieldTextInput.htmlInput_;
   var enterKey = 13, escKey = 27;
+
   if (e.keyCode == enterKey) {
     Blockly.WidgetDiv.hide();
-  } else if (e.keyCode == escKey) {
+  } 
+
+  else if (e.keyCode == escKey) {
     this.setText(htmlInput.defaultValue);
     Blockly.WidgetDiv.hide();
   }
+
 };
 
-//switch back to hotkey mode
-/**
- * Handle a change to the editor.
- * @param {!Event} e Keyboard event.
- * @private
- */
-Blockly.FieldTextInput.prototype.onHtmlInputChange_ = function(e) {
-  var htmlInput = Blockly.FieldTextInput.htmlInput_;
-  var escKey = 27;
-  if (e.keyCode != escKey) {
-    // Update source block.
-    var text = htmlInput.value;
-    if (text !== htmlInput.oldValue_) {
-      htmlInput.oldValue_ = text;
-      this.setText(text);
-      this.validate_();
-    } else if (goog.userAgent.WEBKIT) {
-      // Cursor key.  Render the source block to show the caret moving.
-      // Chrome only (version 26, OS X).
-      this.sourceBlock_.render();
-    }
-  }
-  keyboardState = "hotkeyMode";
-};
+// //switch back to hotkey mode
+// /**
+//  * Handle a change to the editor.
+//  * @param {!Event} e Keyboard event.
+//  * @private
+//  */
+// Blockly.FieldTextInput.prototype.onHtmlInputChange_ = function(e) {
+//   var htmlInput = Blockly.FieldTextInput.htmlInput_;
+//   var escKey = 27;
+//   if (e.keyCode != escKey) {
+//     // Update source block.
+//     var text = htmlInput.value;
+//     if (text !== htmlInput.oldValue_) {
+//       htmlInput.oldValue_ = text;
+//       this.setText(text);
+//       this.validate_();
+//     } else if (goog.userAgent.WEBKIT) {
+//       // Cursor key.  Render the source block to show the caret moving.
+//       // Chrome only (version 26, OS X).
+//       this.sourceBlock_.render();
+//     }
+//   }
+//   keyboardState = "hotkeyMode";
+// };
