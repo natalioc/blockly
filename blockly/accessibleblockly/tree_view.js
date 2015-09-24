@@ -16,6 +16,8 @@ goog.provide('Blockly.Accessibility.TreeView');
 var testData = [];
 var $ = goog.dom.getElement;
 var tree, clipboardNode;
+var category = [];
+var categoryIndex = '';
 
 /**
 *Will set up the box so that the tree can be built into it
@@ -90,16 +92,51 @@ Blockly.Accessibility.TreeView.changeData = function(){
 Blockly.Accessibility.TreeView.addBlockComments = function(){
 	//console.log(this.testData);
 	var comments = [];
-	comments[0] = ['Block Comments'];
 	var map = Blockly.Accessibility.Prefixes.getAllPrefixes();
-	var category = comments[0];
-	var firstGo = 1;
-	var x = 0;
-	var x2 = 0;
+	var initialRun = 1;
+	var doubles = false;
 	category[0] = 'Block Comments';
-	console.log(category);
+	var lastPrefix = '';
+	var prevCategory = '';
 	for (var key in map) {
   		if (map.hasOwnProperty(key)) {
+			var currentPrefix = map[key];
+
+			if(currentPrefix[1].match(/[a-z]/i)){
+				var categoryNumber = Blockly.Accessibility.Prefixes.getNumberFromAlphabetical(currentPrefix[0] + currentPrefix[1]);
+				doubles = true;
+			}
+			else{
+				var categoryNumber = Blockly.Accessibility.Prefixes.getNumberFromAlphabetical(currentPrefix[0]);
+			}
+			if(initialRun == 1){
+				initialRun++;
+				category[1] = [0];
+				category[1][0] = [0];
+				category[1][0][0] = currentPrefix;
+				lastPrefix = currentPrefix;
+			}
+			else{
+				//handles going straight down if not connected ex A1, B1, C1
+				//console.log(categoryNumber);
+				//console.log(doubles);
+				//handles prefixes that are double starters ex AA
+				if(doubles == true){
+					//lastPrefix.length < currentPrefix.length
+				}
+				else{
+
+				}
+				category[1][categoryNumber] = [0];
+				category[1][categoryNumber][0] = currentPrefix;
+				prevCategory = categoryNumber;
+				//var foo = 1;
+				//var thingsToThrowInFunction = "category[1][" + categoryNumber + "][" + foo + "]";
+				//console.log(thingsToThrowInFunction);
+
+				//this.addDepth(thingsToThrowInFunction);
+			}
+			/**
   			if(firstGo == 1){
 	  			var currentPrefix = map[key];
 	  			console.log(currentPrefix);
@@ -110,23 +147,41 @@ Blockly.Accessibility.TreeView.addBlockComments = function(){
 	  			category[1][0] = [x];
 	  			category[1][0][x] = currentPrefix;
 	  			firstGo++;
-	  			var lastPrefix = currentPrefix;
+	  			lastPrefix = currentPrefix;
 	  		}
 	  		else{
+	  			
 	  			//this one handles indents like A1 -> A1a
-	  			var currentPrefix = map[key];
 	  			console.log('in the else');
 	  			console.log(lastPrefix);
 	  			category[1][0][x] = [0];
 	  			category[1][0][x][0] = [0];
 	  			category[1][0][x][0][0] = currentPrefix;
+	  			category[1][0][x][0][1] = [0];
+	  			category[1][0][x][0][1][0] = [0];
+	  			category[1][0][x][0][1][0][0] = 'deeper';
 	  			category[1][0][x][1] = [0]
 	  			category[1][0][x][1][0] = 'tester';
+	  			//breaker
+	  			category[1][1] = [0];
+	  			category[1][1][0] = 'foo';
+	  			lastPrefix = currentPrefix;
 	  		}
+	  		*/
   		}
-  		x++;
 	}
 	console.log(category);
 	this.testData = category;
 	return category;
+};
+
+Blockly.Accessibility.TreeView.addDepth = function(tree){
+	console.log(tree);
+	var newArray = tree.slice(8, tree.length);
+	eval(newArray)[1] = [0];
+	var newCall = category + newArray;
+	
+	console.log(newArray);
+	console.log(newCall);
+
 };

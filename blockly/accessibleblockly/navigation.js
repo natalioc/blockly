@@ -165,6 +165,7 @@ Blockly.Accessibility.Navigation.updateXmlSelection = function (noSelect) {
         // If we are, remember the previous xml selection, and clear the redo stack.
         this.undoStack.push(prevXml);
         this.redoStack = [];
+        Blockly.Accessibility.TreeView.makeTree();
 
         //console.log('THERE WAS A CHANGE');
         

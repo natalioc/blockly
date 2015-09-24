@@ -80,7 +80,7 @@ Blockly.Accessibility.Prefixes.infoBoxFill = function(currentNode){
         return null;
     }
 
-	this.displayComments();
+	//this.displayComments();
 	var map = this.getAllPrefixes();
     //kills previous text in the div
 	document.getElementById("infoBox").innerHTML = "";
