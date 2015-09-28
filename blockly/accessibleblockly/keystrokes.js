@@ -93,7 +93,7 @@ document.onkeydown = document.onkeyup = function(e){
 		    catch (e) {
 		        console.log(e);
 		    } finally {
-		        keyboardState = 'typingMode'; //prevent getting stuck on same block
+		        keyboardState = 'hotkeyMode'; //prevent getting stuck on same block
 
 		    }
 		}
@@ -120,22 +120,31 @@ document.onkeydown = document.onkeyup = function(e){
 		}
 
 		else if(map[13]){ //Enter
+			console.log("IN ENteR LINE 123");
 			Blockly.Accessibility.InBlock.selectConnection();
 			Blockly.Accessibility.InBlock.enterCurrentBlock();
 
+
 		    try { // Try block in case something breaks, we still default back to hotkeymode
+		    	console.log("TRY");
 		        Blockly.Accessibility.InBlock.enterSelected();
+		      
 		    }
 		    catch (e) {
 		        console.log(e);
 		    } finally {
+		    	console.log("FINALLY");
 		    	isConnecting = true;
-		        keyboardState ='hotkeyMode';//prevent getting stuck on same block
+		 		keyboardState ='hotkeyMode';//prevent getting stuck on same block
 
 		    }
+		    
 		    //default select the first category in the menu
-		    var firstCategory = document.getElementById(":1");
-		    firstCategory.focus();
+		    var firstCategory = document.getElementById(":2");
+		    firstCategory.setAttribute("tabIndex", 0);
+		   	firstCategory.focus();
+
+			
 		}
 
 
@@ -343,6 +352,7 @@ document.onkeydown = document.onkeyup = function(e){
 		
 		else if(map[68]){ //D
 			//Navigate in
+			console.log("D PRESSED");
 			Blockly.Accessibility.Navigation.traverseIn();
 		}
 		
@@ -415,14 +425,26 @@ document.onkeydown = document.onkeyup = function(e){
 
 		//============Jumping to specific category===============
 		else{
-			console.log(keyboardState);
-			//loop through the numbers on keyboard to access menu
-			for(var i = 49; i < 58; i++){
-				if(map[i]){
-					var count = i % 48;
-					var tempName = ":" + count;
-					var category = document.getElementById(tempName);
 
+			//loop through the numbers on keyboard to access menu
+			for(var i = 48; i < 58; i++){
+
+				var category;
+				//map each number to its key
+			    if(map[i]){
+
+					var count = i % 48;
+
+					//9 has different id name
+					if(count == 9){
+						category = document.getElementById(":a");
+					}
+
+					else{
+						var tempName = ":" + (count+1);
+						category = document.getElementById(tempName);
+					}
+					
 					category.focus();
 					count++;
 				}

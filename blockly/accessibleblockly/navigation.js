@@ -341,16 +341,12 @@ Blockly.Accessibility.Navigation.traverseIn = function() {
 
     for (var i = 0; i < Blockly.selected.inputList.length; i++) {
 
-        if (Blockly.selected.inputList[i].connection != null &&
-            Blockly.selected.inputList[i].connection.type == 3) {
+        //if there is a connection and it is inline (type 3)
+        if (Blockly.selected.inputList[i].connection != null && Blockly.selected.inputList[i].connection.type == 3) {
 
-            // We always want to return at this point, since we are only concerned with the first example.
-            if (Blockly.selected.inputList[i].connection.targetConnection != null) {
-                Blockly.selected.inputList[i].connection.targetConnection.sourceBlock_.select();
-            }
-
-            return;
-
+            //select the first child
+            Blockly.selected.childBlocks_[0].select();
+             return;
         }
     }
 
