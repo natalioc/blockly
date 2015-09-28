@@ -198,7 +198,32 @@ Blockly.Accessibility.toggleInline = function(){
  * Calls the help function for the selected block
  */
 Blockly.Accessibility.helpSelectedBlock = function(){
-	Blockly.selected.showHelp_();
+
+	//Blockly.selected.showHelp_();
+
+  //set up the initial urls 
+  var urlPt1 = "./quick_reference/";
+  var urlPt2;
+  var fullUrl;
+
+  //get the appropriate file
+  switch(Blockly.selected.type.substr(0,3)){
+
+    case "con":
+    case "log":
+      urlPt1 += "logic.html";
+      break;
+
+    default:
+      break;
+    }
+
+  //jump to a specific block on the page 
+  urlPt2  = "#" + Blockly.selected.type;
+
+  //combine the strings and open new tab with the help
+  fullUrl = urlPt1 + urlPt2;
+  window.open(fullUrl,'_blank');
 };
 
 //#endregion

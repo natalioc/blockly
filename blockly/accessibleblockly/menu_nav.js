@@ -442,7 +442,7 @@ Blockly.Accessibility.menu_nav.blockToString = function(type, disabled){
             result = " (A) 'and or' (B)"; 
             break;
         case "logic_negate": 
-            result = "not ()"; 
+            result = "not (  )"; 
             break;
         case "logic_boolean":
             result = "'true or false'"; 
@@ -493,7 +493,7 @@ Blockly.Accessibility.menu_nav.blockToString = function(type, disabled){
             result = "'round' ()";
             break; 
         case "math_on_list":
-            result = "'sum' of list ()";
+            result = "'sum' of list ( )";
             break; 
         case "math_modulo":
             result = "remainder of (A) divided by (B)";
@@ -508,13 +508,13 @@ Blockly.Accessibility.menu_nav.blockToString = function(type, disabled){
             result = "random fraction";
             break; 
         case "text":
-            result = "text ''";
+            result = "'text'";
             break; 
         case "text_join":
             result = "Create text with (A) combined with (B)";
             break; 
         case "text_append":
-            result = "to 'item' append text ()";
+            result = "to 'item' append text (  )";
             break; 
         case "text_length":
             result = "length of (text)";
@@ -532,13 +532,13 @@ Blockly.Accessibility.menu_nav.blockToString = function(type, disabled){
             result = "in text (text) get substring from ',index' (A) to 'index' (B) ";
             break; 
         case "text_changeCase":
-            result = " to 'upper or lower' case ()";
+            result = " to 'upper or lower' case ( )";
             break; 
         case "text_trim":
             result = "trim spaces from 'both sides' of ()";
             break; 
         case "text_print":
-            result = "print ()";
+            result = "print ( )";
             break; 
         case "text_prompt_ext":
             result = "prompt for 'text' with message ' text'";
@@ -553,22 +553,22 @@ Blockly.Accessibility.menu_nav.blockToString = function(type, disabled){
             result = "create list with item (A) repeated (5) times";
             break;
         case "lists_length":
-            result = "length of () list";
+            result = "length of ( ) list";
             break;
         case "lists_isEmpty":
             result = "the list (list) is empty";
             break;
         case "lists_indexOf":
-            result = "in the list (list) find 'first' occurence of item (A)";
+            result = "in list (list) find 'first' occurence of item (A)";
             break;
         case "lists_getIndex":
-            result = "in the list (list) 'get' 'index' (A)";
+            result = "in list (list) 'get', 'index' (A)";
             break;
         case "lists_setIndex":
-            result = "in the list (list) 'set' 'index' (A) as (B)";
+            result = "in list (list) 'set' 'index' (A) as (B)";
             break;
         case "lists_getSublist":
-            result = "in the list (list) get sub-list from 'index' (A) to ',index' (B)";
+            result = "in list (list) get sub-list from 'index' (A) to ',index' (B)";
             break;
         case "lists_split":
             result = "make 'list from text' (A) with delimiter 'comma'";
@@ -589,7 +589,7 @@ Blockly.Accessibility.menu_nav.blockToString = function(type, disabled){
             result = "function 'do something'";
             break;
         case "procedures_defreturn":
-            result = "function 'do something' then return ()";
+            result = "function 'do something' then return ( )";
             break;
         case "procedures_ifreturn":
             result = "if (A) then return (B)";
@@ -598,7 +598,7 @@ Blockly.Accessibility.menu_nav.blockToString = function(type, disabled){
             result = "set 'variable' to (A)";
             break;
         case "variables_get":
-            result ="get variable (A)";
+            result ="get 'A'";
             break;
         default: 
             result = "custom"; 

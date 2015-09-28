@@ -44,7 +44,7 @@ Blockly.Accessibility.Speech.updateBlockReader = function(type, blockSvg){
 
 
    	//go through the blocks on the workspace and find the matching one based on type and id
-   	for (var i = 0; i<blocksArr.length; i++){
+   	for (var i = 0;  i < blocksArr.length; i++){
    		var blockType = blocksArr[i].getAttribute("type");
    		if(blockType == type && blocksArr[i].id == blockSvg.id){
 	     newStr   = this.changeString(blocksArr[i],xmlDoc);
@@ -147,87 +147,85 @@ Blockly.Accessibility.Speech.changeString = function(block, xmlDoc){
 	//get the top selected block
 	strArr[0] = Blockly.Accessibility.menu_nav.blockToString(block.getAttribute("type"));
 
-	//single blocks must be treated separately
+	//===========single blocks must be treated separately====================================================
 	if(blockArr.length == 0){
+
 		for(var i = 0; i < fieldBlcArr.length; i++){
+
 			//get the default strings for each block and any field values there are
 			var blockType  = block.getAttribute("type");
 		    strArr[i]      = Blockly.Accessibility.menu_nav.blockToString(blockType);
 
 			fieldValArr[i] = fieldBlcArr[i].innerText;
 			fieldValArr[i] = this.fieldNameChange(fieldValArr[i], fieldBlcArr[i].getAttribute("type"));
-		}
-	}
 
-	//Fill the necessary arrays of information
+		}
+
+	}
+	//==========Fill strArr with default strings============================================================
 	for(var i = 0; i < blockArr.length; i++){
 
-		//console.log(blockArr[i]);
 		//make sure blocks are not within <statements> or <next> 
 		if(blockArr[i].parentNode.nodeName != "STATEMENT" && blockArr[i].parentNode.nodeName != "NEXT"){
 
-			//get the default strings for each block and any field values there are
-			var blockType    = blockArr[i].getAttribute("type");
-		    strArr[i+1]      = Blockly.Accessibility.menu_nav.blockToString(blockType);
-		    strArr[i+1]      = strArr[i+1].replace(/block\./g, " ");
-		    console.log(strArr[i]);
-		    //Get field values (number textboxes dropdowns etc.)
-			if(fieldBlcArr != undefined){
-				fieldValArr[i] = fieldBlcArr[i].innerText;
-				fieldValArr[i] = this.fieldNameChange(fieldValArr[i], fieldBlcArr[i].getAttribute("type"));
-			}
+			var blockType = blockArr[i].getAttribute("type");
+
+		    strArr[i+1]   = Blockly.Accessibility.menu_nav.blockToString(blockType);
+		    strArr[i+1]   = strArr[i+1].replace(/block\./g, " ");
 		}
 	}
 
-	//console.log("SECTION 1")
-	//console.log(fieldValArr);
-	//console.log(blockArr);
-	//console.log(strArr);
+	//=======Get field values (number textboxes dropdowns etc.)==============================================
+	for(var i = 0; i < fieldBlcArr.length; i++){
+
+		fieldValArr[i] = fieldBlcArr[i].innerText;
+
+		//only update the array if the field is defined
+		fieldValArr[i] = this.fieldNameChange(fieldValArr[i], fieldBlcArr[i].getAttribute("type"));
+   
+	}
 
 
-
-	//Fill in all the fields
+	//=========Fill in all the fields=========================================================================
+	//go through strArr and if it has ' ' replace it with field value at valueIndex
 	var valueIndex = 0;
-	//go through strArr and if it has ' ' replace it with the LAST array element in field Val array
 	for(var i = 0; i < strArr.length; i++){
 
-		var re = /'([^']*)'/g; //set up regex to get everything in ' ' (indicates value)
+		var re = /'([^']*)'/g; //gets all values indicated by ' ' with anything in between
 
-		//if it contains ()
+		//if it contains ''
 		if(re.test(strArr[i])){
 			strArr[i] = strArr[i].replace(re,fieldValArr[valueIndex]);
 			valueIndex ++;
 		}
 	}
 
+	//===========combine multiple strings if necessary=========================================================
 	if(blockArr.length > 0){
-		//Combine the strings
-		for(var i = 0; i < strArr.length; i++ ){
-			var re = (/\([^\)]+\)/g); //set up regex to get everything in () (indicates block)
-			var matchArr;
 
-			//start replacing from beginning if it contains ()
+		var re = (/\([^\)]+\)/g); //gets all blocks indicated by ()
+		var match;
+
+		//Loop through the string array and update the first value every time 
+		for(var i = 1; i < strArr.length; i ++){
+
+			//if there are blocks to replace
 			if(re.test(strArr[0])){
 
-	 			//match () in string array
-				matchArr = strArr[0].match(re);
-
-				//replace () with next block
-				for(var j = 0; j < matchArr.length; j++){
-
-					//make sure next block is not undefined
-					if(i+1 < strArr.length){
-						strArr[0] = strArr[0].replace(matchArr[j],strArr[i+1]);
-					}
-
-				}
-
+				//find blocks to exchange
+				match     = strArr[0].match(re)[0];
+				strArr[0] = strArr[0].replace(match, strArr[i]);
+				
 			}
-			//console.log(matchArr);
 		}
-				// console.log(strArr);
-				// console.log(fieldValArr);
 	}
+
+	//=====DEBUG========
+	// console.log("FINAL");
+	// console.log(fieldValArr);
+	// console.log(fieldBlcArr);
+	// console.log(blockArr);
+	// console.log(strArr);
 
 	newStr = strArr[0];
 	return newStr;
