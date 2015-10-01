@@ -120,7 +120,6 @@ document.onkeydown = document.onkeyup = function(e){
 		}
 
 		else if(map[13]){ //Enter
-			console.log("IN ENteR LINE 123");
 			Blockly.Accessibility.InBlock.selectConnection();
 			Blockly.Accessibility.InBlock.enterCurrentBlock();
 
