@@ -1,6 +1,6 @@
 'use strict';
 
-goog.provide('Blockly.Accessibility.menu_nav');
+goog.provide('Blockly.Accessibility.MenuNav');
 goog.require('Blockly.Accessibility');
 
 
@@ -186,7 +186,7 @@ Blockly.Flyout.prototype.show = function(xmlList){
 };
 
 //Navigate down through the menu using down arrow
-Blockly.Accessibility.menu_nav.menuNavDown = function(){
+Blockly.Accessibility.MenuNav.menuNavDown = function(){
     if(notOpened){
         return;
     }
@@ -225,7 +225,7 @@ Blockly.Accessibility.menu_nav.menuNavDown = function(){
             lastTabCount = flyoutArr.length-1;
 
         }
-        Blockly.Accessibility.menu_nav.readToolbox(); 
+        Blockly.Accessibility.MenuNav.readToolbox(); 
     }
 
    //handle switching from up to down
@@ -239,7 +239,7 @@ Blockly.Accessibility.menu_nav.menuNavDown = function(){
     //select next -> save last -> increase count 
     if(flyoutArr.length-oldLength != 2){
         flyoutArr[tabCount].addSelect(); 
-        Blockly.Accessibility.menu_nav.readToolbox(); 
+        Blockly.Accessibility.MenuNav.readToolbox(); 
         lastTabCount = tabCount; 
         tabCount++;
     }
@@ -249,7 +249,7 @@ Blockly.Accessibility.menu_nav.menuNavDown = function(){
 
 
 //traverse up through the menu using up arrow
-Blockly.Accessibility.menu_nav.menuNavUp = function(){
+Blockly.Accessibility.MenuNav.menuNavUp = function(){
     if(notOpened){
         return;
     }
@@ -262,8 +262,10 @@ Blockly.Accessibility.menu_nav.menuNavUp = function(){
     //handle loops 
     //if tabcount is too low    || In audio menu (only 1 block)        || trying to switch directions at the top of the menu  && In variables menu (only 2 blocks)   
     if(tabCount <= oldLength-1  || (flyoutArr.length - oldLength == 1) || (lastTabCount == tabCount-1 && tabCount-2<oldLength && (flyoutArr.length - oldLength != 2))){
+        
         lastTabCount = oldLength;
-        tabCount = flyoutArr.length-1;
+        tabCount     = flyoutArr.length-1;
+
         flyoutArr[lastTabCount].removeSelect();
     }
 
@@ -279,6 +281,7 @@ Blockly.Accessibility.menu_nav.menuNavUp = function(){
             flyoutArr[tabCount].addSelect();
             flyoutArr[flyoutArr.length-1].removeSelect();
         }
+        
         //top block
         else if(tabCount == oldLength){
 
@@ -288,7 +291,7 @@ Blockly.Accessibility.menu_nav.menuNavUp = function(){
             flyoutArr[oldLength].removeSelect();
         }
 
-        Blockly.Accessibility.menu_nav.readToolbox(); 
+        Blockly.Accessibility.MenuNav.readToolbox(); 
     }
 
     //handle switching from down to up
@@ -301,7 +304,7 @@ Blockly.Accessibility.menu_nav.menuNavUp = function(){
     if(flyoutArr.length-oldLength != 2){
         //select next -> save last -> decrease count 
         flyoutArr[tabCount].addSelect();
-        Blockly.Accessibility.menu_nav.readToolbox(); 
+        Blockly.Accessibility.MenuNav.readToolbox(); 
         lastTabCount = tabCount;
 
         tabCount--; 
@@ -313,7 +316,7 @@ Blockly.Accessibility.menu_nav.menuNavUp = function(){
 /**
  * When the selection changes, the block name is updated for screenreader
  */
- Blockly.Accessibility.menu_nav.readToolbox = function(){
+ Blockly.Accessibility.MenuNav.readToolbox = function(){
     var blockSvg = flyoutArr[tabCount];
     var active   = document.activeElement;
     var lastCategory; //track the category so that it does not deselect
@@ -332,7 +335,7 @@ Blockly.Accessibility.menu_nav.menuNavUp = function(){
     console.log(say);
 };
 
-Blockly.Accessibility.menu_nav.flyoutToWorkspace = function(){
+Blockly.Accessibility.MenuNav.flyoutToWorkspace = function(){
     isConnecting = false;
 
     var workspaceBlocksString = "";//text of what is on the workspace
@@ -384,7 +387,7 @@ Blockly.Accessibility.menu_nav.flyoutToWorkspace = function(){
     return null;
 };
 
-Blockly.Accessibility.menu_nav.addNext = function(){
+Blockly.Accessibility.MenuNav.addNext = function(){
     //var workspaceBlockId = Blockly.Accessibility.Navigation.getRetainedNode();// the selected block on the workspace
     //console.log(workspaceBlockId)
     var blockIdStr = '<xml> <block type="controls_if" id="8" inline="false" x="11" y="11">'//"id=\"" + "8" + "\"";
@@ -414,11 +417,11 @@ Blockly.Accessibility.menu_nav.addNext = function(){
     Blockly.hideChaff();                                  //hides the toolbox once done
 };
 
-Blockly.Accessibility.menu_nav.getToolboxChoices = function(){
+Blockly.Accessibility.MenuNav.getToolboxChoices = function(){
     return currentFlyoutArr;
 };
 
-Blockly.Accessibility.menu_nav.getMenuSelection = function(){
+Blockly.Accessibility.MenuNav.getMenuSelection = function(){
     return flyoutArr[lastTabCount];
 };
 

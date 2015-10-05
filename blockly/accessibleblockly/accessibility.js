@@ -63,12 +63,12 @@ Blockly.Toolbox.TreeNode.prototype.onKeyDown = function(e) {
     //=======navigating the menu==========  
     //up
     case 87:
-      Blockly.Accessibility.menu_nav.menuNavUp();
+      Blockly.Accessibility.MenuNav.menuNavUp();
       blockSelected = true;
       break;
     //down
     case 83:
-      Blockly.Accessibility.menu_nav.menuNavDown();
+      Blockly.Accessibility.MenuNav.menuNavDown();
       blockSelected = true;
       break;
 
@@ -89,7 +89,7 @@ Blockly.Toolbox.TreeNode.prototype.onKeyDown = function(e) {
         blockSelected  = true;
         this.setExpanded(true);
 
-        Blockly.Accessibility.menu_nav.menuNavDown();
+        Blockly.Accessibility.MenuNav.menuNavDown();
       }
 
       //selecting and connecting blocks
@@ -111,7 +111,7 @@ Blockly.Toolbox.TreeNode.prototype.onKeyDown = function(e) {
           blockSelected  = false;
           this.setExpanded(false);
 
-          Blockly.Accessibility.menu_nav.flyoutToWorkspace();
+          Blockly.Accessibility.MenuNav.flyoutToWorkspace();
           document.getElementById("blockReader").focus();
 
         }
