@@ -131,7 +131,7 @@ Blockly.Accessibility.Navigation.updateXmlSelection = function (noSelect) {
         prevXml = Blockly.Xml.domToPrettyText(xmlDoc);
     }
 	console.log('UpdateXML');
-	
+
     if (noSelect){
         xmlDoc = Blockly.Xml.workspaceToDom(Blockly.mainWorkspace);
         this.currentNode = null;
@@ -165,10 +165,10 @@ Blockly.Accessibility.Navigation.updateXmlSelection = function (noSelect) {
         // If we are, remember the previous xml selection, and clear the redo stack.
         this.undoStack.push(prevXml);
         this.redoStack = [];
-        Blockly.Accessibility.Prefixes.formatTreeView();
+        Blockly.Accessibility.TreeView.makeTree();
 
         //console.log('THERE WAS A CHANGE');
-        
+
     }
 };
 
@@ -303,7 +303,6 @@ Blockly.Accessibility.Navigation.traverseOut = function () {
     if (Blockly.selected.outputConnection != null) {
         if (Blockly.selected.outputConnection.targetConnection != null) {
             Blockly.selected.outputConnection.targetConnection.sourceBlock_.select();
-            Blockly.Accessibility.Prefixes.infoBoxFill(this.currentNode);
         }
         else {
             console.log('Cannot traverse outwards from here.');
@@ -314,7 +313,7 @@ Blockly.Accessibility.Navigation.traverseOut = function () {
 
     // Elaborate series of checks for nulls, but if it comes out to be true then that means this is inside of a statement.
     if (
-        Blockly.selected.previousConnection != null && 
+        Blockly.selected.previousConnection != null &&
         Blockly.selected.previousConnection.targetConnection != null && (
         Blockly.selected.previousConnection.targetConnection.sourceBlock_.nextConnection == null || //If any of the following are null, then we're safe
         Blockly.selected.previousConnection.targetConnection.sourceBlock_.nextConnection.targetConnection == null ||
@@ -322,7 +321,6 @@ Blockly.Accessibility.Navigation.traverseOut = function () {
 
 
             Blockly.selected.previousConnection.targetConnection.sourceBlock_.select();
-            Blockly.Accessibility.Prefixes.infoBoxFill(this.currentNode);
 
     }
     else {
@@ -330,7 +328,7 @@ Blockly.Accessibility.Navigation.traverseOut = function () {
     }
 };
 
-/** 
+/**
  * Goes inside of one block to go down a level
  */
 Blockly.Accessibility.Navigation.traverseIn = function() {
@@ -344,13 +342,28 @@ Blockly.Accessibility.Navigation.traverseIn = function() {
     for (var i = 0; i < Blockly.selected.inputList.length; i++) {
 
         //if there is a connection and it is inline (type 3)
-        if (Blockly.selected.inputList[i].connection != null && Blockly.selected.inputList[i].connection.type == 3) {
+        /**
+        if (Blockly.selected.inputList[i].connection != null && Blockly.selected.inputList[i].connection.type == 3 && Blockly.selected.childBlocks_.length != 0) {
 
             //select the first child
-            Blockly.selected.childBlocks_[0].select();
-            Blockly.Accessibility.Prefixes.infoBoxFill(this.currentNode);
-             return;
+            //Blockly.selected.inputList[i].select();
+            for(var j = 0; j < Blockly.selected.childBlocks_.length; j++){
+              if(Blockly.selected.childBlocks_[j].previousConnection.type == 4){
+                Blockly.selected.childBlocks_[j].select();
+               return;
+             }
+          }
         }
+      */
+      if(Blockly.selected.childBlocks_[i].previousConnection == null){
+        //TODO
+      }
+      else{
+        if(Blockly.selected.childBlocks_[i].previousConnection.type == 4){
+          Blockly.selected.childBlocks_[i].select();
+          return;
+        }
+      }
     }
 
     console.log('Cannot traverse inwards from here.');
@@ -370,7 +383,6 @@ Blockly.Accessibility.Navigation.traverseUp = function() {
     if (Blockly.selected.previousConnection != null &&
         Blockly.selected.previousConnection.targetConnection != null) {
         Blockly.selected.previousConnection.targetConnection.sourceBlock_.select();
-        Blockly.Accessibility.Prefixes.infoBoxFill(this.currentNode);
     }
     else {
         console.log('Cannot traverse up, top of list');
@@ -378,7 +390,7 @@ Blockly.Accessibility.Navigation.traverseUp = function() {
             this.previousContainer();
         }
     }
-    
+
 };
 
 /**
@@ -395,7 +407,6 @@ Blockly.Accessibility.Navigation.traverseDown = function() {
     if (Blockly.selected.nextConnection != null &&
         Blockly.selected.nextConnection.targetConnection != null) {
         Blockly.selected.nextConnection.targetConnection.sourceBlock_.select();
-        Blockly.Accessibility.Prefixes.infoBoxFill(this.currentNode);
     }
     else {
         //  Otherwise just report that you've hit the bottom.
@@ -407,7 +418,7 @@ Blockly.Accessibility.Navigation.traverseDown = function() {
         }
     }
 
-   
+
 };
 
 /**
@@ -477,7 +488,7 @@ Blockly.Accessibility.Navigation.findTop = function(myNode) {
     return myNode;
 };
 
-/** 
+/**
  * Navigates to the bottom of a section of blocks.
  * @param {node} Any node to be navigated from
  * @return {node} The bottom node in the level
@@ -507,7 +518,7 @@ Blockly.Accessibility.Navigation.findContainers = function () {
         return [];
     }
 
-    // There is something weird going on with the xml parent child relationship.  For some reason I can't directly 
+    // There is something weird going on with the xml parent child relationship.  For some reason I can't directly
     // grab the XML node, but this seems to work.  Further investigation needed.
     // I know that the first block is always going to be a region, so this should work
     // until a more clean solution is found.
@@ -540,7 +551,7 @@ Blockly.Accessibility.Navigation.updateSelection = function() {
 
 /**
  * Gets a specific node based on the block id.
- * @param {int} the block id number 
+ * @param {int} the block id number
  * @return {node} the block node
  */
 Blockly.Accessibility.Navigation.getBlockNodeById = function(id) {
@@ -548,7 +559,7 @@ Blockly.Accessibility.Navigation.getBlockNodeById = function(id) {
     if (!xmlDoc || !xmlDoc.getElementsByTagName('BLOCK')) {
         return null;
     }
-	
+
     // Go through every block until you find the one with the right id
     var myBlocks = xmlDoc.getElementsByTagName('BLOCK');
     for (var i = 0; i < myBlocks.length; i++) {
