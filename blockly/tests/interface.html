@@ -109,7 +109,7 @@ function fromXml() {
 function toCode(lang) {
   var output = document.getElementById('importExport');
   output.value = Blockly[lang].workspaceToCode();
-  
+
 }
 
 function airstrike(n) {
@@ -193,7 +193,7 @@ function changeFontDD(){
   var selectedSize = e.options[e.selectedIndex].value;
   var commentBox   = document.getElementById("comment");
   commentBox.style.fontSize = selectedSize + "px";
- 
+
   var outputBox             = document.getElementById("importExport");
   outputBox.style.fontSize  = selectedSize + "px";
 
@@ -201,6 +201,8 @@ function changeFontDD(){
   infoBox.style.fontSize = selectedSize+"px";
 }
 </script>
+
+<link rel="stylesheet" type="text/css" href="interface.css">
 
 <style>
 html, body {
@@ -255,10 +257,10 @@ h1 {
   resize: vertical;
   margin-top: 5px;
 }
-#buttons { 
+#buttons {
   width: 50%;
 }
-#buttons button { 
+#buttons button {
   width: 100%;
 }
 #comment{
@@ -325,7 +327,7 @@ color: black;
   <div id="collaborators" tabindex="-1"></div>
 
   <div id="blocklyDiv"></div>
-  
+
   <xml id="toolbox" style="display: none">
     <category name="Audio">
       <block type="beep"></block>
@@ -333,7 +335,7 @@ color: black;
 	<category name="Logic">
       <block type="controls_if"></block>
       <block type="logic_compare"></block>
-      <block type="logic_operation"></block> 
+      <block type="logic_operation"></block>
       <block type="logic_negate"></block>
       <block type="logic_boolean"></block>
       <block type="logic_null"></block>
@@ -540,7 +542,7 @@ color: black;
     <category name="Variables" custom="VARIABLE"></category>
     <category name="Functions" custom="PROCEDURE"></category>
   </xml>
-    
+
     <div id="infoBox"></div>
 
 
@@ -552,9 +554,10 @@ color: black;
             <option role="option" value='18'>18</option>
             <option role="option" value='24'>24</option>
             <option role="option" value='36' selected="selected" >36</option>
-            <option role="option" value='48'>48</option> 
+            <option role="option" value='48'>48</option>
             <option role="option" value='72'>72</option>
         </select>
+
     </div>
 
     <p tabindex="-1" id="comment" >Comments go here</p>
@@ -570,7 +573,7 @@ color: black;
             <button type="button" value="To Dart" onclick="toCode('Dart')">To Dart</button>
             <button type="button" value="Run JavaScript" onclick="runCode()">Run JavaScript</button>
         </div>
-    
+
         <textarea id="importExport" role="textbox">Program Output is here</textarea>
 <!--
   <p>
@@ -591,7 +594,7 @@ color: black;
 
     <br>
     <br>
-	
+
 
     <!-- Undo and redo buttons. -->
     <!-- TODO: Uncomment this when undo/redo are fixed. -->
@@ -605,42 +608,26 @@ color: black;
     <textarea id="chatbox" style="width: 26%; height: 12em" disabled="true"></textarea>
 
   </div>
+  <!--
+  <ol class="tree">
+  <li>
+      <label for="Folder1">Folder 1</label>
+      <input type="checkbox" id="Folder1"/>
+      <ol>
+          <li class="file"><a>A1</a></li>
+          <li>
+            <label for="subFolder">A2</label>
+            <input type="checkbox" id="subFolder"/>
+            <ol>
+              <li class="file"><a>A3</a></li>
+            </ol>
+          </li>
+      </ol>
+  </li>
+  </ol>
+  ->
+
   <!--This is where the screen reader is updated-->
   <div id="blockReader" tabindex="-1" aria-live="assertive"></div>
-  
-  <link rel="stylesheet" href="./css/tree.css">
-  <!--<div id="treeContainer" style="width:400px"></div>-->
-  <style>
-  .goog-tree-children {
-      background-repeat: repeat-y;
-      background-image: url("./images/tree/I.png") !important;
-      background-position-y: 1px !important; /* IE only */
-      font: icon;
-    }
-
-    .goog-tree-icon {
-      background-image:url("./images/tree/tree.png");
-    }
-
-    .goog-tree-item-label {
-      font: bold 10pt Tahoma, Arial, sans-serif;
-      color: #333;
-      text-decoration: none;
-    }
-
-    .goog-tree-item-label a {
-      font: normal 10pt Tahoma, Arial, sans-serif;
-      color: #333;
-      text-decoration: none;
-    }
-
-    .goog-tree-item-label a:hover {
-      color: #00f;
-      text-decoration: underline;
-    }
-  </style>
-
-
-  
 </body>
 </html>

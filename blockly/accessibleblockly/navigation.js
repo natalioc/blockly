@@ -165,7 +165,7 @@ Blockly.Accessibility.Navigation.updateXmlSelection = function (noSelect) {
         // If we are, remember the previous xml selection, and clear the redo stack.
         this.undoStack.push(prevXml);
         this.redoStack = [];
-        Blockly.Accessibility.TreeView.makeTree();
+        Blockly.Accessibility.Prefixes.formatTreeView();
 
         //console.log('THERE WAS A CHANGE');
         
@@ -303,6 +303,7 @@ Blockly.Accessibility.Navigation.traverseOut = function () {
     if (Blockly.selected.outputConnection != null) {
         if (Blockly.selected.outputConnection.targetConnection != null) {
             Blockly.selected.outputConnection.targetConnection.sourceBlock_.select();
+            Blockly.Accessibility.Prefixes.infoBoxFill(this.currentNode);
         }
         else {
             console.log('Cannot traverse outwards from here.');
@@ -321,6 +322,7 @@ Blockly.Accessibility.Navigation.traverseOut = function () {
 
 
             Blockly.selected.previousConnection.targetConnection.sourceBlock_.select();
+            Blockly.Accessibility.Prefixes.infoBoxFill(this.currentNode);
 
     }
     else {
@@ -346,6 +348,7 @@ Blockly.Accessibility.Navigation.traverseIn = function() {
 
             //select the first child
             Blockly.selected.childBlocks_[0].select();
+            Blockly.Accessibility.Prefixes.infoBoxFill(this.currentNode);
              return;
         }
     }
@@ -367,6 +370,7 @@ Blockly.Accessibility.Navigation.traverseUp = function() {
     if (Blockly.selected.previousConnection != null &&
         Blockly.selected.previousConnection.targetConnection != null) {
         Blockly.selected.previousConnection.targetConnection.sourceBlock_.select();
+        Blockly.Accessibility.Prefixes.infoBoxFill(this.currentNode);
     }
     else {
         console.log('Cannot traverse up, top of list');
@@ -391,6 +395,7 @@ Blockly.Accessibility.Navigation.traverseDown = function() {
     if (Blockly.selected.nextConnection != null &&
         Blockly.selected.nextConnection.targetConnection != null) {
         Blockly.selected.nextConnection.targetConnection.sourceBlock_.select();
+        Blockly.Accessibility.Prefixes.infoBoxFill(this.currentNode);
     }
     else {
         //  Otherwise just report that you've hit the bottom.
