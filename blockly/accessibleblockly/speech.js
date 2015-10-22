@@ -57,7 +57,6 @@ Blockly.Accessibility.Speech.updateBlockReader = function(type, blockSvg){
     
 	//update the blockReader
     blockReader.innerHTML = newStr;
-    console.log(newStr);
 };
 
 /*
@@ -532,7 +531,7 @@ Blockly.Accessibility.Speech.blockToString = function(type, disabled){
             result = " (A) 'equals' (B)"; 
             break;
         case "logic_operation": 
-            result = " (A) 'and or' (B)"; 
+            result = " (A) 'and/or' (B)"; 
             break;
         case "logic_negate": 
             result = "not (  )"; 

@@ -24,9 +24,13 @@ goog.require('Blockly.Accessibility.TreeView');
 goog.require('Blockly.Accessibility.Prefixes');
 goog.require('Blockly.Flyout');
 
+//default constructor 
+Blockly.Accessibility.Keystrokes = function(){
+
+}
 var map = [];
 var keyboardState = 'hotkeyMode';
-var isConnecting  = false;
+Blockly.Accessibility.Keystrokes.prototype.isConnecting  = false;
 /**
  * When a mouseup event happens, update the XML selection
  */
@@ -47,7 +51,6 @@ document.onkeydown = document.onkeyup = function(e){
 
 	if(keyboardState=='typingMode'){ //if you are typing, hotkeys disabled
 		if(map[13]){ //Enter
-			console.log('Enter key pressed.');
 			keyboardState = 'hotkeyMode';
 			Blockly.Accessibility.Navigation.updateXmlSelection();
 		}
@@ -57,9 +60,8 @@ document.onkeydown = document.onkeyup = function(e){
 //===========================================EDITING BLOCKS=======================================
 	else if(keyboardState=='editMode'){ //if you are in editMode, normal hotkeys are disabled
 		if(map[27]){ //Escape
-			console.log('Escape key pressed.');
 			keyboardState = 'hotkeyMode';
-			isConnecting = false;
+			Blockly.Accessibility.Keystrokes.prototype.isConnecting = false;
 			Blockly.Accessibility.Navigation.updateXmlSelection();
 		}
 		
@@ -86,6 +88,7 @@ document.onkeydown = document.onkeyup = function(e){
 		}
 		
 		else if (map[69]) { //E
+		    Blockly.Accessibility.InBlock.enterSelected();
 		    e.preventDefault(); // Prevent default in case this opens up a typing prompt
 		    try { // Try block in case something breaks, we still default back to hotkeymode
 		        Blockly.Accessibility.InBlock.enterSelected();
@@ -108,7 +111,7 @@ document.onkeydown = document.onkeyup = function(e){
 		    catch (e) {
 		        console.log(e);
 		    } finally {
-		    	isConnecting = true;
+		    	Blockly.Accessibility.Keystrokes.prototype.isConnecting = true;
 		        keyboardState ='hotkeyMode';//prevent getting stuck on same block
 
 		    }
@@ -125,15 +128,13 @@ document.onkeydown = document.onkeyup = function(e){
 
 
 		    try { // Try block in case something breaks, we still default back to hotkeymode
-		    	console.log("TRY");
 		        Blockly.Accessibility.InBlock.enterSelected();
 		      
 		    }
 		    catch (e) {
 		        console.log(e);
 		    } finally {
-		    	console.log("FINALLY");
-		    	isConnecting = true;
+		    	Blockly.Accessibility.Keystrokes.prototype.isConnecting = true;
 		 		keyboardState ='hotkeyMode';//prevent getting stuck on same block
 
 		    }
@@ -189,7 +190,6 @@ document.onkeydown = document.onkeyup = function(e){
 		}
 		
 		else if(map[69]){ //E
-			console.log('E key pressed.');
 			//Edit block of code or edit comment
 			keyboardState = 'connectBlocksMode';
 			Blockly.Accessibility.InBlock.enterCurrentBlock();
@@ -333,7 +333,6 @@ document.onkeydown = document.onkeyup = function(e){
 		}
 		
 		else if(map[9]){ //Tab
-			console.log('Tab key pressed.');
 			//Go through the same level of code
 		}
 		
@@ -343,7 +342,6 @@ document.onkeydown = document.onkeyup = function(e){
 		
 		else if(map[67]){ //C
 			//Add a comment
-			console.log('C key pressed.');
 			//Blockly.Accessibility.addComment();
 			//e.preventDefault();
 			Blockly.Accessibility.InBlock.disableIncompatibleBlocks();
@@ -351,12 +349,10 @@ document.onkeydown = document.onkeyup = function(e){
 		
 		else if(map[68]){ //D
 			//Navigate in
-			console.log("D PRESSED");
 			Blockly.Accessibility.Navigation.traverseIn();
 		}
 		
 		else if(map[69]){ //E
-			console.log('E key pressed.');
 			//Edit block of code or edit comment
 			if (Blockly.Accessibility.InBlock.enterCurrentBlock()) { // Returns false if nothing is selected
 			    keyboardState = 'editMode';
@@ -372,31 +368,27 @@ document.onkeydown = document.onkeyup = function(e){
 		}
 		
 		else if(map[71]){ //G
-			console.log('G key pressed.');
 			//Blockly.Accessibility.TreeView.commentOrBlockJump();
 			//Goto the block the comment that is currently selected is from
 			//Alternatively goto the comment that is connected to the currently selected block
 			Blockly.Accessibility.InBlock.addBlock();
-			isConnecting = false;
+			Blockly.Accessibility.Keystrokes.prototype.isConnecting = false;
 			document.getElementById("blockReader").focus();
 		}
 		
 		else if(map[77]){ //M
-			console.log('M key pressed.');
 			//This should initiate menu mode
 			//This should initiate a menu to add a block using hotkeys
 			keyboardState='menuMode';	
 		}	
 		
 		else if(map[78]){ //N
-			console.log('N key pressed.');
 			Blockly.Accessibility.Prefixes.getInfoBox();//currently placed here until button is found to hide and show the infobox
 			//Initiate a navigate search function
 		}
 		
 		else if(map[82]){ //R
 			//Jumps to the top of the currently selected container
-			console.log('R key pressed.');
 			//Blockly.Accessibility.Navigation.jumpToTopOfSection();
 			Blockly.Accessibility.TreeView.makeTree();
 			//Blockly.Accessibility.TreeView.addBlockComments();

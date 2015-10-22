@@ -29,7 +29,7 @@ var flyoutArr = [];   //everytime the flyout opens the blocks in it are added to
 var oldLength = 0;    //size of the array before a new tab opened 
 var tabCount  = 0;    //current position in array/toolbox
 var lastTabCount = 0; //last position for switching up and down
-var notOpened = true; //keep track of the flyout opening and closing
+var opened = false; //keep track of the flyout opening and closing
 var currentFlyoutArr = []; //the current flyoutarray
 
 Blockly.Flyout.prototype.defaultShow = Blockly.Flyout.prototype.show;
@@ -38,7 +38,7 @@ Blockly.Flyout.prototype.defaultShow = Blockly.Flyout.prototype.show;
      * Hide and empty the flyout.
      */
     Blockly.Flyout.prototype.hide = function() {
-      notOpened = true;
+      opened = false;
       if (!this.isVisible()) {
         return;
       }
@@ -58,7 +58,7 @@ Blockly.Flyout.prototype.defaultShow = Blockly.Flyout.prototype.show;
 
 //called when the flyout opens
 Blockly.Flyout.prototype.show = function(xmlList){
-    notOpened = false;
+    opened = true;
     oldLength = flyoutArr.length; //update the length of the last array 
 
 
@@ -187,7 +187,7 @@ Blockly.Flyout.prototype.show = function(xmlList){
 
 //Navigate down through the menu using down arrow
 Blockly.Accessibility.MenuNav.menuNavDown = function(){
-    if(notOpened){
+    if(!opened){
         return;
     }
     //remove last select if not the first
@@ -243,6 +243,8 @@ Blockly.Accessibility.MenuNav.menuNavDown = function(){
         lastTabCount = tabCount; 
         tabCount++;
     }
+            Blockly.Accessibility.MenuNav.readToolbox(); 
+
 };
 
 
@@ -250,7 +252,7 @@ Blockly.Accessibility.MenuNav.menuNavDown = function(){
 
 //traverse up through the menu using up arrow
 Blockly.Accessibility.MenuNav.menuNavUp = function(){
-    if(notOpened){
+    if(!opened){
         return;
     }
     // not in variables category       &&  not first selected  || not second item on list
@@ -309,6 +311,8 @@ Blockly.Accessibility.MenuNav.menuNavUp = function(){
 
         tabCount--; 
     }
+ Blockly.Accessibility.MenuNav.readToolbox(); 
+
 };
 
 //#endregion
@@ -317,26 +321,31 @@ Blockly.Accessibility.MenuNav.menuNavUp = function(){
  * When the selection changes, the block name is updated for screenreader
  */
  Blockly.Accessibility.MenuNav.readToolbox = function(){
-    var blockSvg = flyoutArr[tabCount];
+    var blockSvg = flyoutArr[tabCount-1];
     var active   = document.activeElement;
     var lastCategory; //track the category so that it does not deselect
 
-    var say = Blockly.Accessibility.Speech.blockToString(blockSvg.type, blockSvg.disabled);
-    var readBox       = document.getElementById("blockReader");
-    readBox.innerHTML = say;
+    if(blockSvg == undefined){
+        return;
+    }
+    var say     = Blockly.Accessibility.Speech.blockToString(blockSvg.type, blockSvg.disabled);
+    var readBox = document.getElementById("blockReader");
+
 
     //if category is selected save it (all categories begin with : )
     //then label with aria attributes so that any change will be announced
     if(active.id[0] ==":"){
         lastCategory = active;
-        lastCategory.setAttribute("aria-owns", "blockReader");
-        lastCategory.setAttribute("aria-labelledBy", "blockReader"); 
+        lastCategory.setAttribute("aria-owns", "readBox");
+        lastCategory.setAttribute("aria-labelledBy", "readBox"); 
     }
+        readBox.innerHTML = say;
+
     console.log(say);
 };
 
 Blockly.Accessibility.MenuNav.flyoutToWorkspace = function(){
-    isConnecting = false;
+    Blockly.Accessibility.Keystrokes.prototype.isConnecting = false;
 
     var workspaceBlocksString = "";//text of what is on the workspace
     var workspaceBlocks;           //xml of what is on the workspace

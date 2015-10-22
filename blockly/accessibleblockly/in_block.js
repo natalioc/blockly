@@ -25,6 +25,7 @@ goog.provide('Blockly.Accessibility.InBlock');
 
 goog.require('Blockly.Accessibility.Navigation');
 goog.require('Blockly.Accessibility.Speech');
+goog.require('Blockly.Accessibility.Keystrokes');
 goog.require('Blockly.Accessibility');
 
 Blockly.Accessibility.InBlock.storedConnection = null;
@@ -92,7 +93,6 @@ Blockly.Accessibility.InBlock.enterCurrentBlock = function () {
 
     this.connectionsIndex = 0;
 
-    //console.log(this.selectionList[this.connectionsIndex]);
     Blockly.Accessibility.Speech.readConnection(this.selectionList[this.connectionsIndex].name, this.connectionsIndex);
     this.highlightSelection();
 
@@ -128,7 +128,6 @@ Blockly.Accessibility.InBlock.selectPrev = function () {
         this.connectionsIndex = this.selectionList.length - 1;
     }
 
-    console.log(this.selectionList[this.connectionsIndex]);
 
     Blockly.Accessibility.Speech.readConnection(this.selectionList[this.connectionsIndex].name, this.connectionsIndex);
     this.highlightSelection();
@@ -202,12 +201,12 @@ Blockly.Accessibility.InBlock.selectConnection = function () {
     // If we don't have a stored connection, then store one.  Otherwise connect the things.
     if (this.storedConnection == null) {
         this.storedConnection = relevantConnection;
-        console.log('storing');
+
+        //storing
         this.selectionList = [];
         this.storedHighlight = this.storedConnection.returnHighlight();
     }
     else {
-        console.log('connecting');
         this.safeConnect(relevantConnection);
     }
 }
@@ -298,21 +297,21 @@ Blockly.Accessibility.InBlock.unhighlightSelection = function () {
  */
 Blockly.Accessibility.InBlock.addBlock = function () {
     var newBlock;
-    isConnecting = false;
+    Blockly.Accessibility.Keystrokes.prototype.isConnecting = false;
     if(this.storedConnection.check_ != null){
         //sometimes get an error when we don't predefine the variable
         var loopDistance = this.storedConnection.check_.length;
         for (var i = 0; i < loopDistance; i++){
-            var selectedNode = Blockly.Accessibility.menu_nav.getMenuSelection();
+            var selectedNode = Blockly.Accessibility.MenuNav.getMenuSelection();
             if(this.storedConnection.type == 1){
                 if(selectedNode.outputConnection.check_[0] == this.storedConnection.check_[i]){
-                    newBlock = Blockly.Accessibility.menu_nav.flyoutToWorkspace();
+                    newBlock = Blockly.Accessibility.MenuNav.flyoutToWorkspace();
                     this.safeConnect(newBlock.outputConnection);
                 }
             }
             else if(this.storedConnection.type == 2){
                 if(selectedNode.inputList[0].connection.check_[0] == this.storedConnection.check_[i]){
-                    newBlock = Blockly.Accessibility.menu_nav.flyoutToWorkspace();
+                    newBlock = Blockly.Accessibility.MenuNav.flyoutToWorkspace();
                     this.safeConnect(newBlock.inputList[0].connection);
                 }
             }
@@ -325,19 +324,19 @@ Blockly.Accessibility.InBlock.addBlock = function () {
     //these blocks are compatable because anything can connect to this block
     else{
         if(this.storedConnection.type == 1){
-            newBlock = Blockly.Accessibility.menu_nav.flyoutToWorkspace();
+            newBlock = Blockly.Accessibility.MenuNav.flyoutToWorkspace();
             this.safeConnect(newBlock.outputConnection);
         }
         else if(this.storedConnection.type == 2){
-            newBlock = Blockly.Accessibility.menu_nav.flyoutToWorkspace();
+            newBlock = Blockly.Accessibility.MenuNav.flyoutToWorkspace();
             this.safeConnect(newBlock.inputList[0].connection);
         }
         else if(this.storedConnection.type == 3){
-            newBlock = Blockly.Accessibility.menu_nav.flyoutToWorkspace();
+            newBlock = Blockly.Accessibility.MenuNav.flyoutToWorkspace();
             this.safeConnect(newBlock.previousConnection);
         }
         else if(this.storedConnection.type == 4){
-            newBlock = Blockly.Accessibility.menu_nav.flyoutToWorkspace();
+            newBlock = Blockly.Accessibility.MenuNav.flyoutToWorkspace();
             this.safeConnect(newBlock.nextConnection);
         }
     }
@@ -351,19 +350,23 @@ Blockly.Accessibility.InBlock.addBlock = function () {
 */
 Blockly.Accessibility.InBlock.disableIncompatibleBlocks = function(){
     if(this.storedConnection){
+
         if(this.storedConnection.check_ != null){
-            var toolboxChoices = Blockly.Accessibility.menu_nav.getToolboxChoices();  
+            var toolboxChoices = Blockly.Accessibility.MenuNav.getToolboxChoices();  
             for(var i = 0; i < toolboxChoices.length; i++) {
+
                 if(this.storedConnection.type == 1){
                     if(toolboxChoices[i].outputConnection != null){
                         if(toolboxChoices[i].outputConnection.check_ != null){
                             //if their compatibilites don't match up
                             if(toolboxChoices[i].outputConnection.check_[0] != this.storedConnection.check_[0]){
-                                toolboxChoices[i].setColour(500);
+
                                 toolboxChoices[i].disabled = true;
+                                toolboxChoices[i].updateDisabled();
+
                                 var childrenBlocks = toolboxChoices[i].childBlocks_.length;
                                 while(childrenBlocks != 0){
-                                    var childSVG = toolboxChoices[i].childBlocks_[childrenBlocks - 1].setColour(500);
+                                    var childSVG = toolboxChoices[i].childBlocks_[childrenBlocks - 1];
                                     childrenBlocks--;
                                 }
                             }
@@ -371,11 +374,12 @@ Blockly.Accessibility.InBlock.disableIncompatibleBlocks = function(){
                     }
                     //its the null block and anything like it
                     else{
-                        toolboxChoices[i].setColour(500);
-                        toolboxChoices[i].disabled = true;
+                           toolboxChoices[i].disabled = true;
+                           toolboxChoices[i].updateDisabled();
+
                         var childrenBlocks = toolboxChoices[i].childBlocks_.length;
                         while(childrenBlocks != 0){
-                            var childSVG = toolboxChoices[i].childBlocks_[childrenBlocks - 1].setColour(500);
+                            var childSVG = toolboxChoices[i].childBlocks_[childrenBlocks - 1];
                             childrenBlocks--;
                         }
                     }
@@ -386,11 +390,13 @@ Blockly.Accessibility.InBlock.disableIncompatibleBlocks = function(){
                         if(toolboxChoices[i].previousConnection.check_ != null){
                             //if their compatibilites don't match up
                             if(toolboxChoices[i].previousConnection.check_[0] != this.storedConnection.check_[0]){
-                                toolboxChoices[i].setColour(500);
+
                                 toolboxChoices[i].disabled = true;
+                                toolboxChoices[i].updateDisabled();
+
                                 var childrenBlocks = toolboxChoices[i].childBlocks_.length;
                                 while(childrenBlocks != 0){
-                                    var childSVG = toolboxChoices[i].childBlocks_[childrenBlocks - 1].setColour(500);
+                                    var childSVG = toolboxChoices[i].childBlocks_[childrenBlocks - 1];
                                     childrenBlocks--;
                                 }
                             }
@@ -398,11 +404,14 @@ Blockly.Accessibility.InBlock.disableIncompatibleBlocks = function(){
                     }
                     //its the null block and anything like it
                     else{
-                        toolboxChoices[i].setColour(500);
+                        //toolboxChoices[i].setColour(500);
                         toolboxChoices[i].disabled = true;
+                        toolboxChoices[i].updateDisabled();
+
                         var childrenBlocks = toolboxChoices[i].childBlocks_.length;
                         while(childrenBlocks != 0){
-                            var childSVG = toolboxChoices[i].childBlocks_[childrenBlocks - 1].setColour(500);
+                            var childSVG = toolboxChoices[i].childBlocks_[childrenBlocks - 1];
+                
                             childrenBlocks--;
                         }
                     }
@@ -413,11 +422,13 @@ Blockly.Accessibility.InBlock.disableIncompatibleBlocks = function(){
                         if(toolboxChoices[i].inputList[0].connection.check_ != null){
                             //if their compatibilites don't match up
                             if(toolboxChoices[i].inputList[0].connection.check_[0] != this.storedConnection.check_[0]){
-                                toolboxChoices[i].setColour(500);
-                                toolboxChoices[i].disabled = true;
+                                
+                                 toolboxChoices[i].disabled = true;
+                                 toolboxChoices[i].updateDisabled();
+
                                 var childrenBlocks = toolboxChoices[i].childBlocks_.length;
                                 while(childrenBlocks != 0){
-                                    var childSVG = toolboxChoices[i].childBlocks_[childrenBlocks - 1].setColour(500);
+                                    var childSVG = toolboxChoices[i].childBlocks_[childrenBlocks - 1];
                                     childrenBlocks--;
                                 }
                             }
@@ -425,11 +436,12 @@ Blockly.Accessibility.InBlock.disableIncompatibleBlocks = function(){
                     }
                     //its the null block and anything like it
                     else{
-                        toolboxChoices[i].setColour(500);
                         toolboxChoices[i].disabled = true;
+                        toolboxChoices[i].updateDisabled();
+
                         var childrenBlocks = toolboxChoices[i].childBlocks_.length;
                         while(childrenBlocks != 0){
-                            var childSVG = toolboxChoices[i].childBlocks_[childrenBlocks - 1].setColour(500);
+                            var childSVG = toolboxChoices[i].childBlocks_[childrenBlocks - 1];
                             childrenBlocks--;
                         }
                     }
@@ -444,27 +456,30 @@ Blockly.Accessibility.InBlock.disableIncompatibleBlocks = function(){
 
                 //types dont match disable those blocks
                 else{
-                    toolboxChoices[i].setColour(500);
-                    toolboxChoices[i].disabled = true;
+                        toolboxChoices[i].disabled = true;
+                        toolboxChoices[i].updateDisabled();
+
                     var childrenBlocks = toolboxChoices[i].childBlocks_.length;
                     while(childrenBlocks != 0){
-                        var childSVG = toolboxChoices[i].childBlocks_[childrenBlocks - 1].setColour(500);
+                        var childSVG = toolboxChoices[i].childBlocks_[childrenBlocks - 1];
                         childrenBlocks--;
                     }
                 }
             }
         }
         else{
-            var toolboxChoices = Blockly.Accessibility.menu_nav.getToolboxChoices();  
+            var toolboxChoices = Blockly.Accessibility.MenuNav.getToolboxChoices();  
             for(var i = 0; i < toolboxChoices.length; i++) {
                 if(this.storedConnection.type == 3){
                     if(toolboxChoices[i].outputConnection != null){ 
                         if(toolboxChoices[i].outputConnection.type == 1 || 2){
-                            toolboxChoices[i].setColour(500);
+
                             toolboxChoices[i].disabled = true;
+                            toolboxChoices[i].updateDisabled();
+
                             var childrenBlocks = toolboxChoices[i].childBlocks_.length;
                             while(childrenBlocks != 0){
-                                var childSVG = toolboxChoices[i].childBlocks_[childrenBlocks - 1].setColour(500);
+                                var childSVG = toolboxChoices[i].childBlocks_[childrenBlocks - 1];
                                 childrenBlocks--;
                             }
                         }
@@ -473,11 +488,13 @@ Blockly.Accessibility.InBlock.disableIncompatibleBlocks = function(){
                 else if(this.storedConnection.type == 4){
                     if(toolboxChoices[i].outputConnection != null){ 
                         if(toolboxChoices[i].outputConnection.type == 1 || 2){
-                            toolboxChoices[i].setColour(500);
+
                             toolboxChoices[i].disabled = true;
+                            toolboxChoices[i].updateDisabled();
+
                             var childrenBlocks = toolboxChoices[i].childBlocks_.length;
                             while(childrenBlocks != 0){
-                                var childSVG = toolboxChoices[i].childBlocks_[childrenBlocks - 1].setColour(500);
+                                var childSVG = toolboxChoices[i].childBlocks_[childrenBlocks - 1];
                                 childrenBlocks--;
                             }
                         }

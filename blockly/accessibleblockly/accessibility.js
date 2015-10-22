@@ -24,6 +24,8 @@
 goog.provide('Blockly.Accessibility');
 
 var blockSelected = false;
+var currId;
+var lastId = 99;
 
 //#region ACCESSIBILITY_OVERRIDES
 
@@ -49,6 +51,7 @@ Blockly.Toolbox.TreeNode.prototype.initAccessibility = function() {
  */
 Blockly.Toolbox.TreeNode.prototype.onKeyDown = function(e) {
   var handled = true;
+  currId = this.id_[1];
   switch (e.keyCode) {
     //prevent keys from skipping to categories
     case 77:
@@ -84,20 +87,20 @@ Blockly.Toolbox.TreeNode.prototype.onKeyDown = function(e) {
       // }
 
       //open the flyout
-      if(!this.expanded_){
-        this.select();
-        blockSelected  = true;
-        this.setExpanded(true);
+      if(!this.getExpanded() || (currId != lastId || lastId == 99)){
 
+        this.select();
+        this.setExpanded(true);
         Blockly.Accessibility.MenuNav.menuNavDown();
+        blockSelected = true;
       }
 
       //selecting and connecting blocks
-       else if(this.expanded_){
+       else if(this.getExpanded()){
         //connect to a block on the workspace
-        if(isConnecting && blockSelected){
+        if(Blockly.Accessibility.Keystrokes.prototype.isConnecting && blockSelected){
 
-          isConnecting   = false;
+          Blockly.Accessibility.Keystrokes.prototype.isConnecting = false;
           blockSelected  = false;
           this.setExpanded(false);
 
@@ -106,7 +109,7 @@ Blockly.Toolbox.TreeNode.prototype.onKeyDown = function(e) {
         }
 
         //put block on workspace unconnected
-        else if(!isConnecting && blockSelected){
+        else if(!Blockly.Accessibility.Keystrokes.prototype.isConnecting && blockSelected){
 
           blockSelected  = false;
           this.setExpanded(false);
@@ -118,9 +121,11 @@ Blockly.Toolbox.TreeNode.prototype.onKeyDown = function(e) {
 
         //toggle closed
         else{
-          blockSelected  = false;
-          this.setExpanded(false);
-          this.getTree().setSelectedItem(null);
+          //blockSelected  = false;
+          //this.setExpanded(false);
+          //this.getTree().setSelectedItem(null);
+          //Blockly.Accessibility.Keystrokes.prototype.isConnecting = false;
+          //Blockly.Accessibility.InBlock.unhighlightSelection();
         }
       }
       break;
@@ -145,7 +150,7 @@ Blockly.Toolbox.TreeNode.prototype.onKeyDown = function(e) {
     }
     this.updateRow();
   }
-
+  lastId = currId;
   return handled;
 };
 

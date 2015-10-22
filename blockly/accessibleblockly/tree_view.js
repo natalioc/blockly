@@ -24,7 +24,7 @@ var categoryIndex = '';
 */
 Blockly.Accessibility.TreeView.makeTree = function() {
     //global isn't instantiated 
-    console.log("Here")
+    //console.log("Here")
     if(!this.firstRun){
   	  this.firstRun = 1;
     }
@@ -33,8 +33,8 @@ Blockly.Accessibility.TreeView.makeTree = function() {
     treeConfig['cleardotPath'] = './images/tree/cleardot.gif';
     tree = new goog.ui.tree.TreeControl('root', treeConfig);
     var treeData = this.addBlockComments();
-    console.log(this.testData);
-    console.log(treeData);
+    //console.log(this.testData);
+    //console.log(treeData);
     this.createTreeFromTestData(tree, this.testData);//this.testData);
     tree.render($('comment'));
 }
@@ -170,18 +170,18 @@ Blockly.Accessibility.TreeView.addBlockComments = function(){
 	  		*/
   		}
 	}
-	console.log(category);
+	//console.log(category);
 	this.testData = category;
 	return category;
 };
 
 Blockly.Accessibility.TreeView.addDepth = function(tree){
-	console.log(tree);
+	//console.log(tree);
 	var newArray = tree.slice(8, tree.length);
 	eval(newArray)[1] = [0];
 	var newCall = category + newArray;
 	
-	console.log(newArray);
-	console.log(newCall);
+	//console.log(newArray);
+	//console.log(newCall);
 
 };
