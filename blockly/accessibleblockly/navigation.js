@@ -54,7 +54,10 @@ Blockly.Accessibility.Navigation.undoStack = [];
  * On scene change this stack empties.
  */
 Blockly.Accessibility.Navigation.redoStack = [];
-
+/**
+* Temporary storage for navigating within a statements children
+*/
+Blockly.Accessibility.Navigation.statementChildren = [];
 //#region XML_UPDATING
 
 // Default functions for our hooks.
@@ -339,29 +342,11 @@ Blockly.Accessibility.Navigation.traverseIn = function() {
         return;
     }
 
-    for (var i = 0; i < Blockly.selected.inputList.length; i++) {
-
-        //if there is a connection and it is inline (type 3)
-        /**
-        if (Blockly.selected.inputList[i].connection != null && Blockly.selected.inputList[i].connection.type == 3 && Blockly.selected.childBlocks_.length != 0) {
-
-            //select the first child
-            //Blockly.selected.inputList[i].select();
-            for(var j = 0; j < Blockly.selected.childBlocks_.length; j++){
-              if(Blockly.selected.childBlocks_[j].previousConnection.type == 4){
-                Blockly.selected.childBlocks_[j].select();
-               return;
-             }
-          }
-        }
-      */
-      if(Blockly.selected.childBlocks_[i].previousConnection == null){
-        //TODO
-      }
-      else{
-        if(Blockly.selected.childBlocks_[i].previousConnection.type == 4){
-          Blockly.selected.childBlocks_[i].select();
-          return;
+    if(Blockly.selected.childBlocks_ != null && Blockly.selected.childBlocks_.length > 0){
+      for (var i = 0; i < Blockly.selected.childBlocks_.length; i++) {  
+        if(Blockly.selected.childBlocks_[i].previousConnection != null && Blockly.selected.childBlocks_[i].previousConnection.type == 4){
+            Blockly.selected.childBlocks_[i].select();
+            return;
         }
       }
     }
@@ -419,6 +404,54 @@ Blockly.Accessibility.Navigation.traverseDown = function() {
     }
 
 
+};
+
+/**
+* When in a statement block allows you to traverse in through the blocks
+* Precondition: must be in edit mode which should select the first child block
+*/
+Blockly.Accessibility.Navigation.insideBlockTraverseIn = function(){
+  if (Blockly.selected == null) {
+      console.log('Cannot traverse inside from here.');
+      return;
+  }
+  var parentStatementBlock = this.findTopStatementBlock(Blockly.selected);
+  this.getAllChildrenOfStatement(parentStatementBlock);
+  for(var i = 0; i < this.statementChildren.length; i++){
+      if(Blockly.selected == this.statementChildren[i] && Blockly.selected != this.statementChildren[this.statementChildren.length - 1]){
+          this.statementChildren[i + 1].select();
+          this.statementChildren = []
+          return;
+      }
+      else{
+          console.log("Cannot traverse inside from here");
+      }
+  }
+  this.statementChildren = [];
+};
+
+/**
+* When in the inside statement block allows you to traverse out through the child nodes
+* Precondition: must be in edit mode which should select the first child block
+*/
+Blockly.Accessibility.Navigation.insideBlockTraverseOut = function(){
+  if (Blockly.selected == null) {
+      console.log('Cannot traverse out from here.');
+      return;
+  }
+  var parentStatementBlock = this.findTopStatementBlock(Blockly.selected);
+  this.getAllChildrenOfStatement(parentStatementBlock);
+  for(var i = 0; i < this.statementChildren.length; i++){
+      if(Blockly.selected == this.statementChildren[i] && Blockly.selected != this.statementChildren[0]){
+          this.statementChildren[i - 1].select();
+          this.statementChildren = []
+          return;
+      }
+      else{
+          console.log("Cannot traverse out from here");
+      }
+  }
+  this.statementChildren = [];
 };
 
 /**
@@ -620,6 +653,34 @@ Blockly.Accessibility.Navigation.playAudioBlock = function() {
     var here=getCurrentNode();
     var now=here.getAttribute('type');
     workspace.playAudio(Blockly.Blocks[now].returnAudio());
+};
+
+/**
+* Recursive function that finds the statement block for any child of a statement block for inner traversal
+*/
+Blockly.Accessibility.Navigation.findTopStatementBlock = function(currentNode){
+    if(currentNode.outputConnection != null){
+        if(currentNode.outputConnection.type == 2){
+            return this.findTopStatementBlock(currentNode.parentBlock_);
+        }
+    }
+    else{
+      return currentNode;
+    }
+};
+
+/**
+* The recursive function will find all the childNodes of a statement block for finding its children for inner traversal
+*/
+Blockly.Accessibility.Navigation.getAllChildrenOfStatement = function(currentNode){
+    if(currentNode.childBlocks_ != null && currentNode.childBlocks_.length != 0){
+        for(var i = 0; i < currentNode.childBlocks_.length; i++){
+            if(currentNode.childBlocks_[i].outputConnection != null){
+                this.statementChildren.push(currentNode.childBlocks_[i]);
+                this.getAllChildrenOfStatement(currentNode.childBlocks_[i]);
+            }
+        }
+    }
 };
 
 //#endregion

@@ -24,7 +24,7 @@ goog.require('Blockly.Accessibility.TreeView');
 goog.require('Blockly.Accessibility.Prefixes');
 goog.require('Blockly.Flyout');
 
-//default constructor 
+//default constructor
 Blockly.Accessibility.Keystrokes = function(){
 
 }
@@ -38,15 +38,15 @@ document.onmouseup = function(e){
 	//console.log('Mouse Up');
 	Blockly.Accessibility.Navigation.updateXmlSelection();
 };
- 
+
 /**
  * Take care of keypresses for accessibility
  */
 document.onkeydown = document.onkeyup = function(e){
-	
+
 	e = e || event;
-	map[e.keyCode] = e.type == 'keydown';	
-	
+	map[e.keyCode] = e.type == 'keydown';
+
 
 
 	if(keyboardState=='typingMode'){ //if you are typing, hotkeys disabled
@@ -55,7 +55,7 @@ document.onkeydown = document.onkeyup = function(e){
 			Blockly.Accessibility.Navigation.updateXmlSelection();
 		}
 		return;
-	}	
+	}
 
 //===========================================EDITING BLOCKS=======================================
 	else if(keyboardState=='editMode'){ //if you are in editMode, normal hotkeys are disabled
@@ -64,12 +64,12 @@ document.onkeydown = document.onkeyup = function(e){
 			Blockly.Accessibility.Keystrokes.prototype.isConnecting = false;
 			Blockly.Accessibility.Navigation.updateXmlSelection();
 		}
-		
+
 		else if(map[65]){ //A
 			//Navigate to previous field
 			Blockly.Accessibility.InBlock.selectPrev();
 		}
-		
+
 		else if(map[68]){ //D
 			//Navigate to next field
 			Blockly.Accessibility.InBlock.selectNext();
@@ -80,13 +80,13 @@ document.onkeydown = document.onkeyup = function(e){
 			//Navigate to previous field
 			Blockly.Accessibility.InBlock.selectPrev();
 		}
-		
+
 		else if(map[83]){ //S
 			//Navigate to next field
 			Blockly.Accessibility.InBlock.selectNext();
 
 		}
-		
+
 		else if (map[69]) { //E
 		    Blockly.Accessibility.InBlock.enterSelected();
 		    e.preventDefault(); // Prevent default in case this opens up a typing prompt
@@ -100,7 +100,7 @@ document.onkeydown = document.onkeyup = function(e){
 
 		    }
 		}
-		
+
 		else if(map[67]){ //C
 			Blockly.Accessibility.InBlock.selectConnection();
 			Blockly.Accessibility.InBlock.enterCurrentBlock();
@@ -129,7 +129,7 @@ document.onkeydown = document.onkeyup = function(e){
 
 		    try { // Try block in case something breaks, we still default back to hotkeymode
 		        Blockly.Accessibility.InBlock.enterSelected();
-		      
+
 		    }
 		    catch (e) {
 		        console.log(e);
@@ -138,13 +138,13 @@ document.onkeydown = document.onkeyup = function(e){
 		 		keyboardState ='hotkeyMode';//prevent getting stuck on same block
 
 		    }
-		    
+
 		    //default select the first category in the menu
 		    var firstCategory = document.getElementById(":2");
 		    firstCategory.setAttribute("tabIndex", 0);
 		   	firstCategory.focus();
 
-			
+
 		}
 
 
@@ -171,24 +171,24 @@ document.onkeydown = document.onkeyup = function(e){
 			//Navigate out
 			Blockly.Accessibility.Navigation.traverseOut();
 		}
-		
+
 		else if(map[68]){ //D
 			//Navigate in
 			Blockly.Accessibility.Navigation.traverseIn();
 		}
-		
+
 		else if(map[83]){ //S
 			//Navigates down through blocks
 			e.preventDefault();
 			Blockly.Accessibility.Navigation.traverseDown();
 		}
-		
+
 		else if(map[87]){ //W
 			//Navigates up through blocks
 			e.preventDefault();
 			Blockly.Accessibility.Navigation.traverseUp();
 		}
-		
+
 		else if(map[69]){ //E
 			//Edit block of code or edit comment
 			keyboardState = 'connectBlocksMode';
@@ -203,22 +203,22 @@ document.onkeydown = document.onkeyup = function(e){
 			keyboardState = 'hotkeyMode';
 			Blockly.Accessibility.Navigation.updateXmlSelection();
 		}
-		
+
 		else if(map[65]){ //A
 			//Navigate to previous field
 			Blockly.Accessibility.InBlock.selectPrev();
 		}
-		
+
 		else if(map[68]){ //D
 			//Navigate to next field
 			Blockly.Accessibility.InBlock.selectNext();
 		}
-		
+
 		else if(map[67]){ //C
 			Blockly.Accessibility.InBlock.selectConnection();
 			keyboardState = 'hotkeyMode';
 		}
-		
+
 		else if (map[69]) { //E
 		    e.preventDefault(); // Prevent default in case this opens up a typing prompt
 		    try { // Try block in case something breaks, we still default back to hotkeymode
@@ -252,7 +252,7 @@ document.onkeydown = document.onkeyup = function(e){
 	    }
 	}
 //===========================================NORMAL HOTKEYS=======================================
-	else if(keyboardState=='hotkeyMode'){	
+	else if(keyboardState=='hotkeyMode'){
 
 	    if (map[17] && map[89]) { //Ctrl Y
 	        console.log('Ctrl Y keys pressed');
@@ -280,7 +280,7 @@ document.onkeydown = document.onkeyup = function(e){
 			e.preventDefault();
 			Blockly.Accessibility.Navigation.updateXmlSelection();
 		}
-		
+
 		else if(map[18] && map[16] && map[69]){ //Alt Shift E
 			console.log('Alt Shift E keys pressed.');
 			//Keystroke for enabling or disabling a block
@@ -288,7 +288,7 @@ document.onkeydown = document.onkeyup = function(e){
 			e.preventDefault();
 			Blockly.Accessibility.Navigation.updateXmlSelection();
 		}
-		
+
 		else if(map[18] && map[16] && map[72]){ //Alt Shift H
 			console.log('Alt Shift H keys pressed.');
 			Blockly.Accessibility.helpSelectedBlock();//Link to the help page for the selected block
@@ -303,24 +303,24 @@ document.onkeydown = document.onkeyup = function(e){
 			Blockly.Accessibility.toggleInline();
 			e.preventDefault();
 		}
-		
+
 		else if(map[188]){ //Comma
 		    console.log('Comma key pressed.');
 			//Traverse forward within a block with fields
 		}
-		
+
 		else if(map[190]){ //Period
 			console.log('Period key pressed.');
 			//Traverse backward within a block with fields
 		}
-		
+
 		else if(map[46]){ //Delete
 			console.log('Delete key pressed.');
 			//Delete the currently selected item
 			Blockly.Accessibility.Navigation.updateXmlSelection();
 			e.preventDefault();
 		}
-		
+
 		// else if(map[13]){ //Enter
 		// 	console.log('Enter key pressed.');
 		// 	Blockly.Accessibility.Navigation.updateXmlSelection();
@@ -331,27 +331,27 @@ document.onkeydown = document.onkeyup = function(e){
 			//Get out of the current menu
 			e.preventDefault();
 		}
-		
+
 		else if(map[9]){ //Tab
 			//Go through the same level of code
 		}
-		
+
 		else if(map[65]){ //A
 				Blockly.Accessibility.Navigation.traverseOut();
 		}
-		
+
 		else if(map[67]){ //C
 			//Add a comment
 			//Blockly.Accessibility.addComment();
 			//e.preventDefault();
 			Blockly.Accessibility.InBlock.disableIncompatibleBlocks();
 		}
-		
+
 		else if(map[68]){ //D
 			//Navigate in
 			Blockly.Accessibility.Navigation.traverseIn();
 		}
-		
+
 		else if(map[69]){ //E
 			//Edit block of code or edit comment
 			if (Blockly.Accessibility.InBlock.enterCurrentBlock()) { // Returns false if nothing is selected
@@ -366,7 +366,7 @@ document.onkeydown = document.onkeyup = function(e){
 		    firstCategory.focus();
 		    Blockly.selected = null;
 		}
-		
+
 		else if(map[71]){ //G
 			//Blockly.Accessibility.TreeView.commentOrBlockJump();
 			//Goto the block the comment that is currently selected is from
@@ -375,25 +375,25 @@ document.onkeydown = document.onkeyup = function(e){
 			Blockly.Accessibility.Keystrokes.prototype.isConnecting = false;
 			document.getElementById("blockReader").focus();
 		}
-		
+
 		else if(map[77]){ //M
 			//This should initiate menu mode
 			//This should initiate a menu to add a block using hotkeys
-			keyboardState='menuMode';	
-		}	
-		
+			keyboardState='menuMode';
+		}
+
 		else if(map[78]){ //N
 			Blockly.Accessibility.Prefixes.getInfoBox();//currently placed here until button is found to hide and show the infobox
 			//Initiate a navigate search function
 		}
-		
+
 		else if(map[82]){ //R
 			//Jumps to the top of the currently selected container
 			//Blockly.Accessibility.Navigation.jumpToTopOfSection();
 			Blockly.Accessibility.TreeView.makeTree();
 			//Blockly.Accessibility.TreeView.addBlockComments();
 		}
-		
+
 		else if(map[83]){ //S
 			//Navigates down through blocks
 			e.preventDefault();
@@ -402,16 +402,16 @@ document.onkeydown = document.onkeyup = function(e){
 			if(active.getAttribute("class") == "blocklySvg"){
 				Blockly.Accessibility.Navigation.traverseDown();
 			}
-		
+
 		}
-		
+
 		else if(map[87]){ //W
 			e.preventDefault();
 			//navigate between blocks when not connecting
 			var active = document.activeElement;
 			if(active.getAttribute("class") == "blocklySvg"){
 				Blockly.Accessibility.Navigation.traverseUp();
-			}		
+			}
 		}
 
 		//============Jumping to specific category===============
@@ -435,7 +435,7 @@ document.onkeydown = document.onkeyup = function(e){
 						var tempName = ":" + (count+1);
 						category = document.getElementById(tempName);
 					}
-					
+
 					category.focus();
 					count++;
 				}
