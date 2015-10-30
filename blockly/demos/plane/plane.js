@@ -76,7 +76,11 @@ Plane.LANGUAGE_RTL = ['ar', 'fa', 'he'];
 
 /**
  * Main Blockly workspace.
+<<<<<<< HEAD:blockly/demos/plane/plane.js
  * @type Blockly.WorkspaceSvg
+=======
+ * @type {Blockly.WorkspaceSvg}
+>>>>>>> google/master:demos/plane/plane.js
  */
 Plane.workspace = null;
 
@@ -201,7 +205,7 @@ Plane.getMsg = function(key) {
 
 /**
  * User's language (e.g. "en").
- * @type string
+ * @type {string}
  */
 Plane.LANG = Plane.getLang();
 

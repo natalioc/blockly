@@ -82,7 +82,11 @@ Code.LANGUAGE_RTL = ['ar', 'fa', 'he'];
 
 /**
  * Blockly's main workspace.
+<<<<<<< HEAD:blockly/demos/code/code.js
  * @type Blockly.WorkspaceSvg
+=======
+ * @type {Blockly.WorkspaceSvg}
+>>>>>>> google/master:demos/code/code.js
  */
 Code.workspace = null;
 
@@ -235,7 +239,7 @@ Code.getBBox_ = function(element) {
 
 /**
  * User's language (e.g. "en").
- * @type string
+ * @type {string}
  */
 Code.LANG = Code.getLang();
 
@@ -243,7 +247,7 @@ Code.LANG = Code.getLang();
  * List of tab names.
  * @private
  */
-Code.TABS_ = ['blocks', 'javascript', 'python', 'dart', 'xml'];
+Code.TABS_ = ['blocks', 'javascript', 'php', 'python', 'dart', 'xml'];
 
 Code.selected = 'blocks';
 
@@ -324,6 +328,14 @@ Code.renderContent = function() {
       code = prettyPrintOne(code, 'py');
       content.innerHTML = code;
     }
+  } else if (content.id == 'content_php') {
+    code = Blockly.PHP.workspaceToCode(Code.workspace);
+    content.textContent = code;
+    if (typeof prettyPrintOne == 'function') {
+      code = content.innerHTML;
+      code = prettyPrintOne(code, 'php');
+      content.innerHTML = code;
+    }
   } else if (content.id == 'content_dart') {
     code = Blockly.Dart.workspaceToCode(Code.workspace);
     content.textContent = code;
@@ -357,12 +369,17 @@ Code.init = function() {
       el.style.width = (2 * bBox.width - el.offsetWidth) + 'px';
     }
     // Make the 'Blocks' tab line up with the toolbox.
+<<<<<<< HEAD:blockly/demos/code/code.js
     if (Code.workspace.toolbox_.width) {
+=======
+    if (Code.workspace && Code.workspace.toolbox_.width) {
+>>>>>>> google/master:demos/code/code.js
       document.getElementById('tab_blocks').style.minWidth =
           (Code.workspace.toolbox_.width - 38) + 'px';
           // Account for the 19 pixel margin and on each side.
     }
   };
+  onresize();
   window.addEventListener('resize', onresize, false);
 
   var toolbox = document.getElementById('toolbox');
@@ -374,9 +391,13 @@ Code.init = function() {
            snap: true},
        media: '../../media/',
        rtl: rtl,
-       toolbox: toolbox});
+       toolbox: toolbox,
+       zoom:
+           {controls: true,
+            wheel: true}
+      });
 
-  // Add to reserved word list: Local variables in execution evironment (runJS)
+  // Add to reserved word list: Local variables in execution environment (runJS)
   // and the infinite loop detection function.
   Blockly.JavaScript.addReservedWords('code,timeouts,checkTimeout');
 
@@ -388,7 +409,6 @@ Code.init = function() {
   }
 
   Code.tabClick(Code.selected);
-  Blockly.fireUiEvent(window, 'resize');
 
   Code.bindClick('trashButton',
       function() {Code.discard(); Code.renderContent();});
