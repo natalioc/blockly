@@ -30,18 +30,6 @@
 var mainWorkspace = null;
 
 /**
-<<<<<<< HEAD:blockly/demos/blockfactory/factory.js
- * Workspace for user to build block.
- * @type Blockly.Workspace
- */
-var mainWorkspace = null;
-
-/**
- * Workspace for preview of block.
- * @type Blockly.Workspace
- */
-var previewWorkspace = null;
-=======
  * Workspace for preview of block.
  * @type {Blockly.Workspace}
  */
@@ -76,7 +64,6 @@ function formatChange() {
   }
   disableEnableLink();
 }
->>>>>>> google/master:demos/blockfactory/factory.js
 
 /**
  * Update the language code based on constructs made in Blockly.
@@ -623,8 +610,6 @@ function updatePreview() {
          media: '../../media/',
          scrollbars: true});
     oldDir = newDir;
-<<<<<<< HEAD:blockly/demos/blockfactory/factory.js
-=======
   }
   previewWorkspace.clear();
 
@@ -694,18 +679,7 @@ function updatePreview() {
     updateGenerator(previewBlock);
   } finally {
     Blockly.Blocks = backupBlocks;
->>>>>>> google/master:demos/blockfactory/factory.js
   }
-  var code = document.getElementById('languagePre').textContent;
-  previewWorkspace.clear();
-  eval(code);
-  // Create the preview block.
-  var previewBlock = Blockly.Block.obtain(previewWorkspace, blockType);
-  previewBlock.initSvg();
-  previewBlock.render();
-  previewBlock.setMovable(false);
-  previewBlock.setDeletable(false);
-  previewBlock.moveBy(15, 10);
 }
 
 /**
@@ -762,10 +736,7 @@ function init() {
     linkButton.style.display = 'inline-block';
     linkButton.addEventListener('click',
         function() {BlocklyStorage.link(mainWorkspace);});
-<<<<<<< HEAD:blockly/demos/blockfactory/factory.js
-=======
     disableEnableLink();
->>>>>>> google/master:demos/blockfactory/factory.js
   }
 
   document.getElementById('helpButton').addEventListener('click',
@@ -776,10 +747,7 @@ function init() {
 
   var expandList = [
     document.getElementById('blockly'),
-<<<<<<< HEAD:blockly/demos/blockfactory/factory.js
-=======
     document.getElementById('blocklyMask'),
->>>>>>> google/master:demos/blockfactory/factory.js
     document.getElementById('preview'),
     document.getElementById('languagePre'),
     document.getElementById('languageTA'),
@@ -803,22 +771,11 @@ function init() {
     BlocklyStorage.retrieveXml(window.location.hash.substring(1),
                                mainWorkspace);
   } else {
-<<<<<<< HEAD:blockly/demos/blockfactory/factory.js
-    var rootBlock = Blockly.Block.obtain(mainWorkspace, 'factory_base');
-    rootBlock.initSvg();
-    rootBlock.render();
-    rootBlock.setMovable(false);
-    rootBlock.setDeletable(false);
-  }
-
-  mainWorkspace.addChangeListener(onchange);
-=======
     var xml = '<xml><block type="factory_base" deletable="false" movable="false"></block></xml>';
     Blockly.Xml.domToWorkspace(mainWorkspace, Blockly.Xml.textToDom(xml));
   }
 
   mainWorkspace.addChangeListener(updateLanguage);
->>>>>>> google/master:demos/blockfactory/factory.js
   document.getElementById('direction')
       .addEventListener('change', updatePreview);
   document.getElementById('languageTA')

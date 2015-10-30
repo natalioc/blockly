@@ -2,7 +2,9 @@
 <html>
 <head>
 <meta charset="utf-8">
-<title>Blockly Playground</title>
+<title>Blockly Interface</title>
+
+
 <script src="../blockly_uncompressed.js"></script>
 <script src="../generators/javascript.js"></script>
 <script src="../generators/javascript/logic.js"></script>
@@ -13,15 +15,7 @@
 <script src="../generators/javascript/colour.js"></script>
 <script src="../generators/javascript/variables.js"></script>
 <script src="../generators/javascript/procedures.js"></script>
-<script src="../generators/php.js"></script>
-<script src="../generators/php/logic.js"></script>
-<script src="../generators/php/loops.js"></script>
-<script src="../generators/php/math.js"></script>
-<script src="../generators/php/text.js"></script>
-<script src="../generators/php/lists.js"></script>
-<script src="../generators/php/colour.js"></script>
-<script src="../generators/php/variables.js"></script>
-<script src="../generators/php/procedures.js"></script>
+<script src="../generators/javascript/audio.js"></script>
 <script src="../generators/python.js"></script>
 <script src="../generators/python/logic.js"></script>
 <script src="../generators/python/loops.js"></script>
@@ -31,6 +25,16 @@
 <script src="../generators/python/colour.js"></script>
 <script src="../generators/python/variables.js"></script>
 <script src="../generators/python/procedures.js"></script>
+<script src="../generators/javascript/audio.js"></script>
+<script src="../generators/php.js"></script>    
+<script src="../generators/php/logic.js"></script>    
+<script src="../generators/php/loops.js"></script>    
+<script src="../generators/php/math.js"></script>   
+<script src="../generators/php/text.js"></script>   
+<script src="../generators/php/lists.js"></script>    
+<script src="../generators/php/colour.js"></script>   
+<script src="../generators/php/variables.js"></script>    
+<script src="../generators/php/procedures.js"></script>
 <script src="../generators/dart.js"></script>
 <script src="../generators/dart/logic.js"></script>
 <script src="../generators/dart/loops.js"></script>
@@ -49,8 +53,11 @@
 <script src="../blocks/colour.js"></script>
 <script src="../blocks/variables.js"></script>
 <script src="../blocks/procedures.js"></script>
+<script src="../blocks/audio.js"></script>
 <!-- Load the Google Drive SDK Realtime libraries. -->
 <script src="https://apis.google.com/js/api.js"></script>
+<script src="loadxml.js"></script>
+<script src="debug.js"></script>
 <script>
 'use strict';
 // Depending on the URL argument, render as LTR or RTL.
@@ -178,8 +185,23 @@ var spaghettiXml = [
   '    <next></next>',
   '  </block>'].join('\n');
 
+
+//========change the boxes font size dynamically=========
+function changeFontDD(){
+  var e            = document.getElementById("fontDD");
+  var selectedSize = e.options[e.selectedIndex].value;
+  var commentBox   = document.getElementById("comment");
+  commentBox.style.fontSize = selectedSize + "px";
+ 
+  var outputBox             = document.getElementById("importExport");
+  outputBox.style.fontSize  = selectedSize + "px";
+
+  var infoBox            = document.getElementById("infoBox");
+  infoBox.style.fontSize = selectedSize+"px";
+}
 </script>
 
+<style>
 <style>
 html, body {
   height: 100%;
@@ -187,16 +209,16 @@ html, body {
 body {
   background-color: #fff;
   font-family: sans-serif;
-  overflow: hidden;
 }
 h1 {
   font-weight: normal;
   font-size: 140%;
 }
 #blocklyDiv {
-  float: right;
-  height: 95%;
+  float: left;
   width: 70%;
+  height: 600px;
+  margin-right: 1%;
 }
 #collaborators {
   float: right;
@@ -212,6 +234,92 @@ h1 {
 }
 #importExport {
   font-family: monospace;
+  height: 170px;
+  width: 28%;
+  float:right;
+  overflow: scroll;
+  word-wrap:normal;
+  display: inline-block;
+  resize: vertical;
+  margin-top: 5px;}
+
+/*=============Accessibility Css================*/
+
+#PrimaryContentDiv {
+    padding-left: 71%;
+    margin: 1%;
+}
+
+#buttons { 
+  width: 50%;
+}
+#buttons button { 
+  width: 100%;
+}
+
+#commentDiv {
+    padding-left: 71%;
+    font-family: monospace;
+
+}
+
+#comment{
+  outline: 1px solid gray;
+  margin-bottom: 5px;
+  height: 280px;
+  padding-left: 9px;
+  padding-top:  9px;
+  overflow: scroll;
+  word-wrap:normal;
+  resize:vertical;
+}
+
+/*change font size drop down*/
+#fontDD{
+  margin: .7em;
+  display: block;
+}
+
+/*output buttons*/
+div button{
+  width:10em;
+  margin: 3px;
+}
+
+/*when tabbing through highlight*/
+button:focus,input:focus,textarea:focus,#comment:focus,p:focus{
+outline: solid;
+outline-width: 3px;
+outline-offset: 1px;
+color: black;
+}
+
+#typeButtons{
+  text-align: center;
+}
+#infoBox{
+	border: 1px solid black;
+	position: fixed;
+	margin-left: 37.9%;
+	width: 15%;
+	height: 29%;
+	background-color: white;
+	font-size: 36px;
+	overflow: auto;
+	white-space: nowrap;
+	min-height: 100px;
+	resize: vertical;
+	visibility: hidden;
+}
+#infoBox p{
+	margin: 6px;
+}
+
+#blockReader{
+  width: 1px;
+  height:1px;
+  position: absolute;
+  left: -999em;
 }
 </style>
 </head>
@@ -525,42 +633,46 @@ h1 {
     <category name="Functions" colour="290" custom="PROCEDURE"></category>
   </xml>
 
-  <h1>Blockly Playground</h1>
+    
+    <div id="infoBox"></div>
 
-  <p><a href="javascript:void(workspace.setVisible(true))">Show</a>
-   - <a href="javascript:void(workspace.setVisible(false))">Hide</a></p>
 
-  <script>
-    if (rtl) {
-      document.write('[ &larr; RTL. Switch to <A HREF="?ltr">LTR</A>. ]');
-    } else {
-      document.write('[ &rarr; LTR. Switch to <A HREF="?rtl">RTL</A>. ]');
-    }
-  </script>
+    <div class="commentDiv" tabindex="-1">
+        <h1 tabindex="-1" align="center">Blockly</h1>
+        <select onchange="changeFontDD()" id= "fontDD" role="combobox" aria-haspopup="true" aria-hidden="true" tabindex="-1">
+            <option role="option" value='12'>12</option>
+            <option role="option" value='14'>14</option>
+            <option role="option" value='18'>18</option>
+            <option role="option" value='24'>24</option>
+            <option role="option" value='36' selected="selected" >36</option>
+            <option role="option" value='48'>48</option> 
+            <option role="option" value='72'>72</option>
+        </select>
+    </div>
 
-  <p>
-    <input type="button" value="Export to XML" onclick="toXml()">
-    &nbsp;
-    <input type="button" value="Import from XML" onclick="fromXml()">
-    <br>
-    <input type="button" value="To JavaScript" onclick="toCode('JavaScript')">
-    &nbsp;
-    <input type="button" value="To Python" onclick="toCode('Python')">
-    &nbsp;
-    <input type="button" value="To PHP" onclick="toCode('PHP')">
-    &nbsp;
-    <input type="button" value="To Dart" onclick="toCode('Dart')">
-    <br>
-    <textarea id="importExport" style="width: 26%; height: 12em"></textarea>
-  </p>
-  <hr>
+    <p tabindex="-1" id="comment" >Comments go here</p>
 
+    <script>Blockly.Accessibility.TreeView.makeTree()</script>
+    <div id="primaryContentDiv">
+
+        <div id="typeButtons">
+            <button  type="button" value="Export to XML" onclick="toXml()">Export to XML</button>
+            <button type="button" value="Import from XML" onclick="fromXml()">Import from XML</button>
+            <button type="button" value="To JavaScript" onclick="toCode('JavaScript')">To JavaScript</button>
+            <button type="button" value="To Python" onclick="toCode('Python')">To Python</button>
+            <button type="button" value="To Dart" onclick="toCode('Dart')">To Dart</button>
+            <button type="button" value="Run JavaScript" onclick="runCode()">Run JavaScript</button>
+        </div>
+    
+        <textarea id="importExport" role="textbox">Program Output is here</textarea>
+<!--
   <p>
     Stress test:
     <input type="button" value="Airstrike!" onclick="airstrike(100)">
     <input type="button" value="Spaghetti!" onclick="spaghetti(8)">
   </p>
-
+  -->
+  </div>
   <!-- Realtime setup buttons. -->
 
   <div id="realtime" style="display: none">
@@ -572,6 +684,7 @@ h1 {
 
     <br>
     <br>
+	
 
     <!-- Undo and redo buttons. -->
     <!-- TODO: Uncomment this when undo/redo are fixed. -->
@@ -585,5 +698,42 @@ h1 {
     <textarea id="chatbox" style="width: 26%; height: 12em" disabled="true"></textarea>
 
   </div>
+  <!--This is where the screen reader is updated-->
+  <div id="blockReader" tabindex="-1" aria-live="assertive"></div>
+  
+  <link rel="stylesheet" href="./css/tree.css">
+  <!--<div id="treeContainer" style="width:400px"></div>-->
+ <!-- CAUSES A BUG WITH THE HIGHLIGHTING <style>
+  .goog-tree-children {
+      background-repeat: repeat-y;
+      background-image: url("./images/tree/I.png") !important;
+      background-position-y: 1px !important; /* IE only */
+      font: icon;
+    }
+
+    .goog-tree-icon {
+      background-image:url("./images/tree/tree.png");
+    }
+
+    .goog-tree-item-label {
+      font: bold 10pt Tahoma, Arial, sans-serif;
+      color: #333;
+      text-decoration: none;
+    }
+
+    .goog-tree-item-label a {
+      font: normal 10pt Tahoma, Arial, sans-serif;
+      color: #333;
+      text-decoration: none;
+    }
+
+    .goog-tree-item-label a:hover {
+      color: #00f;
+      text-decoration: underline;
+    }
+  </style> -->
+
+
+  
 </body>
 </html>

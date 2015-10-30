@@ -82,11 +82,7 @@ Code.LANGUAGE_RTL = ['ar', 'fa', 'he'];
 
 /**
  * Blockly's main workspace.
-<<<<<<< HEAD:blockly/demos/code/code.js
- * @type Blockly.WorkspaceSvg
-=======
  * @type {Blockly.WorkspaceSvg}
->>>>>>> google/master:demos/code/code.js
  */
 Code.workspace = null;
 
@@ -369,11 +365,7 @@ Code.init = function() {
       el.style.width = (2 * bBox.width - el.offsetWidth) + 'px';
     }
     // Make the 'Blocks' tab line up with the toolbox.
-<<<<<<< HEAD:blockly/demos/code/code.js
-    if (Code.workspace.toolbox_.width) {
-=======
     if (Code.workspace && Code.workspace.toolbox_.width) {
->>>>>>> google/master:demos/code/code.js
       document.getElementById('tab_blocks').style.minWidth =
           (Code.workspace.toolbox_.width - 38) + 'px';
           // Account for the 19 pixel margin and on each side.
@@ -432,7 +424,6 @@ Code.init = function() {
         function(name_) {return function() {Code.tabClick(name_);};}(name));
   }
 
-  onresize();
   // Lazy-load the syntax-highlighting.
   window.setTimeout(Code.importPrettify, 1);
 };

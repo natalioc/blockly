@@ -119,6 +119,7 @@ Blockly.FieldDropdown.prototype.showEditor_ = function() {
         }
       }
       if (value !== null) {
+        thisField.sourceBlock_.setShadow(false);
         thisField.setValue(value);
       }
     }
@@ -126,11 +127,13 @@ Blockly.FieldDropdown.prototype.showEditor_ = function() {
   }
 
   var menu = new goog.ui.Menu();
+  menu.setRightToLeft(this.sourceBlock_.RTL);
   var options = this.getOptions_();
   for (var x = 0; x < options.length; x++) {
     var text = options[x][0];  // Human-readable text.
     var value = options[x][1]; // Language-neutral value.
     var menuItem = new goog.ui.MenuItem(text);
+    menuItem.setRightToLeft(this.sourceBlock_.RTL);
     menuItem.setValue(value);
     menuItem.setCheckable(true);
     menu.addChild(menuItem, true);
@@ -158,7 +161,7 @@ Blockly.FieldDropdown.prototype.showEditor_ = function() {
   var windowSize = goog.dom.getViewportSize();
   var scrollOffset = goog.style.getViewportPageOffset(document);
   var xy = this.getAbsoluteXY_();
-  var borderBBox = this.borderRect_.getBBox();
+  var borderBBox = this.getScaledBBox_();
   var div = Blockly.WidgetDiv.DIV;
   menu.render(div);
   var menuDom = menu.getElement();
@@ -172,7 +175,7 @@ Blockly.FieldDropdown.prototype.showEditor_ = function() {
   // Flip menu vertically if off the bottom.
   if (xy.y + menuSize.height + borderBBox.height >=
       windowSize.height + scrollOffset.y) {
-    xy.y -= menuSize.height;
+    xy.y -= menuSize.height + 2;
   } else {
     xy.y += borderBBox.height;
   }

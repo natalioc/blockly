@@ -76,11 +76,7 @@ Plane.LANGUAGE_RTL = ['ar', 'fa', 'he'];
 
 /**
  * Main Blockly workspace.
-<<<<<<< HEAD:blockly/demos/plane/plane.js
- * @type Blockly.WorkspaceSvg
-=======
  * @type {Blockly.WorkspaceSvg}
->>>>>>> google/master:demos/plane/plane.js
  */
 Plane.workspace = null;
 
