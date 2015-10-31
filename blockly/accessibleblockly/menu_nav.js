@@ -1,438 +1,721 @@
-// 'use strict';
 
-// goog.provide('Blockly.Accessibility.MenuNav');
-// goog.require('Blockly.Accessibility');
+'use strict';
 
-
-// /*
-// *Licensed under the Apache License, Version 2.0 (the "License");
-// *you may not use this file except in compliance with the License.
-// *You may obtain a copy of the License at
-// *
-// *    http://www.apache.org/licenses/LICENSE-2.0
-// *
-// *Unless required by applicable law or agreed to in writing, software
-// *distributed under the License is distributed on an "AS IS" BASIS,
-// *WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-// *See the License for the specific language governing permissions and
-// *limitations under the License.
-// */
-
-// /*
-// * File overview: this file handles using the keyboard to navigate the menu
-// */
+goog.provide('Blockly.Accessibility.MenuNav');
 
 
 
+/*
+*Licensed under the Apache License, Version 2.0 (the "License");
+*you may not use this file except in compliance with the License.
+*You may obtain a copy of the License at
+*
+*    http://www.apache.org/licenses/LICENSE-2.0
+*
+*Unless required by applicable law or agreed to in writing, software
+*distributed under the License is distributed on an "AS IS" BASIS,
+*WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+*See the License for the specific language governing permissions and
+*limitations under the License.
+*/
 
-// var flyoutArr = [];   //everytime the flyout opens the blocks in it are added to this array
-// var oldLength = 0;    //size of the array before a new tab opened 
-// var tabCount  = 0;    //current position in array/toolbox
-// var lastTabCount = 0; //last position for switching up and down
-// var opened = false; //keep track of the flyout opening and closing
-// var currentFlyoutArr = []; //the current flyoutarray
-
-// Blockly.Flyout.prototype.defaultShow = Blockly.Flyout.prototype.show;
-
-//     /**
-//      * Hide and empty the flyout.
-//      */
-//     Blockly.Flyout.prototype.hide = function() {
-//       opened = false;
-//       if (!this.isVisible()) {
-//         return;
-//       }
-//       this.svgGroup_.style.display = 'none';
-//       // Delete all the event listeners.
-//       for (var x = 0, listen; listen = this.listeners_[x]; x++) {
-//         Blockly.unbindEvent_(listen);
-//       }
-//       this.listeners_.length = 0;
-//       if (this.reflowWrapper_) {
-//         Blockly.unbindEvent_(this.reflowWrapper_);
-//         this.reflowWrapper_ = null;
-//       }
-//       // Do NOT delete the blocks here.  Wait until Flyout.show.
-//       // https://neil.fraser.name/news/2014/08/09/
-//     };
-
-// //called when the flyout opens
-// Blockly.Flyout.prototype.show = function(xmlList){
-//     opened = true;
-//     oldLength = flyoutArr.length; //update the length of the last array 
-
-
-//     if(oldLength>0){              //ignore first case
-//         tabCount  = oldLength;
-//     }
-
-//     // Delete any blocks from a previous showing.
-//     var blocks = this.workspace_.getTopBlocks(false);
-//     for (var x = 0, block; block = blocks[x]; x++) {
-//         if (block.workspace == this.workspace_) {
-//             block.dispose(false, false);
-//         }
-//     }
-//     // Delete any background buttons from a previous showing.
-//     for (var x = 0, rect; rect = this.buttons_[x]; x++) {
-//         goog.dom.removeNode(rect);
-//     }
-//     this.buttons_.length = 0;
-
-//     var margin = this.CORNER_RADIUS;
-//     this.svgGroup_.style.display = 'block';
-
-//     // Create the blocks to be shown in this flyout.
-//     var blocks = [];
-//     var gaps = [];
-//     if (xmlList == Blockly.Variables.NAME_TYPE) {
-//         // Special category for variables.
-//         Blockly.Variables.flyoutCategory(blocks, gaps, margin,
-//             /** @type {!Blockly.Workspace} */ (this.workspace_));
-//     } else if (xmlList == Blockly.Procedures.NAME_TYPE) {
-//         // Special category for procedures.
-//         Blockly.Procedures.flyoutCategory(blocks, gaps, margin,
-//             /** @type {!Blockly.Workspace} */ (this.workspace_));
-//     } else {
-//         for (var i = 0, xml; xml = xmlList[i]; i++) {
-//             if (xml.tagName && xml.tagName.toUpperCase() == 'BLOCK') {
-//                 var block = Blockly.Xml.domToBlock(
-//                     /** @type {!Blockly.Workspace} */(this.workspace_), xml);
-//                 blocks.push(block);
-//                 menuBlocksArr.push(block);
-//                 gaps.push(margin * 3);
-//             }
-//         }
-//     }
-//     // Lay out the blocks vertically.
-//     var cursorY = margin;
-//     for (var i = 0, block; block = blocks[i]; i++) {
-//         var allBlocks = block.getDescendants();
-//         for (var j = 0, child; child = allBlocks[j]; j++) {
-//             // Mark blocks as being inside a flyout.  This is used to detect and
-//             // prevent the closure of the flyout if the user right-clicks on such a
-//             // block.
-//             child.isInFlyout = true;
-//             // There is no good way to handle comment bubbles inside the flyout.
-//             // Blocks shouldn't come with predefined comments, but someone will
-//             // try this, I'm sure.  Kill the comment.
-//             child.setCommentText(null);
-//         }
-//         block.render();
-//         var root = block.getSvgRoot();
-//         var blockHW = block.getHeightWidth();
-//         var x = this.RTL ? 0 : margin + Blockly.BlockSvg.TAB_WIDTH;
-//         block.moveBy(x, cursorY);
-//         cursorY += blockHW.height + gaps[i];
-
-//         // Create an invisible rectangle under the block to act as a button.  Just
-//         // using the block as a button is poor, since blocks have holes in them.
-//         var rect = Blockly.createSvgElement('rect', { 'fill-opacity': 0 }, null);
-//         // Add the rectangles under the blocks, so that the blocks' tooltips work.
-//         this.workspace_.getCanvas().insertBefore(rect, block.getSvgRoot());
-//         block.flyoutRect_ = rect;
-//         this.buttons_[i] = rect;
-
-//         if (this.autoClose) {
-//             this.listeners_.push(Blockly.bindEvent_(root, 'mousedown', null,
-//                 this.createBlockFunc_(block)));
-//         } else {
-//             this.listeners_.push(Blockly.bindEvent_(root, 'mousedown', null,
-//                 this.blockMouseDown_(block)));
-//         }
-//         this.listeners_.push(Blockly.bindEvent_(root, 'mouseover', block,
-//             block.addSelect));
-//         this.listeners_.push(Blockly.bindEvent_(root, 'mouseout', block,
-//             block.removeSelect));
-//         this.listeners_.push(Blockly.bindEvent_(rect, 'mousedown', null,
-//             this.createBlockFunc_(block)));
-//         this.listeners_.push(Blockly.bindEvent_(rect, 'mouseover', block,
-//             block.addSelect));
-//         this.listeners_.push(Blockly.bindEvent_(rect, 'mouseout', block,
-//             block.removeSelect));
-//     }
+/*
+* File overview: this file handles using the keyboard to navigate the flyout
+*/
 
 
 
-//     // IE 11 is an incompetant browser that fails to fire mouseout events.
-//     // When the mouse is over the background, deselect all blocks.
-//     var deselectAll = function (e) {
-//         var blocks = this.workspace_.getTopBlocks(false);
-//         for (var i = 0, block; block = blocks[i]; i++) {
-//             block.removeSelect();
-//         }
-//     };
-//     this.listeners_.push(Blockly.bindEvent_(this.svgBackground_, 'mouseover',
-//         this, deselectAll));
+/*
+ * class to handle menu navigation
+ * @constructor
+ */
+Blockly.Accessibility.MenuNav = function(){
 
-//     this.width_ = 0;
-//     this.reflow();
+};
 
-//     this.filterForCapacity_();
+/*
+*   Object holding variables for flyout navigation
+*   flyoutArr: everytime the flyout opens the blocks in it are added to this array
+*   oldLengh : size of the array before a new tab opened 
+*   currIndex: index of currently selected block
+*   prevIndex: index of last selected block
+*   opened   : keep track of when the flyout opens and closes 
+*             (needed for selecting blocks when a new category opens)
+*   currentFlyoutArr: array containing all currently shown blocks
+*/
+var menuVars = {
+    flyoutArr: [],   
+    oldLength: 0,    
+    currIndex: 0,    
+    prevIndex: 0,
+    opened: false, 
+    currentFlyoutArr: [],
+    blockSelected:false
+};
 
-//     // Fire a resize event to update the flyout's scrollbar.
-//     Blockly.fireUiEventNow(window, 'resize');
-//     this.reflowWrapper_ = Blockly.bindEvent_(this.workspace_.getCanvas(),
-//     'blocklyWorkspaceChange', this, this.reflow);
-//     this.workspace_.fireChangeEvent();
+Blockly.Toolbox.TreeNode.prototype.initAccessibility = function() {
+  goog.ui.tree.BaseNode.prototype.initAccessibility.call(this);
+  
+  var el = this.getElement();
+  el.setAttribute('tabIndex', 0);
+  
+};
+ 
+/*
+* Handles Keyboard input in the toolbox/flyout
+* @param {event}
+*/
+Blockly.Toolbox.TreeNode.prototype.onKeyDown = function(e) {
 
-//     flyoutArr = menuBlocksArr;
+  var handled = true; //used for preventing the screen from scrolling
 
-//     currentFlyoutArr = [];
-//     for(var i = flyoutArr.length-oldLength; i < flyoutArr.length; i++){
-//         currentFlyoutArr.push(flyoutArr[i]);
-//     }
-//     Blockly.Accessibility.InBlock.disableIncompatibleBlocks();
-// };
+  switch (e.keyCode) {
+    //prevent keys from skipping to categories
+    case 77:
+    case 76:
+    case 84:
+    case 67:
+    case 70:
+    case 86:
+    //case 65:
+      e.preventDefault();
+      break;
 
-// //Navigate down through the menu using down arrow
-// Blockly.Accessibility.MenuNav.menuNavDown = function(){
-//     if(!opened){
-//         return;
-//     }
-//     //remove last select if not the first
-//     if(tabCount-1 >= 0 && !(tabCount<= oldLength) && flyoutArr.length-oldLength != 2 ){
-//         flyoutArr[tabCount-1].removeSelect();
-//     }
-//     //handle loops
-//     // if tabcount too high       ||  switching directions at the bottom of the menu               && in variables menu 
-//     if(tabCount>=flyoutArr.length ||  (lastTabCount == tabCount+1 && tabCount+2>=flyoutArr.length) && !(flyoutArr.length-oldLength == 2)){
-//         tabCount = oldLength;
-//         lastTabCount=flyoutArr.length-1; 
-//         flyoutArr[lastTabCount].removeSelect();
-//     }
+    case 87:
 
-//     //handle variables menu because it only has 2 blocks
-//     //for an unknown reason this technique does not work going up the menu
-//     if(flyoutArr.length-oldLength == 2){
+      //select previous block
+      if(this.getExpanded()){
+        Blockly.Accessibility.MenuNav.prototype.menuNavUp();
+      }
 
-//         //if the tab count is too high (bottom block)
-//         if(tabCount >= flyoutArr.length-1){
-//             tabCount = oldLength;
-//             flyoutArr[tabCount].addSelect();
+      //select previous category
+      else{
+        var previousSibling = this.getPreviousSibling(this.selected);
 
-//             lastTabCount = flyoutArr.length-1;
-//             flyoutArr[lastTabCount].removeSelect();
-//             lastTabCount = oldLength;
-//         }
-//         //if the tabcount is too low (top block)
-//         else if(tabCount <= oldLength){
-//             tabCount = flyoutArr.length-1;
-//             flyoutArr[tabCount].addSelect();
+        //if not the top category
+        if(previousSibling != null){
+           previousSibling.select();
+        }
 
-//             lastTabCount = oldLength;
-//             flyoutArr[lastTabCount].removeSelect();
-//             lastTabCount = flyoutArr.length-1;
+      }
+      break;
 
-//         }
-//         Blockly.Accessibility.MenuNav.readToolbox(); 
-//     }
+    case 83:
 
-//    //handle switching from up to down
-//    // if normal switch scenario  && not in variable menu
-//    if(lastTabCount == tabCount+1 && flyoutArr.length-oldLength!=2){
-//         flyoutArr[lastTabCount].removeSelect();
-//         tabCount+=2;
-//     }
+      //select next block
+      if(this.getExpanded()){
+            Blockly.Accessibility.MenuNav.prototype.menuNavDown();
+      }
 
-//     //for everything except variables
-//     //select next -> save last -> increase count 
-//     if(flyoutArr.length-oldLength != 2){
-//         flyoutArr[tabCount].addSelect(); 
-//         Blockly.Accessibility.MenuNav.readToolbox(); 
-//         lastTabCount = tabCount; 
-//         tabCount++;
-//     }
-//             Blockly.Accessibility.MenuNav.readToolbox(); 
+      //select next category
+      else{
+        var nextSibling = this.getNextSibling(this.selected);
 
-// };
+        //if not the bottome category
+        if(nextSibling != null){
+             nextSibling.select();
+        }
+       
+      }
+      break;
+
+    //exit flyout to select categories 
+    case 65:
+
+      if(this.getExpanded()){
+          this.setExpanded(false);
+          menuVars.flyoutArr[menuVars.prevIndex].removeSelect();
+          menuVars.blockSelected = false;
+      }
+    break;
+
+    //move inside the flyout to select blocks
+    case 68:
+        this.select();
+        this.setExpanded(true);
+        Blockly.Accessibility.MenuNav.prototype.menuNavDown();
+        menuVars.blockSelected = true;
+    break;
+
+    case goog.events.KeyCodes.ENTER:
+
+
+
+        if(!this.getExpanded()){
+
+            this.select();
+            this.setExpanded(true);
+            Blockly.Accessibility.MenuNav.menuNavDown();
+            blockSelected = true;
+        }
+
+        if(this.getExpanded()){
+        //connect to a block on the workspace
+        if(Blockly.Accessibility.Keystrokes.prototype.isConnecting && blockSelected){
+
+          Blockly.Accessibility.Keystrokes.prototype.isConnecting = false;
+          menuVars.blockSelected  = false;
+          this.setExpanded(false);
+
+          Blockly.Accessibility.InBlock.addBlock();
+          document.getElementById("blockReader").focus();
+        }
+
+        //put block on workspace unconnected
+        else if(!Blockly.Accessibility.Keystrokes.prototype.isConnecting && menuVars.blockSelected){
+
+          menuVars.blockSelected  = false;
+          this.setExpanded(false);
+
+          Blockly.Accessibility.MenuNav.flyoutToWorkspace();
+          document.getElementById("blockReader").focus();
+
+        }
+    }
+    default:
+      handled = false;
+    break;
+  }
+
+// clear type ahead buffer as user navigates with arrow keys
+  if (handled) {
+    e.preventDefault();
+    var t = this.getTree();
+    if (t) {
+      t.clearTypeAhead();
+    }
+    this.updateRow();
+  }
+  return handled;
+};
 
 
 
 
-// //traverse up through the menu using up arrow
-// Blockly.Accessibility.MenuNav.menuNavUp = function(){
-//     if(!opened){
-//         return;
-//     }
-//     // not in variables category       &&  not first selected  || not second item on list
-//     if(flyoutArr.length-oldLength != 2 &&  tabCount!=oldLength || lastTabCount==oldLength+1)
-//     {
-//         flyoutArr[lastTabCount].removeSelect();
-//     }
+/**
+ * Hide and empty the flyout.
+ */
+Blockly.Flyout.prototype.hide = function() {
+menuVars.opened = false;
 
-//     //handle loops 
-//     //if tabcount is too low    || In audio menu (only 1 block)        || trying to switch directions at the top of the menu  && In variables menu (only 2 blocks)   
-//     if(tabCount <= oldLength-1  || (flyoutArr.length - oldLength == 1) || (lastTabCount == tabCount-1 && tabCount-2<oldLength && (flyoutArr.length - oldLength != 2))){
+  if (!this.isVisible()) {
+    return;
+  }
+  this.svgGroup_.style.display = 'none';
+  // Delete all the event listeners.
+  for (var x = 0, listen; listen = this.listeners_[x]; x++) {
+    Blockly.unbindEvent_(listen);
+  }
+  this.listeners_.length = 0;
+  if (this.reflowWrapper_) {
+    Blockly.unbindEvent_(this.reflowWrapper_);
+    this.reflowWrapper_ = null;
+  }
+  // Do NOT delete the blocks here.  Wait until Flyout.show.
+  // https://neil.fraser.name/news/2014/08/09/
+};
+
+
+
+/*
+*   Traverse to the next block in the flyout 
+*/
+Blockly.Accessibility.MenuNav.prototype.menuNavDown = function(){
+
+
+    //prevent this from being called when the flyout is closed
+    if(!menuVars.opened){
+        return;
+    }
+
+    //remove last select if not the first and the new flyout has more than 2 blocks
+    if(menuVars.currIndex-1 >= 0 && !(menuVars.currIndex <= menuVars.oldLength) && menuVars.flyoutArr.length - menuVars.oldLength != 2 ){
+
+        menuVars.flyoutArr[menuVars.currIndex-1].removeSelect();
+    }
+
+    //handle looping through menu
+    // if on top block               ||  switching directions at the bottom of the menu                    && in variables menu 
+    if(menuVars.currIndex >= menuVars.flyoutArr.length ||  (menuVars.prevIndex == menuVars.currIndex + 1 && menuVars.currIndex + 2 >= menuVars.flyoutArr.length) && !(menuVars.flyoutArr.length - menuVars.oldLength == 2)){
         
-//         lastTabCount = oldLength;
-//         tabCount     = flyoutArr.length-1;
+        menuVars.currIndex = menuVars.oldLength;
+        menuVars.prevIndex = menuVars.flyoutArr.length-1; 
 
-//         flyoutArr[lastTabCount].removeSelect();
-//     }
+        menuVars.flyoutArr[menuVars.prevIndex].removeSelect();
+    }
 
-//     //handle variables menu because it only has 2 blocks
-//     if(flyoutArr.length-oldLength == 2){
+    //handle flyouts with only 2 blocks
+    if(menuVars.flyoutArr.length - menuVars.oldLength == 2){
 
-//         //Otherwise switch blocks
-//         //bottom block
-//         if(tabCount == flyoutArr.length-1){
+        //if bottom block is selected
+        if(menuVars.currIndex >= menuVars.flyoutArr.length-1){
 
-//             tabCount = oldLength;
-//             lastTabCount = oldLength;
-//             flyoutArr[tabCount].addSelect();
-//             flyoutArr[flyoutArr.length-1].removeSelect();
-//         }
+            menuVars.currIndex = menuVars.oldLength;
+            menuVars.prevIndex = menuVars.flyoutArr.length-1;
+
+            menuVars.flyoutArr[menuVars.currIndex].addSelect();
+            menuVars.flyoutArr[menuVars.prevIndex].removeSelect();
+
+            menuVars.prevIndex = menuVars.oldLength;
+        }
+
+        //if top block is selected
+        else if(menuVars.currIndex <= menuVars.oldLength){
+
+            menuVars.currIndex = menuVars.flyoutArr.length-1;
+            menuVars.prevIndex = menuVars.oldLength;
+
+            menuVars.flyoutArr[menuVars.currIndex].addSelect();
+            menuVars.flyoutArr[menuVars.prevIndex].removeSelect();
+
+            menuVars.prevIndex = menuVars.flyoutArr.length-1;
+
+        }
+    }
+
+   //handle switching directions && more than two blocks in flyout
+   if( menuVars.prevIndex == menuVars.currIndex+1  && menuVars.flyoutArr.length - menuVars.oldLength !=2){
+
+        menuVars.flyoutArr[menuVars.prevIndex].removeSelect();
+        menuVars.currIndex+=2;
+    }
+
+    //Update count for flyouts with more than 2 blocks
+    //select next -> save last -> increase count 
+    if(menuVars.flyoutArr.length - menuVars.oldLength != 2){
+
+        menuVars.flyoutArr[menuVars.currIndex].addSelect(); 
+
+        menuVars.prevIndex = menuVars.currIndex; 
+        menuVars.currIndex++;
+    }
+};
+
+
+
+
+/*
+*   Traverse to the previous block in the flyout 
+*/
+Blockly.Accessibility.MenuNav.prototype.menuNavUp = function(){
+    if(!menuVars.opened){
+        return;
+    }
+    //flyout has more than 2 blocks    &&  not first selected   || not second item on list
+    if(menuVars.flyoutArr.length-menuVars.oldLength != 2 &&  menuVars.currIndex != menuVars.oldLength || menuVars.prevIndex == menuVars.oldLength+1)
+    {
+        menuVars.flyoutArr[menuVars.prevIndex].removeSelect();
+    }
+
+    //handle loops 
+    //top block selected                          || In audio menu (only 1 block)                               || trying to switch directions at the top of the flyout && In flyout with only 2 blocks   
+    if(menuVars.currIndex <= menuVars.oldLength-1  || (menuVars.flyoutArr.length - menuVars.oldLength == 1) || (menuVars.prevIndex == menuVars.currIndex-1 && menuVars.currIndex-2 < menuVars.oldLength && (menuVars.flyoutArr.length - menuVars.oldLength != 2))){
         
-//         //top block
-//         else if(tabCount == oldLength){
+        menuVars.prevIndex = menuVars.oldLength;
+        menuVars.currIndex = menuVars.flyoutArr.length-1;
 
-//             tabCount = flyoutArr.length-1;
-//             lastTabCount = flyoutArr.length-1;
-//             flyoutArr[tabCount].addSelect();
-//             flyoutArr[oldLength].removeSelect();
-//         }
+        menuVars.flyoutArr[menuVars.prevIndex].removeSelect();
+    }
 
-//         Blockly.Accessibility.MenuNav.readToolbox(); 
-//     }
+    //if flyout has only 2 blocks
+    if(menuVars.flyoutArr.length - menuVars.oldLength == 2){
 
-//     //handle switching from down to up
-//     //normal switch scenario       && not the first block  && not in the variables menu
-//     if(lastTabCount == tabCount-1  && tabCount!=oldLength  && (flyoutArr.length-oldLength!=2)){
-//         flyoutArr[lastTabCount].removeSelect();
-//         tabCount-=2;
-//     }
+        //Otherwise switch blocks
+        //bottom block
+        if(menuVars.currIndex == menuVars.flyoutArr.length-1){
 
-//     if(flyoutArr.length-oldLength != 2){
-//         //select next -> save last -> decrease count 
-//         flyoutArr[tabCount].addSelect();
-//         Blockly.Accessibility.MenuNav.readToolbox(); 
-//         lastTabCount = tabCount;
+            menuVars.currIndex = menuVars.oldLength;
+            menuVars.prevIndex = menuVars.oldLength;
 
-//         tabCount--; 
-//     }
-//  Blockly.Accessibility.MenuNav.readToolbox(); 
+            menuVars.flyoutArr[menuVars.currIndex].addSelect();
+            menuVars.flyoutArr[menuVars.flyoutArr.length-1].removeSelect();
+        }
 
-// };
+        //top block
+        else if(menuVars.currIndex == menuVars.oldLength){
 
-// //#endregion
+            menuVars.currIndex = menuVars.flyoutArr.length-1;
+            menuVars.prevIndex = menuVars.flyoutArr.length-1;
 
-// /**
-//  * When the selection changes, the block name is updated for screenreader
-//  */
-//  Blockly.Accessibility.MenuNav.readToolbox = function(){
-//     var blockSvg = flyoutArr[tabCount-1];
-//     var active   = document.activeElement;
-//     var lastCategory; //track the category so that it does not deselect
+            menuVars.flyoutArr[menuVars.currIndex].addSelect();
+            menuVars.flyoutArr[menuVars.oldLength].removeSelect();
+        }
 
-//     if(blockSvg == undefined){
-//         return;
-//     }
-//     var say     = Blockly.Accessibility.Speech.blockToString(blockSvg.type, blockSvg.disabled);
-//     var readBox = document.getElementById("blockReader");
+    }
+
+    //handle switching from down to up
+    //normal switch scenario     && not the first block   && flyout has more than 2 blocks
+    if(menuVars.prevIndex == menuVars.currIndex-1  && menuVars.currIndex!=menuVars.oldLength  && (menuVars.flyoutArr.length-menuVars.oldLength!=2)){
+
+        menuVars.flyoutArr[menuVars.prevIndex].removeSelect();
+        menuVars.currIndex-=2;
+    }
+
+    //flyout has more than 2 blocks
+    if(menuVars.flyoutArr.length - menuVars.oldLength != 2){
+
+        //select next -> save last -> decrease count 
+        menuVars.flyoutArr[menuVars.currIndex].addSelect();
+
+        menuVars.prevIndex = menuVars.currIndex;
+        menuVars.currIndex--; 
+    }
+};
 
 
-//     //if category is selected save it (all categories begin with : )
-//     //then label with aria attributes so that any change will be announced
-//     if(active.id[0] ==":"){
-//         lastCategory = active;
-//         lastCategory.setAttribute("aria-owns", "readBox");
-//         lastCategory.setAttribute("aria-labelledBy", "readBox"); 
-//     }
-//         readBox.innerHTML = say;
+//============The following are minor overwrites of existing blockly functions to enable flyout navigation======================
 
-//     console.log(say);
-// };
 
-// Blockly.Accessibility.MenuNav.flyoutToWorkspace = function(){
-//     Blockly.Accessibility.Keystrokes.prototype.isConnecting = false;
+/**
+ * {OVERWRITE} adds blocks to separate array for traversing the flyout
+ * Construct the blocks required by the flyout for the procedure category.
+ * @param {!Array.<!Blockly.Block>} blocks List of blocks to show.
+ * @param {!Array.<number>} gaps List of widths between blocks.
+ * @param {number} margin Standard margin width for calculating gaps.
+ * @param {!Blockly.Workspace} workspace The flyout's workspace.
+ */
+Blockly.Procedures.flyoutCategory = function (blocks, gaps, margin, workspace) {
+    menuVars.opened    = true;
 
-//     var workspaceBlocksString = "";//text of what is on the workspace
-//     var workspaceBlocks;           //xml of what is on the workspace
-//     var incompleteXml;             //xml string before the chosen block has been added
-//     var completeXmlStr;            //string of xml to be added to workspace
-//     var xml;                       //dom version of the xml to be added to the workspace
+    if (Blockly.Blocks['procedures_defnoreturn']) {
+        var block = Blockly.Block.obtain(workspace, 'procedures_defnoreturn');
+        block.initSvg();
+        blocks.push(block);
+        menuVars.flyoutArr.push(block);//added for blockly navigation.js
+        gaps.push(margin * 2);
+    }
+    if (Blockly.Blocks['procedures_defreturn']) {
+        var block = Blockly.Block.obtain(workspace, 'procedures_defreturn');
+        block.initSvg();
+        blocks.push(block);
+        menuVars.flyoutArr.push(block);//added for blockly navigation.js
+        gaps.push(margin * 2);
+    }
+    if (Blockly.Blocks['procedures_ifreturn']) {
+        var block = Blockly.Block.obtain(workspace, 'procedures_ifreturn');
+        block.initSvg();
+        blocks.push(block);
+        menuVars.flyoutArr.push(block);//added for blockly navigation.js
+        gaps.push(margin * 2);
+    }
+    if (gaps.length) {
+        // Add slightly larger gap between system blocks and user calls.
+        gaps[gaps.length - 1] = margin * 3;
+    }
 
-//     var input     = Blockly.Xml.blockToDom_(flyoutArr[lastTabCount]);//the current block tab on from the flyout
-//     var textInput = Blockly.Xml.domToText(input);                    //the svg turned into pain text'
+    function populateProcedures(procedureList, templateName) {
+        for (var x = 0; x < procedureList.length; x++) {
+            var block = Blockly.Block.obtain(workspace, templateName);
+            block.setFieldValue(procedureList[x][0], 'NAME');
+            var tempIds = [];
+            for (var t = 0; t < procedureList[x][1].length; t++) {
+                tempIds[t] = 'ARG' + t;
+            }
+            block.setProcedureParameters(procedureList[x][1], tempIds);
+            block.initSvg();
+            blocks.push(block);
+            menuVars.flyoutArr.push(block);//added for blockly navigation.js
 
-//     //taking the xml declaration from the block after domToText adds it in
-//     var partOne = textInput.substring(0, 7);                  //before the xml declaration
-//     var partTwo = textInput.substring(44, textInput.length);  //after the xml declaration
-//     var blockString = '<xml>' + partOne + partTwo + '</xml>'; //the complete block str from the flyout that we want to add
+            gaps.push(margin * 2);
+        }
+    }
+
+    var tuple = Blockly.Procedures.allProcedures(workspace.targetWorkspace);
+    populateProcedures(tuple[0], 'procedures_callnoreturn');
+    populateProcedures(tuple[1], 'procedures_callreturn');
+};
+
+/**
+ * {Overwrite} tracks status of flyout and updates the array of current blocks.
+ * Show and populate the flyout.
+ * @param {!Array|string} xmlList List of blocks to show.
+ *     Variables and procedures have a custom set of blocks.
+ */
+Blockly.Flyout.prototype.show = function(xmlList){
+    menuVars.opened    = true;
+    menuVars.oldLength = menuVars.flyoutArr.length; //update the length of the last array 
+
+
+    if(menuVars.oldLength > 0){ //ignore first time opening
+        menuVars.currIndex  = menuVars.oldLength;
+    }
+
+    // Delete any blocks from a previous showing.
+    var blocks = this.workspace_.getTopBlocks(false);
+    for (var x = 0, block; block = blocks[x]; x++) {
+        if (block.workspace == this.workspace_) {
+            block.dispose(false, false);
+        }
+    }
+    // Delete any background buttons from a previous showing.
+    for (var x = 0, rect; rect = this.buttons_[x]; x++) {
+        goog.dom.removeNode(rect);
+    }
+    this.buttons_.length = 0;
+
+    var margin = this.CORNER_RADIUS;
+    this.svgGroup_.style.display = 'block';
+
+    // Create the blocks to be shown in this flyout.
+    var blocks = [];
+    var gaps = [];
+    if (xmlList == Blockly.Variables.NAME_TYPE) {
+        // Special category for variables.
+        Blockly.Variables.flyoutCategory(blocks, gaps, margin,
+            /** @type {!Blockly.Workspace} */ (this.workspace_));
+    } else if (xmlList == Blockly.Procedures.NAME_TYPE) {
+        // Special category for procedures.
+        Blockly.Procedures.flyoutCategory(blocks, gaps, margin,
+            /** @type {!Blockly.Workspace} */ (this.workspace_));
+    } else {
+        for (var i = 0, xml; xml = xmlList[i]; i++) {
+            if (xml.tagName && xml.tagName.toUpperCase() == 'BLOCK') {
+                var block = Blockly.Xml.domToBlock(
+                    /** @type {!Blockly.Workspace} */(this.workspace_), xml);
+                blocks.push(block);
+                menuVars.flyoutArr.push(block);
+                gaps.push(margin * 3);
+            }
+        }
+    }
+    // Lay out the blocks vertically.
+    var cursorY = margin;
+    for (var i = 0, block; block = blocks[i]; i++) {
+        var allBlocks = block.getDescendants();
+        for (var j = 0, child; child = allBlocks[j]; j++) {
+            // Mark blocks as being inside a flyout.  This is used to detect and
+            // prevent the closure of the flyout if the user right-clicks on such a
+            // block.
+            child.isInFlyout = true;
+            // There is no good way to handle comment bubbles inside the flyout.
+            // Blocks shouldn't come with predefined comments, but someone will
+            // try this, I'm sure.  Kill the comment.
+            child.setCommentText(null);
+        }
+        block.render();
+        var root = block.getSvgRoot();
+        var blockHW = block.getHeightWidth();
+        var x = this.RTL ? 0 : margin + Blockly.BlockSvg.TAB_WIDTH;
+        block.moveBy(x, cursorY);
+        cursorY += blockHW.height + gaps[i];
+
+        // Create an invisible rectangle under the block to act as a button.  Just
+        // using the block as a button is poor, since blocks have holes in them.
+        var rect = Blockly.createSvgElement('rect', { 'fill-opacity': 0 }, null);
+        // Add the rectangles under the blocks, so that the blocks' tooltips work.
+        this.workspace_.getCanvas().insertBefore(rect, block.getSvgRoot());
+        block.flyoutRect_ = rect;
+        this.buttons_[i] = rect;
+
+        if (this.autoClose) {
+            this.listeners_.push(Blockly.bindEvent_(root, 'mousedown', null,
+                this.createBlockFunc_(block)));
+        } else {
+            this.listeners_.push(Blockly.bindEvent_(root, 'mousedown', null,
+                this.blockMouseDown_(block)));
+        }
+        this.listeners_.push(Blockly.bindEvent_(root, 'mouseover', block,
+            block.addSelect));
+        this.listeners_.push(Blockly.bindEvent_(root, 'mouseout', block,
+            block.removeSelect));
+        this.listeners_.push(Blockly.bindEvent_(rect, 'mousedown', null,
+            this.createBlockFunc_(block)));
+        this.listeners_.push(Blockly.bindEvent_(rect, 'mouseover', block,
+            block.addSelect));
+        this.listeners_.push(Blockly.bindEvent_(rect, 'mouseout', block,
+            block.removeSelect));
+    }
+
+
+
+    // IE 11 is an incompetant browser that fails to fire mouseout events.
+    // When the mouse is over the background, deselect all blocks.
+    var deselectAll = function (e) {
+        var blocks = this.workspace_.getTopBlocks(false);
+        for (var i = 0, block; block = blocks[i]; i++) {
+            block.removeSelect();
+        }
+    };
+    this.listeners_.push(Blockly.bindEvent_(this.svgBackground_, 'mouseover',
+        this, deselectAll));
+
+    this.width_ = 0;
+    this.reflow();
+
+    this.filterForCapacity_();
+
+    // Fire a resize event to update the flyout's scrollbar.
+    Blockly.fireUiEventNow(window, 'resize');
+    this.reflowWrapper_ = Blockly.bindEvent_(this.workspace_.getCanvas(),
+    'blocklyWorkspaceChange', this, this.reflow);
+    this.workspace_.fireChangeEvent();
+
+};
+
+/**
+ * {OVERWRITE} tracks status of flyout and updates the array of current blocks.
+ * Construct the blocks required by the flyout for the variable category.
+ * @param {!Array.<!Blockly.Block>} blocks List of blocks to show.
+ * @param {!Array.<number>} gaps List of widths between blocks.
+ * @param {number} margin Standard margin width for calculating gaps.
+ * @param {!Blockly.Workspace} workspace The flyout's workspace.
+ */
+Blockly.Variables.flyoutCategory = function (blocks, gaps, margin, workspace) {
+    menuVars.opened    = true;
+    var variableList = Blockly.Variables.allVariables(workspace.targetWorkspace);
+    variableList.sort(goog.string.caseInsensitiveCompare);
+    // In addition to the user's variables, we also want to display the default
+    // variable name at the top.  We also don't want this duplicated if the
+    // user has created a variable of the same name.
+    variableList.unshift(null);
+    var defaultVariable = undefined;
+    for (var i = 0; i < variableList.length; i++) {
+        if (variableList[i] === defaultVariable) {
+            continue;
+        }
+        var getBlock = Blockly.Blocks['variables_get'] ?
+            Blockly.Block.obtain(workspace, 'variables_get') : null;
+        getBlock && getBlock.initSvg();
+        var setBlock = Blockly.Blocks['variables_set'] ?
+            Blockly.Block.obtain(workspace, 'variables_set') : null;
+        setBlock && setBlock.initSvg();
+        if (variableList[i] === null) {
+            defaultVariable = (getBlock || setBlock).getVars()[0];
+        } else {
+            getBlock && getBlock.setFieldValue(variableList[i], 'VAR');
+            setBlock && setBlock.setFieldValue(variableList[i], 'VAR');
+        }
+        setBlock && blocks.push(setBlock);
+        menuVars.flyoutArr.push(setBlock);//added for blockly navigation.js
+        getBlock && blocks.push(getBlock);
+        menuVars.flyoutArr.push(getBlock);//added for blockly navigation.js
+        if (getBlock && setBlock) {
+            gaps.push(margin, margin * 3);
+        } else {
+            gaps.push(margin * 2);
+        }
+    }
+};
+
+/**
+ * When the selection changes, the block name is updated for screenreader
+ */
+ Blockly.Accessibility.MenuNav.readToolbox = function(){
+    var blockSvg = menuVars.flyoutArr[menuVars.currIndex-1];
+    var active   = document.activeElement;
+    var lastCategory; //track the category so that it does not deselect
+
+    if(blockSvg == undefined){
+        return;
+    }
+    var say     = Blockly.Accessibility.Speech.blockToString(blockSvg.type, blockSvg.disabled);
+    var readBox = document.getElementById("blockReader");
+
+
+    //if category is selected save it (all categories begin with : )
+    //then label with aria attributes so that any change will be announced
+    if(active.id[0] ==":"){
+        lastCategory = active;
+        lastCategory.setAttribute("aria-owns", "readBox");
+        lastCategory.setAttribute("aria-labelledBy", "readBox"); 
+    }
+        readBox.innerHTML = say;
+
+    console.log(say);
+};
+
+Blockly.Accessibility.MenuNav.flyoutToWorkspace = function(){
+    Blockly.Accessibility.Keystrokes.prototype.isConnecting = false;
+
+    var workspaceBlocksString = "";//text of what is on the workspace
+    var workspaceBlocks;           //xml of what is on the workspace
+    var incompleteXml;             //xml string before the chosen block has been added
+    var completeXmlStr;            //string of xml to be added to workspace
+    var xml;                       //dom version of the xml to be added to the workspace
+
+    var input     = Blockly.Xml.blockToDom_(menuVars.flyoutArr[menuVars.prevIndex]);//the current block tab on from the flyout
+    var textInput = Blockly.Xml.domToText(input);                    //the svg turned into pain text'
+
+    //taking the xml declaration from the block after domToText adds it in
+    var partOne = textInput.substring(0, 7);                  //before the xml declaration
+    var partTwo = textInput.substring(44, textInput.length);  //after the xml declaration
+    var blockString = '<xml>' + partOne + partTwo + '</xml>'; //the complete block str from the flyout that we want to add
     
-//     incompleteXml  = workspaceBlocksString.substring(0, workspaceBlocksString.length-6);//the xml before the chosen block has been added...stripped the </xml>
-//     completeXmlStr = blockString;               //incompleteXml + blockString;//the completeXML string to be added to the workspace
-//     xml = Blockly.Xml.textToDom(completeXmlStr);//take the complete xml string and change to dom
+    incompleteXml  = workspaceBlocksString.substring(0, workspaceBlocksString.length-6);//the xml before the chosen block has been added...stripped the </xml>
+    completeXmlStr = blockString;               //incompleteXml + blockString;//the completeXML string to be added to the workspace
+    xml = Blockly.Xml.textToDom(completeXmlStr);//take the complete xml string and change to dom
 
-//     // The following allows us to immediately identify the block in the scene and grab it.
-//     var commentNode = Blockly.Xml.textToDom('<xml><comment pinned="true" h="80" w="160">`4*K</comment></xml>');
-//     xml.childNodes[0].appendChild(commentNode.childNodes[0]);
+    // The following allows us to immediately identify the block in the scene and grab it.
+    var commentNode = Blockly.Xml.textToDom('<xml><comment pinned="true" h="80" w="160">`4*K</comment></xml>');
+    xml.childNodes[0].appendChild(commentNode.childNodes[0]);
 
-//     Blockly.Xml.domToWorkspace(workspace, xml);//adds the xml var to the main workspace
+    Blockly.Xml.domToWorkspace(workspace, xml);//adds the xml var to the main workspace
 
-//     Blockly.Accessibility.Navigation.updateXmlSelection();//updates the xml
-//     Blockly.hideChaff();//hides the toolbox once done
+    Blockly.Accessibility.Navigation.updateXmlSelection();//updates the xml
+    Blockly.hideChaff();//hides the toolbox once done
 
-//     var comments = xmlDoc.getElementsByTagName('COMMENT');
+    var comments = xmlDoc.getElementsByTagName('COMMENT');
     
-//     //console.log(comments);
+    //console.log(comments);
 
-//     //auto select what was just added
-//     var newId = flyoutArr[flyoutArr.length-1].id;
-//     newId     = parseInt(newId);
-//     newId ++;
-//     Blockly.Accessibility.Navigation.jumpToID(newId);
+    //auto select what was just added
+    var newId = flyoutArr[flyoutArr.length-1].id;
+    newId     = parseInt(newId);
+    newId ++;
+    Blockly.Accessibility.Navigation.jumpToID(newId);
 
-//     //set comment text to null
-//     for (var i = 0; i < comments.length; i++) {
-//         if (comments[i].childNodes[0].nodeValue == '`4*K') {
-//             var block = Blockly.Block.getById(comments[i].parentNode.getAttribute('ID'), Blockly.mainWorkspace)
-//             block.setCommentText(null);
-//             return block;
-//         }
-//     }
-//     console.log("WARNING. ADDED BLOCK NOT FOUND");
-//     return null;
-// };
+    //set comment text to null
+    for (var i = 0; i < comments.length; i++) {
+        if (comments[i].childNodes[0].nodeValue == '`4*K') {
+            var block = Blockly.Block.getById(comments[i].parentNode.getAttribute('ID'), Blockly.mainWorkspace)
+            block.setCommentText(null);
+            return block;
+        }
+    }
+    console.log("WARNING. ADDED BLOCK NOT FOUND");
+    return null;
+};
 
-// Blockly.Accessibility.MenuNav.addNext = function(){
-//     //var workspaceBlockId = Blockly.Accessibility.Navigation.getRetainedNode();// the selected block on the workspace
-//     //console.log(workspaceBlockId)
-//     var blockIdStr = '<xml> <block type="controls_if" id="8" inline="false" x="11" y="11">'//"id=\"" + "8" + "\"";
-//     console.log(blockIdStr);
+Blockly.Accessibility.MenuNav.addNext = function(){
+    //var workspaceBlockId = Blockly.Accessibility.Navigation.getRetainedNode();// the selected block on the workspace
+    //console.log(workspaceBlockId)
+    var blockIdStr = '<xml> <block type="controls_if" id="8" inline="false" x="11" y="11">'//"id=\"" + "8" + "\"";
+    console.log(blockIdStr);
 
-//     var input     = Blockly.Xml.blockToDom_(flyoutArr[lastTabCount]);//the current block tab on from the flyout
-//     var textInput = Blockly.Xml.domToText(input);//the svg turned into pain text
+    var input     = Blockly.Xml.blockToDom_(menuVars.flyoutArr[menuVars.prevIndex]);//the current block tab on from the flyout
+    var textInput = Blockly.Xml.domToText(input);//the svg turned into pain text
 
-//     //taking the xml declaration from the block after domToText adds it in
-//     var partOne = textInput.substring(0, 7)                 //before the xml declaration
-//     var partTwo = textInput.substring(44, textInput.length);//after the xml declaration
+    //taking the xml declaration from the block after domToText adds it in
+    var partOne = textInput.substring(0, 7)                 //before the xml declaration
+    var partTwo = textInput.substring(44, textInput.length);//after the xml declaration
 
-//     var blockString = '<statement name="DO0">' + partOne + partTwo + '</statement>'; //the complete block str from the flyout that we want to add
-//     console.log(blockString);
+    var blockString = '<statement name="DO0">' + partOne + partTwo + '</statement>'; //the complete block str from the flyout that we want to add
+    console.log(blockString);
 
-//     var workspaceBlocks       = Blockly.Xml.workspaceToDom(Blockly.mainWorkspace);//the workspace as an xml doc
-//     var workspaceBlocksString = Blockly.Xml.domToText(workspaceBlocks);           //the text version of what is currently on the workspace
-//     var completeXmlStr        = blockIdStr + blockString + '</block>' + '</xml>';
-//     console.log(completeXmlStr);
+    var workspaceBlocks       = Blockly.Xml.workspaceToDom(Blockly.mainWorkspace);//the workspace as an xml doc
+    var workspaceBlocksString = Blockly.Xml.domToText(workspaceBlocks);           //the text version of what is currently on the workspace
+    var completeXmlStr        = blockIdStr + blockString + '</block>' + '</xml>';
+    console.log(completeXmlStr);
 
-//     var xml = Blockly.Xml.textToDom(completeXmlStr);//take the complete xml string and change to dom
+    var xml = Blockly.Xml.textToDom(completeXmlStr);//take the complete xml string and change to dom
 
-//     Blockly.mainWorkspace.clear();                         //clears the previous blocks on the workspace
-//     Blockly.Xml.domToWorkspace(Blockly.mainWorkspace, xml);//adds the xml var to the main workspace
+    Blockly.mainWorkspace.clear();                         //clears the previous blocks on the workspace
+    Blockly.Xml.domToWorkspace(Blockly.mainWorkspace, xml);//adds the xml var to the main workspace
 
-//     Blockly.Accessibility.Navigation.updateXmlSelection();//updates the xml
-//     Blockly.hideChaff();                                  //hides the toolbox once done
-// };
+    Blockly.Accessibility.Navigation.updateXmlSelection();//updates the xml
+    Blockly.hideChaff();                                  //hides the toolbox once done
+};
 
-// Blockly.Accessibility.MenuNav.getToolboxChoices = function(){
-//     return currentFlyoutArr;
-// };
+Blockly.Accessibility.MenuNav.getToolboxChoices = function(){
+    return menuVars.currentFlyoutArr;
+};
 
-// Blockly.Accessibility.MenuNav.getMenuSelection = function(){
-//     return flyoutArr[lastTabCount];
-// };
+Blockly.Accessibility.MenuNav.getMenuSelection = function(){
+    return menuVars.flyoutArr[menuVars.prevIndex];
+};
+
+
+
 
 
 

@@ -25,7 +25,6 @@
 <script src="../generators/python/colour.js"></script>
 <script src="../generators/python/variables.js"></script>
 <script src="../generators/python/procedures.js"></script>
-<script src="../generators/javascript/audio.js"></script>
 <script src="../generators/php.js"></script>    
 <script src="../generators/php/logic.js"></script>    
 <script src="../generators/php/loops.js"></script>    
@@ -55,9 +54,9 @@
 <script src="../blocks/procedures.js"></script>
 <script src="../blocks/audio.js"></script>
 <!-- Load the Google Drive SDK Realtime libraries. -->
-<script src="https://apis.google.com/js/api.js"></script>
+<!-- <script src="https://apis.google.com/js/api.js"></script>
 <script src="loadxml.js"></script>
-<script src="debug.js"></script>
+<script src="debug.js"></script> -->
 <script>
 'use strict';
 // Depending on the URL argument, render as LTR or RTL.
@@ -71,6 +70,7 @@ function enableRealtimeSpecificUi() {
 
 function start() {
   var toolbox = document.getElementById('toolbox');
+
   workspace = Blockly.inject('blocklyDiv',
           {comments: true,
            disable: true,
@@ -103,6 +103,9 @@ function start() {
   if (Blockly.Realtime.isEnabled()) {
     enableRealtimeSpecificUi();
   }
+
+    toolbox.setAttribute('tabindex','0');
+
 }
 
 function toXml() {
@@ -628,7 +631,6 @@ color: black;
         </value>
       </block>
     </category>
-    <sep></sep>
     <category name="Variables" colour="330" custom="VARIABLE"></category>
     <category name="Functions" colour="290" custom="PROCEDURE"></category>
   </xml>
@@ -701,8 +703,8 @@ color: black;
   <!--This is where the screen reader is updated-->
   <div id="blockReader" tabindex="-1" aria-live="assertive"></div>
   
-  <link rel="stylesheet" href="./css/tree.css">
-  <!--<div id="treeContainer" style="width:400px"></div>-->
+<!--   <link rel="stylesheet" href="./css/tree.css">
+ -->  <!--<div id="treeContainer" style="width:400px"></div>-->
  <!-- CAUSES A BUG WITH THE HIGHLIGHTING <style>
   .goog-tree-children {
       background-repeat: repeat-y;

@@ -337,7 +337,7 @@ document.onkeydown = document.onkeyup = function(e){
 		}
 
 		else if(map[65]){ //A
-				Blockly.Accessibility.Navigation.traverseOut();
+				//Blockly.Accessibility.Navigation.traverseOut();
 		}
 
 		else if(map[67]){ //C
@@ -349,7 +349,7 @@ document.onkeydown = document.onkeyup = function(e){
 
 		else if(map[68]){ //D
 			//Navigate in
-			Blockly.Accessibility.Navigation.traverseIn();
+			//Blockly.Accessibility.Navigation.traverseIn();
 		}
 
 		else if(map[69]){ //E
@@ -395,23 +395,23 @@ document.onkeydown = document.onkeyup = function(e){
 		}
 
 		else if(map[83]){ //S
-			//Navigates down through blocks
-			e.preventDefault();
-			var active = document.activeElement;
+			// //Navigates down through blocks
+			// e.preventDefault();
+			// var active = document.activeElement;
 
-			if(active.getAttribute("class") == "blocklySvg"){
-				Blockly.Accessibility.Navigation.traverseDown();
-			}
+			// if(active.getAttribute("class") == "blocklySvg"){
+			// 	Blockly.Accessibility.Navigation.traverseDown();
+			// }
 
 		}
 
 		else if(map[87]){ //W
-			e.preventDefault();
-			//navigate between blocks when not connecting
-			var active = document.activeElement;
-			if(active.getAttribute("class") == "blocklySvg"){
-				Blockly.Accessibility.Navigation.traverseUp();
-			}
+			// e.preventDefault();
+			// //navigate between blocks when not connecting
+			// var active = document.activeElement;
+			// if(active.getAttribute("class") == "blocklySvg"){
+			// 	Blockly.Accessibility.Navigation.traverseUp();
+			// }
 		}
 
 		//============Jumping to specific category===============

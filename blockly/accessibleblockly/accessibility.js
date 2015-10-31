@@ -33,126 +33,126 @@ var lastId = 99;
  * Initialize accessibility properties
  * @override
  */
-Blockly.Toolbox.TreeNode.prototype.initAccessibility = function() {
-  goog.ui.tree.BaseNode.prototype.initAccessibility.call(this);
+// Blockly.Toolbox.TreeNode.prototype.initAccessibility = function() {
+//   goog.ui.tree.BaseNode.prototype.initAccessibility.call(this);
   
-  var el = this.getElement();
-  el.setAttribute('tabIndex', 0);
+//   var el = this.getElement();
+//   el.setAttribute('tabIndex', 0);
   
-  //Register the onKeyDown handler because nothing else does
-  Blockly.bindEvent_(el, 'keydown', this, this.onKeyDown);
-};
+//   //Register the onKeyDown handler because nothing else does
+//   Blockly.bindEvent_(el, 'keydown', this, this.onKeyDown);
+// };
 
-/**
- * Handles a key down event.
- * @param {!goog.events.BrowserEvent} e The browser event.
- * @return {boolean} The handled value.
- * @override
- */
-Blockly.Toolbox.TreeNode.prototype.onKeyDown = function(e) {
-  var handled = true;
-  currId = this.id_[1];
-  switch (e.keyCode) {
-    //prevent keys from skipping to categories
-    case 77:
-    case 76:
-    case 84:
-    case 67:
-    case 70:
-    case 86:
-    case 65:
-      e.preventDefault();
-      break;
-    //=======navigating the menu==========  
-    //up
-    case 87:
-      Blockly.Accessibility.MenuNav.menuNavUp();
-      blockSelected = true;
-      break;
-    //down
-    case 83:
-      Blockly.Accessibility.MenuNav.menuNavDown();
-      blockSelected = true;
-      break;
+// /**
+//  * Handles a key down event.
+//  * @param {!goog.events.BrowserEvent} e The browser event.
+//  * @return {boolean} The handled value.
+//  * @override
+//  */
+// Blockly.Toolbox.TreeNode.prototype.onKeyDown = function(e) {
+//   var handled = true;
+//   currId = this.id_[1];
+//   switch (e.keyCode) {
+//     //prevent keys from skipping to categories
+//     case 77:
+//     case 76:
+//     case 84:
+//     case 67:
+//     case 70:
+//     case 86:
+//     case 65:
+//       e.preventDefault();
+//       break;
+//     //=======navigating the menu==========  
+//     //up
+//     case 87:
+//       Blockly.Accessibility.MenuNav.menuNavUp();
+//       blockSelected = true;
+//       break;
+//     //down
+//     case 83:
+//       Blockly.Accessibility.MenuNav.menuNavDown();
+//       blockSelected = true;
+//       break;
 
-    //=====Open and close the menu and add blocks======
-    case goog.events.KeyCodes.ENTER:
-      if (e.altKey) {
-        break;
-      }
-      // // Expand icon. 
-      // if (this.hasChildren() && this.isUserCollapsible_) {
-      //   this.setExpanded(true);
-      //   this.select();
-      // }
+//     //=====Open and close the menu and add blocks======
+//     case goog.events.KeyCodes.ENTER:
+//       if (e.altKey) {
+//         break;
+//       }
+//       // // Expand icon. 
+//       // if (this.hasChildren() && this.isUserCollapsible_) {
+//       //   this.setExpanded(true);
+//       //   this.select();
+//       // }
 
-      //open the flyout
-      if(!this.getExpanded() || (currId != lastId || lastId == 99)){
+//       //open the flyout
+//       if(!this.getExpanded() || (currId != lastId || lastId == 99)){
 
-        this.select();
-        this.setExpanded(true);
-        Blockly.Accessibility.MenuNav.menuNavDown();
-        blockSelected = true;
-      }
+//         this.select();
+//         this.setExpanded(true);
+//         Blockly.Accessibility.MenuNav.menuNavDown();
+//         blockSelected = true;
+//       }
 
-      //selecting and connecting blocks
-       else if(this.getExpanded()){
-        //connect to a block on the workspace
-        if(Blockly.Accessibility.Keystrokes.prototype.isConnecting && blockSelected){
+//       //selecting and connecting blocks
+//        else if(this.getExpanded()){
+//         //connect to a block on the workspace
+//         if(Blockly.Accessibility.Keystrokes.prototype.isConnecting && blockSelected){
 
-          Blockly.Accessibility.Keystrokes.prototype.isConnecting = false;
-          blockSelected  = false;
-          this.setExpanded(false);
+//           Blockly.Accessibility.Keystrokes.prototype.isConnecting = false;
+//           blockSelected  = false;
+//           this.setExpanded(false);
 
-          Blockly.Accessibility.InBlock.addBlock();
-          document.getElementById("blockReader").focus();
-        }
+//           Blockly.Accessibility.InBlock.addBlock();
+//           document.getElementById("blockReader").focus();
+//         }
 
-        //put block on workspace unconnected
-        else if(!Blockly.Accessibility.Keystrokes.prototype.isConnecting && blockSelected){
+//         //put block on workspace unconnected
+//         else if(!Blockly.Accessibility.Keystrokes.prototype.isConnecting && blockSelected){
 
-          blockSelected  = false;
-          this.setExpanded(false);
+//           blockSelected  = false;
+//           this.setExpanded(false);
 
-          Blockly.Accessibility.MenuNav.flyoutToWorkspace();
-          document.getElementById("blockReader").focus();
+//           Blockly.Accessibility.MenuNav.flyoutToWorkspace();
+//           document.getElementById("blockReader").focus();
 
-        }
+//         }
 
-        //toggle closed
-        else{
-          //blockSelected  = false;
-          //this.setExpanded(false);
-          //this.getTree().setSelectedItem(null);
-          //Blockly.Accessibility.Keystrokes.prototype.isConnecting = false;
-          //Blockly.Accessibility.InBlock.unhighlightSelection();
-        }
-      }
-      break;
+//         //toggle closed
+//         else{
+//           //blockSelected  = false;
+//           //this.setExpanded(false);
+//           //this.getTree().setSelectedItem(null);
+//           //Blockly.Accessibility.Keystrokes.prototype.isConnecting = false;
+//           //Blockly.Accessibility.InBlock.unhighlightSelection();
+//         }
+//       }
+//       break;
 
-    case goog.events.KeyCodes.LEFT:
+//     case goog.events.KeyCodes.LEFT:
 
-      blockSelected  = false;
-      this.setExpanded(false);
-      this.getTree().setSelectedItem(null);
-      break;
+//       blockSelected  = false;
+//       this.setExpanded(false);
+//       this.getTree().setSelectedItem(null);
+//       break;
 
-    default:
-      handled = false;
-  }
+//     default:
+//       handled = false;
+//   }
 
-  if (handled) {
-    e.preventDefault();
-    var t = this.getTree();
-    if (t) {
-      // clear type ahead buffer as user navigates with arrow keys
-      t.clearTypeAhead();
-    }
-    this.updateRow();
-  }
-  lastId = currId;
-  return handled;
-};
+//   if (handled) {
+//     e.preventDefault();
+//     var t = this.getTree();
+//     if (t) {
+//       // clear type ahead buffer as user navigates with arrow keys
+//       t.clearTypeAhead();
+//     }
+//     this.updateRow();
+//   }
+//   lastId = currId;
+//   return handled;
+// };
 
 //#endregion
 
