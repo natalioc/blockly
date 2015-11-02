@@ -351,8 +351,9 @@ Blockly.Accessibility.Prefixes.getAllPrefixes = function() {
         return null;
     }
     //Add all xml blocks to blockArr
+    this.giveAllBlocksIds();
     var blockArr = xmlDoc.getElementsByTagName('BLOCK');
-  var map = {}; //hashMap with Block Id's and their associated prefix ex Block:19 , A1.3
+    var map = {}; //hashMap with Block Id's and their associated prefix ex Block:19 , A1.3
     var capitalAlphabet = 0;//count of which letter should be chosen from the alphabet array
     var lowerAlphabet = 0;//count of which letter should be chosen from the alphabet array
     var oldPrefix = '';
@@ -451,10 +452,12 @@ Blockly.Accessibility.Prefixes.getAllPrefixes = function() {
         lowerAlphabet++;
       }
       else{
-        oldPrefix = map[previousParentValue.getAttribute('id')];
-        oldPrefix = oldPrefix + this.getAlphabetical(lowerAlphabet);
-        map[valueArr[i].getAttribute('id').toString()] = oldPrefix;
-        lowerAlphabet++;
+          if(valueArr[i].getAttribute('id')!=null){
+              oldPrefix = map[previousParentValue.getAttribute('id')];
+              oldPrefix = oldPrefix + this.getAlphabetical(lowerAlphabet);
+              map[valueArr[i].getAttribute('id').toString()] = oldPrefix;
+              lowerAlphabet++;
+          }
       }
     }
   }
@@ -522,4 +525,11 @@ Blockly.Accessibility.Prefixes.getAllPrefixes = function() {
     }
   }
     return map;
+};
+
+Blockly.Accessibility.Prefixes.giveAllBlocksIds = function(){
+    var blocks = xmlDoc.getElementsByTagName('BLOCK');
+    for(var i = 0; i < blocks.length; i++){
+        blocks[i].setAttribute("id", i);
+    }
 };
