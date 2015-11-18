@@ -104,8 +104,7 @@ function start() {
     enableRealtimeSpecificUi();
   }
 
-    toolbox.setAttribute('tabindex','0');
-
+  toolbox.setAttribute("tabindex",0);
 }
 
 function toXml() {
@@ -202,6 +201,8 @@ function changeFontDD(){
   var infoBox            = document.getElementById("infoBox");
   infoBox.style.fontSize = selectedSize+"px";
 }
+
+
 </script>
 
 <style>
@@ -663,8 +664,8 @@ color: black;
             <button type="button" value="To JavaScript" onclick="toCode('JavaScript')">To JavaScript</button>
             <button type="button" value="To Python" onclick="toCode('Python')">To Python</button>
             <button type="button" value="To Dart" onclick="toCode('Dart')">To Dart</button>
-            <button type="button" value="Run JavaScript" onclick="runCode()">Run JavaScript</button>
-        </div>
+<!--             <button type="button" value="Run JavaScript" onclick="runCode()">Run JavaScript</button>
+ -->        </div>
     
         <textarea id="importExport" role="textbox">Program Output is here</textarea>
 <!--

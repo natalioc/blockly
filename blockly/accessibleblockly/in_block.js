@@ -333,6 +333,7 @@ Blockly.Accessibility.InBlock.addBlock = function () {
         }
         else if(this.storedConnection.type == 3){
             newBlock = Blockly.Accessibility.MenuNav.flyoutToWorkspace();
+            console.log(newBlock);
             this.safeConnect(newBlock.previousConnection);
         }
         else if(this.storedConnection.type == 4){

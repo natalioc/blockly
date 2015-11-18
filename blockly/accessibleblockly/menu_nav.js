@@ -50,15 +50,126 @@ var menuVars = {
     prevIndex: 0,
     opened: false, 
     currentFlyoutArr: [],
-    blockSelected:false
+    blockSelected:false,
+
+
+    /*
+    * Checks if flyout was opened for the first time or first block in newly opened flyout
+    * @return{bool}
+    */
+    isFirstBlock: function() {
+        if (menuVars.currIndex <= menuVars.oldLength) {
+            return true;
+        }
+
+        else if (menuVars.currIndex - 1 < 0) {
+            return true;
+        }
+
+        else return false;
+    },
+
+    /*
+    * Checks if second block in flyout selected
+    * important for deselecting correct block
+    * @return{bool}
+    */
+    isSecondBlock: function() {
+        if (menuVars.currIndex == menuVars.oldLength) {
+            return false;
+        }
+        else if (menuVars.prevIndex != menuVars.oldLength + 1) {
+            return false;
+        }
+        else return true;
+    },
+
+    /*
+    * Checks if flyout contains only 2 blocks
+    * normal looping does not work with only 2
+    * @return {bool}
+    */
+    hasTwoBlocks: function() {
+        return (menuVars.flyoutArr.length - menuVars.oldLength != 2) ? false : true;
+    },
+
+    /*
+    * Checks if flyout only contains 1 block
+    * @return{bool}
+    */
+    hasOneBlock: function() {
+        return (menuVars.flyoutArr.length - menuVars.oldLength == 1) ? true : false;
+    },
+
+    /*
+    * Checks if the user switched directions from up to down.
+    * @return {bool}
+    */
+    switchingDown: function() {
+        return (menuVars.prevIndex == menuVars.currIndex + 1) ? true : false;
+    },
+
+    /*
+    * Checks if the user switched directions from down to up.
+    * @return {bool}
+    */
+    switchingUp: function() {
+        return (menuVars.prevIndex == menuVars.currIndex - 1) ? true : false;
+    },
+
+     /*
+    * Checks if the user is at the top of the flyout
+    * @return {bool}
+    */
+    atTopOfFlyout: function() {
+
+        return (menuVars.currIndex >= menuVars.flyoutArr.length) ? true : false;
+    },
+
+    /*
+    * Checks if the user is at the bottom of the flyout
+    * @return {bool}
+    */
+    atBottomOfFlyout: function() {
+        return (menuVars.currIndex >= menuVars.flyoutArr.length - 1) ? true : false;
+    },
+
+    /*
+    * Checks if looping from top to bottom
+    * @return{bool}
+    */
+    loopingUp: function() {
+        if (menuVars.currIndex <= menuVars.oldLength - 1) {
+            return true;
+        }
+
+        else if (menuVars.currIndex - 2 < menuVars.oldLength) {
+           return (menuVars.prevIndex == menuVars.currIndex - 1) ? true : false;
+        }
+    },
+
+    /*
+    * Checks if looping from bottom to top
+    * @return{bool}
+    */
+    loopingDown: function() {
+        if (menuVars.currIndex >= menuVars.flyoutArr.length) {
+            return true;
+        }
+
+        else if (menuVars.prevIndex == menuVars.currIndex + 1) {
+
+             return (menuVars.currIndex + 2 >= menuVars.flyoutArr.length) ? true : false;
+        }
+    }
 };
 
 Blockly.Toolbox.TreeNode.prototype.initAccessibility = function() {
   goog.ui.tree.BaseNode.prototype.initAccessibility.call(this);
   
   var el = this.getElement();
-  el.setAttribute('tabIndex', 0);
-  
+  el.setAttribute('tabIndex', 0);   
+  Blockly.bindEvent_(el, 'keydown', this, this.onKeyDown);
 };
  
 /*
@@ -68,7 +179,6 @@ Blockly.Toolbox.TreeNode.prototype.initAccessibility = function() {
 Blockly.Toolbox.TreeNode.prototype.onKeyDown = function(e) {
 
   var handled = true; //used for preventing the screen from scrolling
-
   switch (e.keyCode) {
     //prevent keys from skipping to categories
     case 77:
@@ -77,10 +187,10 @@ Blockly.Toolbox.TreeNode.prototype.onKeyDown = function(e) {
     case 67:
     case 70:
     case 86:
-    //case 65:
       e.preventDefault();
       break;
 
+    //W
     case 87:
 
       //select previous block
@@ -95,11 +205,13 @@ Blockly.Toolbox.TreeNode.prototype.onKeyDown = function(e) {
         //if not the top category
         if(previousSibling != null){
            previousSibling.select();
+           document.getElementById(previousSibling.id_).focus();
         }
 
       }
       break;
 
+    //S
     case 83:
 
       //select next block
@@ -114,12 +226,14 @@ Blockly.Toolbox.TreeNode.prototype.onKeyDown = function(e) {
         //if not the bottome category
         if(nextSibling != null){
              nextSibling.select();
+             document.getElementById(nextSibling.id_).focus();
         }
        
       }
       break;
 
     //exit flyout to select categories 
+    //A
     case 65:
 
       if(this.getExpanded()){
@@ -130,6 +244,7 @@ Blockly.Toolbox.TreeNode.prototype.onKeyDown = function(e) {
     break;
 
     //move inside the flyout to select blocks
+    //D
     case 68:
         this.select();
         this.setExpanded(true);
@@ -137,43 +252,45 @@ Blockly.Toolbox.TreeNode.prototype.onKeyDown = function(e) {
         menuVars.blockSelected = true;
     break;
 
-    case goog.events.KeyCodes.ENTER:
-
-
-
+    //ENTER
+    case 13:
+        //open the flyout
         if(!this.getExpanded()){
-
             this.select();
-            this.setExpanded(true);
-            Blockly.Accessibility.MenuNav.menuNavDown();
-            blockSelected = true;
         }
 
-        if(this.getExpanded()){
-        //connect to a block on the workspace
-        if(Blockly.Accessibility.Keystrokes.prototype.isConnecting && blockSelected){
+       //selecting and connecting blocks
+       else if(this.getExpanded()){
 
-          Blockly.Accessibility.Keystrokes.prototype.isConnecting = false;
-          menuVars.blockSelected  = false;
-          this.setExpanded(false);
+            //connect to a block on the workspace
+            if(Blockly.Accessibility.Keystrokes.prototype.isConnecting && menuVars.blockSelected){
 
-          Blockly.Accessibility.InBlock.addBlock();
-          document.getElementById("blockReader").focus();
-        }
+              Blockly.Accessibility.Keystrokes.prototype.isConnecting = false;
+              menuVars.blockSelected  = false;
+              this.setExpanded(false);
+              this.getTree().setSelectedItem(null);
 
-        //put block on workspace unconnected
-        else if(!Blockly.Accessibility.Keystrokes.prototype.isConnecting && menuVars.blockSelected){
+              Blockly.Accessibility.InBlock.addBlock();
+              document.getElementById("blockReader").focus();
+            }
 
-          menuVars.blockSelected  = false;
-          this.setExpanded(false);
+            //put block on workspace unconnected
+            else if(!Blockly.Accessibility.Keystrokes.prototype.isConnecting && menuVars.blockSelected){
 
-          Blockly.Accessibility.MenuNav.flyoutToWorkspace();
-          document.getElementById("blockReader").focus();
+              menuVars.blockSelected  = false;
+              this.setExpanded(false);
+              this.getTree().setSelectedItem(null);
 
-        }
-    }
+              Blockly.Accessibility.MenuNav.flyoutToWorkspace();
+              document.getElementById("blockReader").focus();
+
+            }
+        }   
+        
+    break;
+
     default:
-      handled = false;
+        handled = false;
     break;
   }
 
@@ -216,42 +333,23 @@ menuVars.opened = false;
 };
 
 
-
 /*
-*   Traverse to the next block in the flyout 
+*   Traverse to the next block in the flyout
 */
-Blockly.Accessibility.MenuNav.prototype.menuNavDown = function(){
-
-
+Blockly.Accessibility.MenuNav.prototype.menuNavDown= function() {
     //prevent this from being called when the flyout is closed
-    if(!menuVars.opened){
+    if (!menuVars.opened) {
         return;
     }
 
-    //remove last select if not the first and the new flyout has more than 2 blocks
-    if(menuVars.currIndex-1 >= 0 && !(menuVars.currIndex <= menuVars.oldLength) && menuVars.flyoutArr.length - menuVars.oldLength != 2 ){
-
-        menuVars.flyoutArr[menuVars.currIndex-1].removeSelect();
-    }
-
-    //handle looping through menu
-    // if on top block               ||  switching directions at the bottom of the menu                    && in variables menu 
-    if(menuVars.currIndex >= menuVars.flyoutArr.length ||  (menuVars.prevIndex == menuVars.currIndex + 1 && menuVars.currIndex + 2 >= menuVars.flyoutArr.length) && !(menuVars.flyoutArr.length - menuVars.oldLength == 2)){
-        
-        menuVars.currIndex = menuVars.oldLength;
-        menuVars.prevIndex = menuVars.flyoutArr.length-1; 
-
-        menuVars.flyoutArr[menuVars.prevIndex].removeSelect();
-    }
-
     //handle flyouts with only 2 blocks
-    if(menuVars.flyoutArr.length - menuVars.oldLength == 2){
+    if (menuVars.hasTwoBlocks()) {
 
         //if bottom block is selected
-        if(menuVars.currIndex >= menuVars.flyoutArr.length-1){
+        if (menuVars.currIndex >= menuVars.flyoutArr.length - 1) {
 
             menuVars.currIndex = menuVars.oldLength;
-            menuVars.prevIndex = menuVars.flyoutArr.length-1;
+            menuVars.prevIndex = menuVars.flyoutArr.length - 1;
 
             menuVars.flyoutArr[menuVars.currIndex].addSelect();
             menuVars.flyoutArr[menuVars.prevIndex].removeSelect();
@@ -260,107 +358,119 @@ Blockly.Accessibility.MenuNav.prototype.menuNavDown = function(){
         }
 
         //if top block is selected
-        else if(menuVars.currIndex <= menuVars.oldLength){
+        else if (menuVars.currIndex <= menuVars.oldLength) {
 
-            menuVars.currIndex = menuVars.flyoutArr.length-1;
+            menuVars.currIndex = menuVars.flyoutArr.length - 1;
             menuVars.prevIndex = menuVars.oldLength;
 
             menuVars.flyoutArr[menuVars.currIndex].addSelect();
             menuVars.flyoutArr[menuVars.prevIndex].removeSelect();
 
-            menuVars.prevIndex = menuVars.flyoutArr.length-1;
+            menuVars.prevIndex = menuVars.flyoutArr.length - 1;
 
         }
+        return;
+    }
+    //if not the first time the flyout is opened
+    if (!menuVars.isFirstBlock()) {
+
+        menuVars.flyoutArr[menuVars.currIndex - 1].removeSelect();
     }
 
-   //handle switching directions && more than two blocks in flyout
-   if( menuVars.prevIndex == menuVars.currIndex+1  && menuVars.flyoutArr.length - menuVars.oldLength !=2){
+    //handle looping through flyout
+    if (menuVars.loopingDown()) {
+
+        menuVars.currIndex = menuVars.oldLength;
+        menuVars.prevIndex = menuVars.flyoutArr.length - 1;
 
         menuVars.flyoutArr[menuVars.prevIndex].removeSelect();
-        menuVars.currIndex+=2;
     }
 
-    //Update count for flyouts with more than 2 blocks
-    //select next -> save last -> increase count 
-    if(menuVars.flyoutArr.length - menuVars.oldLength != 2){
 
-        menuVars.flyoutArr[menuVars.currIndex].addSelect(); 
 
-        menuVars.prevIndex = menuVars.currIndex; 
-        menuVars.currIndex++;
+   //handle switching directions
+   if (menuVars.switchingDown()) {
+
+        menuVars.flyoutArr[menuVars.prevIndex].removeSelect();
+        menuVars.currIndex += 2;
     }
+
+    //select next and update
+    menuVars.flyoutArr[menuVars.currIndex].addSelect();
+
+    menuVars.prevIndex = menuVars.currIndex;
+    menuVars.currIndex++;
 };
 
 
 
 
 /*
-*   Traverse to the previous block in the flyout 
+*   Traverse to the previous block in the flyout
 */
-Blockly.Accessibility.MenuNav.prototype.menuNavUp = function(){
-    if(!menuVars.opened){
+Blockly.Accessibility.MenuNav.prototype.menuNavUp = function() {
+    if (!menuVars.opened) {
         return;
-    }
-    //flyout has more than 2 blocks    &&  not first selected   || not second item on list
-    if(menuVars.flyoutArr.length-menuVars.oldLength != 2 &&  menuVars.currIndex != menuVars.oldLength || menuVars.prevIndex == menuVars.oldLength+1)
-    {
-        menuVars.flyoutArr[menuVars.prevIndex].removeSelect();
-    }
-
-    //handle loops 
-    //top block selected                          || In audio menu (only 1 block)                               || trying to switch directions at the top of the flyout && In flyout with only 2 blocks   
-    if(menuVars.currIndex <= menuVars.oldLength-1  || (menuVars.flyoutArr.length - menuVars.oldLength == 1) || (menuVars.prevIndex == menuVars.currIndex-1 && menuVars.currIndex-2 < menuVars.oldLength && (menuVars.flyoutArr.length - menuVars.oldLength != 2))){
-        
-        menuVars.prevIndex = menuVars.oldLength;
-        menuVars.currIndex = menuVars.flyoutArr.length-1;
-
-        menuVars.flyoutArr[menuVars.prevIndex].removeSelect();
     }
 
     //if flyout has only 2 blocks
-    if(menuVars.flyoutArr.length - menuVars.oldLength == 2){
+    if (menuVars.hasTwoBlocks()) {
 
-        //Otherwise switch blocks
         //bottom block
-        if(menuVars.currIndex == menuVars.flyoutArr.length-1){
+        if (menuVars.currIndex == menuVars.flyoutArr.length - 1) {
 
             menuVars.currIndex = menuVars.oldLength;
             menuVars.prevIndex = menuVars.oldLength;
 
             menuVars.flyoutArr[menuVars.currIndex].addSelect();
-            menuVars.flyoutArr[menuVars.flyoutArr.length-1].removeSelect();
+            menuVars.flyoutArr[menuVars.flyoutArr.length - 1].removeSelect();
         }
 
         //top block
-        else if(menuVars.currIndex == menuVars.oldLength){
+        else if (menuVars.currIndex == menuVars.oldLength) {
 
-            menuVars.currIndex = menuVars.flyoutArr.length-1;
-            menuVars.prevIndex = menuVars.flyoutArr.length-1;
+            menuVars.currIndex = menuVars.flyoutArr.length - 1;
+            menuVars.prevIndex = menuVars.flyoutArr.length - 1;
 
             menuVars.flyoutArr[menuVars.currIndex].addSelect();
             menuVars.flyoutArr[menuVars.oldLength].removeSelect();
         }
-
+        return;
     }
 
-    //handle switching from down to up
-    //normal switch scenario     && not the first block   && flyout has more than 2 blocks
-    if(menuVars.prevIndex == menuVars.currIndex-1  && menuVars.currIndex!=menuVars.oldLength  && (menuVars.flyoutArr.length-menuVars.oldLength!=2)){
+    //remove select
+    //not first time opened || not second item on list
+    if (!menuVars.isSecondBlock()) {
+        menuVars.flyoutArr[menuVars.prevIndex].removeSelect();
+    }
+
+    //handle loops
+    //top block selected || only 1 block in flyout|| trying to switch directions at the top of the flyout
+    if (menuVars.hasOneBlock() || menuVars.loopingUp()) {
+
+        menuVars.prevIndex = menuVars.oldLength;
+        menuVars.currIndex = menuVars.flyoutArr.length - 1;
 
         menuVars.flyoutArr[menuVars.prevIndex].removeSelect();
-        menuVars.currIndex-=2;
     }
 
-    //flyout has more than 2 blocks
-    if(menuVars.flyoutArr.length - menuVars.oldLength != 2){
 
-        //select next -> save last -> decrease count 
-        menuVars.flyoutArr[menuVars.currIndex].addSelect();
 
-        menuVars.prevIndex = menuVars.currIndex;
-        menuVars.currIndex--; 
+    //handle switching from down to up
+    //normal switch scenario && not the first block
+    if (menuVars.switchingUp() && !menuVars.isFirstBlock()) {
+
+        menuVars.flyoutArr[menuVars.prevIndex].removeSelect();
+        menuVars.currIndex -= 2;
     }
+
+
+    menuVars.flyoutArr[menuVars.currIndex].addSelect();
+
+    menuVars.prevIndex = menuVars.currIndex;
+    menuVars.currIndex--;
 };
+
 
 
 //============The following are minor overwrites of existing blockly functions to enable flyout navigation======================
@@ -553,51 +663,6 @@ Blockly.Flyout.prototype.show = function(xmlList){
 };
 
 /**
- * {OVERWRITE} tracks status of flyout and updates the array of current blocks.
- * Construct the blocks required by the flyout for the variable category.
- * @param {!Array.<!Blockly.Block>} blocks List of blocks to show.
- * @param {!Array.<number>} gaps List of widths between blocks.
- * @param {number} margin Standard margin width for calculating gaps.
- * @param {!Blockly.Workspace} workspace The flyout's workspace.
- */
-Blockly.Variables.flyoutCategory = function (blocks, gaps, margin, workspace) {
-    menuVars.opened    = true;
-    var variableList = Blockly.Variables.allVariables(workspace.targetWorkspace);
-    variableList.sort(goog.string.caseInsensitiveCompare);
-    // In addition to the user's variables, we also want to display the default
-    // variable name at the top.  We also don't want this duplicated if the
-    // user has created a variable of the same name.
-    variableList.unshift(null);
-    var defaultVariable = undefined;
-    for (var i = 0; i < variableList.length; i++) {
-        if (variableList[i] === defaultVariable) {
-            continue;
-        }
-        var getBlock = Blockly.Blocks['variables_get'] ?
-            Blockly.Block.obtain(workspace, 'variables_get') : null;
-        getBlock && getBlock.initSvg();
-        var setBlock = Blockly.Blocks['variables_set'] ?
-            Blockly.Block.obtain(workspace, 'variables_set') : null;
-        setBlock && setBlock.initSvg();
-        if (variableList[i] === null) {
-            defaultVariable = (getBlock || setBlock).getVars()[0];
-        } else {
-            getBlock && getBlock.setFieldValue(variableList[i], 'VAR');
-            setBlock && setBlock.setFieldValue(variableList[i], 'VAR');
-        }
-        setBlock && blocks.push(setBlock);
-        menuVars.flyoutArr.push(setBlock);//added for blockly navigation.js
-        getBlock && blocks.push(getBlock);
-        menuVars.flyoutArr.push(getBlock);//added for blockly navigation.js
-        if (getBlock && setBlock) {
-            gaps.push(margin, margin * 3);
-        } else {
-            gaps.push(margin * 2);
-        }
-    }
-};
-
-/**
  * When the selection changes, the block name is updated for screenreader
  */
  Blockly.Accessibility.MenuNav.readToolbox = function(){
@@ -645,36 +710,46 @@ Blockly.Accessibility.MenuNav.flyoutToWorkspace = function(){
     completeXmlStr = blockString;               //incompleteXml + blockString;//the completeXML string to be added to the workspace
     xml = Blockly.Xml.textToDom(completeXmlStr);//take the complete xml string and change to dom
 
-    // The following allows us to immediately identify the block in the scene and grab it.
-    var commentNode = Blockly.Xml.textToDom('<xml><comment pinned="true" h="80" w="160">`4*K</comment></xml>');
-    xml.childNodes[0].appendChild(commentNode.childNodes[0]);
+    // // The following allows us to immediately identify the block in the scene and grab it.
+     var commentNode = Blockly.Xml.textToDom('<xml><comment pinned="false" h="80" w="160">`4*K</comment></xml>');
+     xml.childNodes[0].appendChild(commentNode.childNodes[0]);
+
+
 
     Blockly.Xml.domToWorkspace(workspace, xml);//adds the xml var to the main workspace
 
     Blockly.Accessibility.Navigation.updateXmlSelection();//updates the xml
-    Blockly.hideChaff();//hides the toolbox once done
+    // Blockly.hideChaff();//hides the toolbox once done
 
-    var comments = xmlDoc.getElementsByTagName('COMMENT');
+     var comments = xmlDoc.getElementsByTagName('COMMENT');
     
-    //console.log(comments);
 
-    //auto select what was just added
-    var newId = flyoutArr[flyoutArr.length-1].id;
-    newId     = parseInt(newId);
-    newId ++;
-    Blockly.Accessibility.Navigation.jumpToID(newId);
+    // //auto select what was just added
+    // // var newId = menuVars.flyoutArr[menuVars.flyoutArr.length-1].id;
+    // // newId     = parseInt(newId);
+    // // newId ++;
+    // // Blockly.Accessibility.Navigation.jumpToID(newId);
 
-    //set comment text to null
+    // //set comment text to null
     for (var i = 0; i < comments.length; i++) {
         if (comments[i].childNodes[0].nodeValue == '`4*K') {
-            var block = Blockly.Block.getById(comments[i].parentNode.getAttribute('ID'), Blockly.mainWorkspace)
-            block.setCommentText(null);
+            //var xmlStr =  comments[i].parentNode;
+             //var xmlBlock = Blockly.Xml.domToBlock(Blockly.mainWorkspace,xmlStr,true);
+
+             console.log(wsBlocks);
+             //console.log(comments[i].parentNode);
+            //var block = Blockly.Block.getById(comments[i].parentNode, Blockly.mainWorkspace);
+            console.log();
+            //block.setCommentText(null);
+            //var block = Blockly.selected;
             return block;
         }
     }
-    console.log("WARNING. ADDED BLOCK NOT FOUND");
+    //console.log("WARNING. ADDED BLOCK NOT FOUND");
     return null;
 };
+
+
 
 Blockly.Accessibility.MenuNav.addNext = function(){
     //var workspaceBlockId = Blockly.Accessibility.Navigation.getRetainedNode();// the selected block on the workspace
@@ -712,6 +787,51 @@ Blockly.Accessibility.MenuNav.getToolboxChoices = function(){
 
 Blockly.Accessibility.MenuNav.getMenuSelection = function(){
     return menuVars.flyoutArr[menuVars.prevIndex];
+};
+
+/**
+ * {OVERWRITE} tracks status of flyout and updates the array of current blocks.
+ * Construct the blocks required by the flyout for the variable category.
+ * @param {!Array.<!Blockly.Block>} blocks List of blocks to show.
+ * @param {!Array.<number>} gaps List of widths between blocks.
+ * @param {number} margin Standard margin width for calculating gaps.
+ * @param {!Blockly.Workspace} workspace The flyout's workspace.
+ */
+Blockly.Variables.flyoutCategory = function (blocks, gaps, margin, workspace) {
+    menuVars.opened    = true;
+    var variableList = Blockly.Variables.allVariables(workspace.targetWorkspace);
+    variableList.sort(goog.string.caseInsensitiveCompare);
+    // In addition to the user's variables, we also want to display the default
+    // variable name at the top.  We also don't want this duplicated if the
+    // user has created a variable of the same name.
+    variableList.unshift(null);
+    var defaultVariable = undefined;
+    for (var i = 0; i < variableList.length; i++) {
+        if (variableList[i] === defaultVariable) {
+            continue;
+        }
+        var getBlock = Blockly.Blocks['variables_get'] ?
+            Blockly.Block.obtain(workspace, 'variables_get') : null;
+        getBlock && getBlock.initSvg();
+        var setBlock = Blockly.Blocks['variables_set'] ?
+            Blockly.Block.obtain(workspace, 'variables_set') : null;
+        setBlock && setBlock.initSvg();
+        if (variableList[i] === null) {
+            defaultVariable = (getBlock || setBlock).getVars()[0];
+        } else {
+            getBlock && getBlock.setFieldValue(variableList[i], 'VAR');
+            setBlock && setBlockå.setFieldValue(variableList[i], 'VAR');
+        }
+        setBlock && blocks.push(setBlock);
+        menuVars.flyoutArr.push(setBlock);//added for blockly navigation.js
+        getBlock && blocks.push(getBlock);
+        menuVars.flyoutArr.push(getBlock);//added for blockly navigation.js
+        if (getBlock && setBlock) {
+            gaps.push(margin, margin * 3);
+        } else {
+            gaps.push(margin * 2);
+        }
+    }
 };
 
 

@@ -30,6 +30,7 @@ Blockly.Accessibility.Keystrokes = function(){
 }
 var map = [];
 var keyboardState = 'hotkeyMode';
+//Blockly.Accessibility.Keystrokes.prototype.keyboardState = 'hotkeymode';
 Blockly.Accessibility.Keystrokes.prototype.isConnecting  = false;
 /**
  * When a mouseup event happens, update the XML selection
@@ -38,6 +39,8 @@ document.onmouseup = function(e){
 	//console.log('Mouse Up');
 	Blockly.Accessibility.Navigation.updateXmlSelection();
 };
+
+document.on
 
 /**
  * Take care of keypresses for accessibility
@@ -169,24 +172,24 @@ document.onkeydown = document.onkeyup = function(e){
 	else if(keyboardState == 'selectConnectionMode'){
 	    if(map[65]){ //A
 			//Navigate out
-			Blockly.Accessibility.Navigation.traverseOut();
+			//Blockly.Accessibility.Navigation.traverseOut();
 		}
 
 		else if(map[68]){ //D
 			//Navigate in
-			Blockly.Accessibility.Navigation.traverseIn();
+			//Blockly.Accessibility.Navigation.traverseIn();
 		}
 
 		else if(map[83]){ //S
 			//Navigates down through blocks
 			e.preventDefault();
-			Blockly.Accessibility.Navigation.traverseDown();
+			//Blockly.Accessibility.Navigation.traverseDown();
 		}
 
 		else if(map[87]){ //W
 			//Navigates up through blocks
 			e.preventDefault();
-			Blockly.Accessibility.Navigation.traverseUp();
+			//Blockly.Accessibility.Navigation.traverseUp();
 		}
 
 		else if(map[69]){ //E
@@ -337,19 +340,25 @@ document.onkeydown = document.onkeyup = function(e){
 		}
 
 		else if(map[65]){ //A
-				//Blockly.Accessibility.Navigation.traverseOut();
+			if(!Blockly.selected) return;
+			if(Blockly.selected.id[0] != ":"){
+				Blockly.Accessibility.Navigation.traverseOut();
+			}
 		}
 
 		else if(map[67]){ //C
 			//Add a comment
-			//Blockly.Accessibility.addComment();
-			//e.preventDefault();
-			Blockly.Accessibility.InBlock.disableIncompatibleBlocks();
+			Blockly.Accessibility.addComment();
+			keyboardState = 'typingMode';
+			e.preventDefault();
 		}
 
 		else if(map[68]){ //D
 			//Navigate in
-			//Blockly.Accessibility.Navigation.traverseIn();
+			if(!Blockly.selected) return;
+			if(Blockly.selected.id[0] != ":"){
+				Blockly.Accessibility.Navigation.traverseIn();
+			}
 		}
 
 		else if(map[69]){ //E
@@ -395,28 +404,28 @@ document.onkeydown = document.onkeyup = function(e){
 		}
 
 		else if(map[83]){ //S
-			// //Navigates down through blocks
 			// e.preventDefault();
-			// var active = document.activeElement;
 
-			// if(active.getAttribute("class") == "blocklySvg"){
-			// 	Blockly.Accessibility.Navigation.traverseDown();
-			// }
+			if(!Blockly.selected) return;
+
+			//if not on toolbox navigate down through blocks
+			if(Blockly.selected.id[0] != ":"){
+				Blockly.Accessibility.Navigation.traverseDown();
+			}
 
 		}
 
 		else if(map[87]){ //W
 			// e.preventDefault();
-			// //navigate between blocks when not connecting
-			// var active = document.activeElement;
-			// if(active.getAttribute("class") == "blocklySvg"){
-			// 	Blockly.Accessibility.Navigation.traverseUp();
-			// }
+			//if not on the toolbox navigate up through blocks
+			if(!Blockly.selected) return;
+			if(Blockly.selected.id[0] != ":"){
+				Blockly.Accessibility.Navigation.traverseUp();
+			}
 		}
 
 		//============Jumping to specific category===============
 		else{
-
 			//loop through the numbers on keyboard to access menu
 			for(var i = 48; i < 58; i++){
 
@@ -442,4 +451,64 @@ document.onkeydown = document.onkeyup = function(e){
 			}
 		}
 	}
+};
+//==========================================================OVERWRITES================================================================
+/*
+{OVERWRITE}
+need avoid calling hotkeys while typing in text input
+*/
+Blockly.FieldTextInput.prototype.onHtmlInputKeyDown_ = function(e) {
+  keyboardState = "typingMode";
+  
+  var htmlInput = Blockly.FieldTextInput.htmlInput_;
+  var enterKey = 13, escKey = 27;
+
+  if (e.keyCode == enterKey) {
+    Blockly.WidgetDiv.hide();
+  } 
+
+  else if (e.keyCode == escKey) {
+    this.setText(htmlInput.defaultValue);
+    Blockly.WidgetDiv.hide();
+  }
+
+};
+
+/**
+ * Close the editor, save the results, and dispose of the editable
+ * text field's elements.
+ * @return {!Function} Closure to call on destruction of the WidgetDiv.
+ * @private
+ */
+Blockly.FieldTextInput.prototype.widgetDispose_ = function() {
+  keyboardState = "hotkeyMode";
+
+  var thisField = this;
+  return function() {
+    var htmlInput = Blockly.FieldTextInput.htmlInput_;
+    // Save the edit (if it validates).
+    var text = htmlInput.value;
+    if (thisField.sourceBlock_ && thisField.changeHandler_) {
+      var text1 = thisField.changeHandler_(text);
+      if (text1 === null) {
+        // Invalid edit.
+        text = htmlInput.defaultValue;
+      } else if (text1 !== undefined) {
+        // Change handler has changed the text.
+        text = text1;
+      }
+    }
+    thisField.setText(text);
+    thisField.sourceBlock_.rendered && thisField.sourceBlock_.render();
+    Blockly.unbindEvent_(htmlInput.onKeyDownWrapper_);
+    Blockly.unbindEvent_(htmlInput.onKeyUpWrapper_);
+    Blockly.unbindEvent_(htmlInput.onKeyPressWrapper_);
+    Blockly.unbindEvent_(htmlInput.onWorkspaceChangeWrapper_);
+    Blockly.FieldTextInput.htmlInput_ = null;
+    // Delete style properties.
+    var style = Blockly.WidgetDiv.DIV.style;
+    style.width = 'auto';
+    style.height = 'auto';
+    style.fontSize = '';
+  };
 };

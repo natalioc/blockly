@@ -36,27 +36,20 @@ Blockly.Accessibility.Speech.updateBlockReader = function(type, blockSvg){
 	var defaultStr  = Blockly.Accessibility.Speech.blockToString(type); 	
 
 	var active      = document.activeElement;
-    var blockReader = document.getElementById("blockReader");               
-
-    //load the xml of the page and get all the blocks XML
-    var xmlDoc      = Blockly.Xml.workspaceToDom(Blockly.mainWorkspace);	
-   	var blocksArr   = xmlDoc.getElementsByTagName("block");   				
-
+    var blockReader = document.getElementById("blockReader");               	
 
    	//go through the blocks on the workspace and find the matching one based on type and id
-   	for (var i = 0;  i < blocksArr.length; i++){
-   		var blockType = blocksArr[i].getAttribute("type");
-   		if(blockType == type && blocksArr[i].id == blockSvg.id){
-	     newStr   = this.changeString(blocksArr[i],xmlDoc);
-   		}
-   	}
+    var xmlBlock = Blockly.Xml.blockToDom_(Blockly.selected);
 
+	newStr   = this.changeString(xmlBlock);
+   		
    	//apply aria attributes in order to update the user audibly when anything on the workspace changes
     active.setAttribute("aria-owns", "blockReader");
     active.setAttribute("aria-labelledBy", "blockReader");
     
 	//update the blockReader
     blockReader.innerHTML = newStr;
+    console.log(newStr);
 };
 
 /*
@@ -135,7 +128,7 @@ Blockly.Accessibility.Speech.readConnection = function(name, index){
  * @param_block...the currently selected block
  * @param_xmlDoc..the updated xml for the page used to get block information
  */
-Blockly.Accessibility.Speech.changeString = function(block, xmlDoc){
+Blockly.Accessibility.Speech.changeString = function(block){
 
 	var newStr;  												//newStr is what will be returned by this function
 	var fieldValArr = [];										//stores values for all of the fields
@@ -576,13 +569,13 @@ Blockly.Accessibility.Speech.blockToString = function(type, disabled){
             result = "'pi and constants'";
             break; 
         case "math_number_property":
-            result = "( ) is 'even'";
+            result = "(number) is 'even'";
             break; 
         case "math_change":
             result = "change (variable) by (1)";
             break; 
         case "math_round":
-            result = "'round' ()";
+            result = "'round' (number)";
             break; 
         case "math_on_list":
             result = "'sum' of list ( )";

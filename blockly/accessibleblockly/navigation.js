@@ -24,8 +24,8 @@
 
 goog.provide('Blockly.Accessibility.Navigation');
 
-goog.require('Blockly.Accessibility');
 goog.require('Blockly.Accessibility.Speech');
+goog.require('Blockly.Accessibility');
 
 
 /**
@@ -69,7 +69,8 @@ Blockly.BlockSvg.prototype.defaultDispose = Blockly.BlockSvg.prototype.dispose;
  * Select this block.  Highlight it visually.
  */
 Blockly.BlockSvg.prototype.select = function () {
-
+    console.log("select called");
+    console.log(this.type);
     this.defaultSelect();
 
     if (Blockly.Accessibility.Navigation.getBlockNodeById(this.id)) {
@@ -77,8 +78,8 @@ Blockly.BlockSvg.prototype.select = function () {
 
         //console.log(this.id);
         //console.log(this);
-        Blockly.Accessibility.Speech.updateBlockReader(this.type, this);
     }
+            Blockly.Accessibility.Speech.updateBlockReader(this.type, this);
 };
 
 /**

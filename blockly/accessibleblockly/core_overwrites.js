@@ -127,7 +127,7 @@ Blockly.Variables.flyoutCategory = function (blocks, gaps, margin, workspace) {
 
 //need avoid calling hotkeys while typing in text input
 Blockly.FieldTextInput.prototype.onHtmlInputKeyDown_ = function(e) {
-  
+console.log("TYPING MODE ACTIVATED");
   keyboardState = "typingMode";
   
   var htmlInput = Blockly.FieldTextInput.htmlInput_;
