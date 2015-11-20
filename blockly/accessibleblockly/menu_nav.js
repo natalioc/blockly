@@ -698,55 +698,53 @@ Blockly.Accessibility.MenuNav.flyoutToWorkspace = function(){
     var completeXmlStr;            //string of xml to be added to workspace
     var xml;                       //dom version of the xml to be added to the workspace
 
-    var input     = Blockly.Xml.blockToDom_(menuVars.flyoutArr[menuVars.prevIndex]);//the current block tab on from the flyout
-    var textInput = Blockly.Xml.domToText(input);                    //the svg turned into pain text'
+    //block svg to block xml then add to workspace
+    var blockXML = Blockly.Xml.blockToDom_(menuVars.flyoutArr[menuVars.prevIndex]);//the current block tab on from the flyout
+    var block    = Blockly.Block.obtain(workspace, blockXML.getAttribute("type"));
+    block.initSvg();
+    block.render();
 
-    //taking the xml declaration from the block after domToText adds it in
-    var partOne = textInput.substring(0, 7);                  //before the xml declaration
-    var partTwo = textInput.substring(44, textInput.length);  //after the xml declaration
-    var blockString = '<xml>' + partOne + partTwo + '</xml>'; //the complete block str from the flyout that we want to add
-    
-    incompleteXml  = workspaceBlocksString.substring(0, workspaceBlocksString.length-6);//the xml before the chosen block has been added...stripped the </xml>
-    completeXmlStr = blockString;               //incompleteXml + blockString;//the completeXML string to be added to the workspace
-    xml = Blockly.Xml.textToDom(completeXmlStr);//take the complete xml string and change to dom
+    return block;
+    //var workspace = Blockly.Generator.prototype.workspaceToCode();
+    // var textInput = Blockly.Xml.domToText(input);                    //the svg turned into pain text'
 
-    // // The following allows us to immediately identify the block in the scene and grab it.
-     var commentNode = Blockly.Xml.textToDom('<xml><comment pinned="false" h="80" w="160">`4*K</comment></xml>');
-     xml.childNodes[0].appendChild(commentNode.childNodes[0]);
+    // //taking the xml declaration from the block after domToText adds it in
+    // var partOne = textInput.substring(0, 7);                  //before the xml declaration
+    // var partTwo = textInput.substring(44, textInput.length);  //after the xml declaration
+    // var blockString = '<xml>' + partOne + partTwo + '</xml>'; //the complete block str from the flyout that we want to add
+    // return partTwo
+    // incompleteXml  = workspaceBlocksString.substring(0, workspaceBlocksString.length-6);//the xml before the chosen block has been added...stripped the </xml>
+    // completeXmlStr = blockString;               //incompleteXml + blockString;//the completeXML string to be added to the workspace
+    // xml = Blockly.Xml.textToDom(completeXmlStr);//take the complete xml string and change to dom
+
+    //  // The following allows us to immediately identify the block in the scene and grab it.
+    //  var commentNode = Blockly.Xml.textToDom('<xml><comment pinned="false" h="80" w="160">`4*K</comment></xml>');
+    //  xml.childNodes[0].appendChild(commentNode.childNodes[0]);
 
 
 
-    Blockly.Xml.domToWorkspace(workspace, xml);//adds the xml var to the main workspace
+    // Blockly.Xml.domToWorkspace(workspace, xml);//adds the xml var to the main workspace
 
-    Blockly.Accessibility.Navigation.updateXmlSelection();//updates the xml
-    // Blockly.hideChaff();//hides the toolbox once done
+    // Blockly.Accessibility.Navigation.updateXmlSelection();//updates the xml
+    // // Blockly.hideChaff();//hides the toolbox once done
 
-     var comments = xmlDoc.getElementsByTagName('COMMENT');
-    
+    //  var comments = xmlDoc.getElementsByTagName('COMMENT');
 
-    // //auto select what was just added
-    // // var newId = menuVars.flyoutArr[menuVars.flyoutArr.length-1].id;
-    // // newId     = parseInt(newId);
-    // // newId ++;
-    // // Blockly.Accessibility.Navigation.jumpToID(newId);
+    // // //set comment text to null
+    // for (var i = 0; i < comments.length; i++) {
+    //     if (comments[i].childNodes[0].nodeValue == '`4*K') {
+    //         //var xmlStr =  comments[i].parentNode;
+    //         //var xmlBlock = Blockly.Xml.domToBlock(Blockly.mainWorkspace,xmlStr,true);
 
-    // //set comment text to null
-    for (var i = 0; i < comments.length; i++) {
-        if (comments[i].childNodes[0].nodeValue == '`4*K') {
-            //var xmlStr =  comments[i].parentNode;
-             //var xmlBlock = Blockly.Xml.domToBlock(Blockly.mainWorkspace,xmlStr,true);
-
-             console.log(wsBlocks);
-             //console.log(comments[i].parentNode);
-            //var block = Blockly.Block.getById(comments[i].parentNode, Blockly.mainWorkspace);
-            console.log();
-            //block.setCommentText(null);
-            //var block = Blockly.selected;
-            return block;
-        }
-    }
-    //console.log("WARNING. ADDED BLOCK NOT FOUND");
-    return null;
+    //         //var block = Blockly.Block.getById(comments[i].parentNode, Blockly.mainWorkspace);
+    //         //console.log();
+    //         //block.setCommentText(null);
+    //         //var block = Blockly.selected;
+    //         return block;
+    //     }
+    // }
+    // //console.log("WARNING. ADDED BLOCK NOT FOUND");
+    // return null;
 };
 
 
