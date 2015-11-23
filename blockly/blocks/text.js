@@ -71,14 +71,40 @@ Blockly.Blocks['text_join'] = {
    * Block for creating a string made up of any number of elements of any type.
    * @this Blockly.Block
    */
+  // init: function() {
+  //   this.setHelpUrl(Blockly.Msg.TEXT_JOIN_HELPURL);
+  //   this.setColour(Blockly.Blocks.texts.HUE);
+  //   this.itemCount_ = 2;
+  //   this.updateShape_();
+  //   this.setOutput(true, 'String');
+  //   this.setMutator(new Blockly.Mutator(['text_create_join_item']));
+  //   this.setTooltip(Blockly.Msg.TEXT_JOIN_TOOLTIP);
+  // },
+  //new create text
   init: function() {
-    this.setHelpUrl(Blockly.Msg.TEXT_JOIN_HELPURL);
-    this.setColour(Blockly.Blocks.texts.HUE);
-    this.itemCount_ = 2;
+   
+    this.appendValueInput("textinput1")
+        .setCheck("String")
+        .appendField("create text with")
+        .appendField(new Blockly.FieldTextInput("2"), "inputcount")
+        .appendField("items");
+    var text_inputcount = this.getFieldValue('inputcount');
+    this.itemCount_ = text_inputcount-1;
     this.updateShape_();
-    this.setOutput(true, 'String');
-    this.setMutator(new Blockly.Mutator(['text_create_join_item']));
+    this.setOutput(true,'String');
+    this.setColour(160);
+    this.setTooltip('');
     this.setTooltip(Blockly.Msg.TEXT_JOIN_TOOLTIP);
+  },
+
+  //allow the inputs to be changed dynamically
+  onchange: function(){
+      var text_inputcount = this.getFieldValue('inputcount');
+
+      if(text_inputcount != this.itemCount_+1){
+        this.itemCount_ = text_inputcount-1;
+        this.updateShape_();
+      }
   },
   /**
    * Create XML to represent number of text inputs.
@@ -182,7 +208,7 @@ Blockly.Blocks['text_join'] = {
       for (var i = 0; i < this.itemCount_; i++) {
         var input = this.appendValueInput('ADD' + i);
         if (i == 0) {
-          input.appendField(Blockly.Msg.TEXT_JOIN_TITLE_CREATEWITH);
+          //input.appendField(Blockly.Msg.TEXT_JOIN_TITLE_CREATEWITH);
         }
       }
     }
@@ -685,3 +711,37 @@ Blockly.Blocks['text_prompt'] = {
   mutationToDom: Blockly.Blocks['text_prompt_ext'].mutationToDom,
   domToMutation: Blockly.Blocks['text_prompt_ext'].domToMutation
 };
+
+
+//===================================Separate blocks to replace mutators========================
+Blockly.Blocks['text_create_join_container'] = {
+  init: function() {
+    this.appendValueInput("textinput1")
+        .setCheck("String")
+        .appendField("create text with")
+        .appendField(new Blockly.FieldTextInput("2"), "inputcount")
+        .appendField("items");
+    this.appendValueInput("textinput2")
+        .setCheck("String");
+    this.setOutput(true);
+    this.setColour(160);
+    this.setTooltip('');
+  }
+}
+
+Blockly.JavaScript['text_create_join_container'] = function(block) {
+  var text_inputcount = block.getFieldValue('inputcount');
+  var value_textinput1 = Blockly.JavaScript.valueToCode(block, 'textinput1', Blockly.JavaScript.ORDER_ATOMIC);
+  var value_textinput2 = Blockly.JavaScript.valueToCode(block, 'textinput2', Blockly.JavaScript.ORDER_ATOMIC);
+
+  text_inputcount.onchange = function(){
+
+  }
+  // TODO: Assemble JavaScript into code variable.
+  var code = '';
+  // TODO: Change ORDER_NONE to the correct strength.
+  return [code, Blockly.JavaScript.ORDER_NONE];
+};
+
+
+

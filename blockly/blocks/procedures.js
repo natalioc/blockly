@@ -39,6 +39,23 @@ Blockly.Blocks['procedures_defnoreturn'] = {
    * Block for defining a procedure with no return value.
    * @this Blockly.Block
    */
+  // init: function() {
+  //   this.setHelpUrl(Blockly.Msg.PROCEDURES_DEFNORETURN_HELPURL);
+  //   this.setColour(Blockly.Blocks.procedures.HUE);
+  //   var nameField = new Blockly.FieldTextInput(
+  //       Blockly.Msg.PROCEDURES_DEFNORETURN_PROCEDURE,
+  //       Blockly.Procedures.rename);
+  //   nameField.setSpellcheck(false);
+  //   this.appendDummyInput()
+  //       .appendField(Blockly.Msg.PROCEDURES_DEFNORETURN_TITLE)
+  //       .appendField(nameField, 'NAME')
+  //       .appendField('', 'PARAMS');
+  //   this.setMutator(new Blockly.Mutator(['procedures_mutatorarg']));
+  //   this.setTooltip(Blockly.Msg.PROCEDURES_DEFNORETURN_TOOLTIP);
+  //   this.arguments_ = [];
+  //   this.setStatements_(true);
+  //   this.statementConnection_ = null;
+  // },
   init: function() {
     this.setHelpUrl(Blockly.Msg.PROCEDURES_DEFNORETURN_HELPURL);
     this.setColour(Blockly.Blocks.procedures.HUE);
@@ -49,13 +66,45 @@ Blockly.Blocks['procedures_defnoreturn'] = {
     this.appendDummyInput()
         .appendField(Blockly.Msg.PROCEDURES_DEFNORETURN_TITLE)
         .appendField(nameField, 'NAME')
-        .appendField('', 'PARAMS');
-    this.setMutator(new Blockly.Mutator(['procedures_mutatorarg']));
+        .appendField('', 'PARAMS')
+        .appendField("with ")
+        .appendField(new Blockly.FieldTextInput("0"), "inputcount")
+        .appendField("parameters");
     this.setTooltip(Blockly.Msg.PROCEDURES_DEFNORETURN_TOOLTIP);
     this.arguments_ = [];
     this.setStatements_(true);
     this.statementConnection_ = null;
   },
+
+  //allow the inputs to be changed dynamically
+  onchange: function(){
+    var text_inputcount = this.getFieldValue('inputcount');
+    console.log(text_inputcount);
+    console.log(this.arguments_.length+1);
+
+    for(var i = 0; i < this.arguments_.length+1; i++){
+
+        if(text_inputcount == ' '){
+          return;
+        }
+
+        else if(text_inputcount >= this.arguments_.length){
+            this.appendDummyInput("test")
+                 .appendField(new Blockly.FieldTextInput(("arg " + this.arguments_.length), "arg" + this.arguments_.length));
+                 this.arguments_.push(i);
+          //updateParams_();
+        }
+
+
+        else if(text_inputcount < this.arguments_.length){
+           this.removeInput("test");
+           this.arguments_.pop();
+
+          //updateParams_();
+        }
+   }
+  },
+
   /**
    * Initialization of the block has completed, clean up anything that may be
    * inconsistent as a result of the XML loading.

@@ -176,7 +176,7 @@ Blockly.FieldTextInput.prototype.onHtmlInputKeyDown_ = function(e) {
   } else if (e.keyCode == escKey) {
     this.setText(htmlInput.defaultValue);
     Blockly.WidgetDiv.hide();
-  } else if (e.keyCode == tabKey) {
+  } else if (e.keyCode == 77) {
     Blockly.WidgetDiv.hide();
     this.sourceBlock_.tab(this, !e.shiftKey);
     e.preventDefault();

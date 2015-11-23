@@ -459,7 +459,7 @@ Blockly.Blocks['logic_ternary'] = {
         var block = (i == 1) ? blockA : blockB;
         if (block && !block.outputConnection.checkType_(parentConnection)) {
           if (parentConnection === this.prevParentConnection_) {
-            this.setParent(null);
+            this.Parent(null);
             parentConnection.sourceBlock_.bumpNeighbours_();
           } else {
             block.setParent(null);
@@ -470,4 +470,51 @@ Blockly.Blocks['logic_ternary'] = {
     }
     this.prevParentConnection_ = parentConnection;
   }
+}
+      
+
+//==========================MUTATORS CONVERTED TO INDIVIDUAL BLOCKS=======================
+//else block
+Blockly.Blocks['controls_else'] = {
+  init: function() {
+    this.appendDummyInput()
+        .setAlign(Blockly.ALIGN_RIGHT)
+        .appendField("else");
+    this.appendStatementInput("elseInput");
+    this.setPreviousStatement(true, "controls_if","controls_elseif");
+    this.setNextStatement(true, null);
+    this.setColour(210);
+    this.setTooltip('');
+    this.setHelpUrl('http://www.example.com/');
+  }
 };
+
+Blockly.JavaScript['controls_else'] = function(block) {
+  var statements_elseinput = Blockly.JavaScript.statementToCode(block, 'elseInput');
+  // TODO: Assemble JavaScript into code variable.
+  var code = 'else{\n' + statements_elseinput + '\n}\n';
+  return code;
+};
+
+//else if block
+Blockly.Blocks['controls_elseif'] = {
+  init: function() {
+    this.appendDummyInput()
+        .setAlign(Blockly.ALIGN_RIGHT)
+        .appendField("else if");
+    this.appendStatementInput("elseifInput");
+    this.setPreviousStatement(true, ["controls_if", "controls_elseif"]);
+    this.setNextStatement(true, null);
+    this.setColour(210);
+    this.setTooltip('');
+    this.setHelpUrl('http://www.example.com/');
+  }
+}
+
+Blockly.JavaScript['controls_elseif'] = function(block) {
+  var statements_elseifInput = Blockly.JavaScript.statementToCode(block, 'elseifInput');
+  // TODO: Assemble JavaScript into code variable.
+  var code = 'else if{\n' + statements_elseifInput + '\n}\n';
+  return code;
+};
+

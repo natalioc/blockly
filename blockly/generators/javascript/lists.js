@@ -36,9 +36,11 @@ Blockly.JavaScript['lists_create_empty'] = function(block) {
 
 Blockly.JavaScript['lists_create_with'] = function(block) {
   // Create a list with any number of elements of any type.
-  var code = new Array(block.itemCount_);
+  var code = new Array(block.itemCount_+1);
+  var value_textinput1 = Blockly.JavaScript.valueToCode(block, 'textinput1', Blockly.JavaScript.ORDER_ATOMIC);
+  code[0] = value_textinput1;
   for (var n = 0; n < block.itemCount_; n++) {
-    code[n] = Blockly.JavaScript.valueToCode(block, 'ADD' + n,
+    code[n+1] = Blockly.JavaScript.valueToCode(block, 'ADD' + n,
         Blockly.JavaScript.ORDER_COMMA) || 'null';
   }
   code = '[' + code.join(', ') + ']';

@@ -59,15 +59,41 @@ Blockly.Blocks['lists_create_with'] = {
    * Block for creating a list with any number of elements of any type.
    * @this Blockly.Block
    */
+  // init: function() {
+  //   this.setHelpUrl(Blockly.Msg.LISTS_CREATE_WITH_HELPURL);
+  //   this.setColour(Blockly.Blocks.lists.HUE);
+  //   this.itemCount_ = 3;
+  //   this.updateShape_();
+  //   this.setOutput(true, 'Array');
+  //   this.setMutator(new Blockly.Mutator(['lists_create_with_item']));
+  //   this.setTooltip(Blockly.Msg.LISTS_CREATE_WITH_TOOLTIP);
+  // },
   init: function() {
     this.setHelpUrl(Blockly.Msg.LISTS_CREATE_WITH_HELPURL);
     this.setColour(Blockly.Blocks.lists.HUE);
-    this.itemCount_ = 3;
+    this.appendValueInput("textinput1")
+        .appendField("create list with")
+        .appendField(new Blockly.FieldTextInput("3"), "inputcount")
+        .appendField("items");
+    var text_inputcount = this.getFieldValue('inputcount');
+    this.itemCount_ = text_inputcount-1;
     this.updateShape_();
     this.setOutput(true, 'Array');
-    this.setMutator(new Blockly.Mutator(['lists_create_with_item']));
     this.setTooltip(Blockly.Msg.LISTS_CREATE_WITH_TOOLTIP);
   },
+
+   /**
+   * Update list inputs dynamically
+   */
+  onchange: function(){
+      var text_inputcount = this.getFieldValue('inputcount');
+
+      if(text_inputcount != this.itemCount_+1){
+        this.itemCount_ = text_inputcount-1;
+        this.updateShape_();
+      }
+  },
+
   /**
    * Create XML to represent list inputs.
    * @return {!Element} XML storage element.
@@ -164,12 +190,12 @@ Blockly.Blocks['lists_create_with'] = {
     // Rebuild block.
     if (this.itemCount_ == 0) {
       this.appendDummyInput('EMPTY')
-          .appendField(Blockly.Msg.LISTS_CREATE_EMPTY_TITLE);
+          //.appendField(Blockly.Msg.LISTS_CREATE_EMPTY_TITLE);
     } else {
       for (var i = 0; i < this.itemCount_; i++) {
         var input = this.appendValueInput('ADD' + i);
         if (i == 0) {
-          input.appendField(Blockly.Msg.LISTS_CREATE_WITH_INPUT_WITH);
+          //input.appendField(Blockly.Msg.LISTS_CREATE_WITH_INPUT_WITH);
         }
       }
     }

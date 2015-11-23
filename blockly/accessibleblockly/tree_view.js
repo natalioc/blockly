@@ -43,7 +43,7 @@ Blockly.Accessibility.TreeView.makeTree = function() {
 *Creates the tree from the test data
 */
 Blockly.Accessibility.TreeView.createTreeFromTestData = function(node, data) {
-    node.setHtml(data[0]);
+    //node.setHtml(data[0]);
     if(data.length > 1) {
         var children = data[1];
         var childNotCollapsible = null; // Hard coded to reduce randomness.

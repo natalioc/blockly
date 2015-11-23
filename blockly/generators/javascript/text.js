@@ -37,28 +37,47 @@ Blockly.JavaScript['text'] = function(block) {
 
 Blockly.JavaScript['text_join'] = function(block) {
   // Create a string made up of any number of elements of any type.
+
+  
   var code;
+  //added for new text block
+  var value_textinput1 = Blockly.JavaScript.valueToCode(block, 'textinput1', Blockly.JavaScript.ORDER_ATOMIC);
+  //code = 'String(' + value_textinput1 + ')';
   if (block.itemCount_ == 0) {
-    return ['\'\'', Blockly.JavaScript.ORDER_ATOMIC];
-  } else if (block.itemCount_ == 1) {
+    code = 'String(' + value_textinput1 + ')';
+
+    return [code, Blockly.JavaScript.ORDER_ATOMIC];
+  } 
+
+  else if (block.itemCount_ == 1) {
+
     var argument0 = Blockly.JavaScript.valueToCode(block, 'ADD0',
         Blockly.JavaScript.ORDER_NONE) || '\'\'';
-    code = 'String(' + argument0 + ')';
+    code = 'String(' + value_textinput1 + ')' + ' + String(' + argument0 + ')';
+
     return [code, Blockly.JavaScript.ORDER_FUNCTION_CALL];
-  } else if (block.itemCount_ == 2) {
+  } 
+
+  else if (block.itemCount_ == 2) {
+
     var argument0 = Blockly.JavaScript.valueToCode(block, 'ADD0',
         Blockly.JavaScript.ORDER_NONE) || '\'\'';
     var argument1 = Blockly.JavaScript.valueToCode(block, 'ADD1',
         Blockly.JavaScript.ORDER_NONE) || '\'\'';
-    code = 'String(' + argument0 + ') + String(' + argument1 + ')';
+    code = 'String(' + value_textinput1 + ')' + '+ String(' + argument0 + ') + String(' + argument1 + ')';
+
     return [code, Blockly.JavaScript.ORDER_ADDITION];
-  } else {
-    code = new Array(block.itemCount_);
+  } 
+
+  else {
+
+    code = new Array(block.itemCount_+1);
     for (var n = 0; n < block.itemCount_; n++) {
       code[n] = Blockly.JavaScript.valueToCode(block, 'ADD' + n,
           Blockly.JavaScript.ORDER_COMMA) || '\'\'';
     }
     code = '[' + code.join(',') + '].join(\'\')';
+
     return [code, Blockly.JavaScript.ORDER_FUNCTION_CALL];
   }
 };
