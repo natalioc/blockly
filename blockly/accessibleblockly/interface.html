@@ -57,6 +57,7 @@
 <!-- <script src="https://apis.google.com/js/api.js"></script>
 <script src="loadxml.js"></script>
 <script src="debug.js"></script> -->
+<!--Css used for the tree view-->
 <script>
 'use strict';
 // Depending on the URL argument, render as LTR or RTL.
@@ -204,8 +205,7 @@ function changeFontDD(){
 
 
 </script>
-
-<style>
+<link rel="stylesheet" href="interface.css"></link>
 <style>
 html, body {
   height: 100%;
@@ -656,8 +656,6 @@ color: black;
     </div>
 
     <p tabindex="-1" id="comment" >Comments go here</p>
-
-    <script>Blockly.Accessibility.TreeView.makeTree()</script>
     <div id="primaryContentDiv">
 
         <div id="typeButtons">
@@ -706,37 +704,7 @@ color: black;
   <!--This is where the screen reader is updated-->
   <div id="blockReader" tabindex="-1" aria-live="assertive"></div>
   
-<!--   <link rel="stylesheet" href="./css/tree.css">
- -->  <!--<div id="treeContainer" style="width:400px"></div>-->
- <!-- CAUSES A BUG WITH THE HIGHLIGHTING <style>
-  .goog-tree-children {
-      background-repeat: repeat-y;
-      background-image: url("./images/tree/I.png") !important;
-      background-position-y: 1px !important; /* IE only */
-      font: icon;
-    }
 
-    .goog-tree-icon {
-      background-image:url("./images/tree/tree.png");
-    }
-
-    .goog-tree-item-label {
-      font: bold 10pt Tahoma, Arial, sans-serif;
-      color: #333;
-      text-decoration: none;
-    }
-
-    .goog-tree-item-label a {
-      font: normal 10pt Tahoma, Arial, sans-serif;
-      color: #333;
-      text-decoration: none;
-    }
-
-    .goog-tree-item-label a:hover {
-      color: #00f;
-      text-decoration: underline;
-    }
-  </style> -->
 
 
   

@@ -74,7 +74,7 @@ Blockly.Accessibility.Prefixes.formatTreeView = function(){
   document.getElementById("comment").innerHTML = "";
   var map = this.getAllPrefixes();
   var commentStr;
-  var commentArr = xmlDoc.getElementsByTagName('COMMENT'); //all the comments
+  //var commentArr = xmlDoc.getElementsByTagName('COMMENT'); //all the comments
   var firstFolder = this.buildBasis();
   var fullTree = document.createElement("ol");
   var lastPeriodCount = 1;
@@ -486,7 +486,6 @@ Blockly.Accessibility.Prefixes.getAllPrefixes = function() {
        }
        }
   }
-
   //handles function return blocks since they are set up differently than regular blocks
   if(functionArr.length > 0){
     //this for loop makes the prefixes for the function return block

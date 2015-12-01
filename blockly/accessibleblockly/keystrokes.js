@@ -399,7 +399,7 @@ document.onkeydown = document.onkeyup = function(e){
 		else if(map[82]){ //R
 			//Jumps to the top of the currently selected container
 			//Blockly.Accessibility.Navigation.jumpToTopOfSection();
-			Blockly.Accessibility.TreeView.makeTree();
+			Blockly.Accessibility.Prefixes.formatTreeView();
 			//Blockly.Accessibility.TreeView.addBlockComments();
 		}
 
