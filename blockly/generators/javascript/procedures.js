@@ -33,7 +33,9 @@ Blockly.JavaScript['procedures_defreturn'] = function(block) {
   // Define a procedure with a return value.
   var funcName = Blockly.JavaScript.variableDB_.getName(
       block.getFieldValue('NAME'), Blockly.Procedures.NAME_TYPE);
-  var branch = Blockly.JavaScript.statementToCode(block, 'STACK');
+  // var branch = Blockly.JavaScript.statementToCode(block, 'STACK');
+  var branch = Blockly.JavaScript.statementToCode(block, 'dummy');
+
   if (Blockly.JavaScript.STATEMENT_PREFIX) {
     branch = Blockly.JavaScript.prefixLines(
         Blockly.JavaScript.STATEMENT_PREFIX.replace(/%1/g,
@@ -50,8 +52,9 @@ Blockly.JavaScript['procedures_defreturn'] = function(block) {
   }
   var args = [];
   for (var x = 0; x < block.arguments_.length; x++) {
-    args[x] = Blockly.JavaScript.variableDB_.getName(block.arguments_[x],
-        Blockly.Variables.NAME_TYPE);
+    //args[x] = Blockly.JavaScript.variableDB_.getName(block.arguments_[x],
+        //Blockly.Variables.NAME_TYPE);
+    args[x] = block.arguments_[x];
   }
   var code = 'function ' + funcName + '(' + args.join(', ') + ') {\n' +
       branch + returnValue + '}';

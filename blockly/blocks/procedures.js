@@ -35,6 +35,7 @@ goog.require('Blockly.Blocks');
 Blockly.Blocks.procedures.HUE = 290;
 
 Blockly.Blocks['procedures_defnoreturn'] = {
+  count:0,
   /**
    * Block for defining a procedure with no return value.
    * @this Blockly.Block
@@ -63,7 +64,7 @@ Blockly.Blocks['procedures_defnoreturn'] = {
         Blockly.Msg.PROCEDURES_DEFNORETURN_PROCEDURE,
         Blockly.Procedures.rename);
     nameField.setSpellcheck(false);
-    this.appendDummyInput()
+    this.appendDummyInput("dummy")
         .appendField(Blockly.Msg.PROCEDURES_DEFNORETURN_TITLE)
         .appendField(nameField, 'NAME')
         .appendField('', 'PARAMS')
@@ -76,37 +77,79 @@ Blockly.Blocks['procedures_defnoreturn'] = {
     this.statementConnection_ = null;
   },
 
-  //allow the inputs to be changed dynamically
+  
+//allow the inputs to be changed dynamically
   onchange: function(){
     var text_inputcount = this.getFieldValue('inputcount');
-    console.log(text_inputcount);
-    console.log(this.arguments_.length+1);
-
-    for(var i = 0; i < this.arguments_.length+1; i++){
-
-        if(text_inputcount == ' '){
-          return;
-        }
-
-        else if(text_inputcount >= this.arguments_.length){
-            this.appendDummyInput("test")
-                 .appendField(new Blockly.FieldTextInput(("arg " + this.arguments_.length), "arg" + this.arguments_.length));
-                 this.arguments_.push(i);
-          //updateParams_();
-        }
+    var dummy = this.getInput("dummy");
 
 
-        else if(text_inputcount < this.arguments_.length){
-           this.removeInput("test");
-           this.arguments_.pop();
 
-          //updateParams_();
-        }
-   }
+    //maximum of 9 parameters
+    if(text_inputcount > 9){
+      this.setFieldValue(9,'inputcount');
+
+      //read it with screenreader
+      Blockly.Accessibility.Speech.Say("Please enter number between 1 and 9");
+      return;
+    }
+
+    //do nothing when erasing
+    if(text_inputcount == ""){
+        return;
+    }
+
+    //add input
+    else if(text_inputcount > this.count && text_inputcount != 0){
+
+      for(var i = this.count; i < text_inputcount; i++){
+
+        var showNum = this.count+1;
+
+        dummy.appendField(new Blockly.FieldTextInput("arg " + showNum), "arg" + this.count);
+        this.arguments_.push(dummy.fieldRow[dummy.fieldRow.length-1].name);
+
+        this.count++;
+
+      }
+
+    }
+
+    //remove input
+   else if(text_inputcount < this.count){
+      
+      //keep removing until there is enough
+      while(text_inputcount < this.count && this.count > 1){
+
+         var removing = dummy.fieldRow[dummy.fieldRow.length-1].name;
+
+         if(removing[3] >= 1 && text_inputcount > -1){
+            dummy.removeField(removing);
+            this.arguments_.pop();
+            this.count--;
+         }
+      }
+
+      //remove last input
+      if(text_inputcount == 0){
+        dummy.removeField("arg0");
+        this.arguments_.pop();
+        this.count = 0;
+      }
+    }
+
+    //update parameter names
+    else{
+      for(var i = 0; i < this.arguments_.length-1; i++){
+        var fieldIndex = dummy.fieldRow.length-1-i;
+
+        this.arguments_[i+1] = dummy.fieldRow[fieldIndex].text_;
+        this.arguments_[0]   = dummy.fieldRow[6].text_; 
+      }
+    } 
   },
 
-  /**
-   * Initialization of the block has completed, clean up anything that may be
+  /**   * Initialization of the block has completed, clean up anything that may be
    * inconsistent as a result of the XML loading.
    * @this Blockly.Block
    */
@@ -388,6 +431,8 @@ Blockly.Blocks['procedures_defnoreturn'] = {
 };
 
 Blockly.Blocks['procedures_defreturn'] = {
+
+  count:0,
   /**
    * Block for defining a procedure with a return value.
    * @this Blockly.Block
@@ -399,19 +444,95 @@ Blockly.Blocks['procedures_defreturn'] = {
         Blockly.Msg.PROCEDURES_DEFRETURN_PROCEDURE,
         Blockly.Procedures.rename);
     nameField.setSpellcheck(false);
-    this.appendDummyInput()
+    this.appendDummyInput("dummy")
         .appendField(Blockly.Msg.PROCEDURES_DEFRETURN_TITLE)
         .appendField(nameField, 'NAME')
-        .appendField('', 'PARAMS');
+        .appendField('', 'PARAMS')
+        .appendField("with ")
+        .appendField(new Blockly.FieldTextInput("0"), "inputcount")
+        .appendField("parameters");
     this.appendValueInput('RETURN')
         .setAlign(Blockly.ALIGN_RIGHT)
         .appendField(Blockly.Msg.PROCEDURES_DEFRETURN_RETURN);
-    this.setMutator(new Blockly.Mutator(['procedures_mutatorarg']));
+    // this.setMutator(new Blockly.Mutator(['procedures_mutatorarg']));
     this.setTooltip(Blockly.Msg.PROCEDURES_DEFRETURN_TOOLTIP);
     this.arguments_ = [];
     this.setStatements_(true);
     this.statementConnection_ = null;
   },
+
+
+  //allow the inputs to be changed dynamically
+  onchange: function(){
+    var text_inputcount = this.getFieldValue('inputcount');
+    var dummy = this.getInput("dummy");
+
+
+    //maximum of 9 parameters
+    if(text_inputcount > 9){
+        this.setFieldValue(9,'inputcount');
+
+        //read it with screenreader
+        Blockly.Accessibility.Speech.Say("Please enter number between 1 and 9");
+        return;
+    }
+
+    //do nothing when erasing
+    if(text_inputcount == ""){
+        return;
+    }
+
+    //add input
+    else if(text_inputcount > this.count && text_inputcount != 0){
+
+      for(var i = this.count; i < text_inputcount; i++){
+        var showNum = this.count+1;
+        dummy.appendField(new Blockly.FieldTextInput("arg " + showNum), "arg" + this.count);
+        this.arguments_.push(dummy.fieldRow[dummy.fieldRow.length-1].name);
+
+        this.count++;
+      }
+
+    }
+
+    //remove input
+   else if(text_inputcount < this.count){
+      
+      //keep removing until there is enough
+      while(text_inputcount < this.count && this.count > 1){
+
+         var removing = dummy.fieldRow[dummy.fieldRow.length-1].name;
+
+         if(removing[3] >= 1 && text_inputcount > -1){
+            dummy.removeField(removing);
+            this.arguments_.pop();
+
+            this.count--;
+         }
+      }
+
+      if(text_inputcount == 0){
+        //dummy.removeField()
+        dummy.removeField("arg0");
+        this.arguments_.pop();
+
+        this.count = 0;
+      }
+    }
+
+     //update parameter names
+    else{
+        if(this.arguments_.length > 0){
+         for(var i = 0; i < this.arguments_.length-1; i++){
+              var fieldIndex = dummy.fieldRow.length-1-i;
+
+              this.arguments_[i+1] = dummy.fieldRow[fieldIndex].text_;
+              this.arguments_[0]   = dummy.fieldRow[6].text_; 
+         }
+      }
+    } 
+  },
+
   setStatements_: Blockly.Blocks['procedures_defnoreturn'].setStatements_,
   validate: Blockly.Blocks['procedures_defnoreturn'].validate,
   updateParams_: Blockly.Blocks['procedures_defnoreturn'].updateParams_,
@@ -420,6 +541,7 @@ Blockly.Blocks['procedures_defreturn'] = {
   decompose: Blockly.Blocks['procedures_defnoreturn'].decompose,
   compose: Blockly.Blocks['procedures_defnoreturn'].compose,
   dispose: Blockly.Blocks['procedures_defnoreturn'].dispose,
+
   /**
    * Return the signature of this procedure definition.
    * @return {!Array} Tuple containing three elements:

@@ -67,6 +67,7 @@ Blockly.Blocks['text'] = {
 };
 
 Blockly.Blocks['text_join'] = {
+
   /**
    * Block for creating a string made up of any number of elements of any type.
    * @this Blockly.Block
@@ -101,11 +102,40 @@ Blockly.Blocks['text_join'] = {
   onchange: function(){
       var text_inputcount = this.getFieldValue('inputcount');
 
-      if(text_inputcount != this.itemCount_+1){
-        this.itemCount_ = text_inputcount-1;
-        this.updateShape_();
+      //must be between 2 and 9 
+      if(text_inputcount <= 1 || text_inputcount >= 10){
+        this.setFieldValue(this.itemCount_+1,'inputcount');
+
+        //read it with screenreader
+        Blockly.Accessibility.Speech.Say("Please enter number between 2 and 9");
+        return;
+      }
+
+      //update block when new number is entered
+      if(text_inputcount != this.itemCount_+1 && text_inputcount!= ""){
+
+          //maximum of 9
+          if(text_inputcount > 9){
+            text_inputcount = 9;
+            this.setFieldValue(9,'inputcount');
+          }
+
+          //minimum of 2 combined
+          if(text_inputcount <= 1){
+            text_inputcount = 2;
+            this.setFieldValue(2,'inputcount');
+          }
+
+          this.itemCount_ = text_inputcount-1;
+          this.updateShape_();
+      }
+
+      if(text_inputcount == ""){
+        this.setFieldValue(this.itemCount_+1,'inputcount');
       }
   },
+
+
   /**
    * Create XML to represent number of text inputs.
    * @return {!Element} XML storage element.
@@ -116,6 +146,7 @@ Blockly.Blocks['text_join'] = {
     container.setAttribute('items', this.itemCount_);
     return container;
   },
+
   /**
    * Parse XML to restore the text inputs.
    * @param {!Element} xmlElement XML storage element.

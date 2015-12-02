@@ -20,6 +20,18 @@ goog.require('Blockly.Accessibility.InBlock');
 */
 
 
+
+Blockly.Accessibility.Speech.Say = function(string){
+     var active      = document.activeElement;
+	 var blockReader = document.getElementById("blockReader");
+
+	 //apply aria attributes in order to update the user audibly when anything on the workspace changes
+   	 active.setAttribute("aria-owns", "blockReader");
+   	 active.setAttribute("aria-labelledBy", "blockReader");
+
+	 blockReader.innerHTML = string;
+	 console.log(string);
+}
 /*
 *FILE OVERVIEW
 * This file helps the screenreader say useful information while in the workspace and update as the contents of the block changes
@@ -51,6 +63,8 @@ Blockly.Accessibility.Speech.updateBlockReader = function(type, blockSvg){
     blockReader.innerHTML = newStr;
     console.log(newStr);
 };
+
+
 
 /*
 * Reads the selected connection out loud 

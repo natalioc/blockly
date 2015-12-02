@@ -88,9 +88,34 @@ Blockly.Blocks['lists_create_with'] = {
   onchange: function(){
       var text_inputcount = this.getFieldValue('inputcount');
 
-      if(text_inputcount != this.itemCount_+1){
-        this.itemCount_ = text_inputcount-1;
-        this.updateShape_();
+      if(text_inputcount <= 1 || text_inputcount >= 10){
+
+        this.setFieldValue(this.itemCount_+1,'inputcount');
+        Blockly.Accessibility.Speech.Say("Please enter number between 2 and 9");
+        return;
+      }
+
+      //update block when new number is entered
+      if(text_inputcount != this.itemCount_+1 && text_inputcount!= ""){
+
+          //maximum of 9
+          if(text_inputcount > 9){
+            text_inputcount = 9;
+            this.setFieldValue(9,'inputcount');
+          }
+
+          //minimum of 2 combined
+          if(text_inputcount <= 1){
+            text_inputcount = 1;
+            this.setFieldValue(1,'inputcount');
+          }
+
+          this.itemCount_ = text_inputcount-1;
+          this.updateShape_();
+      }
+
+      if(text_inputcount == ""){
+        this.setFieldValue(this.itemCount_+1,'inputcount');
       }
   },
 

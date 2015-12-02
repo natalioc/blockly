@@ -40,7 +40,6 @@ document.onmouseup = function(e){
 	Blockly.Accessibility.Navigation.updateXmlSelection();
 };
 
-document.on
 
 /**
  * Take care of keypresses for accessibility
