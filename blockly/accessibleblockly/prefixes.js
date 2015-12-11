@@ -69,145 +69,6 @@ Blockly.Accessibility.Prefixes.displayComments = function(){
   }
 };
 
-Blockly.Accessibility.Prefixes.formatTreeView = function(){
-
-  document.getElementById("comment").innerHTML = "";
-  var map = this.getAllPrefixes();
-  var commentStr;
-  //var commentArr = xmlDoc.getElementsByTagName('COMMENT'); //all the comments
-  var firstFolder = this.buildBasis();
-  var fullTree = document.createElement("ol");
-  var lastPeriodCount = 1;
-  var firstEqualDepthRun = true;
-  var firstLastGreaterDepthRun = true;
-  document.getElementById('comment').appendChild(firstFolder);
-  fullTree.setAttribute("class", "tree");
-  for (var key in map) {
-    if (map.hasOwnProperty(key)) {
-      var prefix = map[key]
-      var currentPeriodCount = prefix.replace(/[^0-9]/g,"").length;//how many periods are in the string
-      /**
-      if(!prefix[1].match(/[a-z]/i)){ //check if the prefix has 1 or 2 starting characters
-        //this case is for single alphabetical starting prefixes ex. A
-        if(lastPeriodCount == currentPeriodCount){
-          if(firstEqualDepthRun == true){
-            var ol = document.createElement("ol");
-            var li = this.buildFileNode(prefix);
-            ol.appendChild(li);
-            firstFolder.appendChild(ol);
-            fullTree.appendChild(firstFolder);
-            document.getElementById('comment').appendChild(fullTree);
-            firstEqualDepthRun = false;
-            lastPeriodCount = currentPeriodCount;
-          }
-          else{
-            var li = this.buildFileNode(prefix);
-            ol.appendChild(li);
-            firstFolder.appendChild(ol);
-            fullTree.appendChild(firstFolder);
-            document.getElementById('comment').appendChild(fullTree);
-            firstEqualDepthRun = false;
-            lastPeriodCount = currentPeriodCount;
-          }
-        }
-        console.log(lastPeriodCount);
-        console.log(currentPeriodCount);
-        if(lastPeriodCount < currentPeriodCount){
-          if(firstLastGreaterDepthRun == true){
-            var fileToFolder = this.convertFromFileToFolderNode(li, prefix);
-            var ol = document.createElement("ol");
-            //ol.appendChild(fileToFolder);
-            console.log(firstFolder.childNodes);
-            firstFolder.childNodes[currentPeriodCount].appendChild(fileToFolder);
-            fullTree.appendChild(firstFolder);
-            document.getElementById('comment').appendChild(fullTree);
-            lastPeriodCount = currentPeriodCount;
-            firstLastGreaterDepthRun = false;
-          }
-          else{
-            //console.log("in here?");
-            var fileToFolder = this.convertFromFileToFolderNode(li, prefix);
-            var ol = document.createElement("ol");
-            //ol.appendChild(fileToFolder);
-            console.log(firstFolder.childNodes[lastPeriodCount].childNodes);
-            firstFolder.childNodes[lastPeriodCount].childNodes[0].appendChild(fileToFolder);
-            fullTree.appendChild(firstFolder);
-            document.getElementById('comment').appendChild(fullTree);
-            lastPeriodCount = currentPeriodCount;
-            firstLastGreaterDepthRun = true;
-          }
-        }
-        else{
-            console.log("am I here?");
-        }
-      }
-      */
-
-        //var prefix = map[key];
-        var li = this.buildFileNode(map[key]);
-        var ol = document.createElement("ol");
-        ol.appendChild(li);
-        firstFolder.appendChild(ol);
-        fullTree.appendChild(firstFolder);
-        document.getElementById('comment').appendChild(fullTree);
-      }
-      else{//for prefixes that have 2 starting alphabetical characters ex. AA
-
-        var ol = document.createElement("ol");
-        var li = this.buildFileNode(map[key])
-        ol.appendChild(li);
-        firstFolder.appendChild(ol);
-        fullTree.appendChild(firstFolder);
-        document.getElementById('comment').appendChild(fullTree);
-
-        console.log("double variable prefix");
-      }
-    }
-};
-
-Blockly.Accessibility.Prefixes.buildBasis = function(){
-  var li = document.createElement("li");
-  var label = document.createElement("label");
-  var input = document.createElement("input");
-  var title = document.createTextNode("Block Comments");
-  label.setAttribute("for", "topFolder");
-  label.appendChild(title);
-  input.setAttribute("type", "checkbox");
-  input.setAttribute("id", "topFolder");
-  li.appendChild(label);
-  li.appendChild(input);
-  return li;
-};
-
-Blockly.Accessibility.Prefixes.buildFileNode = function(prefixName){
-  var li = document.createElement("li");
-  var pTextNode = document.createTextNode(prefixName);
-  var aTag = document.createElement("a");
-  li.setAttribute("class","file")
-  aTag.appendChild(pTextNode);
-  li.appendChild(aTag);
-  return li;
-};
-
-Blockly.Accessibility.Prefixes.convertFromFileToFolderNode = function(li, newPrefix){
-  var label = document.createElement("label");
-  var input = document.createElement("input");
-  var prefix = li.childNodes[0];
-  var belowNode = this.buildFileNode(newPrefix);
-  var ol = document.createElement("ol");
-  ol.appendChild(belowNode);
-  li.removeAttribute("class");
-  li.removeChild(li.childNodes[0]);
-  label.setAttribute("for", prefix);
-  label.appendChild(prefix);
-  input.setAttribute("type", "checkbox");
-  input.setAttribute("id", prefix);
-  li.appendChild(label);
-  li.appendChild(input);
-  li.appendChild(ol);
-  return li;
-};
-
 /**
  * Generates the information in the info box (on the workspace corner)
  *
@@ -280,6 +141,176 @@ Blockly.Accessibility.Prefixes.getInfoBox = function(){
   }
 };
 
+//******************************************************************************************
+//*                                                                                        *
+//* TREE VIEW FUNCTIONS                                                                    *
+//*                                                                                        *
+//******************************************************************************************
+
+/**
+*  WORK HERE TO FINISH BUILDING THE TREE VIEW FOR THE BLOCK COMMENTS SHOULD BUILD IT TO WORK WITH ALL BLOCKS
+*  THEN SHRINK IT DOWN TO BLOCKS THAT CONTAIN COMMENTS. THE FUNCTIONS BELOW WILL PUT ITEMS INTO FILE OR FOLDER
+*  NODES I LEFT IN COMMENTED OUT CODE THAT. WE STILL NEED TO FIND WHEN TO CALL THIS FUNCTION SO THAT IT IS FUNCTIONAL
+*  IT DOESN"T WORK ON UPDATEXML ANYMORE.
+*  Builds the treeview for comments
+*/
+Blockly.Accessibility.Prefixes.formatTreeView = function(){
+
+  document.getElementById("comment").innerHTML = ""; //clear what is currently in the div
+  var map = this.getAllPrefixes(); //get all the blocks
+  var commentStr;
+  //var commentArr = xmlDoc.getElementsByTagName('COMMENT'); //all the comments to be added in later
+  var firstFolder = this.buildBasis(); //The top folder that says Block Comments
+  var fullTree = document.createElement("ol"); //to build the structure you need to put prefices in ol and li tags
+  var lastPeriodCount = 1;
+  var firstEqualDepthRun = true;
+  var firstLastGreaterDepthRun = true;
+  document.getElementById('comment').appendChild(firstFolder); //append the comments to the base folder
+  fullTree.setAttribute("class", "tree");
+  for (var key in map) { //loops through the entire hashmap of blocks
+    if (map.hasOwnProperty(key)) {
+      var prefix = map[key]
+      var currentPeriodCount = prefix.replace(/[^0-9]/g,"").length;//how many periods are in the string
+      /**
+      if(!prefix[1].match(/[a-z]/i)){ //check if the prefix has 1 or 2 starting characters
+        //this case is for single alphabetical starting prefixes ex. A
+        if(lastPeriodCount == currentPeriodCount){
+          if(firstEqualDepthRun == true){
+            var ol = document.createElement("ol");
+            var li = this.buildFileNode(prefix);
+            ol.appendChild(li);
+            firstFolder.appendChild(ol);
+            fullTree.appendChild(firstFolder);
+            document.getElementById('comment').appendChild(fullTree);
+            firstEqualDepthRun = false;
+            lastPeriodCount = currentPeriodCount;
+          }
+          else{
+            var li = this.buildFileNode(prefix);
+            ol.appendChild(li);
+            firstFolder.appendChild(ol);
+            fullTree.appendChild(firstFolder);
+            document.getElementById('comment').appendChild(fullTree);
+            firstEqualDepthRun = false;
+            lastPeriodCount = currentPeriodCount;
+          }
+        }
+        console.log(lastPeriodCount);
+        console.log(currentPeriodCount);
+        if(lastPeriodCount < currentPeriodCount){
+          if(firstLastGreaterDepthRun == true){
+            var fileToFolder = this.convertFromFileToFolderNode(li, prefix);
+            var ol = document.createElement("ol");
+            //ol.appendChild(fileToFolder);
+            console.log(firstFolder.childNodes);
+            firstFolder.childNodes[currentPeriodCount].appendChild(fileToFolder);
+            fullTree.appendChild(firstFolder);
+            document.getElementById('comment').appendChild(fullTree);
+            lastPeriodCount = currentPeriodCount;
+            firstLastGreaterDepthRun = false;
+          }
+          else{
+            //console.log("in here?");
+            var fileToFolder = this.convertFromFileToFolderNode(li, prefix);
+            var ol = document.createElement("ol");
+            //ol.appendChild(fileToFolder);
+            console.log(firstFolder.childNodes[lastPeriodCount].childNodes);
+            firstFolder.childNodes[lastPeriodCount].childNodes[0].appendChild(fileToFolder);
+            fullTree.appendChild(firstFolder);
+            document.getElementById('comment').appendChild(fullTree);
+            lastPeriodCount = currentPeriodCount;
+            firstLastGreaterDepthRun = true;
+          }
+        }
+        else{
+            console.log("am I here?");
+        }
+      }
+      */
+        //WORK IN PROGRESS
+        //var prefix = map[key];
+        var li = this.buildFileNode(map[key]);
+        var ol = document.createElement("ol");
+        ol.appendChild(li);
+        firstFolder.appendChild(ol);
+        fullTree.appendChild(firstFolder);
+        document.getElementById('comment').appendChild(fullTree);
+      }
+      else{//for prefixes that have 2 starting alphabetical characters ex. AB
+
+        var ol = document.createElement("ol");
+        var li = this.buildFileNode(map[key])
+        ol.appendChild(li);
+        firstFolder.appendChild(ol);
+        fullTree.appendChild(firstFolder);
+        document.getElementById('comment').appendChild(fullTree);
+
+        console.log("double variable prefix");
+      }
+    }
+};
+
+/**
+*  Builds the base of the tree view labels it as block comments and is returned to be appended to the comment div
+*   @return {li} li containing the top folder for the comments section
+*/
+Blockly.Accessibility.Prefixes.buildBasis = function(){
+  var li = document.createElement("li");
+  var label = document.createElement("label");
+  var input = document.createElement("input");
+  var title = document.createTextNode("Block Comments");
+  label.setAttribute("for", "topFolder");
+  label.appendChild(title);
+  input.setAttribute("type", "checkbox");
+  input.setAttribute("id", "topFolder");
+  li.appendChild(label);
+  li.appendChild(input);
+  return li;
+};
+
+/**
+*  Builds a file node for the tree view
+*/
+Blockly.Accessibility.Prefixes.buildFileNode = function(prefixName){
+  var li = document.createElement("li");
+  var pTextNode = document.createTextNode(prefixName);
+  var aTag = document.createElement("a");
+  li.setAttribute("class","file")
+  aTag.appendChild(pTextNode);
+  li.appendChild(aTag);
+  return li;
+};
+
+/**
+* Converts a file tree node into a folder node
+* @param{li , prefix} give it the previous li and the new prefix
+* @return{li} a li that contains the new folder and the new prefix name
+*/
+Blockly.Accessibility.Prefixes.convertFromFileToFolderNode = function(li, newPrefix){
+  var label = document.createElement("label");
+  var input = document.createElement("input");
+  var prefix = li.childNodes[0];
+  var belowNode = this.buildFileNode(newPrefix);
+  var ol = document.createElement("ol");
+  ol.appendChild(belowNode);
+  li.removeAttribute("class");
+  li.removeChild(li.childNodes[0]);
+  label.setAttribute("for", prefix);
+  label.appendChild(prefix);
+  input.setAttribute("type", "checkbox");
+  input.setAttribute("id", prefix);
+  li.appendChild(label);
+  li.appendChild(input);
+  li.appendChild(ol);
+  return li;
+};
+
+//******************************************************************************************
+//*                                                                                        *
+//* PREFIX FUNCTIONS                                                                       *
+//*                                                                                        *
+//******************************************************************************************
+
 /**
  * Generates the alphabetical representation of the number you give it
  * @param {int} int to be converted into it's alphabetical representation
@@ -306,6 +337,12 @@ Blockly.Accessibility.Prefixes.getAlphabetical = function(number) {
   return alphabetList[number];
 };
 
+/**
+* When given a alphabetical letter convert it into it's number equivilient
+* If the letter has doubles ex AC. it will return 26 + 3 = 29
+* @param {str} str to be converted into an int
+* @return {int} a integer representation of a letter
+*/
 Blockly.Accessibility.Prefixes.getNumberFromAlphabetical = function(str) {
   var alphabetList = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n',
   'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z'];
@@ -343,6 +380,8 @@ Blockly.Accessibility.Prefixes.getValueTop = function(block){
 
 /**
  * Function will retrieve all blocks and attach a prefix to them in a hashmap
+ * This function is overly complex and can probably broken down into better parts
+ * but I don't have the time to be able to modify it.
  * @return {map} a hashmap of all the blocks id's and their associated prefix's
  */
 Blockly.Accessibility.Prefixes.getAllPrefixes = function() {
@@ -526,6 +565,9 @@ Blockly.Accessibility.Prefixes.getAllPrefixes = function() {
     return map;
 };
 
+/**
+* Function that gives all blocks that exist on the workspace ID's since Neil removed those ID's in one of his updates
+*/
 Blockly.Accessibility.Prefixes.giveAllBlocksIds = function(){
     var blocks = xmlDoc.getElementsByTagName('BLOCK');
     for(var i = 0; i < blocks.length; i++){

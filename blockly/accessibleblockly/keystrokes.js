@@ -20,7 +20,6 @@ goog.provide('Blockly.Accessibility.Keystrokes');
 goog.require('Blockly.Accessibility');
 goog.require('Blockly.Accessibility.Navigation');
 goog.require('Blockly.Accessibility.Speech');
-goog.require('Blockly.Accessibility.TreeView');
 goog.require('Blockly.Accessibility.Prefixes');
 goog.require('Blockly.Flyout');
 

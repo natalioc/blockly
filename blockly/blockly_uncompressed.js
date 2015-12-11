@@ -177,7 +177,6 @@ goog.addDependency("ui/tree/typeahead.js", ['goog.ui.tree.TypeAhead', 'goog.ui.t
 goog.addDependency("useragent/useragent.js", ['goog.userAgent'], ['goog.labs.userAgent.browser', 'goog.labs.userAgent.engine', 'goog.labs.userAgent.platform', 'goog.labs.userAgent.util', 'goog.string']);
 goog.addDependency("../../../" + dir + "/accessibleblockly/accessibility.js", ['Blockly.Accessibility'], []);
 goog.addDependency("../../../" + dir + "/accessibleblockly/navigation.js", ['Blockly.Accessibility.Navigation'], ['Blockly.BlockSvg', 'Blockly.Block', 'Blockly.Connection', 'Blockly.FieldColour', 'Blockly.FieldTextInput', 'Blockly.FieldDropdown', 'Blockly.FieldCheckbox']);
-goog.addDependency("../../../" + dir + "/accessibleblockly/tree_view.js", ['Blockly.Accessibility.TreeView'], []);
 goog.addDependency("../../../" + dir + "/accessibleblockly/prefixes.js", ['Blockly.Accessibility.Prefixes'], []);
 goog.addDependency("../../../" + dir + "/accessibleblockly/keystrokes.js", ['Blockly.Accessibility.Keystrokes'], []);
 goog.addDependency("../../../" + dir + "/accessibleblockly/in_block.js", ['Blockly.Accessibility.InBlock'], []);
@@ -227,7 +226,6 @@ goog.require('Blockly.ZoomControls');
 goog.require('Blockly.inject');
 goog.require('Blockly.utils');
 goog.require('Blockly.Accessibility.Navigation');
-goog.require('Blockly.Accessibility.TreeView');
 goog.require('Blockly.Accessibility.Prefixes');
 goog.require('Blockly.Accessibility.MenuNav');
 goog.require('Blockly.Accessibility.InBlock');
