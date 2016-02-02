@@ -481,8 +481,8 @@ Blockly.Blocks['controls_else'] = {
         .setAlign(Blockly.ALIGN_RIGHT)
         .appendField("else");
     this.appendStatementInput("elseInput");
-    this.setPreviousStatement(true, "controls_if","controls_elseif");
-    this.setNextStatement(true, null);
+    this.setPreviousStatement(true);
+    this.setNextStatement(true);
     this.setColour(210);
     this.setTooltip('');
     this.setHelpUrl('http://www.example.com/');
@@ -499,12 +499,14 @@ Blockly.JavaScript['controls_else'] = function(block) {
 //else if block
 Blockly.Blocks['controls_elseif'] = {
   init: function() {
-    this.appendDummyInput()
+    this.appendValueInput("valueInput")
         .setAlign(Blockly.ALIGN_RIGHT)
-        .appendField("else if");
+        .appendField("else if")
+        .setCheck('Boolean')
     this.appendStatementInput("elseifInput");
-    this.setPreviousStatement(true, ["controls_if", "controls_elseif"]);
-    this.setNextStatement(true, null);
+    //this.appendStatementInput("elseifInput");
+    this.setPreviousStatement(true);
+    this.setNextStatement(true);
     this.setColour(210);
     this.setTooltip('');
     this.setHelpUrl('http://www.example.com/');
@@ -513,8 +515,11 @@ Blockly.Blocks['controls_elseif'] = {
 
 Blockly.JavaScript['controls_elseif'] = function(block) {
   var statements_elseifInput = Blockly.JavaScript.statementToCode(block, 'elseifInput');
+
+  var argument = Blockly.JavaScript.valueToCode(block, 'valueInput',
+      Blockly.JavaScript.ORDER_NONE) || 'false';
   // TODO: Assemble JavaScript into code variable.
-  var code = 'else if{\n' + statements_elseifInput + '\n}\n';
+  var code = 'else if( ' + argument +  '){\n' + statements_elseifInput + '\n}\n';
   return code;
 };
 

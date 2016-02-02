@@ -398,8 +398,12 @@ Blockly.Accessibility.MenuNav.prototype.menuNavDown= function() {
     //select next and update
     menuVars.flyoutArr[menuVars.currIndex].addSelect();
 
+    //read selected
+    Blockly.Accessibility.MenuNav.readToolbox();
+
     menuVars.prevIndex = menuVars.currIndex;
     menuVars.currIndex++;
+
 };
 
 
@@ -466,6 +470,10 @@ Blockly.Accessibility.MenuNav.prototype.menuNavUp = function() {
 
 
     menuVars.flyoutArr[menuVars.currIndex].addSelect();
+
+    //read selected
+    Blockly.Accessibility.MenuNav.readToolbox();
+
 
     menuVars.prevIndex = menuVars.currIndex;
     menuVars.currIndex--;
@@ -549,6 +557,28 @@ Blockly.Flyout.prototype.show = function(xmlList){
     if(menuVars.oldLength > 0){ //ignore first time opening
         menuVars.currIndex  = menuVars.oldLength;
     }
+
+    //disable else and else if mutator blocks if not being used
+    // if(menuVars.flyoutArr[0] && (menuVars.flyoutArr[8].type == "logic_ternary")){
+    //     console.log("IN FIRST IF");
+    //     if(Blockly.selected && (Blockly.selected.type == "logic_if" || Blockly.selected.type == "logic_elseif")){
+    //         console.log("IN 1");
+    //         menuVars.flyoutArr[menuVars.flyoutArr.length-8].disabled = false;
+    //     }
+    //     else{
+
+    //       console.log("IN 2");
+    //       menuVars.flyoutArr[7].disabled = false;
+    //       // var toolboxChoices = Blockly.Accessibility.MenuNav.getToolboxChoices();
+    //       // toolboxChoices[1].disabled = true;  
+    //       // toolboxChoices[1].updateDisabled();
+    //       // console.log(toolboxChoices[1]);
+    //     }
+    // }
+     var toolboxChoices = Blockly.Accessibility.MenuNav.getToolboxChoices();  
+    console.log(toolboxChoices);
+   
+
 
     // Delete any blocks from a previous showing.
     var blocks = this.workspace_.getTopBlocks(false);
@@ -666,7 +696,7 @@ Blockly.Flyout.prototype.show = function(xmlList){
  * When the selection changes, the block name is updated for screenreader
  */
  Blockly.Accessibility.MenuNav.readToolbox = function(){
-    var blockSvg = menuVars.flyoutArr[menuVars.currIndex-1];
+    var blockSvg = menuVars.flyoutArr[menuVars.currIndex];
     var active   = document.activeElement;
     var lastCategory; //track the category so that it does not deselect
 

@@ -52,6 +52,25 @@ Blockly.Python['controls_if'] = function(block) {
   return code;
 };
 
+//======================else if and else block added for accessibility=========================
+Blockly.Python['controls_elseif'] = function(block){
+  var argument = Blockly.Python.valueToCode(block, 'IF', Blockly.Python.ORDER_NONE) || 'False';
+  var branch   = Blockly.Python.statementToCode(block, 'DO') || Blockly.Python.PASS;
+  var code = 'elif ' + argument + ':\n' + branch;
+
+  return code;
+};
+
+Blockly.Python['controls_else'] = function(block){
+  var argument = Blockly.Python.valueToCode(block, 'IF', Blockly.Python.ORDER_NONE) || 'False';
+  var branch   = Blockly.Python.statementToCode(block, 'DO') || Blockly.Python.PASS;
+  var code = 'else:\n' + branch;
+
+  return code;
+};
+//=============================================================================================
+
+
 Blockly.Python['logic_compare'] = function(block) {
   // Comparison operator.
   var OPERATORS = {

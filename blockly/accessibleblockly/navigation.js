@@ -69,17 +69,14 @@ Blockly.BlockSvg.prototype.defaultDispose = Blockly.BlockSvg.prototype.dispose;
  * Select this block.  Highlight it visually.
  */
 Blockly.BlockSvg.prototype.select = function () {
-    console.log("select called");
-    console.log(this.type);
     this.defaultSelect();
 
     if (Blockly.Accessibility.Navigation.getBlockNodeById(this.id)) {
         Blockly.Accessibility.Navigation.currentNode = Blockly.Accessibility.Navigation.getBlockNodeById(this.id);
-
-        //console.log(this.id);
-        //console.log(this);
     }
-            Blockly.Accessibility.Speech.updateBlockReader(this.type, this);
+
+    Blockly.Accessibility.Speech.updateBlockReader(this.type, this);
+    Blockly.Accessibility.Speech.changedResult = undefined;
 };
 
 /**
@@ -88,7 +85,7 @@ Blockly.BlockSvg.prototype.select = function () {
 Blockly.BlockSvg.prototype.unselect = function () {
     this.defaultUnselect();
     Blockly.Accessibility.Navigation.currentNode = null;
-
+    Blockly.Accessibility.Speech.changedSelect = true;
     // Handle if you're leaving edit mode.
 
     if (keyboardState == 'editMode') {

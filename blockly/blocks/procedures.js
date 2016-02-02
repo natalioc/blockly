@@ -104,13 +104,19 @@ Blockly.Blocks['procedures_defnoreturn'] = {
 
       for(var i = this.count; i < text_inputcount; i++){
 
+        //number shown beginning with 1 not 0
         var showNum = this.count+1;
 
+        //add input with default name arg showNum
         dummy.appendField(new Blockly.FieldTextInput("arg " + showNum), "arg" + this.count);
         this.arguments_.push(dummy.fieldRow[dummy.fieldRow.length-1].name);
 
+        //change string to be read aloud
+        Blockly.Accessibility.Speech.changedResult = Blockly.Accessibility.Speech.result + " \'\' ";
+        for(var j = 0; j < this.count; j++){
+          Blockly.Accessibility.Speech.changedResult += " \'\' ";
+        }
         this.count++;
-
       }
 
     }
@@ -118,16 +124,17 @@ Blockly.Blocks['procedures_defnoreturn'] = {
     //remove input
    else if(text_inputcount < this.count){
       
-      //keep removing until there is enough
+      //keep removing each field until there is enough
       while(text_inputcount < this.count && this.count > 1){
 
+         //get next field to remove
          var removing = dummy.fieldRow[dummy.fieldRow.length-1].name;
 
          if(removing[3] >= 1 && text_inputcount > -1){
             dummy.removeField(removing);
             this.arguments_.pop();
             this.count--;
-         }
+         }         
       }
 
       //remove last input

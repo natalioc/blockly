@@ -67,6 +67,7 @@ Blockly.Blocks['text'] = {
 };
 
 Blockly.Blocks['text_join'] = {
+   
 
   /**
    * Block for creating a string made up of any number of elements of any type.

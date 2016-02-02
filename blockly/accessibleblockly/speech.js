@@ -19,7 +19,10 @@ goog.require('Blockly.Accessibility.InBlock');
 *limitations under the License.
 */
 
-
+//the resulting default string and a check to see if the selection has changed.
+Blockly.Accessibility.Speech.changedResult  = undefined;
+Blockly.Accessibility.Speech.changedSelect = true;
+Blockly.Accessibility.Speech.result;
 
 Blockly.Accessibility.Speech.Say = function(string){
      var active      = document.activeElement;
@@ -45,8 +48,14 @@ Blockly.Accessibility.Speech.Say = function(string){
 Blockly.Accessibility.Speech.updateBlockReader = function(type, blockSvg){
 	// get default string for the block based on type
 	var newStr;
-	var defaultStr  = Blockly.Accessibility.Speech.blockToString(type); 	
+	var defaultStr;
+	if(!this.changedResult){
+		defaultStr  = Blockly.Accessibility.Speech.blockToString(type); 	
+	}
 
+	else{
+		defaultStr = this.changedResult;
+	}
 	var active      = document.activeElement;
     var blockReader = document.getElementById("blockReader");               	
 
@@ -75,6 +84,7 @@ Blockly.Accessibility.Speech.readConnection = function(name, index){
 	var blockReader = document.getElementById("blockReader");	
 	var active 		= document.activeElement;
 	var say;
+
 
 	//top and bottom connections are named undefined
 	if(name == undefined)
@@ -150,6 +160,7 @@ Blockly.Accessibility.Speech.changeString = function(block){
 	var blockArr    = block.getElementsByTagName("BLOCK"); 	    //get array of blocks attached to selected block
 	var fieldBlcArr = block.getElementsByTagName("FIELD");
 
+
 	//get the top selected block
 	strArr[0] = Blockly.Accessibility.Speech.blockToString(block.getAttribute("type"));
 
@@ -191,27 +202,37 @@ Blockly.Accessibility.Speech.changeString = function(block){
    
 	}
 
-
 	//=========Fill in all the fields=========================================================================
 	//go through strArr and if it has ' ' replace it with field value at valueIndex
 	var valueIndex = 0;
+	
 	for(var i = 0; i < strArr.length; i++){
-
-		var re = /'([^']*)'/g; //gets all values indicated by ' ' with anything in between
-
+		var re = /'([^']*)'/; //gets all values indicated by ' ' with anything in between
+ 		
 		//if it contains ''
-		if(re.test(strArr[i])){
-			strArr[i] = strArr[i].replace(re,fieldValArr[valueIndex]);
+		//if(re.test(strArr[i])){
+		  if(re.test(strArr[0])){
+
+			//strArr[i] = strArr[i].replace(re,fieldValArr[i]);
+			strArr[0] = strArr[0].replace(re,fieldValArr[i]);
 			valueIndex ++;
 		}
+
 	}
 
-	//===========combine multiple strings if necessary=========================================================
-	if(blockArr.length > 0){
+	//check for mutator blocks
+	if(block.type == "text_join" || block.type == "lists_create_with"){
+		
+	}
+
+	//===========combine multiple block strings if necessary=========================================================
+	if(blockArr[0]){
 
 		var re = (/\([^\)]+\)/g); //gets all blocks indicated by ()
 		var match;
-
+		console.log(blockArr[0]);
+		if(blockArr[0].type == "text_join"){
+		}
 		//Loop through the string array and update the first value every time 
 		for(var i = 1; i < strArr.length; i ++){
 
@@ -226,7 +247,8 @@ Blockly.Accessibility.Speech.changeString = function(block){
 		}
 	}
 
-	//=====DEBUG========
+
+	//=====DEBUG================
 	// console.log("FINAL");
 	// console.log(fieldValArr);
 	// console.log(fieldBlcArr);
@@ -450,6 +472,8 @@ Blockly.Accessibility.Speech.switchInputOrder = function(blockType, inputsArr){
 			var saveZero = inputsArr[0];
 			inputsArr[0] = inputsArr[1];
 	   		inputsArr[1] = saveZero;
+	   		console.log(inputsArr[0]);
+	   		console.log(inputsArr[1]);
 	   		readOrderArr = inputsArr;
 			break;
 		default: 
@@ -524,188 +548,210 @@ Blockly.Accessibility.Speech.fieldNameChange = function(defaultNm, blockType){
 };
 
 Blockly.Accessibility.Speech.blockToString = function(type, disabled){
-    var result;
     var disabledText = "";
-
+    ;
+    
     switch (type){
         case "beep":
-            result = "beep frequency (A) duration (B) time until played (C)";
+            this.result = "beep frequency (A) duration (B) time until played (C)";
             break;
         case "controls_if"    : 
-            result = "if (A), do";
+            this.result = "if (A), do";
             break;
+        case "controls_elseif":
+        	this.result = "else if (A)";
+        	break;
+        case "controls_else":
+        	this.result = "else ";
+        	break;
         case "logic_compare"  :
-            result = " (A) 'equals' (B)"; 
+            this.result = " (A) 'equals' (B)"; 
             break;
         case "logic_operation": 
-            result = " (A) 'and/or' (B)"; 
+            this.result = " (A) 'and/or' (B)"; 
             break;
         case "logic_negate": 
-            result = "not (  )"; 
+            this.result = "not (  )"; 
             break;
         case "logic_boolean":
-            result = "'true or false'"; 
+            this.result = "'true or false'"; 
             break;
         case "logic_null":
-            result = "null";
+            this.result = "null";
             break;
         case "logic_ternary":
-            result = "Test (A), if true do (B), if false do (C)";
+            this.result = "Test (A), if true do (B), if false do (C)";
             break;
         case "controls_repeat_ext":
-            result = "repeat (10) times";
+            this.result = "repeat (10) times";
             break;
         case "controls_whileUntil":
-            result = "repeat 'while or until' ( )";
+            this.result = "repeat 'while or until' ( )";
             break;
         case "controls_for":
-            result = "count with 'i' from (1) to (10) by (1)";
+            this.result = "count with 'i' from (1) to (10) by (1)";
             break;
         case "controls_forEach":
-            result = "for each item 'i' in in list ()";
+            this.result = "for each item 'i' in in list ()";
             break;
         case "controls_flow_statements":
-            result = "'break out' of loop";
+            this.result = "'break out' of loop";
             break; 
         case "math_number":
-            result = "'number'";
+            this.result = "'number'";
             break; 
         case "math_arithmetic":
-            result = "(A) '+' (B)";
+            this.result = "(A) '+' (B)";
             break; 
         case "math_single":
-            result = "'square root' of (A)";
+            this.result = "'square root' of (A)";
             break; 
         case "math_trig":
-            result = "'trig' ()";
+            this.result = "'trig' ()";
             break; 
         case "math_constant":
-            result = "'pi and constants'";
+            this.result = "'pi and constants'";
             break; 
         case "math_number_property":
-            result = "(number) is 'even'";
+            this.result = "(number) is 'even'";
             break; 
         case "math_change":
-            result = "change (variable) by (1)";
+            this.result = "change (variable) by (1)";
             break; 
         case "math_round":
-            result = "'round' (number)";
+            this.result = "'round' (number)";
             break; 
         case "math_on_list":
-            result = "'sum' of list ( )";
+            this.result = "'sum' of list ( )";
             break; 
         case "math_modulo":
-            result = "remainder of (A) divided by (B)";
+            this.result = "remainder of (A) divided by (B)";
             break; 
         case "math_constrain":
-            result = "constrain (A) between low (1) and high (100)";
+            this.result = "constrain (A) between low (1) and high (100)";
             break; 
         case "math_random_int":
-            result = "random integer from (1) to (100)";
+            this.result = "random integer from (1) to (100)";
             break; 
         case "math_random_float":
-            result = "random fraction";
+            this.result = "random fraction";
             break; 
         case "text":
-            result = "'text'";
+            this.result = "'text'";
             break; 
         case "text_join":
-            result = "Create text with (A) combined with (B)";
+            this.result = "Create text with '2' items (), ()";
             break; 
         case "text_append":
-            result = "to 'item' append text (  )";
+            this.result = "to 'item' append text (  )";
             break; 
         case "text_length":
-            result = "length of (text)";
+            this.result = "length of (text)";
             break; 
         case "text_isEmpty":
-            result = "(A) is empty";
+            this.result = "(A) is empty";
             break; 
         case "text_indexOf":
-            result = "in (text) find 'first or last' occurence of text (A)";
+            this.result = "in (text) find 'first or last' occurence of text (A)";
             break; 
         case "text_charAt":
-            result = "in text (text) get 'character at index' (A)";
+            this.result = "in text (text) get 'character at index' (A)";
             break; 
         case "text_getSubstring":
-            result = "in text (text) get substring from ',index' (A) to 'index' (B) ";
+            this.result = "in text (text) get substring from ',index' (A) to 'index' (B) ";
             break; 
         case "text_changeCase":
-            result = " to 'upper or lower' case ( )";
+            this.result = " to 'upper or lower' case ( )";
             break; 
         case "text_trim":
-            result = "trim spaces from 'both sides' of ()";
+            this.result = "trim spaces from 'both sides' of ()";
             break; 
         case "text_print":
-            result = "print ( )";
+            this.result = "print ( )";
             break; 
         case "text_prompt_ext":
-            result = "prompt for 'text' with message ' text'";
+            this.result = "prompt for 'text' with message ' text'";
             break; 
         case "lists_create_empty":
-            result = "create empty list";
+            this.result = "create empty list";
             break; 
         case "lists_create_with":
-            result = "create list with values (A), (B), (C)";
+            this.result = "create list with '3' items (), (), ()";
             break;  
         case "lists_repeat":
-            result = "create list with item (A) repeated (5) times";
+            this.result = "create list with item (A) repeated (5) times";
             break;
         case "lists_length":
-            result = "length of ( ) list";
+            this.result = "length of ( ) list";
             break;
         case "lists_isEmpty":
-            result = "the list (list) is empty";
+            this.result = "the list (list) is empty";
             break;
         case "lists_indexOf":
-            result = "in list (list) find 'first' occurence of item (A)";
+            this.result = "in list (list) find 'first' occurence of item (A)";
             break;
         case "lists_getIndex":
-            result = "in list (list) 'get', 'index' (A)";
+            this.result = "in list (list) 'get', 'index' (A)";
             break;
         case "lists_setIndex":
-            result = "in list (list) 'set' 'index' (A) as (B)";
+            this.result = "in list (list) 'set' 'index' (A) as (B)";
             break;
         case "lists_getSublist":
-            result = "in list (list) get sub-list from 'index' (A) to ',index' (B)";
+            this.result = "in list (list) get sub-list from 'index' (A) to ',index' (B)";
             break;
         case "lists_split":
-            result = "make 'list from text' (A) with delimiter 'comma'";
+            this.result = "make 'list from text' (A) with delimiter 'comma'";
             break;
         case "colour_picker":
-            result = "colour";
+            this.result = "colour";
             break;
         case "colour_random":
-            result = "random colour";
+            this.result = "random colour";
             break;
         case "colour_rgb":
-            result = "colour with: red 'Value', blue 'value,', green ',value' ";
+            this.result = "colour with: red 'Value', blue 'value,', green ',value' ";
             break;
         case "colour_blend":
-            result = "blend colour 1 'colour' and colour 2 'colour' with ratio 'decimal'";
+            this.result = "blend colour 1 'colour' and colour 2 'colour' with ratio 'decimal'";
             break; 
         case "procedures_defnoreturn":
-            result = "function 'do something'";
+            this.result = "function to 'do something', with '0' parameters";
             break;
         case "procedures_defreturn":
-            result = "function 'do something' then return ( )";
+            this.result = "function to 'do something', with '0' parameters then return ( )";
             break;
         case "procedures_ifreturn":
-            result = "if (A) then return (B)";
+            this.result = "if (A) then return (B)";
             break;
+        case "procedures_callreturn":
+        case "procedures_callnoreturn":
+        	this.result = Blockly.selected.inputList[0].fieldRow[0].text_;
+
+        	//loop through blocks to add parameters dynamically
+        	for(var i = 0; i < Blockly.selected.arguments_.length; i++){
+        		if(i == 0){
+        			this.result += " with ";
+        		}
+        		this.result += Blockly.selected.arguments_[i] + " '' ";
+        	}
+        	console.log(Blockly.selected);
+        	break;
         case "variables_set":
-            result = "set 'variable' to (A)";
+            this.result = "set 'variable' to (A)";
             break;
         case "variables_get":
-            result ="get 'A'";
+            this.result ="get 'A'";
             break;
         default: 
-            result = "custom"; 
+            this.result = "custom"; 
             break;
      }
 
      if(disabled){
-        disabledText = "connection doesn't match ";
+        disabledText = "disabled ";
      }
-     return disabledText + result + " block.";
+     if(this.changedResult){
+     	this.result = this.changedResult;
+     }
+     return disabledText + this.result + " block.";
 };

@@ -408,6 +408,9 @@ document.onkeydown = document.onkeyup = function(e){
 
 			//if not on toolbox navigate down through blocks
 			if(Blockly.selected.id[0] != ":"  && !Blockly.Accessibility.Keystrokes.prototype.isConnecting){
+				if(Blockly.Flyout.prototype.isVisible){
+					return;		
+				}
 				Blockly.Accessibility.Navigation.traverseDown();
 			}
 
@@ -425,7 +428,7 @@ document.onkeydown = document.onkeyup = function(e){
 		//============Jumping to specific category===============
 		else{
 			//loop through the numbers on keyboard to access menu
-			for(var i = 48; i < 58; i++){
+			for(var i = 48; i < 57; i++){
 
 				var category;
 				//map each number to its key
@@ -439,7 +442,7 @@ document.onkeydown = document.onkeyup = function(e){
 					}
 
 					else{
-						var tempName = ":" + (count+1);
+						var tempName = ":" + (count);
 						category = document.getElementById(tempName);
 					}
 
