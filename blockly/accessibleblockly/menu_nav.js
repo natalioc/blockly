@@ -733,7 +733,8 @@ Blockly.Accessibility.MenuNav.flyoutToWorkspace = function(){
     var block    = Blockly.Block.obtain(workspace, blockXML.getAttribute("type"));
     block.initSvg();
     block.render();
-
+    block.select();
+    
     return block;
     //var workspace = Blockly.Generator.prototype.workspaceToCode();
     // var textInput = Blockly.Xml.domToText(input);                    //the svg turned into pain text'

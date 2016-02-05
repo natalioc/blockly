@@ -55,11 +55,12 @@ Blockly.Python['text_join'] = function(block) {
     var code = 'str(' + argument0 + ') + str(' + argument1 + ')';
     return [code, Blockly.Python.ORDER_UNARY_SIGN];
   } else {
+    console.log("LAST ELSE");
     var code = [];
     //added for accessibility
     code[0] = Blockly.Python.valueToCode(block, 'textinput1', Blockly.Python.ORDER_NONE) || '\'\'';
-    for (var n = 1; n < block.itemCount_; n++) {
-      code[n] = Blockly.Python.valueToCode(block, 'ADD' + n,
+    for (var n = 0; n < block.itemCount_; n++) {
+      code[n+1] = Blockly.Python.valueToCode(block, 'ADD' + n,
           Blockly.Python.ORDER_NONE) || '\'\'';
     }
     var tempVar = Blockly.Python.variableDB_.getDistinctName('temp_value',

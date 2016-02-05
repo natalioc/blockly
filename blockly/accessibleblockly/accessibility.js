@@ -177,6 +177,7 @@ Blockly.Accessibility.addComment = function(){
  * Expands the selected block if it is collapsed or collapses the selected block if it isn't
  */
 Blockly.Accessibility.toggleCollapse = function(){
+  console.log("COLLAPSING");
 	Blockly.selected.setCollapsed(!Blockly.selected.collapsed_);
 };
 

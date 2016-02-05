@@ -296,6 +296,8 @@ Blockly.Accessibility.Navigation.traverseOut = function () {
     // Null check
     if (Blockly.selected == null) {
         console.log('Cannot traverse outwards from here.');
+        Blockly.Accessibility.Speech.Say('Cannot move further outwards from here.');
+
         return;
     }
 
@@ -306,6 +308,7 @@ Blockly.Accessibility.Navigation.traverseOut = function () {
         }
         else {
             console.log('Cannot traverse outwards from here.');
+            Blockly.Accessibility.Speech.Say('Cannot move further outwards from here.');
         }
         return;
 
@@ -324,7 +327,7 @@ Blockly.Accessibility.Navigation.traverseOut = function () {
 
     }
     else {
-        console.log('Cannot traverse outwards from here.');
+        Blockly.Accessibility.Speech.Say('Cannot move further outwards from here.');
     }
 };
 
@@ -335,7 +338,8 @@ Blockly.Accessibility.Navigation.traverseIn = function() {
 
     // Null check
     if (Blockly.selected == null) {
-        console.log('Cannot traverse inwards from here.');
+        Blockly.Accessibility.Speech.Say('Cannot move further inwards from here.');
+
         return;
     }
 
@@ -348,7 +352,7 @@ Blockly.Accessibility.Navigation.traverseIn = function() {
       }
     }
 
-    console.log('Cannot traverse inwards from here.');
+    Blockly.Accessibility.Speech.Say('Cannot move further inwards from here.');
 };
 
 /**
@@ -358,7 +362,8 @@ Blockly.Accessibility.Navigation.traverseUp = function() {
 
     // Null check
     if (Blockly.selected == null) {
-        console.log('Cannot traverse up from here.');
+         Blockly.Accessibility.Speech.Say('Cannot move further up from here.');
+
         return;
     }
 
@@ -367,7 +372,8 @@ Blockly.Accessibility.Navigation.traverseUp = function() {
         Blockly.selected.previousConnection.targetConnection.sourceBlock_.select();
     }
     else {
-        console.log('Cannot traverse up, top of list');
+        Blockly.Accessibility.Speech.Say('Cannot move further up from here');
+
         if (this.currentNode == this.getOutermostNode(this.currentNode)) {
             this.previousContainer();
         }
@@ -382,7 +388,7 @@ Blockly.Accessibility.Navigation.traverseDown = function() {
 
     // Null check
     if (Blockly.selected == null) {
-        console.log('Cannot traverse down from here.');
+        Blockly.Accessibility.Speech.Say('Cannot move further down from here.');
         return;
     }
 
@@ -392,7 +398,8 @@ Blockly.Accessibility.Navigation.traverseDown = function() {
     }
     else {
         //  Otherwise just report that you've hit the bottom.
-        console.log('Cannot traverse down, end of list');
+        Blockly.Accessibility.Speech.Say('Cannot move further down from here.');
+
 
         // Check to make sure we're on the first layer before doing anything.
         if (this.currentNode == this.findBottom(this.getOutermostNode(this.currentNode))) {
@@ -409,7 +416,8 @@ Blockly.Accessibility.Navigation.traverseDown = function() {
 */
 Blockly.Accessibility.Navigation.insideBlockTraverseIn = function(){
   if (Blockly.selected == null) {
-      console.log('Cannot traverse inside from here.');
+      Blockly.Accessibility.Speech.Say('Cannot move inside from here');
+
       return;
   }
   var parentStatementBlock = this.findTopStatementBlock(Blockly.selected);
@@ -421,7 +429,8 @@ Blockly.Accessibility.Navigation.insideBlockTraverseIn = function(){
           return;
       }
       else{
-          console.log("Cannot traverse inside from here");
+          Blockly.Accessibility.Speech.Say('Cannot move further inside from here.');
+
       }
   }
   this.statementChildren = [];
@@ -525,6 +534,9 @@ Blockly.Accessibility.Navigation.findTop = function(myNode) {
  */
 Blockly.Accessibility.Navigation.findBottom = function(myNode) {
 
+    if(!myNode){
+        return;
+    }
     // Grab the children nodes of the current node, and see if any of them are a next.
     var children = myNode.childNodes;
     for (var i = 0; i < children.length; i++) {

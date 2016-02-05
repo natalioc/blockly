@@ -275,14 +275,6 @@ document.onkeydown = document.onkeyup = function(e){
 		}
 
 		else if(map[18] && map[16] && map[68]){ //Alt Shift D
-			console.log('Alt Shift D keys pressed.');
-			//Duplicate a block
-			Blockly.Accessibility.duplicateSelected();
-			e.preventDefault();
-			Blockly.Accessibility.Navigation.updateXmlSelection();
-		}
-
-		else if(map[18] && map[16] && map[69]){ //Alt Shift E
 			console.log('Alt Shift E keys pressed.');
 			//Keystroke for enabling or disabling a block
 			Blockly.Accessibility.toggleDisable();
@@ -303,16 +295,6 @@ document.onkeydown = document.onkeyup = function(e){
 			//Toggle inline in a block
 			Blockly.Accessibility.toggleInline();
 			e.preventDefault();
-		}
-
-		else if(map[188]){ //Comma
-		    console.log('Comma key pressed.');
-			//Traverse forward within a block with fields
-		}
-
-		else if(map[190]){ //Period
-			console.log('Period key pressed.');
-			//Traverse backward within a block with fields
 		}
 
 		else if(map[46]){ //Delete
@@ -408,9 +390,9 @@ document.onkeydown = document.onkeyup = function(e){
 
 			//if not on toolbox navigate down through blocks
 			if(Blockly.selected.id[0] != ":"  && !Blockly.Accessibility.Keystrokes.prototype.isConnecting){
-				if(Blockly.Flyout.prototype.isVisible){
-					return;		
-				}
+				// if(Blockly.Flyout.prototype.isVisible){
+					//return;		
+				//}
 				Blockly.Accessibility.Navigation.traverseDown();
 			}
 
