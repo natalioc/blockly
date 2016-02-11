@@ -206,33 +206,31 @@ Blockly.Accessibility.Speech.changeString = function(block){
 	//go through strArr and if it has ' ' replace it with field value at valueIndex
 	var valueIndex = 0;
 	
+
 	for(var i = 0; i < strArr.length; i++){
 		var re = /'([^']*)'/; //gets all values indicated by ' ' with anything in between
  		
-		//if it contains ''
-		//if(re.test(strArr[i])){
-		  if(re.test(strArr[0])){
-
-			//strArr[i] = strArr[i].replace(re,fieldValArr[i]);
-			strArr[0] = strArr[0].replace(re,fieldValArr[i]);
-			valueIndex ++;
+		if(Blockly.selected.type == "procedures_defreturn" || Blockly.selected.type == "procedures_defnoreturn"){
+			if(re.test(strArr[0])){
+				strArr[0] = strArr[0].replace(re,fieldValArr[i]);
+				valueIndex++
+			}
 		}
 
-	}
+		//if it contains ''
+		else if(re.test(strArr[i])){
+				console.log("IN ELSE IF");
+				strArr[i] = strArr[i].replace(re,fieldValArr[valueIndex]);
+				valueIndex ++;
+		}
 
-	//check for mutator blocks
-	if(block.type == "text_join" || block.type == "lists_create_with"){
-		
 	}
 
 	//===========combine multiple block strings if necessary=========================================================
-	if(blockArr[0]){
-
+	if(blockArr.length > 0){
+		console.log(strArr);
 		var re = (/\([^\)]+\)/g); //gets all blocks indicated by ()
 		var match;
-		console.log(blockArr[0]);
-		if(blockArr[0].type == "text_join"){
-		}
 		//Loop through the string array and update the first value every time 
 		for(var i = 1; i < strArr.length; i ++){
 
@@ -640,7 +638,14 @@ Blockly.Accessibility.Speech.blockToString = function(type, disabled){
             this.result = "'text'";
             break; 
         case "text_join":
-            this.result = "Create text with '2' items (), ()";
+            this.result = "Create text with '2 or more' items";
+
+            console.log(Blockly.selected.itemCount_);
+        	//loop through blocks to add inputs dynamically
+        	for(var i = 0; i < Blockly.selected.itemCount_+1; i++){
+        		this.result += " ,() ";
+        	}
+
             break; 
         case "text_append":
             this.result = "to 'item' append text (  )";
@@ -676,7 +681,12 @@ Blockly.Accessibility.Speech.blockToString = function(type, disabled){
             this.result = "create empty list";
             break; 
         case "lists_create_with":
-            this.result = "create list with '3' items (), (), ()";
+            this.result = "create list with '3' items";
+
+            //loop through blocks to add parameters dynamically
+        	for(var i = 0; i < Blockly.selected.itemCount_+1; i++){
+        		this.result += " ,() ";
+        	}
             break;  
         case "lists_repeat":
             this.result = "create list with item (A) repeated (5) times";
@@ -734,7 +744,6 @@ Blockly.Accessibility.Speech.blockToString = function(type, disabled){
         		}
         		this.result += Blockly.selected.arguments_[i] + " '' ";
         	}
-        	console.log(Blockly.selected);
         	break;
         case "variables_set":
             this.result = "set 'variable' to (A)";

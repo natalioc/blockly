@@ -415,25 +415,32 @@ Blockly.Accessibility.Navigation.traverseDown = function() {
 * Precondition: must be in edit mode which should select the first child block
 */
 Blockly.Accessibility.Navigation.insideBlockTraverseIn = function(){
-  if (Blockly.selected == null) {
-      Blockly.Accessibility.Speech.Say('Cannot move inside from here');
+  // if (Blockly.selected == null) {
+  //     Blockly.Accessibility.Speech.Say('Cannot move inside from here');
 
-      return;
-  }
-  var parentStatementBlock = this.findTopStatementBlock(Blockly.selected);
-  this.getAllChildrenOfStatement(parentStatementBlock);
-  for(var i = 0; i < this.statementChildren.length; i++){
-      if(Blockly.selected == this.statementChildren[i] && Blockly.selected != this.statementChildren[this.statementChildren.length - 1]){
-          this.statementChildren[i + 1].select();
-          this.statementChildren = []
-          return;
-      }
-      else{
-          Blockly.Accessibility.Speech.Say('Cannot move further inside from here.');
+  //     return;
+  // }
+  // var parentStatementBlock = Blockly.selected;
+  // this.getAllChildrenOfStatement(parentStatementBlock);
+  // for(var i = 0; i < this.statementChildren.length; i++){
+  //     if(Blockly.selected == this.statementChildren[i] && Blockly.selected != this.statementChildren[this.statementChildren.length - 1]){
+  //         this.statementChildren[i + 1].select();
+  //         this.statementChildren = []
+  //         return;
+  //     }
+  //     else{
+  //         Blockly.Accessibility.Speech.Say('Cannot move further inside from here.');
 
-      }
+  //     }
+  // }
+  //this.statementChildren = [];
+  if(Blockly.selected.childBlocks_.length > 0){
+        Blockly.selected.childBlocks_[0].select();
+    }
+  else{
+    console.log(Blockly.selected);
+    Blockly.selected.parentBlock_.childBlocks_[1].select();
   }
-  this.statementChildren = [];
 };
 
 /**
@@ -441,23 +448,33 @@ Blockly.Accessibility.Navigation.insideBlockTraverseIn = function(){
 * Precondition: must be in edit mode which should select the first child block
 */
 Blockly.Accessibility.Navigation.insideBlockTraverseOut = function(){
-  if (Blockly.selected == null) {
-      console.log('Cannot traverse out from here.');
-      return;
+  // if (Blockly.selected == null) {
+  //     console.log('Cannot traverse out from here.');
+  //     return;
+  // }
+  // var parentStatementBlock = this.findTopStatementBlock(Blockly.selected);
+  // this.getAllChildrenOfStatement(parentStatementBlock);
+  // for(var i = 0; i < this.statementChildren.length; i++){
+  //     if(Blockly.selected == this.statementChildren[i] && Blockly.selected != this.statementChildren[0]){
+  //         this.statementChildren[i - 1].select();
+  //         this.statementChildren = []
+  //         return;
+  //     }
+  //     else{
+  //         console.log("Cannot traverse out from here");
+  //     }
+  // }
+  // this.statementChildren = [];
+
+
+  if(Blockly.selected.childBlocks_.length > 2){
+        Blockly.selected.childBlocks_[Blockly.selected.childBlocks_.length-1].select();
+    }
+  else{
+    console.log(Blockly.selected);
+    Blockly.selected.parentBlock_.childBlocks_[0].select();
   }
-  var parentStatementBlock = this.findTopStatementBlock(Blockly.selected);
-  this.getAllChildrenOfStatement(parentStatementBlock);
-  for(var i = 0; i < this.statementChildren.length; i++){
-      if(Blockly.selected == this.statementChildren[i] && Blockly.selected != this.statementChildren[0]){
-          this.statementChildren[i - 1].select();
-          this.statementChildren = []
-          return;
-      }
-      else{
-          console.log("Cannot traverse out from here");
-      }
-  }
-  this.statementChildren = [];
+
 };
 
 /**

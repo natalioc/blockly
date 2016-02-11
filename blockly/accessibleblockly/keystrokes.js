@@ -21,6 +21,7 @@ goog.require('Blockly.Accessibility');
 goog.require('Blockly.Accessibility.Navigation');
 goog.require('Blockly.Accessibility.Speech');
 goog.require('Blockly.Accessibility.Prefixes');
+goog.require('Blockly.BlockSvg');
 goog.require('Blockly.Flyout');
 
 //default constructor
@@ -62,6 +63,7 @@ document.onkeydown = document.onkeyup = function(e){
 	else if(keyboardState=='editMode'){ //if you are in editMode, normal hotkeys are disabled
 		if(map[27]){ //Escape
 			keyboardState = 'hotkeyMode';
+			Blockly.Accessibility.InBlock.clearHighlights();
 			Blockly.Accessibility.Keystrokes.prototype.isConnecting = false;
 			Blockly.Accessibility.Navigation.updateXmlSelection();
 		}
@@ -201,6 +203,7 @@ document.onkeydown = document.onkeyup = function(e){
 	else if(keyboardState=='connectBlocksMode'){
 		console.log(Blockly.Accessibility.InBlock.enterCurrentBlock());
 		if(map[27]){ //Escape
+			Blockly.Accessibility.InBlock.clearHighlights();
 			keyboardState = 'hotkeyMode';
 			Blockly.Accessibility.Navigation.updateXmlSelection();
 		}
@@ -228,6 +231,7 @@ document.onkeydown = document.onkeyup = function(e){
 		    catch (e) {
 		        console.log(e);
 		    } finally {
+		        Blockly.Accessibility.InBlock.clearHighlights();
 		        keyboardState = 'hotkeyMode'; //prevent getting stuck on same block
 		    }
 		}
@@ -297,6 +301,10 @@ document.onkeydown = document.onkeyup = function(e){
 			e.preventDefault();
 		}
 
+		else if(map[16] && map[70]){//shift f
+			Blockly.Accessibility.Navigation.insideBlockTraverseOut();
+		}
+
 		else if(map[46]){ //Delete
 			console.log('Delete key pressed.');
 			//Delete the currently selected item
@@ -304,13 +312,11 @@ document.onkeydown = document.onkeyup = function(e){
 			e.preventDefault();
 		}
 
-		// else if(map[13]){ //Enter
-		// 	console.log('Enter key pressed.');
-		// 	Blockly.Accessibility.Navigation.updateXmlSelection();
-		// }
-
 		else if(map[27]){ //Escape
 			console.log('Escape key pressed.');
+			Blockly.Accessibility.InBlock.clearHighlights();
+			document.activeElement.blur();
+
 			//Get out of the current menu
 			e.preventDefault();
 		}
@@ -350,11 +356,13 @@ document.onkeydown = document.onkeyup = function(e){
 
 		else if (map[70]) { //F Add a block to the scene
 
-		    keyboardState = 'addBlockMode';
-		    var firstCategory = document.getElementById(":1");
-		    firstCategory.focus();
-		    Blockly.selected = null;
+			Blockly.Accessibility.Navigation.insideBlockTraverseIn();
+		    // keyboardState = 'addBlockMode';
+		    // var firstCategory = document.getElementById(":1");
+		    // firstCategory.focus();
+		    // Blockly.selected = null;
 		}
+
 
 		else if(map[71]){ //G
 			//Blockly.Accessibility.TreeView.commentOrBlockJump();
@@ -363,6 +371,10 @@ document.onkeydown = document.onkeyup = function(e){
 			Blockly.Accessibility.InBlock.addBlock();
 			Blockly.Accessibility.Keystrokes.prototype.isConnecting = false;
 			document.getElementById("blockReader").focus();
+		}
+
+		else if(map[74]){//J jump into workspace 
+			
 		}
 
 		else if(map[77]){ //M
@@ -452,6 +464,7 @@ Blockly.FieldTextInput.prototype.onHtmlInputKeyDown_ = function(e) {
 
   else if (e.keyCode == escKey) {
     this.setText(htmlInput.defaultValue);
+    document.activeElement.blur();
     Blockly.WidgetDiv.hide();
   }
 
