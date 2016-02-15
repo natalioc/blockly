@@ -19,7 +19,6 @@
 /**
  * @fileoverview Core navigation library for Accessible Blockly Plugin.
  * Allows for traversal around blocks, as well as keeping things up to date.
- * @author lunalovecraft@gmail.com (Luna Meier)
  */
 
 goog.provide('Blockly.Accessibility.Navigation');
@@ -59,6 +58,9 @@ Blockly.Accessibility.Navigation.redoStack = [];
 */
 Blockly.Accessibility.Navigation.statementChildren = [];
 //#region XML_UPDATING
+
+//Count for traversing inline blocks
+Blockly.Accessibility.Navigation.inlineCount = 0;
 
 // Default functions for our hooks.
 Blockly.BlockSvg.prototype.defaultSelect = Blockly.BlockSvg.prototype.select;
@@ -434,12 +436,15 @@ Blockly.Accessibility.Navigation.insideBlockTraverseIn = function(){
   //     }
   // }
   //this.statementChildren = [];
+  
   if(Blockly.selected.childBlocks_.length > 0){
-        Blockly.selected.childBlocks_[0].select();
+    console.log(Blockly.Accessibility.Navigation.inlineCount);
+        //Blockly.selected.childBlocks_[0].select();
+        Blockly.selected.childBlocks_[Blockly.Accessibility.Navigation.inlineCount].select();
+        Blockly.Accessibility.Navigation.inlineCount = 1;
     }
   else{
-    console.log(Blockly.selected);
-    Blockly.selected.parentBlock_.childBlocks_[1].select();
+    //Blockly.selected.parentBlock_.childBlocks_[1].select();
   }
 };
 
@@ -468,11 +473,11 @@ Blockly.Accessibility.Navigation.insideBlockTraverseOut = function(){
 
 
   if(Blockly.selected.childBlocks_.length > 2){
-        Blockly.selected.childBlocks_[Blockly.selected.childBlocks_.length-1].select();
+        //Blockly.selected.childBlocks_[Blockly.selected.childBlocks_.length-1].select();
     }
   else{
-    console.log(Blockly.selected);
-    Blockly.selected.parentBlock_.childBlocks_[0].select();
+    //console.log(Blockly.selected);
+    //Blockly.selected.parentBlock_.childBlocks_[0].select();
   }
 
 };

@@ -590,7 +590,7 @@ Blockly.Accessibility.Speech.blockToString = function(type, disabled){
             this.result = "count with 'i' from (1) to (10) by (1)";
             break;
         case "controls_forEach":
-            this.result = "for each item 'i' in in list ()";
+            this.result = "for each item 'i' in list ()";
             break;
         case "controls_flow_statements":
             this.result = "'break out' of loop";
@@ -614,7 +614,7 @@ Blockly.Accessibility.Speech.blockToString = function(type, disabled){
             this.result = "(number) is 'even'";
             break; 
         case "math_change":
-            this.result = "change (variable) by (1)";
+            this.result = "change (variable) by 'number'";
             break; 
         case "math_round":
             this.result = "'round' (number)";
