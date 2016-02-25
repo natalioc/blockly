@@ -143,7 +143,7 @@ document.onkeydown = document.onkeyup = function(e){
 		    }
 
 		    //default select the first category in the menu
-		    var firstCategory = document.getElementById(":2");
+		    var firstCategory = document.getElementById(":1");
 		    firstCategory.setAttribute("tabIndex", 0);
 		   	firstCategory.focus();
 
@@ -302,7 +302,7 @@ document.onkeydown = document.onkeyup = function(e){
 		}
 
 		else if(map[16] && map[70]){//shift f
-			Blockly.Accessibility.Navigation.insideBlockTraverseOut();
+			Blockly.Accessibility.Navigation.inlineBlockTraverseOut();
 		}
 
 		else if(map[46]){ //Delete
@@ -354,9 +354,9 @@ document.onkeydown = document.onkeyup = function(e){
 			}
 		}
 
-		else if (map[70]) { //F Add a block to the scene
+		else if (map[70]) { //F traverse inline blocks
 
-			Blockly.Accessibility.Navigation.insideBlockTraverseIn();
+			Blockly.Accessibility.Navigation.inlineBlockTraverseIn();
 		    // keyboardState = 'addBlockMode';
 		    // var firstCategory = document.getElementById(":1");
 		    // firstCategory.focus();
@@ -374,7 +374,8 @@ document.onkeydown = document.onkeyup = function(e){
 		}
 
 		else if(map[74]){//J jump into workspace 
-			
+
+
 		}
 
 		else if(map[77]){ //M

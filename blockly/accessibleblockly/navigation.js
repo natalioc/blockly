@@ -172,7 +172,7 @@ Blockly.Accessibility.Navigation.updateXmlSelection = function (noSelect) {
         //console.log('THERE WAS A CHANGE');
 
     }
-};
+}; 
 
 /**
  * Undo the previous action
@@ -413,38 +413,47 @@ Blockly.Accessibility.Navigation.traverseDown = function() {
 };
 
 /**
-* When in a statement block allows you to traverse in through the blocks
-* Precondition: must be in edit mode which should select the first child block
+* Traverse through inline blocks (such as if statements)
 */
-Blockly.Accessibility.Navigation.insideBlockTraverseIn = function(){
-  // if (Blockly.selected == null) {
-  //     Blockly.Accessibility.Speech.Say('Cannot move inside from here');
+Blockly.Accessibility.Navigation.inlineBlockTraverseIn = function(){
 
-  //     return;
-  // }
-  // var parentStatementBlock = Blockly.selected;
-  // this.getAllChildrenOfStatement(parentStatementBlock);
-  // for(var i = 0; i < this.statementChildren.length; i++){
-  //     if(Blockly.selected == this.statementChildren[i] && Blockly.selected != this.statementChildren[this.statementChildren.length - 1]){
-  //         this.statementChildren[i + 1].select();
-  //         this.statementChildren = []
-  //         return;
-  //     }
-  //     else{
-  //         Blockly.Accessibility.Speech.Say('Cannot move further inside from here.');
+    console.log(Blockly.selected);
+  // ** TO DO ONLY SELECT INLINE BLOCKS NOT INNER BLOCKS**    
 
-  //     }
-  // }
-  //this.statementChildren = [];
-  
-  if(Blockly.selected.childBlocks_.length > 0){
-    console.log(Blockly.Accessibility.Navigation.inlineCount);
-        //Blockly.selected.childBlocks_[0].select();
-        Blockly.selected.childBlocks_[Blockly.Accessibility.Navigation.inlineCount].select();
-        Blockly.Accessibility.Navigation.inlineCount = 1;
+  //select childblocks of currently selected block
+  if(Blockly.selected.childBlocks_.length-1 > Blockly.Accessibility.Navigation.inlineCount){
+        Blockly.selected.childBlocks_[Blockly.Accessibility.Navigation.inlineCount].select(); 
+        Blockly.Accessibility.Navigation.inlineCount++;
     }
+
+   //select the first childblock
+   else if(Blockly.selected.childBlocks_.length-1 == Blockly.Accessibility.Navigation.inlineCount){
+
+        Blockly.selected.childBlocks_[Blockly.Accessibility.Navigation.inlineCount].select(); 
+        Blockly.Accessibility.Navigation.inlineCount == 0;
+    }
+ 
+  //select childblocks of the parent block (example [(1) = (2)]  with 1 selected select 2 and vice versa)
   else{
-    //Blockly.selected.parentBlock_.childBlocks_[1].select();
+        try{
+            Blockly.selected.parentBlock_.childBlocks_[Blockly.Accessibility.Navigation.inlineCount].select();
+            Blockly.Accessibility.Navigation.inlineCount++;
+        }
+        //loop through children
+        catch(e){
+            console.log("cannot move further inwards");
+            Blockly.Accessibility.Navigation.inlineCount = 0;
+
+            //if block has a parent
+            if(Blockly.selected.parentBlock_){
+                 Blockly.selected.parentBlock_.childBlocks_[Blockly.Accessibility.Navigation.inlineCount].select(); 
+                 Blockly.Accessibility.Navigation.inlineCount++; 
+            }  
+            //if on the top block select the first child again
+            else{
+                Blockly.selected.childBlocks_[Blockly.Accessibility.Navigation.inlineCount].select();
+            }
+        }
   }
 };
 
@@ -452,34 +461,45 @@ Blockly.Accessibility.Navigation.insideBlockTraverseIn = function(){
 * When in the inside statement block allows you to traverse out through the child nodes
 * Precondition: must be in edit mode which should select the first child block
 */
-Blockly.Accessibility.Navigation.insideBlockTraverseOut = function(){
-  // if (Blockly.selected == null) {
-  //     console.log('Cannot traverse out from here.');
-  //     return;
-  // }
-  // var parentStatementBlock = this.findTopStatementBlock(Blockly.selected);
-  // this.getAllChildrenOfStatement(parentStatementBlock);
-  // for(var i = 0; i < this.statementChildren.length; i++){
-  //     if(Blockly.selected == this.statementChildren[i] && Blockly.selected != this.statementChildren[0]){
-  //         this.statementChildren[i - 1].select();
-  //         this.statementChildren = []
-  //         return;
-  //     }
-  //     else{
-  //         console.log("Cannot traverse out from here");
-  //     }
-  // }
-  // this.statementChildren = [];
-
-
-  if(Blockly.selected.childBlocks_.length > 2){
-        //Blockly.selected.childBlocks_[Blockly.selected.childBlocks_.length-1].select();
+Blockly.Accessibility.Navigation.inlineBlockTraverseOut = function(){
+ 
+   //select childblocks of currently selected block
+  if(Blockly.selected.childBlocks_.length < Blockly.Accessibility.Navigation.inlineCount){
+        console.log("if");
+        Blockly.selected.childBlocks_[Blockly.Accessibility.Navigation.inlineCount].select(); 
+        Blockly.Accessibility.Navigation.inlineCount--;
     }
-  else{
-    //console.log(Blockly.selected);
-    //Blockly.selected.parentBlock_.childBlocks_[0].select();
-  }
 
+   //select the first childblock
+   else if(0 == Blockly.Accessibility.Navigation.inlineCount){
+        console.log("else if");
+        Blockly.selected.childBlocks_[Blockly.Accessibility.Navigation.inlineCount].select(); 
+        Blockly.Accessibility.Navigation.inlineCount == Blockly.selected.childBlocks_.length-1;
+    }
+ 
+  //select childblocks of the parent block (example [(1) = (2)]  with 1 selected select 2 and vice versa)
+  else{
+        try{
+            console.log("try");
+            Blockly.selected.parentBlock_.childBlocks_[Blockly.Accessibility.Navigation.inlineCount].select();
+            Blockly.Accessibility.Navigation.inlineCount--;
+        }
+        //loop through children
+        catch(e){
+            console.log("cannot move further inwards");
+            Blockly.Accessibility.Navigation.inlineCount = Blockly.selected.childBlocks_.length-1;
+
+            //if block has a parent
+            if(Blockly.selected.parentBlock_){
+                 Blockly.selected.parentBlock_.childBlocks_[Blockly.Accessibility.Navigation.inlineCount].select(); 
+                 Blockly.Accessibility.Navigation.inlineCount--; 
+            }  
+            //if on the top block select the first child again
+            else{
+                Blockly.selected.childBlocks_[Blockly.Accessibility.Navigation.inlineCount].select();
+            }
+        }
+  }
 };
 
 /**

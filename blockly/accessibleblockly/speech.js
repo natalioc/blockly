@@ -199,14 +199,13 @@ Blockly.Accessibility.Speech.changeString = function(block){
 
 		//only update the array if the field is defined
 		fieldValArr[i] = this.fieldNameChange(fieldValArr[i], fieldBlcArr[i].getAttribute("type"));
-   
+   	
 	}
 
 	//=========Fill in all the fields=========================================================================
 	//go through strArr and if it has ' ' replace it with field value at valueIndex
 	var valueIndex = 0;
 	
-
 	for(var i = 0; i < strArr.length; i++){
 		var re = /'([^']*)'/; //gets all values indicated by ' ' with anything in between
  		
@@ -215,11 +214,13 @@ Blockly.Accessibility.Speech.changeString = function(block){
 				strArr[0] = strArr[0].replace(re,fieldValArr[i]);
 				valueIndex++
 			}
+			strArr[1] = strArr[1].replace(re,fieldValArr[2]);
+			valueIndex++
+			
 		}
 
 		//if it contains ''
 		else if(re.test(strArr[i])){
-				console.log("IN ELSE IF");
 				strArr[i] = strArr[i].replace(re,fieldValArr[valueIndex]);
 				valueIndex ++;
 		}
@@ -228,7 +229,6 @@ Blockly.Accessibility.Speech.changeString = function(block){
 
 	//===========combine multiple block strings if necessary=========================================================
 	if(blockArr.length > 0){
-		console.log(strArr);
 		var re = (/\([^\)]+\)/g); //gets all blocks indicated by ()
 		var match;
 		//Loop through the string array and update the first value every time 
@@ -590,7 +590,7 @@ Blockly.Accessibility.Speech.blockToString = function(type, disabled){
             this.result = "count with 'i' from (1) to (10) by (1)";
             break;
         case "controls_forEach":
-            this.result = "for each item 'i' in list ()";
+            this.result = "for each item 'i' in list ( )";
             break;
         case "controls_flow_statements":
             this.result = "'break out' of loop";
@@ -605,7 +605,7 @@ Blockly.Accessibility.Speech.blockToString = function(type, disabled){
             this.result = "'square root' of (A)";
             break; 
         case "math_trig":
-            this.result = "'trig' ()";
+            this.result = "'trig' ( )";
             break; 
         case "math_constant":
             this.result = "'pi and constants'";
