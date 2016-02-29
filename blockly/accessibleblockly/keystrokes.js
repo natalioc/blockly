@@ -314,6 +314,7 @@ document.onkeydown = document.onkeyup = function(e){
 
 		else if(map[27]){ //Escape
 			console.log('Escape key pressed.');
+			console.log(Blockly.selected);
 			Blockly.Accessibility.InBlock.clearHighlights();
 			document.activeElement.blur();
 
@@ -373,8 +374,10 @@ document.onkeydown = document.onkeyup = function(e){
 			document.getElementById("blockReader").focus();
 		}
 
-		else if(map[74]){//J jump into workspace 
+		else if(map[74]){//J jump into workspace or top block of workspace
 
+			var topBlocks = Blockly.mainWorkspace.getTopBlocks();
+			topBlocks[0].select();
 
 		}
 

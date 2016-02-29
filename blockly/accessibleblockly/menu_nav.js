@@ -190,6 +190,14 @@ Blockly.Toolbox.TreeNode.prototype.onKeyDown = function(e) {
       e.preventDefault();
       break;
 
+    //ESCAPE
+    //removes highlight if escape is pressed while navigating the menu
+    case 27:
+        var test = Blockly.Accessibility.InBlock.storedHighlight;
+        Blockly.Connection.removeHighlight(test);
+        Blockly.Accessibility.Keystrokes.prototype.isConnecting = false;
+        break;
+
     //W
     case 87:
 
