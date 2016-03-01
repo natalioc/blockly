@@ -110,7 +110,7 @@ Blockly.Accessibility.InBlock.selectNext = function () {
         this.connectionsIndex = 0;
     }
 
-    console.log(this.selectionList[this.connectionsIndex]);
+    //console.log(this.selectionList[this.connectionsIndex]);
 
     Blockly.Accessibility.Speech.readConnection(this.selectionList[this.connectionsIndex].name, this.connectionsIndex);
 
@@ -351,7 +351,6 @@ Blockly.Accessibility.InBlock.addBlock = function () {
 */
 Blockly.Accessibility.InBlock.disableIncompatibleBlocks = function(){
     if(this.storedConnection){
-
         if(this.storedConnection.check_ != null){
             var toolboxChoices = Blockly.Accessibility.MenuNav.getToolboxChoices();  
             for(var i = 0; i < toolboxChoices.length; i++) {
@@ -388,10 +387,11 @@ Blockly.Accessibility.InBlock.disableIncompatibleBlocks = function(){
                 
                 else if(this.storedConnection.type == 3){
                     if(toolboxChoices[i].previousConnection != null){
+
                         if(toolboxChoices[i].previousConnection.check_ != null){
+
                             //if their compatibilites don't match up
                             if(toolboxChoices[i].previousConnection.check_[0] != this.storedConnection.check_[0]){
-
                                 toolboxChoices[i].disabled = true;
                                 toolboxChoices[i].updateDisabled();
 
@@ -469,12 +469,11 @@ Blockly.Accessibility.InBlock.disableIncompatibleBlocks = function(){
             }
         }
         else{
-            var toolboxChoices = Blockly.Accessibility.MenuNav.getToolboxChoices();  
+            var toolboxChoices = Blockly.Accessibility.MenuNav.getToolboxChoices(); 
             for(var i = 0; i < toolboxChoices.length; i++) {
                 if(this.storedConnection.type == 3){
                     if(toolboxChoices[i].outputConnection != null){ 
                         if(toolboxChoices[i].outputConnection.type == 1 || 2){
-
                             toolboxChoices[i].disabled = true;
                             toolboxChoices[i].updateDisabled();
 
@@ -489,7 +488,6 @@ Blockly.Accessibility.InBlock.disableIncompatibleBlocks = function(){
                 else if(this.storedConnection.type == 4){
                     if(toolboxChoices[i].outputConnection != null){ 
                         if(toolboxChoices[i].outputConnection.type == 1 || 2){
-
                             toolboxChoices[i].disabled = true;
                             toolboxChoices[i].updateDisabled();
 

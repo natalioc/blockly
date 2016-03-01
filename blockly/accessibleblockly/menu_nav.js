@@ -193,8 +193,8 @@ Blockly.Toolbox.TreeNode.prototype.onKeyDown = function(e) {
     //ESCAPE
     //removes highlight if escape is pressed while navigating the menu
     case 27:
-        var test = Blockly.Accessibility.InBlock.storedHighlight;
-        Blockly.Connection.removeHighlight(test);
+        var highlight = Blockly.Accessibility.InBlock.storedHighlight;
+        Blockly.Connection.removeHighlight(highlight);
         Blockly.Accessibility.Keystrokes.prototype.isConnecting = false;
         break;
 
@@ -213,6 +213,7 @@ Blockly.Toolbox.TreeNode.prototype.onKeyDown = function(e) {
         //if not the top category
         if(previousSibling != null){
            previousSibling.select();
+           Blockly.Accessibility.InBlock.disableIncompatibleBlocks();
            document.getElementById(previousSibling.id_).focus();
         }
 
@@ -231,9 +232,11 @@ Blockly.Toolbox.TreeNode.prototype.onKeyDown = function(e) {
       else{
         var nextSibling = this.getNextSibling(this.selected);
 
+
         //if not the bottome category
         if(nextSibling != null){
              nextSibling.select();
+             Blockly.Accessibility.InBlock.disableIncompatibleBlocks();
              document.getElementById(nextSibling.id_).focus();
         }
        
@@ -256,6 +259,7 @@ Blockly.Toolbox.TreeNode.prototype.onKeyDown = function(e) {
     case 68:
         this.select();
         this.setExpanded(true);
+        Blockly.Accessibility.InBlock.disableIncompatibleBlocks();
         Blockly.Accessibility.MenuNav.prototype.menuNavDown();
         menuVars.blockSelected = true;
     break;
@@ -265,6 +269,7 @@ Blockly.Toolbox.TreeNode.prototype.onKeyDown = function(e) {
         //open the flyout
         if(!this.getExpanded()){
             this.select();
+            Blockly.Accessibility.InBlock.disableIncompatibleBlocks();
         }
 
        //selecting and connecting blocks
@@ -322,6 +327,10 @@ Blockly.Toolbox.TreeNode.prototype.onKeyDown = function(e) {
  */
 Blockly.Flyout.prototype.hide = function() {
 menuVars.opened = false;
+
+ //remove highlight
+ var highlight = Blockly.Accessibility.InBlock.storedHighlight;
+ Blockly.Connection.removeHighlight(highlight);
 
   if (!this.isVisible()) {
     return;
@@ -558,6 +567,7 @@ Blockly.Procedures.flyoutCategory = function (blocks, gaps, margin, workspace) {
  *     Variables and procedures have a custom set of blocks.
  */
 Blockly.Flyout.prototype.show = function(xmlList){
+    menuVars.currentFlyoutArr = [];
     menuVars.opened    = true;
     menuVars.oldLength = menuVars.flyoutArr.length; //update the length of the last array 
 
@@ -583,8 +593,7 @@ Blockly.Flyout.prototype.show = function(xmlList){
     //       // console.log(toolboxChoices[1]);
     //     }
     // }
-     var toolboxChoices = Blockly.Accessibility.MenuNav.getToolboxChoices();  
-    console.log(toolboxChoices);
+
    
 
 
@@ -622,6 +631,7 @@ Blockly.Flyout.prototype.show = function(xmlList){
                     /** @type {!Blockly.Workspace} */(this.workspace_), xml);
                 blocks.push(block);
                 menuVars.flyoutArr.push(block);
+                menuVars.currentFlyoutArr.push(block);
                 gaps.push(margin * 3);
             }
         }
@@ -697,6 +707,7 @@ Blockly.Flyout.prototype.show = function(xmlList){
     this.reflowWrapper_ = Blockly.bindEvent_(this.workspace_.getCanvas(),
     'blocklyWorkspaceChange', this, this.reflow);
     this.workspace_.fireChangeEvent();
+
 
 };
 
