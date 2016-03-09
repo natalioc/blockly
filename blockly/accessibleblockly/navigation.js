@@ -396,7 +396,7 @@ Blockly.Accessibility.Navigation.traverseDown = function() {
 
     // Null check
     if (Blockly.selected == null) {
-        Blockly.Accessibility.Speech.Say('Cannot move further down from here.');
+        //Blockly.Accessibility.Speech.Say('Cannot move further down from here.');
         return;
     }
 
@@ -405,10 +405,11 @@ Blockly.Accessibility.Navigation.traverseDown = function() {
         Blockly.selected.nextConnection.targetConnection.sourceBlock_.select();
     }
     else {
-        //  Otherwise just report that you've hit the bottom.
-        Blockly.Accessibility.Speech.Say('Cannot move further down from here.');
-
-
+        // if not connecting youve hit the bottom
+        if(!Blockly.Accessibility.InBlock.storedConnection){
+            Blockly.Accessibility.Speech.Say('Cannot move further down from here.');
+        }
+        
         // Check to make sure we're on the first layer before doing anything.
         if (this.currentNode == this.findBottom(this.getOutermostNode(this.currentNode))) {
             this.nextContainer();

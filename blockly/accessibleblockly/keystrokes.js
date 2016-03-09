@@ -131,30 +131,29 @@ document.onkeydown = document.onkeyup = function(e){
 		else if(map[13]){ //Enter
 
 
-			
+			var selList = Blockly.Accessibility.InBlock.selectionList;
+			var cIndex  = Blockly.Accessibility.InBlock.connectionsIndex;
+			var conName  = selList[cIndex].name;
+			//console.log(selList[cIndex].name);
 
+			//dropdown menues
+			if(conName == "OP" || conName == "NUM" ){
+				Blockly.Accessibility.InBlock.enterSelected();
+				keyboardState = 'hotkeyMode';
+				Blockly.Accessibility.Speech.Say("Edit Selected.");
+			}
+			//everything else
+			else{
 
-		 	try { // Try block in case something breaks, we still default back to hotkeymode
 				Blockly.Accessibility.InBlock.selectConnection();
 				Blockly.Accessibility.InBlock.enterCurrentBlock();
-		 		Blockly.Accessibility.InBlock.enterSelected();
-			}
-			catch(e){
-				console.log(e);
-			}
-		    finally {
-		    	//Blockly.Accessibility.Keystrokes.prototype.isConnecting = true;
+				Blockly.Accessibility.InBlock.enterSelected();
+
+				Blockly.Accessibility.Keystrokes.prototype.isConnecting = true;
 		    	keyboardState ='hotkeyMode';//prevent getting stuck on same block
-		    	var highlight = Blockly.Accessibility.InBlock.storedHighlight;
-           		Blockly.Connection.removeHighlight(highlight);
-		    	
-		 	}
 
-
-		 	
-		 
-		 
-		   
+		    	Blockly.Accessibility.Speech.Say("Connection Selected");
+			}
 
 		    //default select the first category in the menu **debating keeping this or not**
 		    //var firstCategory = document.getElementById(":1");
