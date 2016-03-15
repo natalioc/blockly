@@ -289,10 +289,12 @@ Blockly.Toolbox.TreeNode.prototype.onKeyDown = function(e) {
 
             //put block on workspace unconnected
             else if(!Blockly.Accessibility.Keystrokes.prototype.isConnecting && menuVars.blockSelected){
-
+			
+			  /**CHECK the workspace here so new blocks dont automatically default to (0,0)**/
               menuVars.blockSelected  = false;
               this.setExpanded(false);
               this.getTree().setSelectedItem(null);
+			  console.log("Block placed in the work area");
 
               Blockly.Accessibility.MenuNav.flyoutToWorkspace();
               document.getElementById("blockReader").focus();

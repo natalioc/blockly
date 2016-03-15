@@ -136,7 +136,7 @@ document.onkeydown = document.onkeyup = function(e){
 			var conName  = selList[cIndex].name;
 			//console.log(selList[cIndex].name);
 
-			//dropdown menues
+			//dropdown menus
 			if(conName == "OP" || conName == "NUM" ){
 				Blockly.Accessibility.InBlock.enterSelected();
 				keyboardState = 'hotkeyMode';
