@@ -440,9 +440,8 @@ Blockly.Accessibility.Navigation.inlineBlockTraverseIn = function(){
 	//for blocks with multiple in line blocks
     //select childblocks of the parent block (example [(1) = (2)]  with 1 selected select 2 and vice versa)
     else{
-		var childBlock = Blockly.selected.parentBlock_.inputList[Blockly.Accessibility.Navigation.inlineCount].connection.targetConnection.sourceBlock_; 
         try{
-			childBlock.select();
+			Blockly.selected.parentBlock_.inputList[Blockly.Accessibility.Navigation.inlineCount].connection.targetConnection.sourceBlock_.select();
             Blockly.Accessibility.Navigation.inlineCount++;
         }
         //loop through children
@@ -452,7 +451,7 @@ Blockly.Accessibility.Navigation.inlineBlockTraverseIn = function(){
 
             //if block has a parent
             if(Blockly.selected.parentBlock_){
-				 childBlock.select(); 
+				 Blockly.selected.parentBlock_.inputList[Blockly.Accessibility.Navigation.inlineCount].connection.targetConnection.sourceBlock_.select(); 
                  Blockly.Accessibility.Navigation.inlineCount++; 
             }  
             //if on the top block select the first child again
