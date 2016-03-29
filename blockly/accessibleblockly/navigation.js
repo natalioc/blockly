@@ -302,41 +302,50 @@ Blockly.Accessibility.Navigation.jumpToID = function(id) {
 Blockly.Accessibility.Navigation.traverseOut = function () {
 
     // Null check
-    if (Blockly.selected == null) {
+    if (!Blockly.selected) {
         console.log('Cannot traverse outwards from here.');
         Blockly.Accessibility.Speech.Say('Cannot move further outwards from here.');
 
         return;
     }
 
-    // Case where we're looking at an output block.
-    if (Blockly.selected.outputConnection != null) {
-        if (Blockly.selected.outputConnection.targetConnection != null) {
-            Blockly.selected.outputConnection.targetConnection.sourceBlock_.select();
-        }
-        else {
-            console.log('Cannot traverse outwards from here.');
-            Blockly.Accessibility.Speech.Say('Cannot move further outwards from here.');
-        }
-        return;
-
+    var surroundParent = Blockly.selected.getSurroundParent();
+    if(surroundParent){
+        surroundParent.select();
     }
+
+    else{
+        Blockly.Accessibility.Speech.Say('Cannot move further outwards from here');
+    }
+
+    // Case where we're looking at an output block.
+    // if (Blockly.selected.outputConnection != null) {
+    //     if (Blockly.selected.outputConnection.targetConnection != null) {
+    //         Blockly.selected.outputConnection.targetConnection.sourceBlock_.select();
+    //     }
+    //     else {
+    //         console.log('Cannot traverse outwards from here.');
+    //         Blockly.Accessibility.Speech.Say('Cannot move further outwards from here.');
+    //     }
+    //     return;
+
+    //}
 
     // Elaborate series of checks for nulls, but if it comes out to be true then that means this is inside of a statement.
-    if (
-        Blockly.selected.previousConnection != null &&
-        Blockly.selected.previousConnection.targetConnection != null && (
-        Blockly.selected.previousConnection.targetConnection.sourceBlock_.nextConnection == null || //If any of the following are null, then we're safe
-        Blockly.selected.previousConnection.targetConnection.sourceBlock_.nextConnection.targetConnection == null ||
-        Blockly.selected.previousConnection.targetConnection.sourceBlock_.nextConnection.targetConnection.sourceBlock_ != Blockly.selected)) {
+    // if (
+    //     Blockly.selected.previousConnection != null &&
+    //     Blockly.selected.previousConnection.targetConnection != null && (
+    //     Blockly.selected.previousConnection.targetConnection.sourceBlock_.nextConnection == null || //If any of the following are null, then we're safe
+    //     Blockly.selected.previousConnection.targetConnection.sourceBlock_.nextConnection.targetConnection == null ||
+    //     Blockly.selected.previousConnection.targetConnection.sourceBlock_.nextConnection.targetConnection.sourceBlock_ != Blockly.selected)) {
 
 
-            Blockly.selected.previousConnection.targetConnection.sourceBlock_.select();
+    //         Blockly.selected.previousConnection.targetConnection.sourceBlock_.select();
 
-    }
-    else {
-        Blockly.Accessibility.Speech.Say('Cannot move further outwards from here.');
-    }
+    // }
+    // else {
+    //     Blockly.Accessibility.Speech.Say('Cannot move further outwards from here.');
+    // }
 };
 
 /**
@@ -354,6 +363,7 @@ Blockly.Accessibility.Navigation.traverseIn = function() {
     if(Blockly.selected.childBlocks_ != null && Blockly.selected.childBlocks_.length > 0){
       for (var i = 0; i < Blockly.selected.childBlocks_.length; i++) {  
         if(Blockly.selected.childBlocks_[i].previousConnection != null && Blockly.selected.childBlocks_[i].previousConnection.type == 4){
+            
             Blockly.selected.childBlocks_[i].select();
             return;
         }
