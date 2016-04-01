@@ -180,7 +180,7 @@ Blockly.Toolbox.TreeNode.prototype.onKeyDown = function(e) {
 
   var handled = true; //used for preventing the screen from scrolling
   switch (e.keyCode) {
-    //prevent keys from skipping to categories
+    //prevent default letter keys from skipping to categories
     case 77:
     case 76:
     case 84:
@@ -287,16 +287,34 @@ Blockly.Toolbox.TreeNode.prototype.onKeyDown = function(e) {
               document.getElementById("blockReader").focus();
             }
 
-            //put block on workspace unconnected
+            //put block on workspace connected to the last container
             else if(!Blockly.Accessibility.Keystrokes.prototype.isConnecting && menuVars.blockSelected){
 			
 			  /**CHECK the workspace here so new blocks dont automatically default to (0,0)**/
               menuVars.blockSelected  = false;
               this.setExpanded(false);
               this.getTree().setSelectedItem(null);
-			  console.log("Block placed in the work area");
 
-              Blockly.Accessibility.MenuNav.flyoutToWorkspace();
+              var containers = Blockly.mainWorkspace.getTopBlocks();
+              var curBlock = menuVars.flyoutArr[menuVars.prevIndex];
+              if(!curBlock.nextConnection){
+
+                if(curBlock.type == "procedures_defnoreturn" || curBlock.type == "procedures_defreturn"){
+                    Blockly.Accessibility.MenuNav.moveToBottom();
+                }
+                else{
+                    Blockly.Accessibility.Speech.Say("This block should be connected to another block");
+                }
+              }
+
+              else if(containers.length == 0){
+                Blockly.Accessibility.MenuNav.flyoutToWorkspace();
+              }
+
+              else{
+                 var menuBlock = Blockly.selected;
+                 Blockly.Accessibility.MenuNav.connectToLastBlock(menuBlock);
+              }
               document.getElementById("blockReader").focus();
 
             }
@@ -741,7 +759,6 @@ Blockly.Flyout.prototype.show = function(xmlList){
 };
 
 Blockly.Accessibility.MenuNav.flyoutToWorkspace = function(){
-    Blockly.Accessibility.Keystrokes.prototype.isConnecting = false;
 
     var workspaceBlocksString = "";//text of what is on the workspace
     var workspaceBlocks;           //xml of what is on the workspace
@@ -755,6 +772,21 @@ Blockly.Accessibility.MenuNav.flyoutToWorkspace = function(){
     block.initSvg();
     block.render();
     block.select();
+
+    //The following is used to put new, unconnected blocks at the bottom of the workspace
+    // var topBlocks = Blockly.mainWorkspace.getTopBlocks();
+    // var index = topBlocks.length-1;
+    // var totalHeight = -topBlocks[0].height/2;
+ 
+    // if(!Blockly.selectedConnection && index>0){
+    //     for(var i = 0; i< topBlocks.length-1; i++){
+    //         totalHeight += topBlocks[i].height;
+    //     }
+    //     block.moveBy(0, totalHeight+32);
+    // }
+
+    Blockly.Accessibility.Keystrokes.prototype.isConnecting = false;
+
     
     return block;
     //var workspace = Blockly.Generator.prototype.workspaceToCode();
@@ -883,6 +915,52 @@ Blockly.Variables.flyoutCategory = function (blocks, gaps, margin, workspace) {
         }
     }
 };
+
+//when adding a block and not connecting, add to the last statement on the workspace
+Blockly.Accessibility.MenuNav.connectToLastBlock = function(menuBlock){
+    Blockly.mainWorkspace.addTopBlock(menuBlock);
+    var containers = Blockly.mainWorkspace.getTopBlocks(true);
+    var bottom = containers.length-1;
+    
+    //functions cant connect to statement blocks
+   if(containers[bottom].type == "procedures_defreturn" || containers[bottom].type == "procedures_defnoreturn"){
+        Blockly.Accessibility.MenuNav.moveToBottom();
+    }
+    else{ 
+        Blockly.Accessibility.MenuNav.flyoutToWorkspace();
+        var newBlock = Blockly.selected;
+        Blockly.Accessibility.InBlock.enterCurrentBlock();
+        Blockly.Accessibility.InBlock.selectNext();
+        Blockly.Accessibility.InBlock.selectConnection();
+
+        containers[bottom].select();
+
+        Blockly.Accessibility.InBlock.enterCurrentBlock();
+        Blockly.Accessibility.InBlock.selectConnection();
+        Blockly.Accessibility.InBlock.enterSelected();
+
+        newBlock.select();
+    }
+
+    
+
+}
+
+//moves a newly added block to the bottom of the workspace
+Blockly.Accessibility.MenuNav.moveToBottom = function(){
+    
+    Blockly.Accessibility.MenuNav.flyoutToWorkspace();
+
+    var containers = Blockly.mainWorkspace.getTopBlocks(true);
+    var bottom = containers.length-1;
+    var totalHeight = 0;
+
+    for(var i = 0; i < containers.length-1; i++){
+        totalHeight += containers[i].height;
+    }
+
+    Blockly.selected.moveBy(0, totalHeight+25);
+}
 
 
 

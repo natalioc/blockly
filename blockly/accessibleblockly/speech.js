@@ -640,7 +640,6 @@ Blockly.Accessibility.Speech.blockToString = function(type, disabled){
         case "text_join":
             this.result = "Create text with '2 or more' items";
 
-            console.log(Blockly.selected.itemCount_);
         	//loop through blocks to add inputs dynamically
         	for(var i = 0; i < Blockly.selected.itemCount_+1; i++){
         		this.result += " ,() ";

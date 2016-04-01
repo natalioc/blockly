@@ -393,7 +393,15 @@ Blockly.Accessibility.Navigation.traverseUp = function() {
         Blockly.Accessibility.Speech.Say('Cannot move further up from here');
 
         if (this.currentNode == this.getOutermostNode(this.currentNode)) {
-            this.previousContainer();
+
+            var containers = Blockly.mainWorkspace.getTopBlocks(true);
+
+            for(var i = 0; i < containers.length; i++){
+                if(containers[i] == Blockly.selected && containers[i-1]){
+                    containers[i-1].select();
+                }
+            }
+
         }
     }
 
@@ -422,7 +430,14 @@ Blockly.Accessibility.Navigation.traverseDown = function() {
         
         // Check to make sure we're on the first layer before doing anything.
         if (this.currentNode == this.findBottom(this.getOutermostNode(this.currentNode))) {
-            this.nextContainer();
+
+            var containers = Blockly.mainWorkspace.getTopBlocks(true);
+
+            for(var i = 0; i < containers.length; i++){
+                if(containers[i] == Blockly.selected && containers[i+1]){
+                    containers[i+1].select();
+                }
+            }
         }
     }
 
@@ -480,14 +495,14 @@ Blockly.Accessibility.Navigation.inlineBlockTraverseOut = function(){
  
    //select childblocks of currently selected block
   if(Blockly.selected.childBlocks_.length < Blockly.Accessibility.Navigation.inlineCount){
-        console.log("if");
+        
         Blockly.selected.childBlocks_[Blockly.Accessibility.Navigation.inlineCount].select(); 
         Blockly.Accessibility.Navigation.inlineCount--;
     }
 
    //select the first childblock
    else if(0 == Blockly.Accessibility.Navigation.inlineCount){
-        console.log("else if");
+
         Blockly.selected.childBlocks_[Blockly.Accessibility.Navigation.inlineCount].select(); 
         Blockly.Accessibility.Navigation.inlineCount == Blockly.selected.childBlocks_.length-1;
     }
@@ -495,13 +510,13 @@ Blockly.Accessibility.Navigation.inlineBlockTraverseOut = function(){
   //select childblocks of the parent block (example [(1) = (2)]  with 1 selected select 2 and vice versa)
   else{
         try{
-            console.log("try");
+
             Blockly.selected.parentBlock_.childBlocks_[Blockly.Accessibility.Navigation.inlineCount].select();
             Blockly.Accessibility.Navigation.inlineCount--;
         }
         //loop through children
         catch(e){
-            console.log("cannot move further inwards");
+
             Blockly.Accessibility.Navigation.inlineCount = Blockly.selected.childBlocks_.length-1;
 
             //if block has a parent
@@ -519,6 +534,7 @@ Blockly.Accessibility.Navigation.inlineBlockTraverseOut = function(){
 
 /**
  * Jumps you to the next container based on the one you are currently in
+ * DEPRECATED
  */
 Blockly.Accessibility.Navigation.nextContainer = function () {
     // Compare the region you're in to all of the other ones
@@ -543,6 +559,7 @@ Blockly.Accessibility.Navigation.nextContainer = function () {
 
 /**
  * Jumps you to the previous container based on the one you are currently in
+ * DEPRECATED
  */
 Blockly.Accessibility.Navigation.previousContainer = function () {
     // Compare the region you're in to all of the other ones
@@ -610,6 +627,7 @@ Blockly.Accessibility.Navigation.findBottom = function(myNode) {
 
 /**
  * Finds all of the containers in the current xmlstring and returns them.
+ * DEPRECATED
  */
 Blockly.Accessibility.Navigation.findContainers = function () {
 
@@ -652,6 +670,8 @@ Blockly.Accessibility.Navigation.updateSelection = function() {
  * Gets a specific node based on the block id.
  * @param {int} the block id number
  * @return {node} the block node
+ * DEPRECATED blocks no longer have id's after googles update
+
  */
 Blockly.Accessibility.Navigation.getBlockNodeById = function(id) {
 
