@@ -233,9 +233,7 @@ Blockly.Accessibility.Navigation.jumpToTopOfSection = function() {
         return;
     }
 
-    console.log('Jumping to top of section.');
     this.currentNode = Blockly.Accessibility.Navigation.findTop(this.currentNode);
-    console.log('Going to ' + this.currentNode.nodeName + ' with id ' + this.currentNode.getAttribute('id') + ' via cycle.');
     Blockly.Accessibility.Navigation.updateSelection();
 };
 
@@ -249,9 +247,7 @@ Blockly.Accessibility.Navigation.jumpToBottomOfSection = function () {
         return;
     }
 
-    console.log('Jumping to bottom of section.');
     this.currentNode = Blockly.Accessibility.Navigation.findTop(this.currentNode);
-    console.log('Going to ' + this.currentNode.nodeName + ' with id ' + this.currentNode.getAttribute('id') + ' via cycle.');
     Blockly.Accessibility.Navigation.updateSelection();
 };
 
@@ -261,13 +257,11 @@ Blockly.Accessibility.Navigation.jumpToBottomOfSection = function () {
  */
 Blockly.Accessibility.Navigation.jumpToContainer = function(containerNumber) {
 
-    console.log('Jumping to container ' + containerNumber);
     var containers = Blockly.Accessibility.Navigation.findContainers();
 
     // Jump to the appropriate section.
     if (containers[containerNumber]) {
         this.currentNode = containers[containerNumber];
-        console.log('Going to ' + this.currentNode.nodeName + ' with id ' + this.currentNode.getAttribute('id'));
         Blockly.Accessibility.Navigation.updateSelection();
         return;
     }
@@ -303,7 +297,7 @@ Blockly.Accessibility.Navigation.traverseOut = function () {
 
     // Null check
     if (!Blockly.selected) {
-        console.log('Cannot traverse outwards from here.');
+        //console.log('Cannot traverse outwards from here.');
         Blockly.Accessibility.Speech.Say('Cannot move further outwards from here.');
 
         return;
@@ -393,12 +387,15 @@ Blockly.Accessibility.Navigation.traverseUp = function() {
         Blockly.Accessibility.Speech.Say('Cannot move further up from here');
 
         if (this.currentNode == this.getOutermostNode(this.currentNode)) {
+            console.log("in up if");
 
             var containers = Blockly.mainWorkspace.getTopBlocks(true);
+            console.log(containers);
 
             for(var i = 0; i < containers.length; i++){
                 if(containers[i] == Blockly.selected && containers[i-1]){
                     containers[i-1].select();
+                    return;
                 }
             }
 
@@ -429,13 +426,18 @@ Blockly.Accessibility.Navigation.traverseDown = function() {
         }
         
         // Check to make sure we're on the first layer before doing anything.
-        if (this.currentNode == this.findBottom(this.getOutermostNode(this.currentNode))) {
-
+        //if (this.currentNode == this.findBottom(this.getOutermostNode(this.currentNode))) {
+        if (this.currentNode == this.getOutermostNode(this.currentNode)) {
             var containers = Blockly.mainWorkspace.getTopBlocks(true);
 
             for(var i = 0; i < containers.length; i++){
+
                 if(containers[i] == Blockly.selected && containers[i+1]){
                     containers[i+1].select();
+                    return;
+                }
+                else{
+
                 }
             }
         }

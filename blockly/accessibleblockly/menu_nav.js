@@ -177,7 +177,6 @@ Blockly.Toolbox.TreeNode.prototype.initAccessibility = function() {
 * @param {event}
 */
 Blockly.Toolbox.TreeNode.prototype.onKeyDown = function(e) {
-
   var handled = true; //used for preventing the screen from scrolling
   switch (e.keyCode) {
     //prevent default letter keys from skipping to categories
@@ -266,6 +265,7 @@ Blockly.Toolbox.TreeNode.prototype.onKeyDown = function(e) {
 
     //ENTER
     case 13:
+
         //open the flyout
         if(!this.getExpanded()){
             this.select();
@@ -277,9 +277,8 @@ Blockly.Toolbox.TreeNode.prototype.onKeyDown = function(e) {
 
             //connect to a block on the workspace
             if(Blockly.Accessibility.Keystrokes.prototype.isConnecting && menuVars.blockSelected){
-
               Blockly.Accessibility.Keystrokes.prototype.isConnecting = false;
-              menuVars.blockSelected  = false;
+              menuVars.blockSelected = false;
               this.setExpanded(false);
               this.getTree().setSelectedItem(null);
 
@@ -289,18 +288,25 @@ Blockly.Toolbox.TreeNode.prototype.onKeyDown = function(e) {
 
             //put block on workspace connected to the last container
             else if(!Blockly.Accessibility.Keystrokes.prototype.isConnecting && menuVars.blockSelected){
-			
-			  /**CHECK the workspace here so new blocks dont automatically default to (0,0)**/
+              
               menuVars.blockSelected  = false;
               this.setExpanded(false);
               this.getTree().setSelectedItem(null);
+              
+              /** move or connect new blocks so they dont automatically default to (0,0)**/
+              var containers = Blockly.mainWorkspace.getTopBlocks(true);
+              var curBlock = menuVars.flyoutArr[menuVars.currIndex];
+              var menuBlock = Blockly.selected;
 
-              var containers = Blockly.mainWorkspace.getTopBlocks();
-              var curBlock = menuVars.flyoutArr[menuVars.prevIndex];
+              //if not a statement block
               if(!curBlock.nextConnection){
-
+                //handle procedure(function) blocks
                 if(curBlock.type == "procedures_defnoreturn" || curBlock.type == "procedures_defreturn"){
                     Blockly.Accessibility.MenuNav.moveToBottom();
+                    //if not 
+                    if(containers.length > 0) {
+                      Blockly.mainWorkspace.addTopBlock(menuBlock);
+                    }
                 }
                 else{
                     Blockly.Accessibility.Speech.Say("This block should be connected to another block");
@@ -312,7 +318,6 @@ Blockly.Toolbox.TreeNode.prototype.onKeyDown = function(e) {
               }
 
               else{
-                 var menuBlock = Blockly.selected;
                  Blockly.Accessibility.MenuNav.connectToLastBlock(menuBlock);
               }
               document.getElementById("blockReader").focus();
@@ -847,12 +852,12 @@ Blockly.Accessibility.MenuNav.addNext = function(){
     var partTwo = textInput.substring(44, textInput.length);//after the xml declaration
 
     var blockString = '<statement name="DO0">' + partOne + partTwo + '</statement>'; //the complete block str from the flyout that we want to add
-    console.log(blockString);
+    //console.log(blockString);
 
     var workspaceBlocks       = Blockly.Xml.workspaceToDom(Blockly.mainWorkspace);//the workspace as an xml doc
     var workspaceBlocksString = Blockly.Xml.domToText(workspaceBlocks);           //the text version of what is currently on the workspace
     var completeXmlStr        = blockIdStr + blockString + '</block>' + '</xml>';
-    console.log(completeXmlStr);
+    //console.log(completeXmlStr);
 
     var xml = Blockly.Xml.textToDom(completeXmlStr);//take the complete xml string and change to dom
 
@@ -916,19 +921,49 @@ Blockly.Variables.flyoutCategory = function (blocks, gaps, margin, workspace) {
     }
 };
 
-//when adding a block and not connecting, add to the last statement on the workspace
+//=====================================HANDLES ADDING BLOCKS WHEN NOT CONNECTING=============================
+
+/*when adding a block and not connecting, add to the last statement on the workspace
+ *@param menuBlock - the block that is being added to the workspace from the menu
+*/
 Blockly.Accessibility.MenuNav.connectToLastBlock = function(menuBlock){
-    Blockly.mainWorkspace.addTopBlock(menuBlock);
+
     var containers = Blockly.mainWorkspace.getTopBlocks(true);
     var bottom = containers.length-1;
+    var duplicate  = false;
+
+
+    //check for duplicate
+    for(var i = 0; i < containers.length; i++){
+      if(containers[i] == menuBlock){
+        duplicate = true;
+      }
+    }
+
+
     
     //functions cant connect to statement blocks
    if(containers[bottom].type == "procedures_defreturn" || containers[bottom].type == "procedures_defnoreturn"){
+
         Blockly.Accessibility.MenuNav.moveToBottom();
+        //Blockly.mainWorkspace.addTopBlock(containers[bottom-1]); //avoid adding again to the topBlock array
     }
+    //connect to the bottom block
     else{ 
+
         Blockly.Accessibility.MenuNav.flyoutToWorkspace();
+        
         var newBlock = Blockly.selected;
+
+        if(!duplicate){ //check for duplicate
+          Blockly.mainWorkspace.addTopBlock(newBlock);
+        }
+
+        containers = Blockly.mainWorkspace.getTopBlocks(true);
+        if(containers[bottom].type == "procedures_defreturn" || containers[bottom].type == "procedures_defnoreturn"){
+          bottom++;
+        }
+
         Blockly.Accessibility.InBlock.enterCurrentBlock();
         Blockly.Accessibility.InBlock.selectNext();
         Blockly.Accessibility.InBlock.selectConnection();
@@ -939,27 +974,22 @@ Blockly.Accessibility.MenuNav.connectToLastBlock = function(menuBlock){
         Blockly.Accessibility.InBlock.selectConnection();
         Blockly.Accessibility.InBlock.enterSelected();
 
-        newBlock.select();
     }
-
-    
-
 }
 
 //moves a newly added block to the bottom of the workspace
 Blockly.Accessibility.MenuNav.moveToBottom = function(){
-    
+
     Blockly.Accessibility.MenuNav.flyoutToWorkspace();
 
     var containers = Blockly.mainWorkspace.getTopBlocks(true);
-    var bottom = containers.length-1;
     var totalHeight = 0;
 
     for(var i = 0; i < containers.length-1; i++){
         totalHeight += containers[i].height;
     }
 
-    Blockly.selected.moveBy(0, totalHeight+25);
+    Blockly.selected.moveBy(0, totalHeight+80);
 }
 
 
