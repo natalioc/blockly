@@ -251,6 +251,16 @@ document.onkeydown = document.onkeyup = function(e){
 			Blockly.Accessibility.Navigation.inlineBlockTraverseOut();
 		}
 
+		else if(map[8]){
+			var containers = Blockly.Accessibility.MenuNav.containersArr;
+
+		    for(var i = 0; i < containers.length; i++){
+		        if(containers[i] == Blockly.selected){
+		            containers.splice(i,1);
+		        }
+		    }
+		}
+
 		else if(map[46]){ //Delete
 			console.log('Delete key pressed.');
 			//Delete the currently selected item
@@ -315,9 +325,12 @@ document.onkeydown = document.onkeyup = function(e){
 		}
 
 		else if(map[74]){//J jump into workspace or top block of workspace
-
-			var topBlocks = Blockly.mainWorkspace.getTopBlocks();
-			topBlocks[0].select();
+  
+			var topBlocks = Blockly.Accessibility.MenuNav.containersArr;
+            
+			if(topBlocks.length>0){
+				topBlocks[0].select();
+			}
 
 		}
 
@@ -350,6 +363,7 @@ document.onkeydown = document.onkeyup = function(e){
 			if(!Blockly.selected) return;
 
 			if(Blockly.selected.id[0] != ":" && !Blockly.Accessibility.Keystrokes.prototype.isConnecting){
+				console.log("traverseUp");
 				Blockly.Accessibility.Navigation.traverseUp();
 			}
 		}

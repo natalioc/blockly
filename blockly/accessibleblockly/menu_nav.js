@@ -34,6 +34,13 @@ Blockly.Accessibility.MenuNav = function(){
 };
 
 /*
+* Array containing the outermost blocks on the workspace
+* Using the built in Blockly function getTopBlocks returns the incorrect top blocks for our purposes
+* (we want all outer statements not just ones at the top of the chain)
+*/
+Blockly.Accessibility.MenuNav.containersArr = [];
+
+/*
 *   Object holding variables for flyout navigation
 *   flyoutArr: everytime the flyout opens the blocks in it are added to this array
 *   oldLengh : size of the array before a new tab opened 
@@ -286,45 +293,64 @@ Blockly.Toolbox.TreeNode.prototype.onKeyDown = function(e) {
               document.getElementById("blockReader").focus();
             }
 
-            //put block on workspace connected to the last container
+            /** move or connect new blocks so they dont automatically default to (0,0)**/
             else if(!Blockly.Accessibility.Keystrokes.prototype.isConnecting && menuVars.blockSelected){
               
+              //reset everything
               menuVars.blockSelected  = false;
               this.setExpanded(false);
               this.getTree().setSelectedItem(null);
               
-              /** move or connect new blocks so they dont automatically default to (0,0)**/
-              var containers = Blockly.mainWorkspace.getTopBlocks(true);
-              var curBlock = menuVars.flyoutArr[menuVars.currIndex];
-              var menuBlock = Blockly.selected;
+              var containers = Blockly.Accessibility.MenuNav.containersArr;
+              var curBlock   = menuVars.flyoutArr[menuVars.prevIndex];
+              var menuBlock  = Blockly.selected;
+              var contLength = Blockly.Accessibility.MenuNav.containersArr.length;
+
 
               //if not a statement block
               if(!curBlock.nextConnection){
+
                 //handle procedure(function) blocks
                 if(curBlock.type == "procedures_defnoreturn" || curBlock.type == "procedures_defreturn"){
+
+                    Blockly.Accessibility.MenuNav.flyoutToWorkspace();
+
+                    var proBlock = Blockly.selected;
+                    Blockly.Accessibility.MenuNav.containersArr.push(proBlock);
                     Blockly.Accessibility.MenuNav.moveToBottom();
-                    //if not 
-                    if(containers.length > 0) {
-                      Blockly.mainWorkspace.addTopBlock(menuBlock);
-                    }
+
                 }
+
                 else{
                     Blockly.Accessibility.Speech.Say("This block should be connected to another block");
                 }
               }
 
+              //first iteration
               else if(containers.length == 0){
+
                 Blockly.Accessibility.MenuNav.flyoutToWorkspace();
+                Blockly.Accessibility.MenuNav.containersArr.push(Blockly.selected);
+
               }
 
               else{
-                 Blockly.Accessibility.MenuNav.connectToLastBlock(menuBlock);
-              }
-              document.getElementById("blockReader").focus();
+                 Blockly.Accessibility.MenuNav.flyoutToWorkspace();
+                 Blockly.Accessibility.MenuNav.containersArr.push(Blockly.selected);
 
+
+                 Blockly.mainWorkspace.addTopBlock(menuBlock);
+
+                 // if(!Blockly.Accessibility.MenuNav.containersArr){
+                 //    Blockly.Accessibility.MenuNav.containersArr = Blockly.mainWorkspace.getTopBlocks(true);
+                 // }
+
+                 Blockly.Accessibility.MenuNav.connectToLastBlock(menuBlock);
+                 Blockly.mainWorkspace.removeTopBlock(menuBlock);
+              }
+              document.getElementById("blockReader").focus(); 
             }
         }   
-        
     break;
 
     default:
@@ -928,68 +954,45 @@ Blockly.Variables.flyoutCategory = function (blocks, gaps, margin, workspace) {
 */
 Blockly.Accessibility.MenuNav.connectToLastBlock = function(menuBlock){
 
-    var containers = Blockly.mainWorkspace.getTopBlocks(true);
-    var bottom = containers.length-1;
-    var duplicate  = false;
+    var containers = Blockly.Accessibility.MenuNav.containersArr;
+    var bottom = Blockly.Accessibility.MenuNav.containersArr.length-1;    
 
-
-    //check for duplicate
-    for(var i = 0; i < containers.length; i++){
-      if(containers[i] == menuBlock){
-        duplicate = true;
-      }
-    }
-
-
-    
-    //functions cant connect to statement blocks
-   if(containers[bottom].type == "procedures_defreturn" || containers[bottom].type == "procedures_defnoreturn"){
-
+     //functions cant connect to statement blocks
+    if(containers[bottom-1].type == "procedures_defreturn" || containers[bottom-1].type == "procedures_defnoreturn"){
         Blockly.Accessibility.MenuNav.moveToBottom();
-        //Blockly.mainWorkspace.addTopBlock(containers[bottom-1]); //avoid adding again to the topBlock array
     }
-    //connect to the bottom block
     else{ 
 
-        Blockly.Accessibility.MenuNav.flyoutToWorkspace();
-        
         var newBlock = Blockly.selected;
-
-        if(!duplicate){ //check for duplicate
-          Blockly.mainWorkspace.addTopBlock(newBlock);
-        }
-
-        containers = Blockly.mainWorkspace.getTopBlocks(true);
-        if(containers[bottom].type == "procedures_defreturn" || containers[bottom].type == "procedures_defnoreturn"){
-          bottom++;
-        }
-
         Blockly.Accessibility.InBlock.enterCurrentBlock();
         Blockly.Accessibility.InBlock.selectNext();
         Blockly.Accessibility.InBlock.selectConnection();
 
-        containers[bottom].select();
+        Blockly.Accessibility.MenuNav.containersArr[bottom-1].select();
 
         Blockly.Accessibility.InBlock.enterCurrentBlock();
         Blockly.Accessibility.InBlock.selectConnection();
         Blockly.Accessibility.InBlock.enterSelected();
 
+        newBlock.select();  
     }
+
 }
 
-//moves a newly added block to the bottom of the workspace
+/*
+*  Moves a newly added block to the bottom of the workspace.
+*  Used for procedure blocks and the block after a procedure block
+*/
 Blockly.Accessibility.MenuNav.moveToBottom = function(){
 
-    Blockly.Accessibility.MenuNav.flyoutToWorkspace();
-
-    var containers = Blockly.mainWorkspace.getTopBlocks(true);
+    var containers = Blockly.Accessibility.MenuNav.containersArr;
     var totalHeight = 0;
 
     for(var i = 0; i < containers.length-1; i++){
         totalHeight += containers[i].height;
     }
 
-    Blockly.selected.moveBy(0, totalHeight+80);
+    Blockly.selected.moveBy(0, totalHeight-3);
 }
 
 

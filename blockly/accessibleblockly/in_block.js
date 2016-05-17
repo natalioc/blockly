@@ -519,7 +519,7 @@ Blockly.Accessibility.InBlock.disableIncompatibleBlocks = function(){
  */
 Blockly.Accessibility.InBlock.bottomConnection = function () {
     // This behaviour is essentially just traversing down, so do that.
-    Blockly.Accessibility.Navigation.traverseDown();
+    //Blockly.Accessibility.Navigation.traverseDown();
 };
 
 /**
@@ -527,7 +527,7 @@ Blockly.Accessibility.InBlock.bottomConnection = function () {
  */
 Blockly.Accessibility.InBlock.topConnection = function () {
     // This behaviour is essentially just traversing up, so do that.
-    Blockly.Accessibility.Navigation.traverseUp();
+    //Blockly.Accessibility.Navigation.traverseUp();
 };
 
 /**
@@ -673,10 +673,10 @@ Blockly.Field.prototype.highlight = function () {
 
     var steps = 'm -5,5 v -19 h ' + width + ' v 19 h ' + (-width - 2);
 
-    // This is the only way I've found that allows me to find the relative position of the field
+    // Find the relative position of the field (offset y because otherwise it highlights above the field)
     var mat = this.fieldGroup_.transform.baseVal[0].matrix
     var x = mat.e;
-    var y = mat.f;
+    var y = mat.f+13;
 
     return Blockly.createSvgElement('path',
         {

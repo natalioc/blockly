@@ -23,6 +23,7 @@
 
 goog.provide('Blockly.Accessibility.Navigation');
 
+goog.require('Blockly.Accessibility.MenuNav');
 goog.require('Blockly.Accessibility.Speech');
 goog.require('Blockly.Accessibility');
 
@@ -113,8 +114,17 @@ Blockly.BlockSvg.prototype.unselect = function () {
  */
 Blockly.BlockSvg.prototype.dispose = function (healStack, animate,
                                               opt_dontRemoveFromWorkspace) {
-    this.defaultDispose(healStack, animate, opt_dontRemoveFromWorkspace);
 
+    this.defaultDispose(healStack, animate, opt_dontRemoveFromWorkspace);
+    
+    // var containers = Blockly.Accessibility.MenuNav.containersArr;
+
+    // for(var i = 0; i < containers.length; i++){
+    //     if(containers[i] == Blockly.selected){
+    //         containers.splice(i,1);
+    //     }
+    // }
+    
     Blockly.Accessibility.Navigation.updateXmlSelection(true);
 };
 
@@ -384,21 +394,24 @@ Blockly.Accessibility.Navigation.traverseUp = function() {
         Blockly.selected.previousConnection.targetConnection.sourceBlock_.select();
     }
     else {
-        Blockly.Accessibility.Speech.Say('Cannot move further up from here');
+        //Blockly.Accessibility.Speech.Say('Cannot move further up from here');
 
         if (this.currentNode == this.getOutermostNode(this.currentNode)) {
-            console.log("in up if");
 
-            var containers = Blockly.mainWorkspace.getTopBlocks(true);
-            console.log(containers);
+            var containers = Blockly.Accessibility.MenuNav.containersArr;
 
             for(var i = 0; i < containers.length; i++){
-                if(containers[i] == Blockly.selected && containers[i-1]){
-                    containers[i-1].select();
-                    return;
+
+                if(containers[i] == Blockly.selected){
+
+                    if(containers[i-1]){
+                       var count = i-1;
+                       containers[count].select();
+                       return;
+                    }
                 }
             }
-
+            containers[containers.length-1].select();
         }
     }
 
@@ -422,28 +435,32 @@ Blockly.Accessibility.Navigation.traverseDown = function() {
     else {
         // if not connecting youve hit the bottom
         if(!Blockly.Accessibility.InBlock.storedConnection){
-            Blockly.Accessibility.Speech.Say('Cannot move further down from here.');
+            //Blockly.Accessibility.Speech.Say('Cannot move further down from here.');
         }
         
         // Check to make sure we're on the first layer before doing anything.
         //if (this.currentNode == this.findBottom(this.getOutermostNode(this.currentNode))) {
         if (this.currentNode == this.getOutermostNode(this.currentNode)) {
-            var containers = Blockly.mainWorkspace.getTopBlocks(true);
+
+            var containers = Blockly.Accessibility.MenuNav.containersArr;
 
             for(var i = 0; i < containers.length; i++){
 
-                if(containers[i] == Blockly.selected && containers[i+1]){
-                    containers[i+1].select();
-                    return;
-                }
-                else{
+                if(containers[i] == Blockly.selected){
 
+                    if(containers[i+1]){
+                       console.log("top");
+                       var count = i+1;
+                       console.log(count);
+                       console.log(containers[count]);
+                       containers[count].select();
+                       return;
+                    }  
                 }
             }
+            containers[0].select();
         }
     }
-
-
 };
 
 /**
