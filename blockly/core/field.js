@@ -150,6 +150,7 @@ Blockly.Field.prototype.updateEditable = function() {
     return;
   }
   if (this.sourceBlock_.isEditable()) {
+
     Blockly.addClass_(/** @type {!Element} */ (this.fieldGroup_),
                       'blocklyEditableText');
     Blockly.removeClass_(/** @type {!Element} */ (this.fieldGroup_),
@@ -236,6 +237,8 @@ Blockly.Field.prototype.render_ = function() {
     var width = 0;
   }
   this.size_.width = width;
+
+
 };
 
 /**
@@ -315,7 +318,7 @@ Blockly.Field.prototype.setText = function(text) {
   if (this.sourceBlock_ && this.sourceBlock_.rendered) {
     this.sourceBlock_.render();
     this.sourceBlock_.bumpNeighbours_();
-    this.sourceBlock_.workspace.fireChangeEvent();
+    this.sourceBlock_.workspace.fireChangeEvent();  
   }
 };
 
@@ -350,6 +353,7 @@ Blockly.Field.prototype.updateTextNode_ = function() {
 
   // Cached width is obsolete.  Clear it.
   this.size_.width = 0;
+
 };
 
 /**
@@ -376,6 +380,7 @@ Blockly.Field.prototype.setValue = function(text) {
  * @private
  */
 Blockly.Field.prototype.onMouseUp_ = function(e) {
+
   if ((goog.userAgent.IPHONE || goog.userAgent.IPAD) &&
       !goog.userAgent.isVersionOrHigher('537.51.2') &&
       e.layerX !== 0 && e.layerY !== 0) {
@@ -392,6 +397,7 @@ Blockly.Field.prototype.onMouseUp_ = function(e) {
     // Non-abstract sub-classes must define a showEditor_ method.
     this.showEditor_();
   }
+  
 };
 
 /**

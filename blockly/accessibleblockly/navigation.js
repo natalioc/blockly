@@ -1,7 +1,7 @@
 'use strict';
 
 /**
-*Copyright 2015 Luna Meier, Rachael Bosley
+*Copyright 2015 Copyright 2015 RIT Center for Accessibility and Inclusion Research
 *
 *Licensed under the Apache License, Version 2.0 (the "License");
 *you may not use this file except in compliance with the License.
@@ -72,15 +72,19 @@ Blockly.BlockSvg.prototype.defaultDispose = Blockly.BlockSvg.prototype.dispose;
  * Select this block.  Highlight it visually.
  */
 Blockly.BlockSvg.prototype.select = function () {
+
+    var prevSelect = Blockly.selected;
     this.defaultSelect();
     console.log(Blockly.selected);
 
     if (Blockly.Accessibility.Navigation.getBlockNodeById(this.id)) {
         Blockly.Accessibility.Navigation.currentNode = Blockly.Accessibility.Navigation.getBlockNodeById(this.id);
     }
-
-    Blockly.Accessibility.Speech.updateBlockReader(this.type, this);
-    Blockly.Accessibility.Speech.changedResult = undefined;
+    
+    //if(prevSelect.type != Blockly.selected.type){
+        Blockly.Accessibility.Speech.updateBlockReader(this.type, this);
+        Blockly.Accessibility.Speech.changedResult = undefined;
+    //}
 
 };
 
@@ -117,14 +121,6 @@ Blockly.BlockSvg.prototype.dispose = function (healStack, animate,
 
     this.defaultDispose(healStack, animate, opt_dontRemoveFromWorkspace);
     
-    // var containers = Blockly.Accessibility.MenuNav.containersArr;
-
-    // for(var i = 0; i < containers.length; i++){
-    //     if(containers[i] == Blockly.selected){
-    //         containers.splice(i,1);
-    //     }
-    // }
-    
     Blockly.Accessibility.Navigation.updateXmlSelection(true);
 };
 
@@ -149,7 +145,7 @@ Blockly.Accessibility.Navigation.updateXmlSelection = function (noSelect) {
     if (xmlDoc != null) {
         prevXml = Blockly.Xml.domToPrettyText(xmlDoc);
     }
-	console.log('UpdateXML');
+	//console.log('UpdateXML');
 
     if (noSelect){
         xmlDoc = Blockly.Xml.workspaceToDom(Blockly.mainWorkspace);
@@ -374,7 +370,6 @@ Blockly.Accessibility.Navigation.traverseIn = function() {
       }
     }
 
-    Blockly.Accessibility.Speech.Say('Cannot move further inwards from here.');
 };
 
 /**
@@ -384,7 +379,7 @@ Blockly.Accessibility.Navigation.traverseUp = function() {
 
     // Null check
     if (Blockly.selected == null) {
-         Blockly.Accessibility.Speech.Say('Cannot move further up from here.');
+        //Blockly.Accessibility.Speech.Say('Cannot move further up from here.');
 
         return;
     }

@@ -1,7 +1,7 @@
 'use strict';
 
 /**
-*Copyright 2015 Luna Meier
+*Copyright 2015 RIT Center for Accessibility and Inclusion Research
 *
 *Licensed under the Apache License, Version 2.0 (the "License");
 *you may not use this file except in compliance with the License.
@@ -18,7 +18,6 @@
 
 /**
  * @fileoverview Provides ability to navigate within a block in order to access inner blocks and fields.
- * @author lunalovecraft@gmail.com (Luna Meier)
  */
 
 goog.provide('Blockly.Accessibility.InBlock');
@@ -110,8 +109,6 @@ Blockly.Accessibility.InBlock.selectNext = function () {
         this.connectionsIndex = 0;
     }
 
-    //console.log(this.selectionList[this.connectionsIndex]);
-
     Blockly.Accessibility.Speech.readConnection(this.selectionList[this.connectionsIndex].name, this.connectionsIndex);
 
     this.highlightSelection();
@@ -172,8 +169,6 @@ Blockly.Accessibility.InBlock.enterSelected = function () {
     else if (this.selectionList[this.connectionsIndex] instanceof Blockly.FieldVariable) {
         this.variable();
     }
-
-
 };
 
 /**
@@ -511,7 +506,6 @@ Blockly.Accessibility.InBlock.disableIncompatibleBlocks = function(){
 /**
  * All of the following are separated so that they can be described as hooks
  */
-
 //#region INNER_ACTION_FUNCTIONS
 
 /**
@@ -541,30 +535,148 @@ Blockly.Accessibility.InBlock.outputConnection = function () {
     }
 };
 
-/**
- * Enters the currently selected block if the input isn't null
+//=============================================================FIELDS=============================================================
+
+ /* Enters the currently selected block if the input isn't null
  */
 Blockly.Accessibility.InBlock.input = function () {
     if (this.selectionList[this.connectionsIndex].connection.targetConnection != null) {
         // Find the block that's connected to this input and jump to it
         Blockly.Accessibility.Navigation.jumpToID(
-            this.selectionList[this.connectionsIndex].connection.targetConnection.sourceBlock_.id);
+        this.selectionList[this.connectionsIndex].connection.targetConnection.sourceBlock_.id);
     }
 };
+
+//=======================DROPDOWNS=======================
 
 /**
  * Allows the user to edit the selected dropDownMenu
  */
 Blockly.Accessibility.InBlock.dropDown = function () {
-    // Sorta complete, no way to select a specific option yet without arrow keys
-    this.selectionList[this.connectionsIndex].showEditor_();
+
+    this.selectionList[this.connectionsIndex].showEditor_();    
 };
+
+/**
+ * Gets the current SET dropdown field value
+ */
+Blockly.Accessibility.InBlock.dropDownGetOpts = function(){
+    var ddOptions = this.selectionList[this.connectionsIndex].getOptions_();
+    return ddOptions;
+}
+
+/**
+ * Gets the current SET dropdown field value
+ */
+Blockly.Accessibility.InBlock.dropDownGetVal = function(){
+    var ddValue = this.selectionList[this.connectionsIndex].getValue();
+    return ddValue;
+}
+
+/**
+ * Gets the current SET dropdown field value
+ */
+Blockly.Accessibility.InBlock.dropDownSetVal = function(val, index, prevIndex){
+
+    this.selectionList[this.connectionsIndex].setValue(val);
+
+    //update visuals
+    var cnIndex     = document.activeElement.childNodes[index];
+    var cnPrevIndex = document.activeElement.childNodes[prevIndex];
+    var prevClass   = cnPrevIndex.getAttribute("class");
+    var checkClass  = prevClass.replace(".goog-menuitem-checkbox", " ");
+    var noSelect    = prevClass.replace("goog-option-selected", " ");
+ 
+    cnIndex.setAttribute("style", "background-color: #d6e9f8;");
+    cnIndex.setAttribute("class", checkClass);
+    cnPrevIndex.setAttribute("style", "background-color: white;");
+    cnPrevIndex.setAttribute("class", noSelect);
+}
+
+/*
+ * Hide the drop down menu
+ */
+Blockly.Accessibility.InBlock.hideDropDown = function(){
+     this.selectionList[this.connectionsIndex].sourceBlock_.select();
+}
+
+
+/*
+ * Choose the next item in the dropdown then read it aloud(key:S)
+ */
+Blockly.Accessibility.InBlock.ddNavDown = function(){
+
+    var opts = Blockly.Accessibility.InBlock.dropDownGetOpts();
+    var curVal = Blockly.Accessibility.InBlock.dropDownGetVal();
+    
+    for(var i = opts.length-1; i >= 0; i--){
+        
+        if(opts[i][1] == curVal){
+
+            if(i == opts.length-1){ //loop at bottom
+               Blockly.Accessibility.InBlock.dropDownSetVal(opts[0][1], 0, opts.length-1);
+            }
+            else{
+               Blockly.Accessibility.InBlock.dropDownSetVal(opts[i+1][1], i+1, i);
+            }
+
+        }
+    }
+    
+    //read out new value
+    curVal     = Blockly.Accessibility.InBlock.dropDownGetVal();
+    var valStr = curVal.toString();
+    var say    = Blockly.Accessibility.Speech.fieldNameChange(valStr, "notneeded");
+    Blockly.Accessibility.Speech.Say(say);
+   
+}
+
+/*
+ * Choose the previous item in the dropdown (W)
+ */
+Blockly.Accessibility.InBlock.ddNavUp = function(){
+
+    var opts = Blockly.Accessibility.InBlock.dropDownGetOpts();
+    var curVal = Blockly.Accessibility.InBlock.dropDownGetVal();
+
+    if(opts){
+
+        for(var i = 0; i < opts.length; i++){
+
+            if(opts[i][1] == curVal){
+
+                if(i == 0){
+                    Blockly.Accessibility.InBlock.dropDownSetVal(opts[opts.length-1][1], opts.length-1, 0);
+                    break;
+                }
+                else{
+                    Blockly.Accessibility.InBlock.dropDownSetVal(opts[i-1][1], i-1, i);
+                    break;
+                }
+                  
+            }
+             //read out new value
+
+             curVal  = Blockly.Accessibility.InBlock.dropDownGetVal();
+             var valStr = curVal.toString();
+             var say = Blockly.Accessibility.Speech.fieldNameChange(valStr, "notneeded")
+             Blockly.Accessibility.Speech.Say(say);
+        }
+    }
+
+}
+
+
+//===========================Other Fields============================
+
+Blockly.Accessibility.InBlock.getFieldValue = function(){
+    this.selectionList[this.connectionsIndex].getText();
+}
 
 /**
  * Allows the user to edit the selected textInput
  */
 Blockly.Accessibility.InBlock.textInput = function () {
-
     this.selectionList[this.connectionsIndex].showEditor_();
 };
 

@@ -89,6 +89,7 @@ Blockly.FieldTextInput.prototype.setText = function(text) {
     // In this case we still want to display the illegal result.
     if (validated !== null && validated !== undefined) {
       text = validated;
+      Blockly.Accessibility.Speech.Say(this.getText());
     }
   }
   Blockly.Field.prototype.setText.call(this, text);
@@ -199,12 +200,14 @@ Blockly.FieldTextInput.prototype.onHtmlInputChange_ = function(e) {
       htmlInput.oldValue_ = text;
       this.setText(text);
       this.validate_();
+
     } else if (goog.userAgent.WEBKIT) {
       // Cursor key.  Render the source block to show the caret moving.
       // Chrome only (version 26, OS X).
       this.sourceBlock_.render();
     }
   }
+
 };
 
 /**
@@ -224,6 +227,7 @@ Blockly.FieldTextInput.prototype.validate_ = function() {
   } else {
     Blockly.removeClass_(htmlInput, 'blocklyInvalidInput');
   }
+
 };
 
 /**
@@ -280,6 +284,7 @@ Blockly.FieldTextInput.prototype.widgetDispose_ = function() {
         text = text1;
       }
     }
+    
     thisField.setText(text);
     thisField.sourceBlock_.rendered && thisField.sourceBlock_.render();
     Blockly.unbindEvent_(htmlInput.onKeyDownWrapper_);

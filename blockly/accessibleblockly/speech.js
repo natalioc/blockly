@@ -6,17 +6,18 @@ goog.require('Blockly.Accessibility');
 goog.require('Blockly.Accessibility.InBlock');
 
 /*
-*Licensed under the Apache License, Version 2.0 (the "License");
-*you may not use this file except in compliance with the License.
-*You may obtain a copy of the License at
+    Copyright 2015 RIT Center for Accessibility and Inclusion Research
+*   Licensed under the Apache License, Version 2.0 (the "License");
+*   you may not use this file except in compliance with the License.
+*   You may obtain a copy of the License at
 *
 *    http://www.apache.org/licenses/LICENSE-2.0
 *
-*Unless required by applicable law or agreed to in writing, software
-*distributed under the License is distributed on an "AS IS" BASIS,
-*WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-*See the License for the specific language governing permissions and
-*limitations under the License.
+*   Unless required by applicable law or agreed to in writing, software
+*   distributed under the License is distributed on an "AS IS" BASIS,
+*   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+*   See the License for the specific language governing permissions and
+*   limitations under the License.
 */
 
 //the resulting default string and a check to see if the selection has changed.
@@ -137,6 +138,12 @@ Blockly.Accessibility.Speech.readConnection = function(name, index){
 
 	//screenreaders sometimes read words in all uppercase as individual letters
 	name = name.toLowerCase();
+
+    //a should be pronounced as the letter not "uh"
+	if(name == 'a'){
+		name = "A,";
+	}
+
 	say = name + " connection."
 
    	//apply aria attributes in order to update the user audibly when anything on the workspace changes
@@ -581,7 +588,7 @@ Blockly.Accessibility.Speech.blockToString = function(type, disabled){
             this.result = "Test (A), if true do (B), if false do (C)";
             break;
         case "controls_repeat_ext":
-            this.result = "repeat (10) times";
+            this.result = "repeat (blank) times";
             break;
         case "controls_whileUntil":
             this.result = "repeat 'while or until' ( )";

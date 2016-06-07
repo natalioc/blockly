@@ -1,7 +1,7 @@
 'use strict';
 
 /**
-*Copyright [2015] [Rachael Bosley, Luna Meier, Mary Spencer]
+* Copyright 2015 RIT Center for Accessibility and Inclusion Research
 *
 *Licensed under the Apache License, Version 2.0 (the "License");
 *you may not use this file except in compliance with the License.
@@ -129,26 +129,32 @@ document.onkeydown = document.onkeyup = function(e){
 		}
 
 		else if(map[13]){ //Enter
-
-
+            console.log("key 132");
 			var selList = Blockly.Accessibility.InBlock.selectionList;
 			var cIndex  = Blockly.Accessibility.InBlock.connectionsIndex;
-			var conName  = selList[cIndex].name;
+			var conName = selList[cIndex].name;
 			//console.log(selList[cIndex].name);
 
 			//dropdown menus
 			if(conName == "OP" || conName == "NUM" ){
 				Blockly.Accessibility.InBlock.enterSelected();
 				keyboardState = 'hotkeyMode';
-				Blockly.Accessibility.Speech.Say("Edit Selected.");
+				Blockly.Accessibility.Speech.Say("Edit Selected");
+
+			}
+			//special case needed to blocks with text field followed by a child connection
+			else if(conName == "STACK"){ 
+				Blockly.Accessibility.InBlock.selectConnection();
+				Blockly.Accessibility.Keystrokes.prototype.isConnecting = true;
+				keyboardState ='hotkeyMode';//prevent getting stuck on same block
+				Blockly.Accessibility.Speech.Say("Connection Selected");
+
 			}
 			//everything else
 			else{
-
 				Blockly.Accessibility.InBlock.selectConnection();
 				Blockly.Accessibility.InBlock.enterCurrentBlock();
 				Blockly.Accessibility.InBlock.enterSelected();
-
 				Blockly.Accessibility.Keystrokes.prototype.isConnecting = true;
 		    	keyboardState ='hotkeyMode';//prevent getting stuck on same block
 
@@ -251,6 +257,10 @@ document.onkeydown = document.onkeyup = function(e){
 			Blockly.Accessibility.Navigation.inlineBlockTraverseOut();
 		}
 
+		else if(map[13]){
+			Blockly.Accessibility.InBlock.hideDropDown();
+		}
+
 		else if(map[8]){
 			var containers = Blockly.Accessibility.MenuNav.containersArr;
 
@@ -348,24 +358,37 @@ document.onkeydown = document.onkeyup = function(e){
 
 		else if(map[83]){ //S
 			// e.preventDefault();
+			var role = document.activeElement.getAttribute("role");
 
 			if(!Blockly.selected) return;
+
+			else if(role == "menu"){
+				Blockly.Accessibility.InBlock.ddNavDown();
+			}
 			
 			//if not on toolbox navigate down through blocks
-			if(Blockly.selected.id[0] != ":"  && !Blockly.Accessibility.Keystrokes.prototype.isConnecting){
+			else if(Blockly.selected.id[0] != ":"  && !Blockly.Accessibility.Keystrokes.prototype.isConnecting){
 				Blockly.Accessibility.Navigation.traverseDown();
 			}
 		}
 
 		else if(map[87]){ //W
-			// e.preventDefault();
-			//if not on the toolbox navigate up through blocks
-			if(!Blockly.selected) return;
 
-			if(Blockly.selected.id[0] != ":" && !Blockly.Accessibility.Keystrokes.prototype.isConnecting){
-				console.log("traverseUp");
+			// e.preventDefault();
+			var role = document.activeElement.getAttribute("role");
+
+			//if not on the toolbox navigate up through blocks
+		    if(!Blockly.selected) return;
+
+			//change option on the block
+			else if(role == "menu"){
+				Blockly.Accessibility.InBlock.ddNavUp();
+			}
+
+			else if(Blockly.selected.id[0] != ":" && !Blockly.Accessibility.Keystrokes.prototype.isConnecting){
 				Blockly.Accessibility.Navigation.traverseUp();
 			}
+
 		}
 
 		//============Jumping to specific category using number keys===============
