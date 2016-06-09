@@ -785,8 +785,7 @@ Blockly.Flyout.prototype.show = function(xmlList){
         lastCategory.setAttribute("aria-labelledBy", "readBox"); 
     }
         readBox.innerHTML = say;
-
-    console.log(say);
+        Blockly.Accessibility.Speech.Say(say);
 };
 
 Blockly.Accessibility.MenuNav.flyoutToWorkspace = function(){

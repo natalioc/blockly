@@ -367,7 +367,7 @@ document.onkeydown = document.onkeyup = function(e){
 			}
 			
 			//if not on toolbox navigate down through blocks
-			else if(Blockly.selected.id[0] != ":"  && !Blockly.Accessibility.Keystrokes.prototype.isConnecting){
+			else if(document.activeElement.id[0] != ":"  && !Blockly.Accessibility.Keystrokes.prototype.isConnecting){
 				Blockly.Accessibility.Navigation.traverseDown();
 			}
 		}
@@ -385,7 +385,8 @@ document.onkeydown = document.onkeyup = function(e){
 				Blockly.Accessibility.InBlock.ddNavUp();
 			}
 
-			else if(Blockly.selected.id[0] != ":" && !Blockly.Accessibility.Keystrokes.prototype.isConnecting){
+			else if(document.activeElement.id[0] != ":" && !Blockly.Accessibility.Keystrokes.prototype.isConnecting){
+
 				Blockly.Accessibility.Navigation.traverseUp();
 			}
 

@@ -75,16 +75,17 @@ Blockly.BlockSvg.prototype.select = function () {
 
     var prevSelect = Blockly.selected;
     this.defaultSelect();
-    console.log(Blockly.selected);
+    
+    //console.log(Blockly.selected);
 
     if (Blockly.Accessibility.Navigation.getBlockNodeById(this.id)) {
         Blockly.Accessibility.Navigation.currentNode = Blockly.Accessibility.Navigation.getBlockNodeById(this.id);
     }
     
-    //if(prevSelect.type != Blockly.selected.type){
+    if(prevSelect != Blockly.selected){
         Blockly.Accessibility.Speech.updateBlockReader(this.type, this);
         Blockly.Accessibility.Speech.changedResult = undefined;
-    //}
+    }
 
 };
 

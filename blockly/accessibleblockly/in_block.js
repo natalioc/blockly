@@ -92,7 +92,9 @@ Blockly.Accessibility.InBlock.enterCurrentBlock = function () {
 
     this.connectionsIndex = 0;
 
-    Blockly.Accessibility.Speech.readConnection(this.selectionList[this.connectionsIndex].name, this.connectionsIndex);
+    if(Blockly.Accessibility.Speech.keyboardState == "editMode"){
+        Blockly.Accessibility.Speech.readConnection(this.selectionList[this.connectionsIndex].name, this.connectionsIndex);
+    }
     this.highlightSelection();
 
     return true;
@@ -108,16 +110,20 @@ Blockly.Accessibility.InBlock.selectNext = function () {
     if (this.connectionsIndex >= this.selectionList.length) {
         this.connectionsIndex = 0;
     }
+    
+    if(Blockly.Accessibility.Speech.keyboardState == "editMode"){
 
-    Blockly.Accessibility.Speech.readConnection(this.selectionList[this.connectionsIndex].name, this.connectionsIndex);
-
+        Blockly.Accessibility.Speech.readConnection(this.selectionList[this.connectionsIndex].name, this.connectionsIndex);
+    }
     this.highlightSelection();
+
 };
 
 /**
  * Selects the previous value or field within the current block
  */
 Blockly.Accessibility.InBlock.selectPrev = function () {
+
     this.unhighlightSelection();
 
     this.connectionsIndex--;
@@ -125,9 +131,12 @@ Blockly.Accessibility.InBlock.selectPrev = function () {
         this.connectionsIndex = this.selectionList.length - 1;
     }
 
+    if(Blockly.Accessibility.Speech.keyboardState == "editMode"){
 
-    Blockly.Accessibility.Speech.readConnection(this.selectionList[this.connectionsIndex].name, this.connectionsIndex);
+        Blockly.Accessibility.Speech.readConnection(this.selectionList[this.connectionsIndex].name, this.connectionsIndex);
+    }
     this.highlightSelection();
+
 };
 
 /**
@@ -597,7 +606,12 @@ Blockly.Accessibility.InBlock.dropDownSetVal = function(val, index, prevIndex){
  * Hide the drop down menu
  */
 Blockly.Accessibility.InBlock.hideDropDown = function(){
-     this.selectionList[this.connectionsIndex].sourceBlock_.select();
+     try{
+        this.selectionList[this.connectionsIndex].sourceBlock_.select();
+     }
+     catch(e){
+
+     }
 }
 
 
