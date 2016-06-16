@@ -111,10 +111,8 @@ Blockly.Accessibility.InBlock.selectNext = function () {
         this.connectionsIndex = 0;
     }
     
-    if(Blockly.Accessibility.Speech.keyboardState == "editMode"){
+    Blockly.Accessibility.Speech.readConnection(this.selectionList[this.connectionsIndex].name, this.connectionsIndex);
 
-        Blockly.Accessibility.Speech.readConnection(this.selectionList[this.connectionsIndex].name, this.connectionsIndex);
-    }
     this.highlightSelection();
 
 };
@@ -131,10 +129,9 @@ Blockly.Accessibility.InBlock.selectPrev = function () {
         this.connectionsIndex = this.selectionList.length - 1;
     }
 
-    if(Blockly.Accessibility.Speech.keyboardState == "editMode"){
 
-        Blockly.Accessibility.Speech.readConnection(this.selectionList[this.connectionsIndex].name, this.connectionsIndex);
-    }
+    Blockly.Accessibility.Speech.readConnection(this.selectionList[this.connectionsIndex].name, this.connectionsIndex);
+
     this.highlightSelection();
 
 };

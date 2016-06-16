@@ -129,7 +129,6 @@ document.onkeydown = document.onkeyup = function(e){
 		}
 
 		else if(map[13]){ //Enter
-            console.log("key 132");
 			var selList = Blockly.Accessibility.InBlock.selectionList;
 			var cIndex  = Blockly.Accessibility.InBlock.connectionsIndex;
 			var conName = selList[cIndex].name;

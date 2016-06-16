@@ -21,22 +21,21 @@ goog.require('Blockly.Accessibility.InBlock');
 */
 
 //the resulting default string and a check to see if the selection has changed.
-Blockly.Accessibility.Speech.changedResult  = undefined;
+Blockly.Accessibility.Speech.changedResult = undefined;
 Blockly.Accessibility.Speech.changedSelect = true;
 Blockly.Accessibility.Speech.result;
 
+
+/*
+*   Read any string passed in immediately with the screen reader	
+*/
 Blockly.Accessibility.Speech.Say = function(string){
-     var active      = document.activeElement;
+
 	 var blockReader = document.getElementById("blockReader");
-
-	 //apply aria attributes in order to update the user audibly when anything on the workspace changes
-   	 active.setAttribute("aria-owns", "blockReader");
-   	 active.setAttribute("aria-labelledBy", "blockReader");
-
 	 blockReader.innerHTML = string;
-
 	 console.log(string);
 }
+
 /*
 *FILE OVERVIEW
 * This file helps the screenreader say useful information while in the workspace and update as the contents of the block changes
@@ -51,6 +50,8 @@ Blockly.Accessibility.Speech.updateBlockReader = function(type, blockSvg){
 	// get default string for the block based on type
 	var newStr;
 	var defaultStr;
+
+	//only update the screen reader if something has changed
 	if(!this.changedResult){
 		defaultStr  = Blockly.Accessibility.Speech.blockToString(type); 	
 	}
@@ -58,26 +59,12 @@ Blockly.Accessibility.Speech.updateBlockReader = function(type, blockSvg){
 	else{
 		defaultStr = this.changedResult;
 	}    
-	var active      = document.activeElement;
-    var blockReader = document.getElementById("blockReader");               	
 
    	//go through the blocks on the workspace and find the matching one based on type and id
-    var xmlBlock = Blockly.Xml.blockToDom_(Blockly.selected);
-
-	//newStr   = this.changeString(xmlBlock);
 	newStr = this.changeString(blockSvg);
-   		
-   	//apply aria attributes in order to update the user audibly when anything on the workspace changes
-    active.setAttribute("aria-owns", "blockReader");
-    active.setAttribute("aria-labelledBy", "blockReader");
-
-
     
 	//update the blockReader
-    blockReader.innerHTML = newStr;
-
-
-    console.log(newStr);
+     Blockly.Accessibility.Speech.Say(newStr);
 };
 
 
@@ -88,10 +75,10 @@ Blockly.Accessibility.Speech.updateBlockReader = function(type, blockSvg){
 * Aparam_index..index of the connection selected
 */
 Blockly.Accessibility.Speech.readConnection = function(name, index){
+
 	var blockReader = document.getElementById("blockReader");	
 	var active 		= document.activeElement;
 	var say;
-
 
 	//top and bottom connections are named undefined
 	if(name == undefined)
@@ -127,6 +114,7 @@ Blockly.Accessibility.Speech.readConnection = function(name, index){
 			break;
 		default:
 			break;
+
 	}
 
 	//blocks with multiple outputs like create list with are named add0 add1 etc. so put in a space to make it readable
@@ -152,13 +140,8 @@ Blockly.Accessibility.Speech.readConnection = function(name, index){
 
 	say = name + " connection."
 
-   	//apply aria attributes in order to update the user audibly when anything on the workspace changes
-    active.setAttribute("aria-owns", "blockReader");
-    active.setAttribute("aria-labelledBy", "blockReader");
 
-    //update the blockReader
-    blockReader.innerHTML = say;
-    console.log(say);
+    Blockly.Accessibility.Speech.Say(say);
 };
 
 
@@ -239,276 +222,8 @@ Blockly.Accessibility.Speech.changeString = function(blockSvg) {
   return text;
 };
 
-/* Updates the string that will be read by the screenReader
- * @param_block...the currently selected block xml
- * @param_xmlDoc..the updated xml for the page used to get block information
- */
-// Blockly.Accessibility.Speech.changeString = function(block){
-
-// 	var newStr;  												//newStr is what will be returned by this function
-// 	var fieldValArr = [];										//stores values for all of the fields
-// 	var strArr      = [];										//Array of default strings to be updated 
-// 	var blockArr    = block.getElementsByTagName("BLOCK"); 	    //get array of blocks attached to selected block
-// 	var fieldBlcArr = block.getElementsByTagName("FIELD");
-
-// 	console.log(Blockly.selected);
-// 	var test;
-
-// 	if(Blockly.selected.childBlocks_.length > 0 ){
-// 		test = Blockly.selected.toString();
-// 	}
-// 	return test;
-
-// 	//get the top selected block
-// 	strArr[0] = Blockly.Accessibility.Speech.blockToString(block.getAttribute("type"));
-
-// 	//===========single blocks must be treated separately====================================================
-// 	if(blockArr.length == 0){
-
-// 		for(var i = 0; i < fieldBlcArr.length; i++){
-
-// 			//get the default strings for each block and any field values there are
-// 			var blockType  = block.getAttribute("type");
-// 		    strArr[i]      = Blockly.Accessibility.Speech.blockToString(blockType);
-
-// 			fieldValArr[i] = fieldBlcArr[i].innerText;
-// 			fieldValArr[i] = this.fieldNameChange(fieldValArr[i], fieldBlcArr[i].getAttribute("type"));
-
-// 		}
-
-// 	}
-// 	//==========Fill strArr with default strings============================================================
-// 	for(var i = 0; i < blockArr.length; i++){
-
-// 		//make sure blocks are not within <statements> or <next> 
-// 		if(blockArr[i].parentNode.nodeName != "STATEMENT" && blockArr[i].parentNode.nodeName != "NEXT"){
-
-// 			var blockType = blockArr[i].getAttribute("type");
-
-// 		    strArr[i+1]   = Blockly.Accessibility.Speech.blockToString(blockType);
-// 		    strArr[i+1]   = strArr[i+1].replace(/block\./g, " ");
-// 		}
-// 	}
-
-// 	//=======Get field values (number textboxes dropdowns etc.)==============================================
-// 	for(var i = 0; i < fieldBlcArr.length; i++){
-
-// 		fieldValArr[i] = fieldBlcArr[i].innerText;
-
-// 		//only update the array if the field is defined 
-// 		console.log(fieldBlcArr[i]);
-// 		fieldValArr[i] = this.fieldNameChange(fieldValArr[i], fieldBlcArr[i].getAttribute("type"));
-   	
-// 	}
-
-// 	//=========Fill in all the fields=========================================================================
-// 	//go through strArr and if it has ' ' replace it with field value at valueIndex
-// 	var valueIndex = 0;
-	
-// 	for(var i = 0; i < strArr.length; i++){
-// 		var re = /'([^']*)'/; //gets all values indicated by ' ' with anything in between
- 		
-// 		if(Blockly.selected.type == "procedures_defreturn" || Blockly.selected.type == "procedures_defnoreturn"){
-// 			if(re.test(strArr[0])){
-// 				strArr[0] = strArr[0].replace(re,fieldValArr[i]);
-// 				valueIndex++
-// 			}
-// 			strArr[1] = strArr[1].replace(re,fieldValArr[2]);
-// 			valueIndex++
-			
-// 		}
-
-// 		//if it contains ''
-// 		else if(re.test(strArr[i])){
-// 				strArr[i] = strArr[i].replace(re,fieldValArr[valueIndex]);
-// 				valueIndex ++;
-// 		}
-
-// 	}
-
-// 	//===========combine multiple block strings if necessary=========================================================
-// 	if(blockArr.length > 0){
-// 		var re = (/\([^\)]+\)/g); //gets all blocks indicated by ()
-// 		var match;
-// 		//Loop through the string array and update the first value every time 
-// 		for(var i = 1; i < strArr.length; i ++){
-
-// 			//if there are blocks to replace
-// 			if(re.test(strArr[0])){
-
-// 				//find blocks to exchange
-// 				match     = strArr[0].match(re)[0];
-// 				strArr[0] = strArr[0].replace(match, strArr[i]);
-				
-// 			}
-// 		}
-// 	}
 
 
-// 	//=====DEBUG================
-// 	// console.log("FINAL");
-// 	// console.log(fieldValArr);
-// 	// console.log(fieldBlcArr);
-// 	// console.log(blockArr);
-// 	// console.log(strArr);
-
-// 	newStr = strArr[0];
-// 	//return newStr;
-// };
-
-
-
-/*
-* Update the string to create a unique one for that block
-* 	@param_defaultStr..the default string for a block of that type
-* 	@param_block.......the actual block whose string i s being changed
-* 	@param_blockSvg....The svg of the block that is being changed
-*/
-// Blockly.Accessibility.Speech.changeString = function(defaultStr, block, blockSvg){
-// 	var newStr = defaultStr; 			  //this is what the function will return
-// 	var re = /'([^']*)'/g;  			  //gets everything between single quotes
-// 	var inputsArr = defaultStr.match(re); //array of the possible inputs to change
-
-// 	var innerType; 						  //type of block within current block
-// 	var getInputs = block.childNodes;     //all possible inputs for block
-// 	var blockType = block.getAttribute("type"); 
-// 	var blocksArr = xmlDoc.getElementsByTagName("BLOCK");
-// 	console.log(blocksArr);
-// 	console.log(blocksArr[blocksArr.length-1].outerHTML);
-
-// 	//switch the input order of blocks if necessary
-// 	var readOrderArr = this.switchInputOrder(blockType, inputsArr);
-    
-//      //if there is nothing in the string to change then return it as is
-// 	if(inputsArr == null){
-// 		return newStr;
-// 	}
-
-// 	//go through any blocks or inputs that would change speech
-// 	for(var i = 0; i < inputsArr.length; i++){ 
-
-// 		//If there are potential fields in the block (dropdowns or textboxes)
-// 		if(getInputs.length >0 && block.childNodes[i]!= undefined && block.childNodes[i].textContent != undefined){
-// 			var newName; //the updated name of the field or dropdown in the block
-
-// 			console.log(getInputs[i]);
-
-// 			//check that the block exists
-// 			if((block.lastChild !=null && block.lastChild.innerHTML != "")){
-
-// 				//inner container blocks should not be read.
-// 				if(block.firstChild.tagName == "NEXT" || getInputs[i].tagName == "STATEMENT"){
-// 					return newStr;
-// 				}
-
-// 				// if(!getInputs[i].tagName == "FIELD" && getInputs[i].firstChild.getAttribute("type") == "logic_null"){
-
-// 				// 	var childType = "logic_null";
-// 				// 	var childStr  = Blockly.Accessibility.menu_nav.blockToString(childType);
-
-// 				// 	newStr = newStr.replace(readOrderArr[1], childStr);    //update the string
-// 				// 	newStr = newStr.replace(newStr.match(/block\./), ""); //fix blocks that have an extra "block." 
-// 				// 	console.log("in field/null");
-// 				// }
-
-// 				//names arnt changing so stay the same
-// 				if(block.lastChild.getAttribute("name") == "NAME"){ 
-
-// 					newName = this.fieldNameChange("",blockType);
-// 					newStr  = newStr.replace(readOrderArr[i], newName);
-// 					console.log("in name");
-
-// 				}
-
-// 				//get the text content of a changed field
-// 				//else{
-
-// 				// 	newName = this.fieldNameChange(getInputs[i].textContent, blockType);
-// 				//     newStr  = newStr.replace(readOrderArr[i], newName);
-// 				//     console.log("in else");
-// 				//     console.log(getInputs[i]);
-// 				// }
-// 				// console.log("1: " + newStr);
-// 			}
-// 			//blocks with multiple inline inputs such as create list with and create text with have mutations that will throw errors if not handled separately
-// 			if(getInputs[i].tagName == "MUTATION" && blockSvg.childBlocks_[i] != undefined){
-
-// 				var mutationType = Blockly.Accessibility.menu_nav.blockToString(blockSvg.childBlocks_[i].type);
-// 				var changedName  = this.changeString(mutationType, block.lastChild.lastChild, blockSvg.childBlocks_[i]);
-// 				newName = this.fieldNameChange(changedName, blockType);
-
-
-// 			}
-
-// 			//functions need a special case for matching the getInputs array and inputsArr getinputs[i+1] == inputsArr[i-1]
-// 			if(blockType == "procedures_defnoreturn" || blockType == "procedures_defreturn"){
-// 				i++;
-// 				newName = this.fieldNameChange(getInputs[i].textContent, blockType);
-// 				newStr = newStr.replace(inputsArr[i-1],newName);
-// 				i--;
-// 			}			
-
-// 						//handle functions with returns
-// 			if(blockType == "procedures_defreturn" && getInputs.length == 3){
-// 				var nameLoc  = getInputs[2].lastChild.lastChild;
-// 				var newName2 = this.fieldNameChange(nameLoc.innerHTML, blockType);
-// 				newStr       = newStr.replace('A', newName2);
-// 			}	
-// 				console.log("2: " + newStr);
-
-// 		}
-
-// 		// //if there is an inner   block get its type and update the string
-// 		// if(blockSvg.childBlocks_[i] != undefined){
-// 		// 	innerType = blockSvg.childBlocks_[i].type;
-// 		// 	var blockAdded   = Blockly.Accessibility.menu_nav.blockToString(innerType); //get default string for that block
-// 		// 	//block connected to block
-// 		// 	if(block.firstChild.firstChild != undefined ) {
-// 		// 		//set up variables to call blockToString and changeString
-// 		// 		var childSvg   = blockSvg.childBlocks_[i].childBlocks_[0];
-// 		// 		var childBlock = block.firstChild.firstChild;
-// 		// 		console.log(childBlock);
-
-// 		// 		//throws error trying to get attribute otherwise
-// 		// 		if(childBlock.toString().indexOf('"' < 0)){
-// 		// 			//get the child block and its string
-// 		// 			var childType   = childBlock.getAttribute("type");
-// 		// 			var defChildStr = Blockly.Accessibility.menu_nav.blockToString(childType);
-// 		// 			var newChildStr = this.changeString(defChildStr, childBlock, childSvg);
-// 		// 			console.log(childBlock);
-
-// 		// 			//combination of the two attached blocks
-// 		// 			blockAdded = blockAdded.replace(blockAdded,newChildStr);
-// 		// 			blockAdded = blockAdded.replace("block.", " "); //remove the block suffix from combined block
-// 		// 			newStr = defaultStr.replace(inputsArr[i],blockAdded);
-// 		// 		}
-
-// 		// 	 }
-
-// 		// 	else{
-// 		// 	    blockAdded = blockAdded.replace("block.", " "); 
-// 		// 		newStr = newStr.replace(readOrderArr[i], blockAdded);
-// 		// 	}
-// 		// 	console.log("O: " + newStr);
-// 		// }
-// 	}
-// 	//blocks with >3 inputs do not replace all of the text
-// 	if((newStr.indexOf("'") != -1) && getInputs[readOrderArr.length-1] != undefined){
-// 		var re2 = /'([^']*)'/g;  //gets everything between single quotes
-// 		var leftOverArr = newStr.match(re2); //array of the possible inputs to change
-// 		newStr = newStr.replace(leftOverArr[0], getInputs[readOrderArr.length-1].textContent); //replace the last bit of text
-// 	}
-
-// 	//fix blocks that read "block." 
-// 	var suffixCnt = (newStr.match(/block/g) || []).length;
-// 	if(suffixCnt >= 1 && getInputs.length > 1){
-// 		newStr = newStr.replace(newStr.match(/ block. /), " ");
-// 	}
-
-// 	//console.log(newStr);
-// 	return newStr;
-
-// };
 
 
 
@@ -517,6 +232,8 @@ Blockly.Accessibility.Speech.changeString = function(blockSvg) {
 
 
 /*
+* ********DEPRECATED as of (6/16/16)********************
+*--- the new change string function makes this unnecessary--
 * For certain blocks, the order of the inputs must be switched to read correctly **note: read order arr starts at 1 to skip invisible mutations**
 * The default order of inputs is mutations, fields, then values.
 * 	@param_blockType...type of block
@@ -569,8 +286,6 @@ Blockly.Accessibility.Speech.switchInputOrder = function(blockType, inputsArr){
 			var saveZero = inputsArr[0];
 			inputsArr[0] = inputsArr[1];
 	   		inputsArr[1] = saveZero;
-	   		console.log(inputsArr[0]);
-	   		console.log(inputsArr[1]);
 	   		readOrderArr = inputsArr;
 			break;
 		default: 
@@ -589,8 +304,6 @@ Blockly.Accessibility.Speech.switchInputOrder = function(blockType, inputsArr){
 */
 Blockly.Accessibility.Speech.fieldNameChange = function(defaultNm, blockType){
 	var newName;
-
-	console.log(defaultNm);
 
 	switch(defaultNm){
 		case "EQ":
@@ -651,6 +364,11 @@ Blockly.Accessibility.Speech.fieldNameChange = function(defaultNm, blockType){
 	return newName;
 };
 
+/*
+* ******Deprecated*****
+* individual strings for each block.
+* A modified google function block.tostring called changeString in this file is now used instead.
+*/
 Blockly.Accessibility.Speech.blockToString = function(type, disabled){
     var disabledText = "";
     ;

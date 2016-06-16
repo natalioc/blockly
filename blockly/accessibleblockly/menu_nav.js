@@ -293,7 +293,7 @@ Blockly.Toolbox.TreeNode.prototype.onKeyDown = function(e) {
               document.getElementById("blockReader").focus();
             }
 
-            /** move or connect new blocks so they dont automatically default to (0,0)**/
+            /** top blocks move or connect new blocks so they dont automatically default to (0,0)**/
             else if(!Blockly.Accessibility.Keystrokes.prototype.isConnecting && menuVars.blockSelected){
               
               //reset everything
@@ -769,23 +769,27 @@ Blockly.Flyout.prototype.show = function(xmlList){
     var blockSvg = menuVars.flyoutArr[menuVars.currIndex];
     var active   = document.activeElement;
     var lastCategory; //track the category so that it does not deselect
-
+    var blockReader = document.getElementById("blockReader");
     if(blockSvg == undefined){
         return;
     }
-    var say     = Blockly.Accessibility.Speech.blockToString(blockSvg.type, blockSvg.disabled);
-    var readBox = document.getElementById("blockReader");
 
+
+    var say = Blockly.Accessibility.Speech.blockToString(blockSvg.type, blockSvg.disabled);
+    Blockly.Accessibility.Speech.Say(say);
+
+
+    //Blockly.Accessibility.Speech.updateBlockReader(blockSvg.type, blockSvg);
 
     //if category is selected save it (all categories begin with : )
     //then label with aria attributes so that any change will be announced
-    if(active.id[0] ==":"){
-        lastCategory = active;
-        lastCategory.setAttribute("aria-owns", "readBox");
-        lastCategory.setAttribute("aria-labelledBy", "readBox"); 
-    }
-        readBox.innerHTML = say;
-        Blockly.Accessibility.Speech.Say(say);
+    // if(active.id[0] ==":"){
+    //     lastCategory = active;
+    //     lastCategory.setAttribute("aria-owns", "readBox");
+    //     lastCategory.setAttribute("aria-labelledBy", "readBox"); 
+    // }
+
+  //Blockly.Accessibility.Speech.Say(say);
 };
 
 Blockly.Accessibility.MenuNav.flyoutToWorkspace = function(){
@@ -801,6 +805,7 @@ Blockly.Accessibility.MenuNav.flyoutToWorkspace = function(){
     var block    = Blockly.Block.obtain(workspace, blockXML.getAttribute("type"));
     block.initSvg();
     block.render();
+    document.activeElement.blur();
     block.select();
 
     //The following is used to put new, unconnected blocks at the bottom of the workspace
