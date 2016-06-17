@@ -55,12 +55,14 @@ document.onkeydown = document.onkeyup = function(e){
 		if(map[13]){ //Enter
 			keyboardState = 'hotkeyMode';
 			Blockly.Accessibility.Navigation.updateXmlSelection();
+			Blockly.selected.comment.setVisible(false);
 		}
 		return;
 	}
 
 //===========================================EDITING BLOCKS=======================================
 	else if(keyboardState=='editMode'){ //if you are in editMode, normal hotkeys are disabled
+		console.log("edit mode");
 		if(map[27]){ //Escape
 			keyboardState = 'hotkeyMode';
 			var highlight = Blockly.Accessibility.InBlock.storedHighlight;
@@ -132,7 +134,6 @@ document.onkeydown = document.onkeyup = function(e){
 			var selList = Blockly.Accessibility.InBlock.selectionList;
 			var cIndex  = Blockly.Accessibility.InBlock.connectionsIndex;
 			var conName = selList[cIndex].name;
-			//console.log(selList[cIndex].name);
 
 			//dropdown menus
 			if(conName == "OP" || conName == "NUM" ){
@@ -170,6 +171,7 @@ document.onkeydown = document.onkeyup = function(e){
 
 //===========================================CONNECTING BLOCKS====================================================
 	else if(keyboardState=='connectBlocksMode'){
+		console.log("connecting blocks mode");
 		console.log(Blockly.Accessibility.InBlock.enterCurrentBlock());
 		if(map[27]){ //Escape
 			Blockly.Accessibility.InBlock.clearHighlights();
@@ -350,9 +352,9 @@ document.onkeydown = document.onkeyup = function(e){
 
 		else if(map[82]){ //R
 			//Jumps to the top of the currently selected container
-			Blockly.Accessibility.Navigation.jumpToTopOfSection();
-			//Blockly.Accessibility.Prefixes.formatTreeView();
-			//Blockly.Accessibility.TreeView.addBlockComments();
+			//Blockly.Accessibility.Navigation.jumpToTopOfSection();
+			Blockly.Accessibility.Prefixes.formatTreeView();
+			Blockly.Accessibility.Prefixes.infoBoxFill(Blockly.selected);
 		}
 
 		else if(map[83]){ //S

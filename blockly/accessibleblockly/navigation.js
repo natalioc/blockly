@@ -75,7 +75,7 @@ Blockly.BlockSvg.prototype.select = function () {
 
     var prevSelect = Blockly.selected;
     this.defaultSelect();
-    
+
     if (Blockly.Accessibility.Navigation.getBlockNodeById(this.id)) {
         Blockly.Accessibility.Navigation.currentNode = Blockly.Accessibility.Navigation.getBlockNodeById(this.id);
     }
@@ -309,13 +309,20 @@ Blockly.Accessibility.Navigation.traverseOut = function () {
 
     var childBlocks = Blockly.selected.parentBlock_.childBlocks_;
     var surroundParent = Blockly.selected.getSurroundParent();
-
+    var ioSelected = childBlocks.indexOf(Blockly.selected);
+    console.log(surroundParent);
     //select the previous block at the same level if there is one
-    if(childBlocks.length > 1 && Blockly.selected != childBlocks[0]){
+    if(childBlocks.length > 1 && !Blockly.selected.previousConnection){
+
         for (var i = 0; i < childBlocks.length; i++){
-            if(Blockly.selected != childBlocks[i]){
+
+            if(Blockly.selected != childBlocks[i] && ioSelected > i){
                 childBlocks[i].select();
-                break;
+                return;
+            }
+
+            else{
+                surroundParent.select();  
             }
         }     
     }
@@ -335,6 +342,7 @@ Blockly.Accessibility.Navigation.traverseOut = function () {
 /**
  * Goes inside of one block to go down a level
  * if there are two blocks that the same level, go to the next one
+ * TODO: clean up this function, the if statements may be redundant or simplified but for now it works
  */
 Blockly.Accessibility.Navigation.traverseIn = function() {
 
@@ -352,25 +360,30 @@ Blockly.Accessibility.Navigation.traverseIn = function() {
 
         //select next child
         //TODO: clean up this if statement if possible
-        if(Blockly.selected.childBlocks_[i].previousConnection != null && Blockly.selected.childBlocks_[i].previousConnection.type == 4){
+        if(Blockly.selected.childBlocks_[i].previousConnection != null && Blockly.selected.childBlocks_[i].previousConnection.type != 2){
             Blockly.selected.childBlocks_[i].select();
             return;
         }
         //select next child of PARENT ( [1] + 2 ) ->  (1 + [2])
-        else{
+        else if(Blockly.selected.parentBlock_){
+          
             var parentBlock = Blockly.selected.parentBlock_;
+            var prevConnection;
 
-            for (var i = 0; i < parentBlock.childBlocks_.length; i++){
-                
+            if (!parentBlock){
+                return;
+            }
+
+            for (var j = 0; j < parentBlock.childBlocks_.length; j++){
+
                 //make sure its not the same block
-                if(Blockly.selected != parentBlock.childBlocks_[i]){
-                    parentBlock.childBlocks_[i].select();
+                if(Blockly.selected != parentBlock.childBlocks_[j] ){
+                    parentBlock.childBlocks_[j].select();
                 }
 
             }
         }
       }
-
     }
     //select next child of parent
     else{
