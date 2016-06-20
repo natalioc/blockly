@@ -309,26 +309,30 @@ Blockly.Accessibility.Navigation.traverseOut = function () {
 
     var childBlocks = Blockly.selected.parentBlock_.childBlocks_;
     var surroundParent = Blockly.selected.getSurroundParent();
-    var ioSelected = childBlocks.indexOf(Blockly.selected);
+    var selectedIndex = childBlocks.indexOf(Blockly.selected);
     console.log(surroundParent);
     //select the previous block at the same level if there is one
     if(childBlocks.length > 1 && !Blockly.selected.previousConnection){
 
         for (var i = 0; i < childBlocks.length; i++){
 
-            if(Blockly.selected != childBlocks[i] && ioSelected > i){
+            if(Blockly.selected != childBlocks[i]){
                 childBlocks[i].select();
+                console.log("1");
                 return;
             }
 
             else{
+                console.log("3");
                 surroundParent.select();  
+                return;
             }
         }     
     }
 
     //select the surrounding block
     else if (surroundParent){
+        console.log("2");
         surroundParent.select();
     }
     //inform the user they've reached the end
@@ -360,13 +364,14 @@ Blockly.Accessibility.Navigation.traverseIn = function() {
 
         //select next child
         //TODO: clean up this if statement if possible
-        if(Blockly.selected.childBlocks_[i].previousConnection != null && Blockly.selected.childBlocks_[i].previousConnection.type != 2){
+        if(Blockly.selected.childBlocks_[i].previousConnection != null && Blockly.selected.childBlocks_[i].previousConnection.type == 4){
+            console.log("1");
             Blockly.selected.childBlocks_[i].select();
             return;
         }
         //select next child of PARENT ( [1] + 2 ) ->  (1 + [2])
         else if(Blockly.selected.parentBlock_){
-          
+            console.log("2");
             var parentBlock = Blockly.selected.parentBlock_;
             var prevConnection;
 
@@ -378,6 +383,7 @@ Blockly.Accessibility.Navigation.traverseIn = function() {
 
                 //make sure its not the same block
                 if(Blockly.selected != parentBlock.childBlocks_[j] ){
+                    console.log("3");
                     parentBlock.childBlocks_[j].select();
                 }
 
@@ -392,6 +398,7 @@ Blockly.Accessibility.Navigation.traverseIn = function() {
         for (var i = 0; i < parentBlock.childBlocks_.length; i++){
             
             if(Blockly.selected != parentBlock.childBlocks_[i]){
+                console.log("4");
                 parentBlock.childBlocks_[i].select();
             }
 
