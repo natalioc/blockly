@@ -241,8 +241,7 @@ document.onkeydown = document.onkeyup = function(e){
 
 		else if(map[18] && map[16] && map[72]){ //Alt Shift H
 			console.log('Alt Shift H keys pressed.');
-			Blockly.Accessibility.helpSelectedBlock();//Link to the help page for the selected block
-			//resets the map in order to fix the bug where every key becomes this key
+			Blockly.Accessibility.InBlock.getHelpUrl();			
 			e.preventDefault();
 			map = [];
 		}

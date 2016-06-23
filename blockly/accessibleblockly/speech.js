@@ -32,7 +32,19 @@ Blockly.Accessibility.Speech.result;
 Blockly.Accessibility.Speech.Say = function(string){
 
 	 var blockReader = document.getElementById("blockReader");
+	
+
+	 //for safari
+	 blockReader.setAttribute("aria-live", "assertive");
+	 blockReader.setAttribute("aria-label", string);
+	 blockReader.setAttribute("role", "alert");
+
+	 //for chrome
 	 blockReader.innerHTML = string;
+
+
+	 //TODO: Firefox for Voiceover (live regions currently not supported on their end)
+
 	 console.log(string);
 }
 

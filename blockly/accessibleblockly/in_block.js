@@ -810,5 +810,195 @@ Blockly.Field.prototype.highlight = function () {
         this.sourceBlock_.getSvgRoot());
 };
 
+/*
+*   Opens help page for specific block in a new tab
+*   TODO: make this dynamic and not hardcoded
+*/
+Blockly.Accessibility.InBlock.getHelpUrl = function(){
+    var url = "./helpPages/index.html";
 
+
+    switch(Blockly.selected.type){
+        case "controls_if":
+            url = "./helpPages/logic.html#controls_if";
+        break;
+        case "controls_elseif":
+            url = "./helpPages/logic.html#controls_elseif";
+        break;
+        case "controls_else":
+            url = "./helpPages/logic.html#controls_else";
+        break;
+        case "logic_compare":
+             url = "./helpPages/logic.html#logic_compare";
+        break;
+        case "logic_operation":
+              url = "./helpPages/logic.html#logic_operation";
+        break;
+        case "logic_negate":
+            url = "./helpPages/logic.html#negate";
+        break;
+        case "logic_boolean":
+            url = "./helpPages/logic.html#logic_boolean";
+        break;
+        case "logic_null":
+            url = "./helpPages/logic.html#logic_null";
+        break;
+        case "logic_ternary":
+            url = "./helpPages/logic.html#logic_ternary";
+        break;
+        case "controls_repeat_ext":
+            url = "./helpPages/loops.html#controls_repeat_ext";
+        break;
+        case "controls_repeat":
+            url = "./helpPages/loops.html#controls_repeat";
+        break;
+        case "controls_whileUntil":
+            url = "./helpPages/loops.html#controls_whileUntil";
+        break;
+        case "controls_for":
+            url = "./helpPages/loops.html#controls_for";
+        break;
+        case "controls_forEach":
+            url = "./helpPages/loops.html#controls_forEach";
+        break;
+        case "controls_flow_statements":
+            url = "./helpPages/loops.html#controls_flow_statements";
+        break;
+        case "math_number":
+            url = "./helpPages/math.html#math_number#math_number";
+        break;
+        case "math_arithmetic":
+            url = "./helpPages/math.html#math_arithmetic";
+        break;
+        case "math_single":
+            url = "./helpPages/math.html#math_single";
+        break;
+        case "math_trig":
+             url = "./helpPages/math.html#math_trig";
+        break;
+        case "math_constant":
+             url = "./helpPages/math.html#math_constant";
+        break;
+        case "math_number_property":
+            url = "./helpPages/math.html#math_number_property";
+        break;
+        case "math_change":
+            url = "./helpPages/math.html#math_change";
+        break;
+        case "math_round":
+            url = "./helpPages/math.html#math_round";
+        break;
+        case "math_on_list":
+            url = "./helpPages/math.html#math_on_list";
+        break;
+        case "math_modulo":
+            url = "./helpPages/math.html#math_modulo";
+        break;
+        case "math_contrain":
+            url = "./helpPages/math.html#math_contrain";
+        break;
+        case "math_random_int":
+            url = "./helpPages/math.html#math_random_int";
+        break;
+        case "math_random_float":
+            url = "./helpPages/math.html#math_random_float";
+        break;
+        case "text":
+            url = "./helpPages/text.html#text";
+        break;
+        case "text_join":
+            url = "./helpPages/text.html#text_join";
+        break;
+        case "text_append":
+            url = "./helpPages/text.html#text_append";
+        break;
+        case "text_length":
+            url = "./helpPages/text.html#text_length";
+        break;
+        case "text_isEmpty":
+            url = "./helpPages/text.html#text_isEmpty";
+        break;
+        case "text_indexOf":
+            url = "./helpPages/text.html#text_indexOf";
+        break;
+        case "text_charAt":
+            url = "./helpPages/text.html#text_charAt";
+        break;
+        case "text_getSubstring":
+            url = "./helpPages/text.html#text_getSubstring";
+        break;
+        case "text_changeCase":
+            url = "./helpPages/text.html#text_changeCase";
+        break;
+        case "text_trim":
+            url = "./helpPages/text.html#text_trim";
+        break;
+        case "text_print":
+            url = "./helpPages/text.html#text_print";
+        break;
+        case "text_prompt_ext":
+            url = "./helpPages/text.html#text_prompt_ext";
+        break;
+        case "lists_create_empty":
+            url = "./helpPages/lists.html#lists_create_empty";
+        break;
+        case "lists_create_with":
+            url = "./helpPages/lists.html#lists_create_with";
+        break;
+        case "lists_repeat":
+            url = "./helpPages/lists.html#lists_repeat";
+        break;
+        case "lists_length":
+            url = "./helpPages/lists.html#lists_length";
+        break;
+        case "lists_isEmpty":
+            url = "./helpPages/lists.html#lists_isEmpty";
+        break;
+        case "lists_indexOf":
+            url = "./helpPages/lists.html#lists_indexOf";
+        break;
+        case "lists_getIndex":
+            url = "./helpPages/lists.html#lists_getIndex";
+        break;
+        case "lists_setIndex":
+            url = "./helpPages/lists.html#lists_setIndex";
+        break;
+        case "lists_getSublist":
+            url = "./helpPages/lists.html#lists_getSublist";
+        break;
+        case "lists_split":
+            url = "./helpPages/lists.html#lists_split";
+        break;
+        case "colour_picker":
+            url = "./helpPages/colour.html#colour_picker";
+        break;
+        case "colour_random":
+            url = "./helpPages/colour.html#colour_random";
+        break;
+        case "colour_rgb":
+            url = "./helpPages/colour.html#colour_rgb";
+        break;
+        case "colour_blend":
+            url = "./helpPages/colour.html#colour_blend";
+        break;
+        case "procedures_defnoreturn":
+            url = "./helpPages/functions.html#procedures_defnoreturn";
+        break;
+        case "procedures_defreturn":
+            url = "./helpPages/functions.html#procedures_defreturn"; 
+        break;
+        case "procedures_callnoreturn":
+            url = "./helpPages/functions.html#procedures_callnoreturn"; 
+        break;
+        case "procedures_callreturn":
+            url = "./helpPages/functions.html#procedures_callreturn"; 
+        break;
+        case "procedures_ifreturn":
+            url = "./helpPages/functions.html#procedures_ifreturn";
+        default:
+        break;
+    }
+
+    window.open(url, "_blank");
+}
 //#endregion
