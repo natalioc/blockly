@@ -286,8 +286,16 @@ document.onkeydown = document.onkeyup = function(e){
 			Blockly.Accessibility.InBlock.clearHighlights();
 			document.activeElement.blur();
 
+			document.getElementById("colorOptions").style.display = "none";
+
 			//Get out of the current menu
 			e.preventDefault();
+		}
+
+		else if(map[9]){//tab 
+			if(document.activeElement.className != "colOpts"){
+				document.getElementById("colorOptions").style.display = "none";
+			} 
 		}
 
 		else if(map[65]){ //A
@@ -329,9 +337,6 @@ document.onkeydown = document.onkeyup = function(e){
 			//Blockly.Accessibility.TreeView.commentOrBlockJump();
 			//Goto the block the comment that is currently selected is from
 			//Alternatively goto the comment that is connected to the currently selected block
-			Blockly.Accessibility.InBlock.addBlock();
-			Blockly.Accessibility.Keystrokes.prototype.isConnecting = false;
-			document.getElementById("blockReader").focus();
 		}
 
 		else if(map[74]){//J jump into workspace or top block of workspace
@@ -412,7 +417,6 @@ document.onkeydown = document.onkeyup = function(e){
 						var tempName = ":" + (count);
 						category = document.getElementById(tempName);
 					}
-
 					category.focus();
 					count++;
 				}

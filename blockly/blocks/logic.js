@@ -479,9 +479,9 @@ Blockly.Blocks['controls_else'] = {
   init: function() {
     this.appendDummyInput()
         .setAlign(Blockly.ALIGN_RIGHT)
-        .appendField("else");
+        .appendField("else")
     this.appendStatementInput("elseInput");
-    this.setPreviousStatement(true);
+    this.setPreviousStatement(true,"else");
     this.setNextStatement(true);
     this.setColour(210);
     this.setTooltip('');
@@ -506,7 +506,7 @@ Blockly.Blocks['controls_elseif'] = {
     this.appendStatementInput("elseifInput");
     //this.appendStatementInput("elseifInput");
     this.setPreviousStatement(true);
-    this.setNextStatement(true);
+    this.setNextStatement(true, "else");
     this.setColour(210);
     this.setTooltip('');
     this.setHelpUrl('http://www.example.com/');

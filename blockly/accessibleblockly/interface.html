@@ -203,6 +203,73 @@ function changeFontDD(){
   infoBox.style.fontSize = selectedSize+"px";
 }
 
+//change color scheme
+function changeColor(color){
+  var blocklyMain = document.getElementsByClassName("blocklySvg");
+  var toolbox = document.getElementsByClassName("blocklyToolboxDiv");
+  var comment =  document.getElementById("comment");
+  var impExp  = document.getElementById("importExport");
+
+  console.log(blocklyMain);
+  console.log(toolbox);
+
+  if(color == "blue"){
+
+    document.body.style.backgroundColor = "#343E54";
+    document.body.style.color = "white";
+    comment.style.backgroundColor = "#DCDCDC";
+    comment.style.color = "#000";
+    blocklyMain[0].style.backgroundColor = "#DCDCDC";
+    toolbox[0].style.backgroundColor = "#343E54";
+
+  }
+  else if(color == "dark"){
+    document.body.style.backgroundColor = "#28292B";
+    document.body.style.color = "#FFF";
+    comment.style.backgroundColor = "#DCDCDC";
+    comment.style.color = "#000";
+    impExp.style.backgroundColor = "#DCDCDC";
+    blocklyMain[0].style.backgroundColor = "#3E3F42";
+    toolbox[0].style.backgroundColor = "#28292B";
+  }
+   else if(color == "grey"){
+    document.body.style.backgroundColor = "#d6d6d6";
+    document.body.style.color =  "#000";
+    comment.style.backgroundColor = "#fff";
+    comment.style.color = "#000";
+    blocklyMain[0].style.backgroundColor = "#8C8C8C";
+    toolbox[0].style.backgroundColor = "#ddd";
+  }
+  else{
+    document.body.style.backgroundColor = "#fff";
+    document.body.style.color = "#000";
+    comment.style.backgroundColor = "#FFF";
+    comment.style.color = "#000";
+    blocklyMain[0].setAttribute("style", "background-color:'#FFF';");
+    toolbox[0].style.backgroundColor = "#ddd";
+  }
+  toggleColorDD();
+}
+
+//toggle color dropdown
+function toggleColorDD(){
+  var opts = document.getElementById("colorOptions");
+  var colorDiv = document.getElementById("colorDiv");
+
+  if(opts.style.display == "none"){
+      opts.style.display = "block";
+      opts.setAttribute("aria-hidden", "false");
+      colorDiv.setAttribute("aria-expanded","true");
+
+  }
+  else{
+      opts.style.display = "none";
+      opts.setAttribute("aria-hidden", "true");
+      colorDiv.setAttribute("aria-expanded","false");
+      document.getElementById("colorButton").focus();
+  }
+}
+
 
 </script>
 <link rel="stylesheet" href="interface.css"></link>
@@ -264,7 +331,6 @@ h1 {
 #commentDiv {
     padding-left: 71%;
     font-family: monospace;
-
 }
 
 #comment{
@@ -280,14 +346,14 @@ h1 {
 
 /*change font size drop down*/
 #fontDD{
-  margin: .7em;
-  display: block;
+  display: inline-block;
+  margin-bottom: 10px;
+  height: 20px;
 }
 
 /*output buttons*/
 div button{
   width:10em;
-  margin: 3px;
 }
 
 /*when tabbing through highlight*/
@@ -325,16 +391,48 @@ color: black;
   position: absolute;
   left: -999em;
 }
+
+#colorButton{
+  width: 150px;
+  height: 24px;
+  margin-bottom: 0px;
+  margin-left: 20px;
+}
+
+#colorDiv{
+  display: inline-block;
+  margin-bottom: 5px;
+  margin-top: 30px;
+}
+
+#colorOptions{
+  display: none;
+  position: absolute;
+  box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+  width:150px;
+  margin-left: 20px;
+  padding: 5px;
+  text-align: center;
+}
+
+#colorOptions a{
+  text-decoration: none;
+  display: block;
+  padding: 5px;
+}
 </style>
 </head>
 <body onload="start()">
 
   <div id="collaborators"></div>
 
+
   <div id="blocklyDiv"></div>
 
-  <xml id="toolbox" style="display: none">
-    <category name="Logic" colour="210">
+
+
+  <xml id="toolbox" style="display: none" role = "menu">
+    <category  name="Logic" colour="210">
       <block type="controls_if"></block>
       <block type="controls_elseif"></block>
       <block type="controls_else"></block>
@@ -539,11 +637,12 @@ color: black;
   </xml>
 
     
-    <div id="infoBox"></div>
+
 
 
     <div class="commentDiv" tabindex="-1">
         <h1 tabindex="-1" align="center">Blockly</h1>
+        <label for="fontDD"> Font Size: </label>
         <select onchange="changeFontDD()" id= "fontDD" role="combobox" aria-haspopup="true" aria-hidden="true" tabindex="-1">
             <option role="option" value='12'>12</option>
             <option role="option" value='14'>14</option>
@@ -553,13 +652,27 @@ color: black;
             <option role="option" value='48'>48</option> 
             <option role="option" value='72'>72</option>
         </select>
-    </div>
+
+
+        <div id="colorDiv" >
+          <button class="colOpts" id="colorButton" aria-haspopup = "true" aria-owns = "colorOptions" aria-controls="colorOptions" aria-expanded="false" onclick="toggleColorDD()" >Color Scheme</button>
+          <div id="colorOptions" aria-hidden="true" role="menu">
+            <a class="colOpts" tabindex="0" role = "menuitem"; href="#" onclick="changeColor('blue')" style="background-color: #343E54; color: #FFF;">Blue </a>
+            <a class="colOpts" tabindex="0" role = "menuitem"; href="#" onclick="changeColor('grey')" style="background-color: #ddd; color: #000;"> Grey </a>
+            <a class="colOpts" tabindex="0" role = "menuitem"; href="#" onclick="changeColor('dark')" style="background-color: #28292B; color: #fff;"> Dark </a>
+            <a class="colOpts" tabindex="0" role = "menuitem"; href="#" onclick="changeColor('default')" style="background-color: #fff;"> Default </a>
+          </div>
+        </div>
+
+        <div id="infoBox"></div>
+
+      </div>
 
     <p tabindex="-1" id="comment" >Comments go here</p>
     <div id="primaryContentDiv">
 
         <div id="typeButtons">
-            <button  type="button" value="Export to XML" onclick="toXml()">Export to XML</button>
+            <button type="button" value="Export to XML" onclick="toXml()">Export to XML</button>
             <button type="button" value="Import from XML" onclick="fromXml()">Import from XML</button>
             <button type="button" value="To JavaScript" onclick="toCode('JavaScript')">To JavaScript</button>
             <button type="button" value="To Python" onclick="toCode('Python')">To Python</button>

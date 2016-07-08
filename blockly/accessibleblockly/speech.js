@@ -42,9 +42,6 @@ Blockly.Accessibility.Speech.Say = function(string){
 	 //for chrome
 	 blockReader.innerHTML = string;
 
-
-	 //TODO: Firefox for Voiceover (live regions currently not supported on their end)
-
 	 console.log(string);
 }
 
