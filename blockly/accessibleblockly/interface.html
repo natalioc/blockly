@@ -210,9 +210,6 @@ function changeColor(color){
   var comment =  document.getElementById("comment");
   var impExp  = document.getElementById("importExport");
 
-  console.log(blocklyMain);
-  console.log(toolbox);
-
   if(color == "blue"){
 
     document.body.style.backgroundColor = "#343E54";
@@ -314,7 +311,9 @@ h1 {
   resize: vertical;
   margin-top: 5px;}
 
-/*=============Accessibility Css================*/
+/*=============Accessibility Css================
+  TO DO: move to new file
+*/
 
 #PrimaryContentDiv {
     padding-left: 71%;
@@ -337,12 +336,32 @@ h1 {
   outline: 1px solid gray;
   margin-bottom: 5px;
   height: 280px;
-  padding-left: 9px;
   padding-top:  9px;
   overflow: scroll;
-  word-wrap:normal;
-  resize:vertical;
+
 }
+
+#commentList > li, #commentList ul{
+
+  display: list-item;
+  list-style-type: square;
+
+  margin: 10px;
+  margin-left: 0px;
+
+}
+
+li+li{
+  display: list-item;
+  list-style-type: square;
+}
+
+#comment ul{
+  margin-left: 35px;
+  padding-left: 10px;
+    
+}
+
 
 /*change font size drop down*/
 #fontDD{
@@ -413,6 +432,7 @@ color: black;
   margin-left: 20px;
   padding: 5px;
   text-align: center;
+  z-index:100;
 }
 
 #colorOptions a{
@@ -420,6 +440,8 @@ color: black;
   display: block;
   padding: 5px;
 }
+
+
 </style>
 </head>
 <body onload="start()">
@@ -668,7 +690,11 @@ color: black;
 
       </div>
 
-    <p tabindex="-1" id="comment" >Comments go here</p>
+    <p tabindex="-1" id="comment" >
+      <ul id="commentList"></ul>
+    </p>
+
+
     <div id="primaryContentDiv">
 
         <div id="typeButtons">

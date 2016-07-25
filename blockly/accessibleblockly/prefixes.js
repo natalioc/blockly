@@ -30,13 +30,15 @@ Blockly.Accessibility.Prefixes.ol = document.createElement("ol");
 Blockly.Accessibility.Prefixes.usedKeys = [];
 
 Blockly.Comment.prototype.defaultsetText = Blockly.Comment.prototype.setText;
+
 /*
 * Altered implentation of Blocklys setText function for compatibility with the comment display box.
 */
 Blockly.Comment.prototype.setText = function(text){
   this.defaultsetText(text);
-  Blockly.Accessibility.Speech.Say(" comment: " + text);
-  Blockly.Accessibility.Prefixes.formatTreeView();
+  if(Blockly.selected){
+      Blockly.Accessibility.Speech.Say(" comment: " + Blockly.selected.comment.getText());
+  }
 }
 
 /**
@@ -159,196 +161,319 @@ Blockly.Accessibility.Prefixes.getInfoBox = function(){
 //* TREE VIEW FUNCTIONS                                                                    *
 //*                                                                                        *
 //******************************************************************************************
+/*
+ * New version of formatTreeView used to create the comment tree
+ */
+Blockly.Accessibility.Prefixes.generateTree = function(){
+
+  var parentBlocks = Blockly.mainWorkspace.getAllBlocks(true);
+  var  ul =  document.getElementById("commentList");
+
+  ul.innerHTML = "";
+  this.narySearchTree(parentBlocks[0], 2, ul);
+}
+
+/*
+ * Recursive N-ary search function to organize the comments correctly
+ * @param_block.....svg object of top block;
+ * @param_indent....bool indented
+ * @param_bottom.... The lowest level ul or li 
+ */
+Blockly.Accessibility.Prefixes.narySearchTree = function(block, indent, bottom){
+  
+  var ul = document.getElementById("commentList");
+  var  p =  document.getElementById("comment");
+  var children = block.getChildren();
+  var length = children.length;
+
+  if(!block.comment){
+    block.comment.setText(" ");
+  }
+
+  var commentText = block.comment.getText();
+  var botUls = bottom.getElementsByTagName("UL");
+  var botLis = bottom.getElementsByTagName("LI");
+  var commentLi = document.createElement("li");
+  
+  //indent
+  if(indent == 1){
+
+    //loop through  
+    var prevBottom;
+    while(bottom.nodeName != "LI"){
+
+      prevBottom = bottom;
+      bottom = bottom.childNode;
+
+      if(!bottom){
+        bottom = prevBottom;
+        if(prevBottom.nodeName != "LI" && prevBottom != ul){
+          bottom = bottom.parentNode;
+        }
+        break;
+      }
+    }
+
+    //create new ul and comment li
+    var indentedUl = document.createElement("ul");
+
+    //put everything together
+    commentLi.appendChild(document.createTextNode(commentText));
+    indentedUl.appendChild(commentLi);
+    bottom.appendChild(indentedUl);
+
+    if(!ul.contains(bottom)){
+       ul.appendChild(bottom);
+       p.appendChild(ul); 
+    }
+  }
+
+  //first block
+  else if(indent ==2){
+
+    commentLi.appendChild(document.createTextNode(commentText));
+    ul.appendChild(commentLi);
+    p.appendChild(ul);
+  }
+
+  //dont indent further 
+  else{
+
+    //find last <ul> to add <li> to
+    commentLi.appendChild(document.createTextNode(commentText));
+
+    while(bottom.nodeName != "UL"){
+      bottom = bottom.parentNode;
+    }
+
+    bottom.appendChild(commentLi);
+
+    if(!ul.contains(bottom)){
+        ul.appendChild(bottom);
+        p.appendChild(ul);
+    }
+  }
+
+  var newIndent;
+  var newBottom;
+
+  //go through all children
+  for(var i = 0; i < length; i++)
+  { 
+      //indent
+      if(i == 0){ 
+        newIndent = 1;            
+        newBottom = botLis[0];
+      }
+
+      //dont indent
+      else{
+        index = 0;
+        newIndent = 0;
+
+        if(botLis[0] == newBottom && newBottom != ul){
+          newBottom = botLis[1];
+        }
+        else{
+          newBottom = botLis[0];
+        }
+      }
+
+      if(!newBottom){
+        newBottom = bottom;
+      }
+      this.narySearchTree(children[i], newIndent, newBottom);
+  }
+  console.log(document.getElementById("comment"));
+}
+
 
 /**
 *  WORK HERE TO FINISH BUILDING THE TREE VIEW FOR THE BLOCK COMMENTS SHOULD BUILD IT TO WORK WITH ALL BLOCKS
 *  THEN SHRINK IT DOWN TO BLOCKS THAT CONTAIN COMMENTS. THE FUNCTIONS BELOW WILL PUT ITEMS INTO FILE OR FOLDER
-*  NODES I LEFT IN COMMENTED OUT CODE THAT. WE STILL NEED TO FIND WHEN TO CALL THIS FUNCTION SO THAT IT IS FUNCTIONAL
+*  NODES I LEFT IN COMMENTED OUT CODE THAT. WE STILL NEED TO FIND WHEN TO CALL THIS FUNCTION  SO THAT IT IS FUNCTIONAL
 *  IT DOESN"T WORK ON UPDATEXML ANYMORE.
 *  Builds the treeview for comments
 */
-Blockly.Accessibility.Prefixes.formatTreeView = function(){
+// Blockly.Accessibility.Prefixes.formatTreeView = function(){
 
-  document.getElementById("comment").innerHTML = ""; //clear what is currently in the div
-  var map = this.getAllPrefixes(); //get all the blocks
-  var commentStr;
-  //var commentArr = xmlDoc.getElementsByTagName('COMMENT'); //all the comments to be added in later
-  var firstFolder = this.buildBasis(); //The top folder that says Block Comments
-  var fullTree = document.createElement("ol"); //to build the structure you need to put prefices in ol and li tags
-  var lastPeriodCount = 1;
-  var firstEqualDepthRun = true;
-  var firstLastGreaterDepthRun = true;
-  //var ol = document.createElement("ol");
-  var text = Blockly.selected.comment.getText();
-  var li; //= this.buildFileNode(map[key] + " " + text);
-  var count = 0;
-  var commentText;
-
+//   document.getElementById("comment").innerHTML = ""; //clear what is currently in the div
+//   var map = this.getAllPrefixes(); //get all the blocks
+//   var commentStr;
+//   //var commentArr = xmlDoc.getElementsByTagName('COMMENT'); //all the comments to be added in later
+//   var firstFolder = this.buildBasis(); //The top folder that says Block Comments
+//   var fullTree = document.createElement("ol"); //to build the structure you need to put prefices in ol and li tags
+//   var lastPeriodCount = 1;
+//   var firstEqualDepthRun = true;
+//   var firstLastGreaterDepthRun = true;
+//   //var ol = document.createElement("ol");
+//   var text = Blockly.selected.comment.getText();
+//   var li; //= this.buildFileNode(map[key] + " " + text);
+//   var commentText;
 
       
 
-  //document.getElementById('comment').appendChild(firstFolder); //append the comments to the base folder
-  fullTree.setAttribute("class", "tree");
-  console.log(map);
-  for (var key in map) { //loops through the entire hashmap of blocks
+//   //document.getElementById('comment').appendChild(firstFolder); //append the comments to the base folder
+//   fullTree.setAttribute("class", "tree");
+//   console.log(map);
+//   for (var key in map) { //loops through the entire hashmap of blocks
 
-    if(this.usedKeys.includes(map[key])){
-      console.log(this.usedKeys);
-      this.usedKeys
-      continue;
-    }
-    else{
-       console.log("else");
-       this.usedKeys.push(map[key]);
-    }
-
-
-
-    count++;
-    // don't do anything if the text area is open
-    if (map.hasOwnProperty(key) && !(Blockly.selected.comment.textarea_)){
+//     if(this.usedKeys.includes(map[key])){
+//       console.log(this.usedKeys);
+//       this.usedKeys
+//       continue;
+//     }
+//     else{
+//        console.log("else");
+//        this.usedKeys.push(map[key]);
+//     }
 
 
-      var prefix = map[key];
-      var currentPeriodCount = prefix.replace(/[^0-9]/g,"").length;//how many periods are in the string
+
+//     // don't do anything if the text area is open
+//     if (map.hasOwnProperty(key) && !(Blockly.selected.comment.textarea_)){
 
 
-      //if(!prefix[1].match(/[a-z]/i)){ //check if the prefix has 1 or 2 starting characters
-      if(prefix.includes(".")){
-        console.log("1");
-        //this case is for single alphabetical starting prefixes ex. A
-        if(lastPeriodCount == currentPeriodCount){
-          console.log("2");
-          if(firstEqualDepthRun == true){
-            console.log("3");
-            var ol = document.createElement("ol");
-            var li = this.buildFileNode(prefix);
-            ol.appendChild(li);
-            firstFolder.appendChild(ol);
-            fullTree.appendChild(firstFolder);
-            document.getElementById('comment').appendChild(fullTree);
-            firstEqualDepthRun = false;
-            lastPeriodCount = currentPeriodCount;
-          }
-          else{
-            console.log("4");
-            var li = this.buildFileNode(prefix);
-            ol.appendChild(li);
-            firstFolder.appendChild(ol);
-            fullTree.appendChild(firstFolder);
-            document.getElementById('comment').appendChild(fullTree);
-            firstEqualDepthRun = false;
-            lastPeriodCount = currentPeriodCount;
-          }
-        }
-        //nested statements
-        if(lastPeriodCount < currentPeriodCount){
-          console.log("5");
-          if(firstLastGreaterDepthRun == true){
-            console.log("6");
-            console.log(Blockly.selected);
-            //var prevComment = Blockly.selected.parentBlock_.comment.getText();
-            var fileToFolder = this.convertFromFileToFolderNode(li, prefix);
-            var ol = document.createElement("ol");
-            //ol.appendChild(fileToFolder);
-            //this.ol.appendChild(fileToFolder);
-            firstFolder.childNodes[currentPeriodCount].appendChild(fileToFolder);
-            fullTree.appendChild(firstFolder);
-            //document.getElementById('comment').appendChild(fullTree);
-            lastPeriodCount = currentPeriodCount;
-            firstLastGreaterDepthRun = false;
+//       var prefix = map[key];
+//       var currentPeriodCount = prefix.replace(/[^0-9]/g,"").length;//how many periods are in the string
 
-          }
-          else{
-            console.log("7");
-            li = this.buildFileNode(map[key] + " " + text);
-            var fileToFolder = this.convertFromFileToFolderNode(li, prefix);
-            var ol = document.createElement("ol");
-            //ol.appendChild(fileToFolder);
-            //console.log(firstFolder.childNodes[lastPeriodCount].childNodes);
-            firstFolder.childNodes[lastPeriodCount].childNodes[0].appendChild(fileToFolder);
-            fullTree.appendChild(firstFolder);
-            document.getElementById('comment').appendChild(fullTree);
-            lastPeriodCount = currentPeriodCount;
-            firstLastGreaterDepthRun = true;
-          }
-        }
-        else{
-            console.log("8");
-        }
-      }
+
+//       //if(!prefix[1].match(/[a-z]/i)){ //check if the prefix has 1 or 2 starting characters
+//       if(prefix.includes(".")){
+//         console.log("1");
+//         //this case is for single alphabetical starting prefixes ex. A
+//         if(lastPeriodCount == currentPeriodCount){
+//           console.log("2");
+//           if(firstEqualDepthRun == true){
+//             console.log("3");
+//             var ol = document.createElement("ol");
+//             var li = this.buildFileNode(prefix);
+//             ol.appendChild(li);
+//             firstFolder.appendChild(ol);
+//             fullTree.appendChild(firstFolder);
+//             document.getElementById('comment').appendChild(fullTree);
+//             firstEqualDepthRun = false;
+//             lastPeriodCount = currentPeriodCount;
+//           }
+//           else{
+//             console.log("4");
+//             var li = this.buildFileNode(prefix);
+//             ol.appendChild(li);
+//             firstFolder.appendChild(ol);
+//             fullTree.appendChild(firstFolder);
+//             document.getElementById('comment').appendChild(fullTree);
+//             firstEqualDepthRun = false;
+//             lastPeriodCount = currentPeriodCount;
+//           }
+//         }
+//         //nested statements
+//         if(lastPeriodCount < currentPeriodCount){
+//           console.log("5");
+//           if(firstLastGreaterDepthRun == true){
+//             console.log("6");
+//             console.log(Blockly.selected);
+//             //var prevComment = Blockly.selected.parentBlock_.comment.getText();
+//             var fileToFolder = this.convertFromFileToFolderNode(li, prefix);
+//             var ol = document.createElement("ol");
+//             //ol.appendChild(fileToFolder);
+//             //this.ol.appendChild(fileToFolder);
+//             firstFolder.childNodes[currentPeriodCount].appendChild(fileToFolder);
+//             fullTree.appendChild(firstFolder);
+//             //document.getElementById('comment').appendChild(fullTree);
+//             lastPeriodCount = currentPeriodCount;
+//             firstLastGreaterDepthRun = false;
+
+//           }
+//           else{
+//             console.log("7");
+//             li = this.buildFileNode(map[key] + " " + text);
+//             var fileToFolder = this.convertFromFileToFolderNode(li, prefix);
+//             var ol = document.createElement("ol");
+//             //ol.appendChild(fileToFolder);
+//             //console.log(firstFolder.childNodes[lastPeriodCount].childNodes);
+//             firstFolder.childNodes[lastPeriodCount].childNodes[0].appendChild(fileToFolder);
+//             fullTree.appendChild(firstFolder);
+//             document.getElementById('comment').appendChild(fullTree);
+//             lastPeriodCount = currentPeriodCount;
+//             firstLastGreaterDepthRun = true;
+//           }
+//         }
+//         else{
+//             console.log("8");
+//         }
+//       }
         
-        //var li = this.buildFileNode(map[key] + " " + Blockly.selected.comment.getText());
-        //var ol = document.createElement("ol");
-        li = this.buildFileNode(map[key] + " " + text);
-        Blockly.Accessibility.Prefixes.ol.appendChild(li);
-        //firstFolder.appendChild(Blockly.Accessibility.Prefixes.ol);
-        //fullTree.appendChild(firstFolder);
-        //document.getElementById('comment').appendChild(fullTree);
-    }
+//         //var li = this.buildFileNode(map[key] + " " + Blockly.selected.comment.getText());
+//         //var ol = document.createElement("ol");
+//         li = this.buildFileNode(map[key] + " " + text);
+//         Blockly.Accessibility.Prefixes.ol.appendChild(li);
+//         //firstFolder.appendChild(Blockly.Accessibility.Prefixes.ol);
+//         //fullTree.appendChild(firstFolder);
+//         //document.getElementById('comment').appendChild(fullTree);
+//     }
 
-  }
+//   }
 
-      firstFolder.appendChild(Blockly.Accessibility.Prefixes.ol);
-      fullTree.appendChild(firstFolder);
-      document.getElementById('comment').appendChild(fullTree);
+//       firstFolder.appendChild(Blockly.Accessibility.Prefixes.ol);
+//       fullTree.appendChild(firstFolder);
+//       document.getElementById('comment').appendChild(fullTree);
 
-};
+// };
 
-/**
-*  Builds the base of the tree view labels it as block comments and is returned to be appended to the comment div
-*   @return {li} li containing the top folder for the comments section
-*/
-Blockly.Accessibility.Prefixes.buildBasis = function(){
-  var li = document.createElement("li");
-  var label = document.createElement("label");
-  var input = document.createElement("input");
-  var title = document.createTextNode("Block Comments");
-  label.setAttribute("for", "topFolder");
-  label.appendChild(title);
-  input.setAttribute("type", "checkbox");
-  input.setAttribute("id", "topFolder");
-  li.appendChild(label);
-  li.appendChild(input);
-  return li;
-};
+// /**
+// *  Builds the base of the tree view labels it as block comments and is returned to be appended to the comment div
+// *   @return {li} li containing the top folder for the comments section
+// */
+// Blockly.Accessibility.Prefixes.buildBasis = function(){
+//   var li = document.createElement("li");
+//   var label = document.createElement("label");
+//   var input = document.createElement("input");
+//   var title = document.createTextNode("Block Comments");
+//   label.setAttribute("for", "topFolder");
+//   label.appendChild(title);
+//   input.setAttribute("type", "checkbox");
+//   input.setAttribute("id", "topFolder");
+//   li.appendChild(label);
+//   li.appendChild(input);
+//   return li;
+// };
 
-/**
-*  Builds a file node for the tree view
-*/
-Blockly.Accessibility.Prefixes.buildFileNode = function(prefixName){
-  var li = document.createElement("li");
-  var pTextNode = document.createTextNode(prefixName);
-  var aTag = document.createElement("a");
-  li.setAttribute("class","file")
-  aTag.appendChild(pTextNode);
-  li.appendChild(aTag);
-  return li;
-};
+// /**
+// *  Builds a file node for the tree view
+// */
+// Blockly.Accessibility.Prefixes.buildFileNode = function(prefixName){
+//   var li = document.createElement("li");
+//   var pTextNode = document.createTextNode(prefixName);
+//   var aTag = document.createElement("a");
+//   li.setAttribute("class","file")
+//   aTag.appendChild(pTextNode);
+//   li.appendChild(aTag);
+//   return li;
+// };
 
-/**
-* Converts a file tree node into a folder node
-* @param{li , prefix} give it the previous li and the new prefix
-* @return{li} a li that contains the new folder and the new prefix name
-*/
-Blockly.Accessibility.Prefixes.convertFromFileToFolderNode = function(li, newPrefix){
-  var label = document.createElement("label");
-  var input = document.createElement("input");
-  var prefix = li.childNodes[0];
-  var belowNode = this.buildFileNode(newPrefix);
-  var ol = document.createElement("ol");
-  ol.appendChild(belowNode);
-  li.removeAttribute("class");
-  li.removeChild(li.childNodes[0]);
-  label.setAttribute("for", prefix);
-  label.appendChild(prefix);
-  input.setAttribute("type", "checkbox");
-  input.setAttribute("id", prefix);
-  li.appendChild(label);
-  li.appendChild(input);
-  li.appendChild(ol);
-  return li;
-};
+// /**
+// * Converts a file tree node into a folder node
+// * @param{li , prefix} give it the previous li and the new prefix
+// * @return{li} a li that contains the new folder and the new prefix name
+// */
+// Blockly.Accessibility.Prefixes.convertFromFileToFolderNode = function(li, newPrefix){
+//   var label = document.createElement("label");
+//   var input = document.createElement("input");
+//   var prefix = li.childNodes[0];
+//   var belowNode = this.buildFileNode(newPrefix);
+//   var ol = document.createElement("ol");
+//   ol.appendChild(belowNode);
+//   li.removeAttribute("class");
+//   li.removeChild(li.childNodes[0]);
+//   label.setAttribute("for", prefix);
+//   label.appendChild(prefix);
+//   input.setAttribute("type", "checkbox");
+//   input.setAttribute("id", prefix);
+//   li.appendChild(label);
+//   li.appendChild(input);
+//   li.appendChild(ol);
+//   return li;
+// };
 
 //******************************************************************************************
 //*                                                                                        *

@@ -49,12 +49,11 @@ document.onkeydown = document.onkeyup = function(e){
 	e = e || event;
 	map[e.keyCode] = e.type == 'keydown';
 
-
-
 	if(keyboardState=='typingMode'){ //if you are typing, hotkeys disabled
 		if(map[13]){ //Enter
 			keyboardState = 'hotkeyMode';
 			Blockly.Accessibility.Navigation.updateXmlSelection();
+			Blockly.Accessibility.Prefixes.generateTree();
 			Blockly.selected.comment.setVisible(false);
 		}
 		return;
@@ -307,7 +306,9 @@ document.onkeydown = document.onkeyup = function(e){
 
 		else if(map[67]){ //C
 			//Add a comment
+			
 			Blockly.Accessibility.addComment();
+			//Blockly.Accessibility.Prefixes.generateTree();
 			keyboardState = 'typingMode';
 			e.preventDefault();
 		}
@@ -399,6 +400,12 @@ document.onkeydown = document.onkeyup = function(e){
 
 		//============Jumping to specific category using number keys===============
 		else{
+
+			//stop jumping to menu when typing a comment
+			if(Blockly.selected.comment.isVisible()){
+				keyboardState = "typingMode";
+				return;
+			}
 			//loop through the numbers on keyboard to access menu
 			for(var i = 48; i < 57; i++){
 
