@@ -62,6 +62,8 @@ document.onkeydown = document.onkeyup = function(e){
 //===========================================EDITING BLOCKS=======================================
 	else if(keyboardState=='editMode'){ //if you are in editMode, normal hotkeys are disabled
 		console.log("edit mode");
+		
+		
 		if(map[27]){ //Escape
 			keyboardState = 'hotkeyMode';
 			var highlight = Blockly.Accessibility.InBlock.storedHighlight;
@@ -75,30 +77,38 @@ document.onkeydown = document.onkeyup = function(e){
 		else if(map[65]){ //A
 			//Navigate to previous field
 			Blockly.Accessibility.InBlock.selectPrev();
+			//console.log("previous block selected");
 		}
 
 		else if(map[68]){ //D
 			//Navigate to next field
 			Blockly.Accessibility.InBlock.selectNext();
+			//console.log("Next block selected");
 
 		}
 
 		else if(map[87]){ //W
 			//Navigate to previous field
 			Blockly.Accessibility.InBlock.selectPrev();
+			//console.log("previous block selected");
 		}
 
 		else if(map[83]){ //S
 			//Navigate to next field
 			Blockly.Accessibility.InBlock.selectNext();
+			//console.log("Next block selected");
 
 		}
 
 		else if (map[69]) { //E
+			Blockly.Accessibility.Speech.Say("Edit Mode exited now");
+			//Blockly.Accessibility.InBlock.selectConnection();
+			//Blockly.Accessibility.InBlock.enterCurrentBlock();
 		    Blockly.Accessibility.InBlock.enterSelected();
 		    e.preventDefault(); // Prevent default in case this opens up a typing prompt
 		    try { // Try block in case something breaks, we still default back to hotkeymode
 		        Blockly.Accessibility.InBlock.enterSelected();
+		        
 		    }
 		    catch (e) {
 		        console.log(e);
@@ -130,15 +140,17 @@ document.onkeydown = document.onkeyup = function(e){
 		}
 
 		else if(map[13]){ //Enter
+			console.log("Enter clicked");
 			var selList = Blockly.Accessibility.InBlock.selectionList;
 			var cIndex  = Blockly.Accessibility.InBlock.connectionsIndex;
 			var conName = selList[cIndex].name;
-
+			console.log("Enter selected");
 			//dropdown menus
 			if(conName == "OP" || conName == "NUM" ){
 				Blockly.Accessibility.InBlock.enterSelected();
 				keyboardState = 'hotkeyMode';
-				Blockly.Accessibility.Speech.Say("Edit Selected");
+				//Blockly.Accessibility.Speech.Say("Edit mode Selected");
+				
 
 			}
 			//special case needed to blocks with text field followed by a child connection
@@ -323,8 +335,10 @@ document.onkeydown = document.onkeyup = function(e){
 
 		else if(map[69]){ //E
 			//Edit block of code or edit comment
+			console.log("key E pressed")
 			if (Blockly.Accessibility.InBlock.enterCurrentBlock()) { // Returns false if nothing is selected
 			    keyboardState = 'editMode';
+			    Blockly.Accessibility.Speech.Say("Edit Mode entered now");
 			}
 		}
 
