@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<title>Math</title>
+	<link rel="stylesheet" type="text/css" href="quick_reference.css">
+</head>
+<body>
+	<h1><a href="index.html">Blockly Quick Reference</a></h1>
+	<a href="#contentStart">
+		<div id="skipButton" role="button">Skip to Content</div>
+	</a>
+	<ul id="navigation">
+		<li><a href="index.html">Home</a></li>
+		<li><a href="logic.html">Logic</a></li>
+		<li><a href="loops.html">Loops</a></li>
+		<li><a href="math.html">Math</a></li>
+		<li><a href="text.html">Text</a></li>
+		<li><a href="lists.html">Lists</a></li>
+		<li><a href="colour.html">Colour</a></li>
+		<li><a href="variables.html">Variables</a></li>
+		<li><a href="functions.html">Functions</a></li>
+		<li><a href="hotkeys.html">Hot Keys</a></li>
+	</ul>
+	<h2 id="contentStart" tabindex="0">Math</h2>
+	<div class="container">
+		<a id="math_number">
+			<h3 tabindex="0">Number</h3>
+		</a>
+		<p tabindex="0" role="article">This is a simple number block.
+			<img role="presentation" src="media/number.png" alt="Simple number block" height="27" width="42">
+		</p>
+	</div>
+	<div class="container">
+		<a id="math_arithemetic">
+			<h3 tabindex="0">Operations</h3>
+		</a>
+		<p tabindex="0" role="article">The operations block has 5 different modes to choose from: add, subtract, multiply, divide, and exponentiation. The block will return the result of the operation.
+			<img role="presentation" src="media/operations.png" alt="Operation Block Modes" height="146" width="345">
+		</p>
+	</div>
+	<div class="container">
+		<a id="math_single">
+			<h3 tabindex="0">Math on Number</h3>
+		</a>
+		<p tabindex="0" role="article">This block will return the value from the operation you choose. The operation modes are: square root, absolute, negative, ln, log, e to the power, ten to the power. 
+			<img role="presentation" src="media/math_on_number.png" alt="7 Block Mode" height="144" width="344">
+		</p>
+	</div>
+	<div class="container">
+		<a id="math_trig">
+			<h3 tabindex="0">Trigonometry Functions</h3>
+		</a>
+		<p tabindex="0" role="article">This block has the six trigonometry functions. They are: sine, cosine, tangent, co-secant, secant, cotangent.
+			<img role="presentation" src="media/trigonometry_functions.png" alt="6 Trigonometry Functions" height="127" width="189">
+		</p>
+	</div>
+	<div class="container">
+		<a id="math_constant">
+			<h3 tabindex="0">Constants</h3>
+		</a>
+		<p tabindex="0" role="article">This block has 6 common constants that are returned on use. They are: pi, e, phi, square root of 2, square root of one half, infinity.
+			<img role="presentation" src="media/constants.png" alt="6 constant symbols from the constants block" height="131" width="173">
+		</p>
+	</div>
+	<div class="container">
+		<a id="math_number_property">
+			<h3 tabindex="0">Type of Number</h3>
+		</a>
+		<p tabindex="0" role="article">The type of number block has 7 modes: even, odd, prime, whole, positive, negative, and divisible by. The block will check the number you provide in the block against the mode in use and it will return a boolean value. The divisible by mode is slightly different than others as the block will need 2 numbers. Check out the example below.
+			<img role="presentation" src="media/type_of_number.png" alt="The type of number block has 7 modes" height="194" width="355">
+		</p>
+	</div>
+	<div class="container">
+		<a id="math_change">
+			<h3 tabindex="0">Change Variable by</h3>
+		</a>
+		<p tabindex="0" role="article">The change variable by key will do just that. Choose a variable name to change and a number to change it by. This block does not return anything but it will set the variable to the new value.
+			<img role="presentation" src="media/change_variable_by.png" alt="Change Variable by Block" height="43" width="176">
+		</p>
+	</div>
+	<div class="container">
+		<a id="math_round">
+			<h3 tabindex="0">Round</h3>
+		</a>
+		<p tabindex="0" role="article">The round block will round any number. There are three modes: round, round up, and round down. Round will use conventional rounding methods, round up will always give a greater number
+			<img role="presentation" src="media/round.png" alt="Round block" height="104" width="118">
+		</p>
+	</div>
+	<div class="container">
+		<a id="math_on_list">
+			<h3 tabindex="0">Math on List</h3>
+		</a>
+		<p tabindex="0" role="article">The math on list block will return the sum, min, max, average, median, modes, standard deviation, or a random item from the list you provide.
+			<img role="presentation" src="media/math_on_list.png" alt="Simple repeat block Example" height="218" width="159">
+		</p>
+	</div>
+	<div class="container">
+		<a id="math_modulo">
+			<h3 tabindex="0">Modulo</h3>
+		</a>
+		<p tabindex="0" role="article">The modulo block will compute the division between the two numbers provided within the block. Then, the remainder will be returned.
+			<img role="presentation" src="media/modulo.png" alt="Modulo Block Example" height="42" width="235">
+		</p>
+	</div>
+	<div class="container">
+		<a id="math_constrain">
+			<h3 tabindex="0">Constrain</h3>
+		</a>
+		<p tabindex="0" role="article">The constrain block requires a number to be given as well as two values for the number to be constrained between. A low and a high constraint value are required. If the given number is less than the low constraint value then the block will return the low number and the same with the high constraint value. This block is inclusive.
+			<img role="presentation" src="media/constrain.png" alt="Constrain Block Example" height="52" width="445">
+		</p>
+	</div>
+	<div class="container">
+		<a id="math_random_int">
+			<h3 tabindex="0">Random Integer</h3>
+		</a>
+		<p tabindex="0" role="article">The random integer block will return a random integer between the two specified limits. This block is inclusive.
+			<img role="presentation" src="media/random_integer.png" alt="Random Integer Block" height="42" width="298">
+		</p>
+	</div>
+	<div class="container">
+		<a id="math_random_float">
+			<h3 tabindex="0">Random Fraction</h3>
+		</a>
+		<p tabindex="0" role="article">The random fraction block will return a random fraction between 0.0 and 1.0.The 0.0 is inclusive and the 1.0 is exclusive.
+			<img role="presentation" src="media/random_fraction.png" alt="Random Fraction Block" height="30" width="136">
+		</p>
+	</div>
+	<div id="to_top"><a href="math.html">To Top</a></div>
+</body>
+</html>
