@@ -5,7 +5,10 @@
 <title>Blockly Generator Tests</title>
 <script src="../../blockly_uncompressed.js"></script>
 
+<<<<<<< HEAD
   
+=======
+>>>>>>> 65889c6fda0ae3561893af060cbf5026b0104e40
 <script src="../../generators/javascript.js"></script>
 <script src="unittest_javascript.js"></script>
 <script src="../../generators/javascript/logic.js"></script>
@@ -67,6 +70,7 @@ var workspace = null;
 
 function start() {
   workspace = Blockly.inject('blocklyDiv',
+<<<<<<< HEAD
 	      {grid:
 	         {spacing: 25,
 	          length: 3,
@@ -78,6 +82,10 @@ function start() {
 	       });
 	  changeIndex();
 	  }
+=======
+      {media: '../../media/', toolbox: document.getElementById('toolbox')});
+}
+>>>>>>> 65889c6fda0ae3561893af060cbf5026b0104e40
 
 function loadXml() {
   var dropdown = document.getElementById('testUrl');
@@ -122,6 +130,7 @@ function fromXml(xmlText) {
   workspace.clear();
   try {
     var xmlDoc = Blockly.Xml.textToDom(xmlText);
+<<<<<<< HEAD
     Blockly.Xml.domToWorkspace(workspace, xmlDoc);
   } catch (e) {
 	  var msg = 'Error parsing XML: ' + filename + '\n\n\t' + e;
@@ -133,6 +142,13 @@ function fromXml(xmlText) {
 	    return;
   }
 
+=======
+  } catch (e) {
+    alert('Error parsing XML:\n' + e);
+    return;
+  }
+  Blockly.Xml.domToWorkspace(workspace, xmlDoc);
+>>>>>>> 65889c6fda0ae3561893af060cbf5026b0104e40
 }
 
 function setOutput(text) {
@@ -169,12 +185,15 @@ function toDart() {
   var code = Blockly.Dart.workspaceToCode(workspace);
   setOutput(code);
 }
+<<<<<<< HEAD
 
 function changeIndex() {
 	  var oneBasedIndex = document.getElementById('indexing').checked;
 	  workspace.options.oneBasedIndex = oneBasedIndex;
 	  workspace.toolbox_.flyout_.workspace_.options.oneBasedIndex = oneBasedIndex;
 	}
+=======
+>>>>>>> 65889c6fda0ae3561893af060cbf5026b0104e40
 </script>
 
 <style>
@@ -213,7 +232,10 @@ h1 {
       <block type="unittest_assertequals"></block>
       <block type="unittest_assertvalue"></block>
       <block type="unittest_fail"></block>
+<<<<<<< HEAD
       <block type="unittest_adjustindex"></block>
+=======
+>>>>>>> 65889c6fda0ae3561893af060cbf5026b0104e40
     </category>
     <category name="Logic">
       <block type="controls_if"></block>
@@ -446,10 +468,14 @@ h1 {
       </select>
       <input type="button" value="Load" onclick="loadXml()">
     </p>
+<<<<<<< HEAD
      <p>
       <input id="indexing" type="checkbox" onchange="changeIndex()" checked>
       <label for="indexing">Generate with one-based indexing</label>
     </p>
+=======
+
+>>>>>>> 65889c6fda0ae3561893af060cbf5026b0104e40
     <p>
       Generate:
       <input type="button" value="XML" onclick="toXml()">

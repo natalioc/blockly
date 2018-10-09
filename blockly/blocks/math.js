@@ -271,13 +271,21 @@ Blockly.Blocks['math_change'] = {
           "check": "Number"
         }
       ],
+<<<<<<< HEAD
+=======
+      "previousStatement": null,
+      "nextStatement": null,
+>>>>>>> 65889c6fda0ae3561893af060cbf5026b0104e40
       "colour": Blockly.Blocks.math.HUE,
       "helpUrl": Blockly.Msg.MATH_CHANGE_HELPURL
     });
     // Assign 'this' to a variable for use in the tooltip closure below.
     var thisBlock = this;
+<<<<<<< HEAD
     this.setPreviousStatement(true, 'blocks');
     this.setNextStatement(true, 'blocks');
+=======
+>>>>>>> 65889c6fda0ae3561893af060cbf5026b0104e40
     this.setTooltip(function() {
       return Blockly.Msg.MATH_CHANGE_TOOLTIP.replace('%1',
           thisBlock.getFieldValue('VAR'));

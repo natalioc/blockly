@@ -51,6 +51,7 @@ document.onkeydown = document.onkeyup = function(e){
 
 	if(keyboardState=='typingMode'){ //if you are typing, hotkeys disabled
 		if(map[13]){ //Enter
+<<<<<<< HEAD
 			console.log('Enter key pressed');
 			keyboardState = 'hotkeyMode';
 			Blockly.selected.comment.setVisible(false);
@@ -68,6 +69,12 @@ document.onkeydown = document.onkeyup = function(e){
 			Blockly.Accessibility.Prefixes.generateTree();
 			e.preventDefault();
 		
+=======
+			keyboardState = 'hotkeyMode';
+			Blockly.Accessibility.Navigation.updateXmlSelection();
+			Blockly.Accessibility.Prefixes.generateTree();
+			Blockly.selected.comment.setVisible(false);
+>>>>>>> 65889c6fda0ae3561893af060cbf5026b0104e40
 		}
 		return;
 	}
@@ -79,39 +86,59 @@ document.onkeydown = document.onkeyup = function(e){
 			keyboardState = 'hotkeyMode';
 			var highlight = Blockly.Accessibility.InBlock.storedHighlight;
             Blockly.Connection.removeHighlight(highlight);
+<<<<<<< HEAD
     		Blockly.Accessibility.InBlock.clearHighlights();
+=======
+
+			Blockly.Accessibility.InBlock.clearHighlights();
+>>>>>>> 65889c6fda0ae3561893af060cbf5026b0104e40
 			Blockly.Accessibility.Keystrokes.prototype.isConnecting = false;
 			Blockly.Accessibility.Navigation.updateXmlSelection();
 		}
 
 		else if(map[65]){ //A
 			//Navigate to previous field
+<<<<<<< HEAD
 			console.log('editMode A key pressed');
+=======
+>>>>>>> 65889c6fda0ae3561893af060cbf5026b0104e40
 			Blockly.Accessibility.InBlock.selectPrev();
 		}
 
 		else if(map[68]){ //D
 			//Navigate to next field
+<<<<<<< HEAD
 			console.log('editMode D key pressed');
+=======
+>>>>>>> 65889c6fda0ae3561893af060cbf5026b0104e40
 			Blockly.Accessibility.InBlock.selectNext();
 
 		}
 
 		else if(map[87]){ //W
 			//Navigate to previous field
+<<<<<<< HEAD
 			console.log('editMode W key pressed');
+=======
+>>>>>>> 65889c6fda0ae3561893af060cbf5026b0104e40
 			Blockly.Accessibility.InBlock.selectPrev();
 		}
 
 		else if(map[83]){ //S
 			//Navigate to next field
+<<<<<<< HEAD
 			console.log('editMode S key pressed');
+=======
+>>>>>>> 65889c6fda0ae3561893af060cbf5026b0104e40
 			Blockly.Accessibility.InBlock.selectNext();
 
 		}
 
 		else if (map[69]) { //E
+<<<<<<< HEAD
 			Blockly.Accessibility.Speech.Say("Edit Mode exited now");
+=======
+>>>>>>> 65889c6fda0ae3561893af060cbf5026b0104e40
 		    Blockly.Accessibility.InBlock.enterSelected();
 		    e.preventDefault(); // Prevent default in case this opens up a typing prompt
 		    try { // Try block in case something breaks, we still default back to hotkeymode
@@ -126,7 +153,10 @@ document.onkeydown = document.onkeyup = function(e){
 		}
 
 		else if(map[67]){ //C
+<<<<<<< HEAD
 			console.log('editMode C key pressed');
+=======
+>>>>>>> 65889c6fda0ae3561893af060cbf5026b0104e40
 			Blockly.Accessibility.InBlock.selectConnection();
 			Blockly.Accessibility.InBlock.enterCurrentBlock();
 
@@ -198,13 +228,19 @@ document.onkeydown = document.onkeyup = function(e){
 
 		else if(map[65]){ //A
 			//Navigate to previous field
+<<<<<<< HEAD
 			console.log('connectBlocksMode A key pressed');
+=======
+>>>>>>> 65889c6fda0ae3561893af060cbf5026b0104e40
 			Blockly.Accessibility.InBlock.selectPrev();
 		}
 
 		else if(map[68]){ //D
 			//Navigate to next field
+<<<<<<< HEAD
 			console.log('connectBlocksMode D key pressed');
+=======
+>>>>>>> 65889c6fda0ae3561893af060cbf5026b0104e40
 			Blockly.Accessibility.InBlock.selectNext();
 		}
 
@@ -242,6 +278,10 @@ document.onkeydown = document.onkeyup = function(e){
 	        Blockly.Accessibility.Navigation.undo();
 	        e.preventDefault();
 	    }
+<<<<<<< HEAD
+=======
+
+>>>>>>> 65889c6fda0ae3561893af060cbf5026b0104e40
 	    else if(map[18] && map[16] && map[67]){ //Alt Shift C
 			console.log('Alt Shift C keys pressed.');
 			//Keystroke for collapsing or expanding a block
@@ -250,7 +290,11 @@ document.onkeydown = document.onkeyup = function(e){
 		}
 
 		else if(map[18] && map[16] && map[68]){ //Alt Shift D
+<<<<<<< HEAD
 			console.log('Alt Shift D keys pressed.');
+=======
+			console.log('Alt Shift E keys pressed.');
+>>>>>>> 65889c6fda0ae3561893af060cbf5026b0104e40
 			//Keystroke for enabling or disabling a block
 			Blockly.Accessibility.toggleDisable();
 			e.preventDefault();
@@ -272,12 +316,18 @@ document.onkeydown = document.onkeyup = function(e){
 		}
 
 		else if(map[16] && map[70]){//shift f
+<<<<<<< HEAD
 			console.log('shift f keys pressed');
+=======
+>>>>>>> 65889c6fda0ae3561893af060cbf5026b0104e40
 			Blockly.Accessibility.Navigation.inlineBlockTraverseOut();
 		}
 
 		else if(map[13]){
+<<<<<<< HEAD
 			console.log('hotkeyMode Enter key pressed');
+=======
+>>>>>>> 65889c6fda0ae3561893af060cbf5026b0104e40
 			Blockly.Accessibility.InBlock.hideDropDown();
 		}
 
@@ -319,7 +369,10 @@ document.onkeydown = document.onkeyup = function(e){
 		}
 
 		else if(map[65]){ //A
+<<<<<<< HEAD
 			console.log('hotkeyMode A key pressed');
+=======
+>>>>>>> 65889c6fda0ae3561893af060cbf5026b0104e40
 			if(!Blockly.selected) return;
 			if(Blockly.selected.id[0] != ":" && !Blockly.Accessibility.Keystrokes.prototype.isConnecting){
 				Blockly.Accessibility.Navigation.traverseOut();
@@ -328,7 +381,11 @@ document.onkeydown = document.onkeyup = function(e){
 
 		else if(map[67]){ //C
 			//Add a comment
+<<<<<<< HEAD
 			console.log('hotkeyMode C key pressed');
+=======
+			
+>>>>>>> 65889c6fda0ae3561893af060cbf5026b0104e40
 			Blockly.Accessibility.addComment();
 			//Blockly.Accessibility.Prefixes.generateTree();
 			keyboardState = 'typingMode';
@@ -337,7 +394,10 @@ document.onkeydown = document.onkeyup = function(e){
 
 		else if(map[68]){ //D
 			//Navigate in
+<<<<<<< HEAD
 			console.log('hotkeyMode D key pressed');
+=======
+>>>>>>> 65889c6fda0ae3561893af060cbf5026b0104e40
 			if(!Blockly.selected) return;
 			if(Blockly.selected.id[0] != ":" && !Blockly.Accessibility.Keystrokes.prototype.isConnecting){
 				Blockly.Accessibility.Navigation.traverseIn();
@@ -346,16 +406,25 @@ document.onkeydown = document.onkeyup = function(e){
 
 		else if(map[69]){ //E
 			//Edit block of code or edit comment
+<<<<<<< HEAD
 			console.log('E key pressed');
 			console.log('Edit mode activated!');
 			if (Blockly.Accessibility.InBlock.enterCurrentBlock()) { // Returns false if nothing is selected
 			    keyboardState = 'editMode';
 			    Blockly.Accessibility.Speech.Say("Edit Mode entered now");
+=======
+			if (Blockly.Accessibility.InBlock.enterCurrentBlock()) { // Returns false if nothing is selected
+			    keyboardState = 'editMode';
+>>>>>>> 65889c6fda0ae3561893af060cbf5026b0104e40
 			}
 		}
 
 		else if (map[70]) { //F traverse inline blocks
+<<<<<<< HEAD
 			console.log('hotkeyMode F key pressed');
+=======
+
+>>>>>>> 65889c6fda0ae3561893af060cbf5026b0104e40
 			Blockly.Accessibility.Navigation.inlineBlockTraverseIn();
 		}
 
@@ -390,7 +459,10 @@ document.onkeydown = document.onkeyup = function(e){
 
 		else if(map[83]){ //S
 			// e.preventDefault();
+<<<<<<< HEAD
 			console.log('hotkeyMode S key pressed');
+=======
+>>>>>>> 65889c6fda0ae3561893af060cbf5026b0104e40
 			var role = document.activeElement.getAttribute("role");
 
 			if(!Blockly.selected) return;
@@ -406,7 +478,11 @@ document.onkeydown = document.onkeyup = function(e){
 		}
 
 		else if(map[87]){ //W
+<<<<<<< HEAD
 			console.log('hotkeyMode W key pressed');
+=======
+
+>>>>>>> 65889c6fda0ae3561893af060cbf5026b0104e40
 			// e.preventDefault();
 			var role = document.activeElement.getAttribute("role");
 

@@ -154,6 +154,10 @@ Blockly.Accessibility.Navigation.updateXmlSelection = function (noSelect) {
    // console.log('Updating XML.');
     // If you currently have a node, make sure that if all block id's change you are still selecting the same block.
     if (this.currentNode) {
+<<<<<<< HEAD
+=======
+        //console.log('Maintaining Position');
+>>>>>>> 65889c6fda0ae3561893af060cbf5026b0104e40
         var pastId = parseInt(this.currentNode.getAttribute('id'));
         var idDifference = parseInt(Blockly.Accessibility.Navigation.findContainers()[0].getAttribute('id'));
 
@@ -164,6 +168,10 @@ Blockly.Accessibility.Navigation.updateXmlSelection = function (noSelect) {
     }
         // Otherwise this is a non-issue
     else {
+<<<<<<< HEAD
+=======
+        //console.log('Finding block.');
+>>>>>>> 65889c6fda0ae3561893af060cbf5026b0104e40
         xmlDoc = Blockly.Xml.workspaceToDom(Blockly.mainWorkspace);
         if (!xmlDoc.getElementsByTagName('BLOCK')) {
             this.currentNode = xmlDoc.getElementsByTagName('BLOCK')[0];
@@ -177,6 +185,11 @@ Blockly.Accessibility.Navigation.updateXmlSelection = function (noSelect) {
         this.undoStack.push(prevXml);
         this.redoStack = [];
 
+<<<<<<< HEAD
+=======
+        //console.log('THERE WAS A CHANGE');
+
+>>>>>>> 65889c6fda0ae3561893af060cbf5026b0104e40
     }
 }; 
 

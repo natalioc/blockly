@@ -22,10 +22,14 @@
  */
 
 goog.provide('Blockly.Accessibility');
+<<<<<<< HEAD
 goog.require('Blockly.Comment');
 goog.require('Blockly.Bubble');
 goog.require('Blockly.Icon');
 goog.require('goog.userAgent');
+=======
+
+>>>>>>> 65889c6fda0ae3561893af060cbf5026b0104e40
 var blockSelected = false;
 var currId;
 var lastId = 99;
@@ -177,6 +181,7 @@ Blockly.Accessibility.addComment = function(){
 };
 
 /**
+<<<<<<< HEAD
  * removes comment block
  */
 Blockly.Accessibility.removeComment = function(){
@@ -186,6 +191,8 @@ Blockly.Accessibility.removeComment = function(){
 	Blockly.selected.comment.setVisible(false);
 };
 /**
+=======
+>>>>>>> 65889c6fda0ae3561893af060cbf5026b0104e40
  * Expands the selected block if it is collapsed or collapses the selected block if it isn't
  */
 Blockly.Accessibility.toggleCollapse = function(){

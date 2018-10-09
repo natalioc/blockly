@@ -5,9 +5,14 @@ npm-debug.log
 .project
 *.pyc
 *.komodoproject
+<<<<<<< HEAD
 /nbproject/private/
 
 tests/compile/main_compressed.js
 tests/compile/*compiler*.jar
 local_build/*compiler*.jar
 local_build/local_blockly_compressed.js
+=======
+
+blockly/tests/TestPlanTracker.xls
+>>>>>>> 65889c6fda0ae3561893af060cbf5026b0104e40

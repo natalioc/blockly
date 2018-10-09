@@ -49,13 +49,21 @@ Blockly.Blocks['controls_repeat_ext'] = {
           "check": "Number"
         }
       ],
+<<<<<<< HEAD
+=======
+      "previousStatement": null,
+      "nextStatement": null,
+>>>>>>> 65889c6fda0ae3561893af060cbf5026b0104e40
       "colour": Blockly.Blocks.loops.HUE,
       "tooltip": Blockly.Msg.CONTROLS_REPEAT_TOOLTIP,
       "helpUrl": Blockly.Msg.CONTROLS_REPEAT_HELPURL
     });
+<<<<<<< HEAD
     
     this.setPreviousStatement(true, 'blocks');
     this.setNextStatement(true, 'blocks');
+=======
+>>>>>>> 65889c6fda0ae3561893af060cbf5026b0104e40
     this.appendStatementInput('DO')
         .appendField(Blockly.Msg.CONTROLS_REPEAT_INPUT_DO);
   }
@@ -77,13 +85,21 @@ Blockly.Blocks['controls_repeat'] = {
           "text": "10"
         }
       ],
+<<<<<<< HEAD
 
+=======
+      "previousStatement": null,
+      "nextStatement": null,
+>>>>>>> 65889c6fda0ae3561893af060cbf5026b0104e40
       "colour": Blockly.Blocks.loops.HUE,
       "tooltip": Blockly.Msg.CONTROLS_REPEAT_TOOLTIP,
       "helpUrl": Blockly.Msg.CONTROLS_REPEAT_HELPURL
     });
+<<<<<<< HEAD
     this.setPreviousStatement(true, 'blocks');
     this.setNextStatement(true, 'blocks');
+=======
+>>>>>>> 65889c6fda0ae3561893af060cbf5026b0104e40
     this.appendStatementInput('DO')
         .appendField(Blockly.Msg.CONTROLS_REPEAT_INPUT_DO);
     this.getField('TIMES').setChangeHandler(
@@ -107,8 +123,13 @@ Blockly.Blocks['controls_whileUntil'] = {
         .appendField(new Blockly.FieldDropdown(OPERATORS), 'MODE');
     this.appendStatementInput('DO')
         .appendField(Blockly.Msg.CONTROLS_WHILEUNTIL_INPUT_DO);
+<<<<<<< HEAD
     this.setPreviousStatement(true, 'blocks');
     this.setNextStatement(true, 'blocks');
+=======
+    this.setPreviousStatement(true);
+    this.setNextStatement(true);
+>>>>>>> 65889c6fda0ae3561893af060cbf5026b0104e40
     // Assign 'this' to a variable for use in the tooltip closure below.
     var thisBlock = this;
     this.setTooltip(function() {
@@ -156,11 +177,19 @@ Blockly.Blocks['controls_for'] = {
         }
       ],
       "inputsInline": true,
+<<<<<<< HEAD
       "colour": Blockly.Blocks.loops.HUE,
       "helpUrl": Blockly.Msg.CONTROLS_FOR_HELPURL
     });
     this.setPreviousStatement(true, 'blocks');
     this.setNextStatement(true, 'blocks');
+=======
+      "previousStatement": null,
+      "nextStatement": null,
+      "colour": Blockly.Blocks.loops.HUE,
+      "helpUrl": Blockly.Msg.CONTROLS_FOR_HELPURL
+    });
+>>>>>>> 65889c6fda0ae3561893af060cbf5026b0104e40
     this.appendStatementInput('DO')
         .appendField(Blockly.Msg.CONTROLS_FOR_INPUT_DO);
     // Assign 'this' to a variable for use in the tooltip closure below.
@@ -230,11 +259,19 @@ Blockly.Blocks['controls_forEach'] = {
           "check": "Array"
         }
       ],
+<<<<<<< HEAD
       "colour": Blockly.Blocks.loops.HUE,
       "helpUrl": Blockly.Msg.CONTROLS_FOREACH_HELPURL
     });
     this.setPreviousStatement(true, 'blocks');
     this.setNextStatement(true, 'blocks');
+=======
+      "previousStatement": null,
+      "nextStatement": null,
+      "colour": Blockly.Blocks.loops.HUE,
+      "helpUrl": Blockly.Msg.CONTROLS_FOREACH_HELPURL
+    });
+>>>>>>> 65889c6fda0ae3561893af060cbf5026b0104e40
     this.appendStatementInput('DO')
         .appendField(Blockly.Msg.CONTROLS_FOREACH_INPUT_DO);
     // Assign 'this' to a variable for use in the tooltip closure below.

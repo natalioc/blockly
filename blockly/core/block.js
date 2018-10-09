@@ -399,6 +399,7 @@ Blockly.Block.prototype.getRootBlock = function() {
 Blockly.Block.prototype.getChildren = function() {
   return this.childBlocks_;
 };
+<<<<<<< HEAD
 /**
  * Find all the blocks that are directly nested inside this one.
  * Excludes any connection on an output tab or any preceding statement or next statements.
@@ -418,6 +419,8 @@ Blockly.Block.prototype.getNestedChildren = function() {
 	  };
 	
 
+=======
+>>>>>>> 65889c6fda0ae3561893af060cbf5026b0104e40
 
 /**
  * Set parent of this block to be a new block or null.
