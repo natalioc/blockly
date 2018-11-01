@@ -21,11 +21,7 @@
  */
 
 goog.provide('Blockly.Accessibility.InBlock');
-<<<<<<< HEAD
 goog.require('Blockly.Block');
-=======
-
->>>>>>> 65889c6fda0ae3561893af060cbf5026b0104e40
 goog.require('Blockly.Accessibility.Navigation');
 goog.require('Blockly.Accessibility.Speech');
 goog.require('Blockly.Accessibility.Keystrokes');
@@ -308,10 +304,7 @@ Blockly.Accessibility.InBlock.addBlock = function () {
         var loopDistance = this.storedConnection.check_.length;
         for (var i = 0; i < loopDistance; i++){
             var selectedNode = Blockly.Accessibility.MenuNav.getMenuSelection();
-<<<<<<< HEAD
             console.log(this.storedConnection.type);
-=======
->>>>>>> 65889c6fda0ae3561893af060cbf5026b0104e40
             if(this.storedConnection.type == 1){
                 if(selectedNode.outputConnection.check_[0] == this.storedConnection.check_[i]){
                     newBlock = Blockly.Accessibility.MenuNav.flyoutToWorkspace();
@@ -324,7 +317,6 @@ Blockly.Accessibility.InBlock.addBlock = function () {
                     this.safeConnect(newBlock.inputList[0].connection);
                 }
             }
-<<<<<<< HEAD
             else if(this.storedConnection.type == 3){
             	console.log("connection type three");
                 if(selectedNode.previousConnection.check_[0] == this.storedConnection.check_[i]){
@@ -345,15 +337,6 @@ Blockly.Accessibility.InBlock.addBlock = function () {
         }
     }
     //these blocks are compatible because anything can connect to this block
-=======
-            //these blocks are not compatable
-            else{
-                console.log("these blocks are not compatable");
-            }
-        }
-    }
-    //these blocks are compatable because anything can connect to this block
->>>>>>> 65889c6fda0ae3561893af060cbf5026b0104e40
     else{
         if(this.storedConnection.type == 1){
             newBlock = Blockly.Accessibility.MenuNav.flyoutToWorkspace();
@@ -365,10 +348,6 @@ Blockly.Accessibility.InBlock.addBlock = function () {
         }
         else if(this.storedConnection.type == 3){
             newBlock = Blockly.Accessibility.MenuNav.flyoutToWorkspace();
-<<<<<<< HEAD
-=======
-            console.log(newBlock);
->>>>>>> 65889c6fda0ae3561893af060cbf5026b0104e40
             this.safeConnect(newBlock.previousConnection);
         }
         else if(this.storedConnection.type == 4){
@@ -426,11 +405,7 @@ Blockly.Accessibility.InBlock.disableIncompatibleBlocks = function(){
                         if(toolboxChoices[i].previousConnection.check_ != null){
 
                             //if their compatibilites don't match up
-<<<<<<< HEAD
                             if(toolboxChoices[i].previousConnection.check_[0] != this.storedConnection.check_[0] && toolboxChoices[i].previousConnection.check_[0] != this.storedConnection.check_[1] && toolboxChoices[i].previousConnection.check_[0] != this.storedConnection.check_[2]){
-=======
-                            if(toolboxChoices[i].previousConnection.check_[0] != this.storedConnection.check_[0]){
->>>>>>> 65889c6fda0ae3561893af060cbf5026b0104e40
                                 toolboxChoices[i].disabled = true;
                                 toolboxChoices[i].updateDisabled();
 
@@ -642,13 +617,9 @@ Blockly.Accessibility.InBlock.dropDownSetVal = function(val, index, prevIndex){
  */
 Blockly.Accessibility.InBlock.hideDropDown = function(){
      try{
-<<<<<<< HEAD
   
     	  console.log("Unselected!");
     	  this.selectionList[this.connectionsIndex].sourceBlock_.select();
-=======
-        this.selectionList[this.connectionsIndex].sourceBlock_.select();
->>>>>>> 65889c6fda0ae3561893af060cbf5026b0104e40
      }
      catch(e){
 

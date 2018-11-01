@@ -168,7 +168,6 @@ Blockly.Accessibility.Prefixes.generateTree = function(){
 
   var parentBlocks = Blockly.mainWorkspace.getAllBlocks(true);
   var  ul =  document.getElementById("commentList");
-<<<<<<< HEAD
   ul.innerHTML = "";
   this.createCommentTree(parentBlocks, ul,[]);
 }
@@ -214,14 +213,6 @@ Blockly.Accessibility.Prefixes.createCommentTree= function(nodes, ul, prev){
 
 
 /*
-=======
-
-  ul.innerHTML = "";
-  this.narySearchTree(parentBlocks[0], 2, ul);
-}
-
-/*
->>>>>>> 65889c6fda0ae3561893af060cbf5026b0104e40
  * Recursive N-ary search function to organize the comments correctly
  * @param_block.....svg object of top block;
  * @param_indent....bool indented
@@ -233,27 +224,18 @@ Blockly.Accessibility.Prefixes.narySearchTree = function(block, indent, bottom){
   var  p =  document.getElementById("comment");
   var children = block.getChildren();
   var length = children.length;
-<<<<<<< HEAD
   console.log(length);
   console.log(!block.comment);
-=======
-
->>>>>>> 65889c6fda0ae3561893af060cbf5026b0104e40
   if(!block.comment){
     block.comment.setText(" ");
   }
 
   var commentText = block.comment.getText();
-<<<<<<< HEAD
   console.log(commentText);
   var botUls = bottom.getElementsByTagName("UL");
   var botLis = bottom.getElementsByTagName("LI");
   console.log(botUls);
   console.log(botLis);
-=======
-  var botUls = bottom.getElementsByTagName("UL");
-  var botLis = bottom.getElementsByTagName("LI");
->>>>>>> 65889c6fda0ae3561893af060cbf5026b0104e40
   var commentLi = document.createElement("li");
   
   //indent
@@ -261,10 +243,7 @@ Blockly.Accessibility.Prefixes.narySearchTree = function(block, indent, bottom){
 
     //loop through  
     var prevBottom;
-<<<<<<< HEAD
     console.log(bottom.nodeName);
-=======
->>>>>>> 65889c6fda0ae3561893af060cbf5026b0104e40
     while(bottom.nodeName != "LI"){
 
       prevBottom = bottom;
@@ -292,11 +271,7 @@ Blockly.Accessibility.Prefixes.narySearchTree = function(block, indent, bottom){
        p.appendChild(ul); 
     }
   }
-<<<<<<< HEAD
  
-=======
-
->>>>>>> 65889c6fda0ae3561893af060cbf5026b0104e40
   //first block
   else if(indent ==2){
 
@@ -304,7 +279,6 @@ Blockly.Accessibility.Prefixes.narySearchTree = function(block, indent, bottom){
     ul.appendChild(commentLi);
     p.appendChild(ul);
   }
-<<<<<<< HEAD
   //dont indent further 
   else{
     //find last <ul> to add <li> to
@@ -313,21 +287,6 @@ Blockly.Accessibility.Prefixes.narySearchTree = function(block, indent, bottom){
       bottom = bottom.parentNode;
     }
     bottom.appendChild(commentLi);
-=======
-
-  //dont indent further 
-  else{
-
-    //find last <ul> to add <li> to
-    commentLi.appendChild(document.createTextNode(commentText));
-
-    while(bottom.nodeName != "UL"){
-      bottom = bottom.parentNode;
-    }
-
-    bottom.appendChild(commentLi);
-
->>>>>>> 65889c6fda0ae3561893af060cbf5026b0104e40
     if(!ul.contains(bottom)){
         ul.appendChild(bottom);
         p.appendChild(ul);
@@ -364,17 +323,10 @@ Blockly.Accessibility.Prefixes.narySearchTree = function(block, indent, bottom){
       }
       this.narySearchTree(children[i], newIndent, newBottom);
   }
-<<<<<<< HEAD
 }
 
 
 
-=======
-  console.log(document.getElementById("comment"));
-}
-
-
->>>>>>> 65889c6fda0ae3561893af060cbf5026b0104e40
 /**
 *  WORK HERE TO FINISH BUILDING THE TREE VIEW FOR THE BLOCK COMMENTS SHOULD BUILD IT TO WORK WITH ALL BLOCKS
 *  THEN SHRINK IT DOWN TO BLOCKS THAT CONTAIN COMMENTS. THE FUNCTIONS BELOW WILL PUT ITEMS INTO FILE OR FOLDER
