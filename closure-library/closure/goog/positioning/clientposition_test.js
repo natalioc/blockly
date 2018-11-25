@@ -13,7 +13,7 @@
 // limitations under the License.
 
 /**
- * Tests for {@code goog.positioning.ClientPosition}
+ * Tests for `goog.positioning.ClientPosition`
  * @author chrishenry@google.com (Chris Henry)
  */
 
@@ -60,7 +60,7 @@ function setUp() {
 
 function tearDown() {
   popupElement = null;
-  testArea.innerHTML = '';
+  goog.dom.removeChildren(testArea);
   testArea.setAttribute('style', '');
 }
 
@@ -107,8 +107,8 @@ function testClientPositionWithPositionContext() {
   var x = 300;
   var y = 200;
 
-  var contextElement = goog.dom.createDom(goog.dom.TagName.DIV,
-                                          undefined, popupElement);
+  var contextElement =
+      goog.dom.createDom(goog.dom.TagName.DIV, undefined, popupElement);
   goog.style.setPosition(contextElement, contextAbsoluteX, contextAbsoluteY);
   contextElement.style.position = 'absolute';
   goog.dom.appendChild(testArea, contextElement);

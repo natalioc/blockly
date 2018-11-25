@@ -25,6 +25,11 @@ goog.require('goog.events.EventTarget');
 goog.require('goog.functions');
 goog.require('goog.graphics.ext.coordinates');
 
+goog.forwardDeclare('goog.graphics.AbstractGraphics');
+goog.forwardDeclare('goog.graphics.Element');
+goog.forwardDeclare('goog.graphics.ext.Graphics');
+goog.forwardDeclare('goog.graphics.ext.Group');
+
 
 
 /**
@@ -167,8 +172,8 @@ goog.graphics.ext.Element.prototype.getParent = function() {
  *     pending but not yet performed.
  * @private
  */
-goog.graphics.ext.Element.prototype.setPosition_ = function(position, value,
-    type, opt_chain) {
+goog.graphics.ext.Element.prototype.setPosition_ = function(
+    position, value, type, opt_chain) {
   position.setPosition(value, type);
   this.computeIsParentDependent_(position);
 
@@ -189,8 +194,8 @@ goog.graphics.ext.Element.prototype.setPosition_ = function(position, value,
  *     pending but not yet performed.
  * @private
  */
-goog.graphics.ext.Element.prototype.setSize_ = function(position, size,
-    opt_chain) {
+goog.graphics.ext.Element.prototype.setSize_ = function(
+    position, size, opt_chain) {
   if (position.setSize(size)) {
     this.needsTransform_ = true;
 
@@ -240,9 +245,8 @@ goog.graphics.ext.Element.prototype.getLeft = function() {
  *     pending but not yet performed.
  */
 goog.graphics.ext.Element.prototype.setLeft = function(left, opt_chain) {
-  this.setPosition_(this.xPosition_,
-      left,
-      goog.graphics.ext.Element.PositionType_.START,
+  this.setPosition_(
+      this.xPosition_, left, goog.graphics.ext.Element.PositionType_.START,
       opt_chain);
 };
 
@@ -265,9 +269,8 @@ goog.graphics.ext.Element.prototype.getRight = function() {
  *     pending but not yet performed.
  */
 goog.graphics.ext.Element.prototype.setRight = function(right, opt_chain) {
-  this.setPosition_(this.xPosition_,
-      right,
-      goog.graphics.ext.Element.PositionType_.END,
+  this.setPosition_(
+      this.xPosition_, right, goog.graphics.ext.Element.PositionType_.END,
       opt_chain);
 };
 
@@ -290,9 +293,8 @@ goog.graphics.ext.Element.prototype.getCenter = function() {
  *     pending but not yet performed.
  */
 goog.graphics.ext.Element.prototype.setCenter = function(center, opt_chain) {
-  this.setPosition_(this.xPosition_,
-      center,
-      goog.graphics.ext.Element.PositionType_.MIDDLE,
+  this.setPosition_(
+      this.xPosition_, center, goog.graphics.ext.Element.PositionType_.MIDDLE,
       opt_chain);
 };
 
@@ -318,9 +320,8 @@ goog.graphics.ext.Element.prototype.getTop = function() {
  *     pending but not yet performed.
  */
 goog.graphics.ext.Element.prototype.setTop = function(top, opt_chain) {
-  this.setPosition_(this.yPosition_,
-      top,
-      goog.graphics.ext.Element.PositionType_.START,
+  this.setPosition_(
+      this.yPosition_, top, goog.graphics.ext.Element.PositionType_.START,
       opt_chain);
 };
 
@@ -343,9 +344,8 @@ goog.graphics.ext.Element.prototype.getBottom = function() {
  *     pending but not yet performed.
  */
 goog.graphics.ext.Element.prototype.setBottom = function(bottom, opt_chain) {
-  this.setPosition_(this.yPosition_,
-      bottom,
-      goog.graphics.ext.Element.PositionType_.END,
+  this.setPosition_(
+      this.yPosition_, bottom, goog.graphics.ext.Element.PositionType_.END,
       opt_chain);
 };
 
@@ -368,9 +368,8 @@ goog.graphics.ext.Element.prototype.getMiddle = function() {
  *     pending but not yet performed.
  */
 goog.graphics.ext.Element.prototype.setMiddle = function(middle, opt_chain) {
-  this.setPosition_(this.yPosition_,
-      middle,
-      goog.graphics.ext.Element.PositionType_.MIDDLE,
+  this.setPosition_(
+      this.yPosition_, middle, goog.graphics.ext.Element.PositionType_.MIDDLE,
       opt_chain);
 };
 
@@ -467,8 +466,8 @@ goog.graphics.ext.Element.prototype.setMinHeight = function(minHeight) {
  *     of a chain of calls and therefore transformations should be set as
  *     pending but not yet performed.
  */
-goog.graphics.ext.Element.prototype.setPosition = function(left, top,
-                                                           opt_chain) {
+goog.graphics.ext.Element.prototype.setPosition = function(
+    left, top, opt_chain) {
   this.setLeft(left, true);
   this.setTop(top, opt_chain);
 };
@@ -482,8 +481,8 @@ goog.graphics.ext.Element.prototype.setPosition = function(left, top,
  *     of a chain of calls and therefore transformations should be set as
  *     pending but not yet performed.
  */
-goog.graphics.ext.Element.prototype.setSize = function(width, height,
-                                                       opt_chain) {
+goog.graphics.ext.Element.prototype.setSize = function(
+    width, height, opt_chain) {
   this.setWidth(width, true);
   this.setHeight(height, opt_chain);
 };
@@ -499,8 +498,8 @@ goog.graphics.ext.Element.prototype.setSize = function(width, height,
  *     of a chain of calls and therefore transformations should be set as
  *     pending but not yet performed.
  */
-goog.graphics.ext.Element.prototype.setBounds = function(left, top, width,
-                                                         height, opt_chain) {
+goog.graphics.ext.Element.prototype.setBounds = function(
+    left, top, width, height, opt_chain) {
   this.setLeft(left, true);
   this.setTop(top, true);
   this.setWidth(width, true);
@@ -568,8 +567,7 @@ goog.graphics.ext.Element.prototype.computeIsParentDependent_ = function(
     position) {
   this.parentDependent_ = position.isParentDependent() ||
       this.xPosition_.isParentDependent() ||
-      this.yPosition_.isParentDependent() ||
-      this.checkParentDependent();
+      this.yPosition_.isParentDependent() || this.checkParentDependent();
 };
 
 
@@ -589,8 +587,7 @@ goog.graphics.ext.Element.prototype.isParentDependent = function() {
  * @return {boolean} Whether this shape's bounds depends on its parent's.
  * @protected
  */
-goog.graphics.ext.Element.prototype.checkParentDependent =
-    goog.functions.FALSE;
+goog.graphics.ext.Element.prototype.checkParentDependent = goog.functions.FALSE;
 
 
 // ROTATION
@@ -648,11 +645,8 @@ goog.graphics.ext.Element.prototype.transform = function() {
     this.needsTransform_ = false;
 
     this.wrapper_.setTransformation(
-        this.getLeft(),
-        this.getTop(),
-        this.rotation_,
-        (this.getWidth() || 1) / 2,
-        (this.getHeight() || 1) / 2);
+        this.getLeft(), this.getTop(), this.rotation_,
+        (this.getWidth() || 1) / 2, (this.getHeight() || 1) / 2);
 
     // TODO(robbyw): this._fireEvent('transform', [ this ]);
   }
@@ -683,7 +677,7 @@ goog.graphics.ext.Element.prototype.getPixelScaleY = function() {
 
 /** @override */
 goog.graphics.ext.Element.prototype.disposeInternal = function() {
-  goog.graphics.ext.Element.superClass_.disposeInternal.call();
+  goog.graphics.ext.Element.superClass_.disposeInternal.call(this);
   this.wrapper_.dispose();
 };
 
@@ -734,9 +728,8 @@ goog.graphics.ext.Element.Position_.prototype.getCoordinateCache_ = function() {
  */
 goog.graphics.ext.Element.Position_.prototype.getParentSize_ = function() {
   var parent = this.element_.getParent();
-  return this.horizontal_ ?
-      parent.getCoordinateWidth() :
-      parent.getCoordinateHeight();
+  return this.horizontal_ ? parent.getCoordinateWidth() :
+                            parent.getCoordinateHeight();
 };
 
 
@@ -789,28 +782,27 @@ goog.graphics.ext.Element.Position_.prototype.setSize = function(size) {
  * @return {number} The correct number of coordinate space units.
  * @private
  */
-goog.graphics.ext.Element.Position_.prototype.getValue_ = function(v,
-    opt_forMaximum) {
+goog.graphics.ext.Element.Position_.prototype.getValue_ = function(
+    v, opt_forMaximum) {
   if (!goog.graphics.ext.coordinates.isSpecial(v)) {
     return parseFloat(String(v));
   }
 
   var cache = this.getCoordinateCache_();
-  var scale = this.horizontal_ ?
-      this.element_.getPixelScaleX() :
-      this.element_.getPixelScaleY();
+  var scale = this.horizontal_ ? this.element_.getPixelScaleX() :
+                                 this.element_.getPixelScaleY();
 
   var containerSize;
   if (opt_forMaximum) {
-    containerSize = goog.graphics.ext.coordinates.computeValue(
-        this.size_ || 0, 0, scale);
+    containerSize =
+        goog.graphics.ext.coordinates.computeValue(this.size_ || 0, 0, scale);
   } else {
     var parent = this.element_.getParent();
     containerSize = this.horizontal_ ? parent.getWidth() : parent.getHeight();
   }
 
-  return goog.graphics.ext.coordinates.getValue(v, opt_forMaximum,
-      containerSize, scale, cache);
+  return goog.graphics.ext.coordinates.getValue(
+      v, opt_forMaximum, containerSize, scale, cache);
 };
 
 
@@ -824,8 +816,8 @@ goog.graphics.ext.Element.Position_.prototype.getStart = function() {
     var value = this.getValue_(this.distance_);
     if (this.distanceType_ == goog.graphics.ext.Element.PositionType_.START) {
       this.cachedValue_ = value;
-    } else if (this.distanceType_ ==
-               goog.graphics.ext.Element.PositionType_.MIDDLE) {
+    } else if (
+        this.distanceType_ == goog.graphics.ext.Element.PositionType_.MIDDLE) {
       this.cachedValue_ = value + (this.getParentSize_() - this.getSize()) / 2;
     } else {
       this.cachedValue_ = this.getParentSize_() - value - this.getSize();
@@ -865,8 +857,8 @@ goog.graphics.ext.Element.Position_.prototype.getEnd = function() {
  * @param {goog.graphics.ext.Element.PositionType_} type The type of the
  *     coordinate.
  */
-goog.graphics.ext.Element.Position_.prototype.setPosition = function(value,
-    type) {
+goog.graphics.ext.Element.Position_.prototype.setPosition = function(
+    value, type) {
   this.distance_ = value;
   this.distanceType_ = type;
 
@@ -883,8 +875,9 @@ goog.graphics.ext.Element.Position_.prototype.getMaxPosition = function() {
   // TODO(robbyw): Handle transformed or rotated coordinates
   // TODO(robbyw): Handle pixel based sizes?
 
-  return this.getValue_(this.distance_ || 0) + (
-      goog.graphics.ext.coordinates.isSpecial(this.size_) ? 0 : this.getSize());
+  return this.getValue_(this.distance_ || 0) +
+      (goog.graphics.ext.coordinates.isSpecial(this.size_) ? 0 :
+                                                             this.getSize());
 };
 
 
@@ -960,4 +953,3 @@ goog.graphics.ext.Element.Position_.prototype.distance_ = 0;
  */
 goog.graphics.ext.Element.Position_.prototype.distanceType_ =
     goog.graphics.ext.Element.PositionType_.START;
-

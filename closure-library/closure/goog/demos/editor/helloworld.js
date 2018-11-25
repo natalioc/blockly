@@ -57,8 +57,7 @@ goog.demos.editor.HelloWorld.COMMAND = {
 
 
 /** @override */
-goog.demos.editor.HelloWorld.prototype.isSupportedCommand = function(
-    command) {
+goog.demos.editor.HelloWorld.prototype.isSupportedCommand = function(command) {
   return command == goog.demos.editor.HelloWorld.COMMAND.HELLO_WORLD;
 };
 
@@ -66,13 +65,12 @@ goog.demos.editor.HelloWorld.prototype.isSupportedCommand = function(
 /**
  * Executes a command. Does not fire any BEFORECHANGE, CHANGE, or
  * SELECTIONCHANGE events (these are handled by the super class implementation
- * of {@code execCommand}.
+ * of `execCommand`.
  * @param {string} command Command to execute.
  * @override
  * @protected
  */
-goog.demos.editor.HelloWorld.prototype.execCommandInternal = function(
-    command) {
+goog.demos.editor.HelloWorld.prototype.execCommandInternal = function(command) {
   var domHelper = this.getFieldObject().getEditableDomHelper();
   var range = this.getFieldObject().getRange();
   range.removeContents();

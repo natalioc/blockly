@@ -18,9 +18,9 @@
  * has been changed. The event does not occur if value was changed
  * programmatically.<br>
  * <br>
- * Note: this does not guarantee the correctness of {@code keyCode} or
- * {@code charCode}, or attempt to unify them across browsers. See
- * {@code goog.events.KeyHandler} for that functionality<br>
+ * Note: this does not guarantee the correctness of `keyCode` or
+ * `charCode`, or attempt to unify them across browsers. See
+ * `goog.events.KeyHandler` for that functionality<br>
  * <br>
  * Known issues:
  * <ul>
@@ -81,9 +81,9 @@ goog.events.InputHandler = function(element) {
   //   event.
   // IE9 supports input events when characters are inserted, but not deleted.
   // WebKit before version 531 did not support input events for textareas.
-  var emulateInputEvents = goog.userAgent.IE ||
+  var emulateInputEvents = goog.userAgent.IE || goog.userAgent.EDGE ||
       (goog.userAgent.WEBKIT && !goog.userAgent.isVersionOrHigher('531') &&
-          element.tagName == goog.dom.TagName.TEXTAREA);
+       element.tagName == goog.dom.TagName.TEXTAREA);
 
   /**
    * @type {goog.events.EventHandler<!goog.events.InputHandler>}
@@ -100,9 +100,8 @@ goog.events.InputHandler = function(element) {
   // fit.)
   this.eventHandler_.listen(
       this.element_,
-      emulateInputEvents ?
-          ['keydown', 'paste', 'cut', 'drop', 'input'] :
-          'input',
+      emulateInputEvents ? ['keydown', 'paste', 'cut', 'drop', 'input'] :
+                           'input',
       this);
 };
 goog.inherits(goog.events.InputHandler, goog.events.EventTarget);
@@ -120,6 +119,7 @@ goog.events.InputHandler.EventType = {
 /**
  * This handles the underlying events and dispatches a new event as needed.
  * @param {goog.events.BrowserEvent} e The underlying browser event.
+ * @suppress {strictMissingProperties} Part of the go/strict_warnings_migration
  */
 goog.events.InputHandler.prototype.handleEvent = function(e) {
   if (e.type == 'input') {
@@ -168,7 +168,8 @@ goog.events.InputHandler.prototype.handleEvent = function(e) {
     // of the element has changed, we need to postpone dispatching input event
     // until value is updated.
     this.cancelTimerIfSet_();
-    this.timer_ = goog.Timer.callOnce(function() {
+    this.timer_ = goog.Timer.callOnce(/** @suppress {strictMissingProperties} Part of the go/strict_warnings_migration */
+                                      function() {
       this.timer_ = null;
       if (this.element_.value != valueBeforeKey) {
         this.dispatchEvent(inputEvent);

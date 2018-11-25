@@ -23,6 +23,8 @@ goog.provide('goog.graphics.ext.Rectangle');
 
 goog.require('goog.graphics.ext.StrokeAndFillElement');
 
+goog.forwardDeclare('goog.graphics.ext.Group');
+
 
 
 /**
@@ -34,12 +36,12 @@ goog.require('goog.graphics.ext.StrokeAndFillElement');
  */
 goog.graphics.ext.Rectangle = function(group) {
   // Initialize with some stock values.
-  var wrapper = group.getGraphicsImplementation().drawRect(0, 0, 1, 1, null,
-      null, group.getWrapper());
+  var wrapper = group.getGraphicsImplementation().drawRect(
+      0, 0, 1, 1, null, null, group.getWrapper());
   goog.graphics.ext.StrokeAndFillElement.call(this, group, wrapper);
 };
-goog.inherits(goog.graphics.ext.Rectangle,
-              goog.graphics.ext.StrokeAndFillElement);
+goog.inherits(
+    goog.graphics.ext.Rectangle, goog.graphics.ext.StrokeAndFillElement);
 
 
 /**

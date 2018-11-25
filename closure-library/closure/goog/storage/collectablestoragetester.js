@@ -18,9 +18,14 @@
  */
 
 goog.provide('goog.storage.collectableStorageTester');
+goog.setTestOnly();
 
 goog.require('goog.testing.asserts');
-goog.setTestOnly('collectablestorage_test');
+
+goog.forwardDeclare('goog.storage.CollectableStorage');
+goog.forwardDeclare('goog.storage.mechanism.IterableMechanism');
+goog.forwardDeclare('goog.testing.MockClock');
+
 
 
 /**
@@ -30,8 +35,8 @@ goog.setTestOnly('collectablestorage_test');
  * @param {goog.testing.MockClock} clock
  * @param {goog.storage.CollectableStorage} storage
   */
-goog.storage.collectableStorageTester.runBasicTests =
-    function(mechanism, clock, storage) {
+goog.storage.collectableStorageTester.runBasicTests = function(
+    mechanism, clock, storage) {
   // No expiration.
   storage.set('first', 'three seconds', 3000);
   storage.set('second', 'one second', 1000);

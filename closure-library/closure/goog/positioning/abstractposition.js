@@ -20,6 +20,10 @@
 
 goog.provide('goog.positioning.AbstractPosition');
 
+goog.forwardDeclare('goog.math.Box');
+goog.forwardDeclare('goog.math.Size');
+goog.forwardDeclare('goog.positioning.Corner');
+
 
 
 /**
@@ -40,5 +44,5 @@ goog.positioning.AbstractPosition = function() {};
  * @param {goog.math.Size=} opt_preferredSize PreferredSize of the
  *     movableElement.
  */
-goog.positioning.AbstractPosition.prototype.reposition =
-    function(movableElement, corner, opt_margin, opt_preferredSize) { };
+goog.positioning.AbstractPosition.prototype.reposition = function(
+    movableElement, corner, opt_margin, opt_preferredSize) {};

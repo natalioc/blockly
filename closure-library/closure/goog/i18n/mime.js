@@ -20,6 +20,7 @@ goog.provide('goog.i18n.mime');
 goog.provide('goog.i18n.mime.encode');
 
 goog.require('goog.array');
+goog.require('goog.i18n.uChar');
 
 
 /**
@@ -29,16 +30,15 @@ goog.require('goog.array');
  * @type {RegExp}
  * @private
  */
-goog.i18n.mime.NONASCII_ = /[^!-<>@-^`-~]/g;
-
+goog.i18n.mime.NONASCII_ = /[\uD800-\uDBFF][\uDC00-\uDFFF]|[^!-<>@-^`-~]/g;
 
 /**
  * Like goog.i18n.NONASCII_ but also omits double-quotes.
  * @type {RegExp}
  * @private
  */
-goog.i18n.mime.NONASCII_NOQUOTE_ = /[^!#-<>@-^`-~]/g;
-
+goog.i18n.mime.NONASCII_NOQUOTE_ =
+    /[\uD800-\uDBFF][\uDC00-\uDFFF]|[^!#-<>@-^`-~]/g;
 
 /**
  * Encodes a string for inclusion in a MIME header. The string is encoded
@@ -50,24 +50,27 @@ goog.i18n.mime.NONASCII_NOQUOTE_ = /[^!#-<>@-^`-~]/g;
  * @return {string} The encoded string.
  */
 goog.i18n.mime.encode = function(str, opt_noquote) {
-  var nonascii = opt_noquote ?
-      goog.i18n.mime.NONASCII_NOQUOTE_ : goog.i18n.mime.NONASCII_;
+  var nonascii =
+      opt_noquote ? goog.i18n.mime.NONASCII_NOQUOTE_ : goog.i18n.mime.NONASCII_;
 
   if (str.search(nonascii) >= 0) {
-    str = '=?UTF-8?Q?' + str.replace(nonascii,
-        /**
-         * @param {string} c The matched char.
-         * @return {string} The quoted-printable form of utf-8 encoding.
-         */
-        function(c) {
-          var i = c.charCodeAt(0);
-          if (i == 32) {
-            // Special case for space, which can be encoded as _ not =20
-            return '_';
-          }
-          var a = goog.array.concat('', goog.i18n.mime.getHexCharArray(c));
-          return a.join('=');
-        }) + '?=';
+    str = '=?UTF-8?Q?' +
+        str.replace(
+            nonascii,
+            /**
+             * @param {string} c The matched char.
+             * @return {string} The quoted-printable form of utf-8 encoding.
+             */
+            function(c) {
+              var i = c.charCodeAt(0);
+              if (i == 32) {
+                // Special case for space, which can be encoded as _ not =20
+                return '_';
+              }
+              var a = goog.array.concat('', goog.i18n.mime.getHexCharArray(c));
+              return a.join('=');
+            }) +
+        '?=';
   }
   return str;
 };
@@ -79,28 +82,21 @@ goog.i18n.mime.encode = function(str, opt_noquote) {
  * @return {!Array<string>} A hex array representing the character.
  */
 goog.i18n.mime.getHexCharArray = function(c) {
-  var i = c.charCodeAt(0);
+  var i = goog.i18n.uChar.toCharCode(c);
   var a = [];
   // First convert the UCS-2 character into its UTF-8 bytes
   if (i < 128) {
     a.push(i);
   } else if (i <= 0x7ff) {
-    a.push(
-        0xc0 + ((i >> 6) & 0x3f),
-        0x80 + (i & 0x3f));
+    a.push(0xc0 + ((i >> 6) & 0x3f), 0x80 + (i & 0x3f));
   } else if (i <= 0xffff) {
     a.push(
-        0xe0 + ((i >> 12) & 0x3f),
-        0x80 + ((i >> 6) & 0x3f),
-        0x80 + (i & 0x3f));
+        0xe0 + ((i >> 12) & 0x3f), 0x80 + ((i >> 6) & 0x3f), 0x80 + (i & 0x3f));
   } else {
-    // (This is defensive programming, since ecmascript isn't supposed
-    // to handle code points that take more than 16 bits.)
+    // Handle code points that take more than 16 bits.
     a.push(
-        0xf0 + ((i >> 18) & 0x3f),
-        0x80 + ((i >> 12) & 0x3f),
-        0x80 + ((i >> 6) & 0x3f),
-        0x80 + (i & 0x3f));
+        0xf0 + ((i >> 18) & 0x3f), 0x80 + ((i >> 12) & 0x3f),
+        0x80 + ((i >> 6) & 0x3f), 0x80 + (i & 0x3f));
   }
   // Now convert those bytes into hex strings (don't do anything with
   // a[0] as that's got the empty string that lets us use join())

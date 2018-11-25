@@ -24,6 +24,9 @@ goog.require('goog.asserts');
 goog.require('goog.object');
 goog.require('goog.string');
 
+goog.forwardDeclare('goog.proto2.FieldDescriptor');
+goog.forwardDeclare('goog.proto2.Message');
+
 
 /**
  * @typedef {{name: (string|undefined),
@@ -137,7 +140,7 @@ goog.proto2.Descriptor.prototype.getFields = function() {
    */
   function tagComparator(fieldA, fieldB) {
     return fieldA.getTag() - fieldB.getTag();
-  };
+  }
 
   var fields = goog.object.getValues(this.fields_);
   goog.array.sort(fields, tagComparator);
@@ -169,10 +172,9 @@ goog.proto2.Descriptor.prototype.getFieldsMap = function() {
  * @return {goog.proto2.FieldDescriptor} The field found, if any.
  */
 goog.proto2.Descriptor.prototype.findFieldByName = function(name) {
-  var valueFound = goog.object.findValue(this.fields_,
-      function(field, key, obj) {
-        return field.getName() == name;
-      });
+  var valueFound = goog.object.findValue(
+      this.fields_,
+      function(field, key, obj) { return field.getName() == name; });
 
   return /** @type {goog.proto2.FieldDescriptor} */ (valueFound) || null;
 };

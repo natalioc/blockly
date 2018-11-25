@@ -77,8 +77,8 @@ goog.inherits(goog.dom.pattern.ChildMatches, goog.dom.pattern.AllChildren);
  *
  * @param {Node} token Token to match against.
  * @param {goog.dom.TagWalkType} type The type of token.
- * @return {goog.dom.pattern.MatchType} {@code MATCHING} if the token is on the
- *     same level or deeper and {@code BACKTRACK_MATCH} if not.
+ * @return {goog.dom.pattern.MatchType} `MATCHING` if the token is on the
+ *     same level or deeper and `BACKTRACK_MATCH` if not.
  * @override
  */
 goog.dom.pattern.ChildMatches.prototype.matchToken = function(token, type) {
@@ -123,8 +123,8 @@ goog.dom.pattern.ChildMatches.prototype.matchToken = function(token, type) {
       // when we don't meet our minimum.
       this.needsReset_ = true;
       return (this.matches.length >= this.minimumMatches_) ?
-             goog.dom.pattern.MatchType.BACKTRACK_MATCH :
-             goog.dom.pattern.MatchType.NO_MATCH;
+          goog.dom.pattern.MatchType.BACKTRACK_MATCH :
+          goog.dom.pattern.MatchType.NO_MATCH;
 
     default:
       this.needsReset_ = true;

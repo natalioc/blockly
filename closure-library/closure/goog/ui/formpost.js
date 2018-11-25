@@ -16,6 +16,7 @@
  * @fileoverview Utility for making the browser submit a hidden form, which can
  * be used to effect a POST from JavaScript.
  *
+ * @author dpb@google.com (David P. Baker)
  */
 
 goog.provide('goog.ui.FormPost');
@@ -44,8 +45,9 @@ goog.inherits(goog.ui.FormPost, goog.ui.Component);
 
 /** @override */
 goog.ui.FormPost.prototype.createDom = function() {
-  this.setElementInternal(this.getDomHelper().createDom(goog.dom.TagName.FORM,
-      {'method': 'POST', 'style': 'display:none'}));
+  this.setElementInternal(
+      this.getDomHelper().createDom(
+          goog.dom.TagName.FORM, {'method': 'POST', 'style': 'display:none'}));
 };
 
 
@@ -59,6 +61,7 @@ goog.ui.FormPost.prototype.createDom = function() {
  * @param {string=} opt_target An optional name of a window in which to open the
  *     URL. If not specified, uses the window for the DOM specified in the
  *     constructor.
+ * @suppress {strictMissingProperties} Part of the go/strict_warnings_migration
  */
 goog.ui.FormPost.prototype.post = function(parameters, opt_url, opt_target) {
   var form = this.getElement();
@@ -104,6 +107,7 @@ goog.ui.FormPost.prototype.setParameters_ = function(form, parameters) {
  * @private
  */
 goog.ui.FormPost.prototype.createInput_ = function(name, value) {
-  return goog.html.SafeHtml.create('input',
+  return goog.html.SafeHtml.create(
+      'input',
       {'type': goog.dom.InputType.HIDDEN, 'name': name, 'value': value});
 };

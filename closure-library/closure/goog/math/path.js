@@ -23,6 +23,7 @@ goog.provide('goog.math.Path.Segment');
 
 goog.require('goog.array');
 goog.require('goog.math');
+goog.require('goog.math.AffineTransform');
 
 
 
@@ -32,7 +33,7 @@ goog.require('goog.math');
  * path. A path must start with a moveTo command.
  *
  * A "simple" path does not contain any arcs and may be transformed using
- * the {@code transform} method.
+ * the `transform` method.
  *
  * @struct
  * @constructor
@@ -248,7 +249,7 @@ goog.math.Path.prototype.lineToFromArray = function(coordinates) {
 goog.math.Path.prototype.lineTo_ = function(coordinates) {
   var lastSegment = goog.array.peek(this.segments_);
   if (lastSegment == null) {
-    throw Error('Path cannot start with lineTo');
+    throw new Error('Path cannot start with lineTo');
   }
   if (lastSegment != goog.math.Path.Segment.LINETO) {
     this.segments_.push(goog.math.Path.Segment.LINETO);
@@ -270,7 +271,7 @@ goog.math.Path.prototype.lineTo_ = function(coordinates) {
  * specified using 3 points (6 coordinates) - two control points and the end
  * point of the curve.
  *
- * @param {...number} var_args The coordinates specifiying each curve in sets of
+ * @param {...number} var_args The coordinates specifying each curve in sets of
  *     6 points: {@code [x1, y1]} the first control point, {@code [x2, y2]} the
  *     second control point and {@code [x, y]} the end point.
  * @return {!goog.math.Path} The path itself.
@@ -285,7 +286,7 @@ goog.math.Path.prototype.curveTo = function(var_args) {
  * specified using 3 points (6 coordinates) - two control points and the end
  * point of the curve.
  *
- * @param {!Array<number>} coordinates The coordinates specifiying
+ * @param {!Array<number>} coordinates The coordinates specifying
  *     each curve in sets of 6 points: {@code [x1, y1]} the first control point,
  *     {@code [x2, y2]} the second control point and {@code [x, y]} the end
  *     point.
@@ -301,7 +302,7 @@ goog.math.Path.prototype.curveToFromArray = function(coordinates) {
  * specified using 3 points (6 coordinates) - two control points and the end
  * point of the curve.
  *
- * @param {!Array<number>|Arguments} coordinates The coordinates specifiying
+ * @param {!Array<number>|Arguments} coordinates The coordinates specifying
  *     each curve in sets of 6 points: {@code [x1, y1]} the first control point,
  *     {@code [x2, y2]} the second control point and {@code [x, y]} the end
  *     point.
@@ -311,7 +312,7 @@ goog.math.Path.prototype.curveToFromArray = function(coordinates) {
 goog.math.Path.prototype.curveTo_ = function(coordinates) {
   var lastSegment = goog.array.peek(this.segments_);
   if (lastSegment == null) {
-    throw Error('Path cannot start with curve');
+    throw new Error('Path cannot start with curve');
   }
   if (lastSegment != goog.math.Path.Segment.CURVETO) {
     this.segments_.push(goog.math.Path.Segment.CURVETO);
@@ -320,8 +321,9 @@ goog.math.Path.prototype.curveTo_ = function(coordinates) {
   for (var i = 0; i < coordinates.length; i += 6) {
     var x = coordinates[i + 4];
     var y = coordinates[i + 5];
-    this.arguments_.push(coordinates[i], coordinates[i + 1],
-        coordinates[i + 2], coordinates[i + 3], x, y);
+    this.arguments_.push(
+        coordinates[i], coordinates[i + 1], coordinates[i + 2],
+        coordinates[i + 3], x, y);
   }
   this.count_[this.count_.length - 1] += i / 6;
   this.currentPoint_ = [x, y];
@@ -338,7 +340,7 @@ goog.math.Path.prototype.curveTo_ = function(coordinates) {
 goog.math.Path.prototype.close = function() {
   var lastSegment = goog.array.peek(this.segments_);
   if (lastSegment == null) {
-    throw Error('Path cannot start with close');
+    throw new Error('Path cannot start with close');
   }
   if (lastSegment != goog.math.Path.Segment.CLOSE) {
     this.segments_.push(goog.math.Path.Segment.CLOSE);
@@ -351,8 +353,8 @@ goog.math.Path.prototype.close = function() {
 
 /**
  * Adds a path command to draw an arc centered at the point {@code (cx, cy)}
- * with radius {@code rx} along the x-axis and {@code ry} along the y-axis from
- * {@code startAngle} through {@code extent} degrees. Positive rotation is in
+ * with radius `rx` along the x-axis and `ry` along the y-axis from
+ * `startAngle` through `extent` degrees. Positive rotation is in
  * the direction from positive x-axis to positive y-axis.
  *
  * @param {number} cx X coordinate of center of ellipse.
@@ -365,10 +367,10 @@ goog.math.Path.prototype.close = function() {
  * @param {boolean} connect If true, the starting point of the arc is connected
  *     to the current point.
  * @return {!goog.math.Path} The path itself.
- * @deprecated Use {@code arcTo} or {@code arcToAsCurves} instead.
+ * @deprecated Use `arcTo` or `arcToAsCurves` instead.
  */
-goog.math.Path.prototype.arc = function(cx, cy, rx, ry,
-    fromAngle, extent, connect) {
+goog.math.Path.prototype.arc = function(
+    cx, cy, rx, ry, fromAngle, extent, connect) {
   var startX = cx + goog.math.angleDx(fromAngle, rx);
   var startY = cy + goog.math.angleDy(fromAngle, ry);
   if (connect) {
@@ -385,8 +387,8 @@ goog.math.Path.prototype.arc = function(cx, cy, rx, ry,
 
 /**
  * Adds a path command to draw an arc starting at the path's current point,
- * with radius {@code rx} along the x-axis and {@code ry} along the y-axis from
- * {@code startAngle} through {@code extent} degrees. Positive rotation is in
+ * with radius `rx` along the x-axis and `ry` along the y-axis from
+ * `startAngle` through `extent` degrees. Positive rotation is in
  * the direction from positive x-axis to positive y-axis.
  *
  * This method makes the path non-simple.
@@ -413,9 +415,9 @@ goog.math.Path.prototype.arcTo = function(rx, ry, fromAngle, extent) {
 
 
 /**
- * Same as {@code arcTo}, but approximates the arc using bezier curves.
+ * Same as `arcTo`, but approximates the arc using bezier curves.
 .* As a result, this method does not affect the simplified status of this path.
- * The algorithm is adapted from {@code java.awt.geom.ArcIterator}.
+ * The algorithm is adapted from `java.awt.geom.ArcIterator`.
  *
  * @param {number} rx Radius of ellipse on x axis.
  * @param {number} ry Radius of ellipse on y axis.
@@ -424,8 +426,7 @@ goog.math.Path.prototype.arcTo = function(rx, ry, fromAngle, extent) {
  * @param {number} extent The span of the arc in degrees.
  * @return {!goog.math.Path} The path itself.
  */
-goog.math.Path.prototype.arcToAsCurves = function(
-    rx, ry, fromAngle, extent) {
+goog.math.Path.prototype.arcToAsCurves = function(rx, ry, fromAngle, extent) {
   var cx = this.currentPoint_[0] - goog.math.angleDx(fromAngle, rx);
   var cy = this.currentPoint_[1] - goog.math.angleDy(fromAngle, ry);
   var extentRad = goog.math.toRadians(extent);
@@ -441,11 +442,9 @@ goog.math.Path.prototype.arcToAsCurves = function(
     angle += inc;
     relX = Math.cos(angle);
     relY = Math.sin(angle);
-    this.curveTo(c0, c1,
-        cx + (relX + z * relY) * rx,
-        cy + (relY - z * relX) * ry,
-        cx + relX * rx,
-        cy + relY * ry);
+    this.curveTo(
+        c0, c1, cx + (relX + z * relY) * rx, cy + (relY - z * relX) * ry,
+        cx + relX * rx, cy + relY * ry);
   }
   return this;
 };
@@ -456,11 +455,11 @@ goog.math.Path.prototype.arcToAsCurves = function(
  * segment. The arguments to the callback function are the segment type and
  * an array of its arguments.
  *
- * The {@code LINETO} and {@code CURVETO} arrays can contain multiple
+ * The `LINETO` and `CURVETO` arrays can contain multiple
  * segments of the same type. The number of segments is the length of the
  * array divided by the segment length (2 for lines, 6 for  curves).
  *
- * As a convenience the {@code ARCTO} segment also includes the end point as the
+ * As a convenience the `ARCTO` segment also includes the end point as the
  * last two arguments: {@code rx, ry, fromAngle, extent, x, y}.
  *
  * @param {function(!goog.math.Path.Segment, !Array<number>)} callback
@@ -506,7 +505,7 @@ goog.math.Path.prototype.clone = function() {
 
 /**
  * Returns true if this path contains no arcs. Simplified paths can be
- * created using {@code createSimplifiedPath}.
+ * created using `createSimplifiedPath`.
  *
  * @return {boolean} True if the path contains no arcs.
  */
@@ -524,17 +523,15 @@ goog.math.Path.simplifySegmentMap_ = (function() {
   map[goog.math.Path.Segment.MOVETO] = goog.math.Path.prototype.moveTo;
   map[goog.math.Path.Segment.LINETO] = goog.math.Path.prototype.lineTo;
   map[goog.math.Path.Segment.CLOSE] = goog.math.Path.prototype.close;
-  map[goog.math.Path.Segment.CURVETO] =
-      goog.math.Path.prototype.curveTo;
-  map[goog.math.Path.Segment.ARCTO] =
-      goog.math.Path.prototype.arcToAsCurves;
+  map[goog.math.Path.Segment.CURVETO] = goog.math.Path.prototype.curveTo;
+  map[goog.math.Path.Segment.ARCTO] = goog.math.Path.prototype.arcToAsCurves;
   return map;
 })();
 
 
 /**
- * Creates a copy of the given path, replacing {@code arcTo} with
- * {@code arcToAsCurves}. The resulting path is simplified and can
+ * Creates a copy of the given path, replacing `arcTo` with
+ * `arcToAsCurves`. The resulting path is simplified and can
  * be transformed.
  *
  * @param {!goog.math.Path} src The path to simplify.
@@ -576,10 +573,10 @@ goog.math.Path.prototype.createTransformedPath = function(tx) {
  */
 goog.math.Path.prototype.transform = function(tx) {
   if (!this.isSimple()) {
-    throw Error('Non-simple path');
+    throw new Error('Non-simple path');
   }
-  tx.transform(this.arguments_, 0, this.arguments_, 0,
-      this.arguments_.length / 2);
+  tx.transform(
+      this.arguments_, 0, this.arguments_, 0, this.arguments_.length / 2);
   if (this.closePoint_) {
     tx.transform(this.closePoint_, 0, this.closePoint_, 0, 1);
   }

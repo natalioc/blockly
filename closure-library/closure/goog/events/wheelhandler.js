@@ -71,7 +71,7 @@ goog.events.WheelHandler = function(element, opt_capture) {
 
   var rtlElement = goog.dom.isElement(this.element_) ?
       /** @type {!Element} */ (this.element_) :
-      /** @type {!Document} */ (this.element_).body;
+                              /** @type {!Document} */ (this.element_).body;
 
   /**
    * True if the element exists and is RTL, false otherwise.
@@ -84,8 +84,8 @@ goog.events.WheelHandler = function(element, opt_capture) {
    * @private {goog.events.Key}
    */
   this.listenKey_ = goog.events.listen(
-      this.element_, goog.events.WheelHandler.getDomEventType(),
-      this, opt_capture);
+      this.element_, goog.events.WheelHandler.getDomEventType(), this,
+      opt_capture);
 };
 goog.inherits(goog.events.WheelHandler, goog.events.EventTarget);
 
@@ -110,6 +110,7 @@ goog.events.WheelHandler.getDomEventType = function() {
 /**
  * Handles the events on the element.
  * @param {!goog.events.BrowserEvent} e The underlying browser event.
+ * @suppress {strictMissingProperties} Part of the go/strict_warnings_migration
  */
 goog.events.WheelHandler.prototype.handleEvent = function(e) {
   var deltaMode = goog.events.WheelEvent.DeltaMode.PIXEL;
@@ -131,7 +132,7 @@ goog.events.WheelHandler.prototype.handleEvent = function(e) {
     } else {
       deltaY = -be.wheelDelta;
     }
-  } else { // Historical Gecko
+  } else {  // Historical Gecko
     // Gecko returns multiple of 3 (representing the number of lines)
     deltaMode = goog.events.WheelEvent.DeltaMode.LINE;
     // Firefox 3.1 adds an axis field to the event to indicate axis.
@@ -145,8 +146,8 @@ goog.events.WheelHandler.prototype.handleEvent = function(e) {
   if (this.isRtl_) {
     deltaX = -deltaX;
   }
-  var newEvent = new goog.events.WheelEvent(
-      be, deltaMode, deltaX, deltaY, deltaZ);
+  var newEvent =
+      new goog.events.WheelEvent(be, deltaMode, deltaX, deltaY, deltaZ);
   this.dispatchEvent(newEvent);
 };
 

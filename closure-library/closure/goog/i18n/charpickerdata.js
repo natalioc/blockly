@@ -18,6 +18,7 @@
  * https://sites/cibu/character-picker.
  */
 
+// clang-format off
 goog.provide('goog.i18n.CharPickerData');
 
 
@@ -2040,7 +2041,7 @@ goog.i18n.CharPickerData.prototype.categories = [
 /**
  * Names of subcategories. Each message this array is the
  * name for the corresponding subcategory specified in
- * {@code goog.i18n.CharPickerData.subcategories}.
+ * `goog.i18n.CharPickerData.subcategories`.
  * @type {!Array<string>}
  */
 goog.i18n.CharPickerData.SUBCATEGORY_NAMES_OF_SYMBOL = [
@@ -2073,15 +2074,15 @@ goog.i18n.CharPickerData.SUBCATEGORY_NAMES_OF_SYMBOL = [
 /**
  * List of characters in base88 encoding scheme. Each base88 encoded
  * charater string represents corresponding subcategory specified in
- * {@code goog.i18n.CharPickerData.subcategories}. Encoding
- * scheme is described in {@code goog.i18n.CharListDecompressor}.
+ * `goog.i18n.CharPickerData.subcategories`. Encoding
+ * scheme is described in `goog.i18n.CharListDecompressor`.
  * @type {!Array<string>}
  */
 goog.i18n.CharPickerData.CHARLIST_OF_SYMBOL = [
   '2>807AnTMm6e6HDk%`O728F1f4V1PNF2WF1G}58?]514M]Ol1%2l2^3X1U:1Un2Mb>$0MD-(068k11I3706:%MwiZ06',
   ';oA0FN',
   '(j90d3',
-  'H3XBMQQ10HB(2106uPM]N:qol202S20t2^.Z0^xM0:91E]J6O6',
+  'H3XBMQQ10HB(2106uPM]N:qol202S20#2;.Z0^xM0:91E]J6O6',
   ';(i1-5W?',
   'Q6A06f5#1H2,]4MeEY[W1@3W}891N1GF1GN18N1P%k',
   '2JA0sOc',
@@ -2107,7 +2108,7 @@ goog.i18n.CharPickerData.CHARLIST_OF_SYMBOL = [
 /**
  * Names of subcategories. Each message this array is the
  * name for the corresponding subcategory specified in
- * {@code goog.i18n.CharPickerData.subcategories}.
+ * `goog.i18n.CharPickerData.subcategories`.
  * @type {!Array<string>}
  */
 goog.i18n.CharPickerData.SUBCATEGORY_NAMES_OF_EMOJI = [
@@ -2126,8 +2127,8 @@ goog.i18n.CharPickerData.SUBCATEGORY_NAMES_OF_EMOJI = [
 /**
  * List of characters in base88 encoding scheme. Each base88 encoded
  * charater string represents corresponding subcategory specified in
- * {@code goog.i18n.CharPickerData.subcategories}. Encoding
- * scheme is described in {@code goog.i18n.CharListDecompressor}.
+ * `goog.i18n.CharPickerData.subcategories`. Encoding
+ * scheme is described in `goog.i18n.CharListDecompressor`.
  * @type {!Array<string>}
  */
 goog.i18n.CharPickerData.CHARLIST_OF_EMOJI = [
@@ -2146,7 +2147,7 @@ goog.i18n.CharPickerData.CHARLIST_OF_EMOJI = [
 /**
  * Names of subcategories. Each message this array is the
  * name for the corresponding subcategory specified in
- * {@code goog.i18n.CharPickerData.subcategories}.
+ * `goog.i18n.CharPickerData.subcategories`.
  * @type {!Array<string>}
  */
 goog.i18n.CharPickerData.SUBCATEGORY_NAMES_OF_PUNCTUATION = [
@@ -2162,8 +2163,8 @@ goog.i18n.CharPickerData.SUBCATEGORY_NAMES_OF_PUNCTUATION = [
 /**
  * List of characters in base88 encoding scheme. Each base88 encoded
  * charater string represents corresponding subcategory specified in
- * {@code goog.i18n.CharPickerData.subcategories}. Encoding
- * scheme is described in {@code goog.i18n.CharListDecompressor}.
+ * `goog.i18n.CharPickerData.subcategories`. Encoding
+ * scheme is described in `goog.i18n.CharListDecompressor`.
  * @type {!Array<string>}
  */
 goog.i18n.CharPickerData.CHARLIST_OF_PUNCTUATION = [
@@ -2179,7 +2180,7 @@ goog.i18n.CharPickerData.CHARLIST_OF_PUNCTUATION = [
 /**
  * Names of subcategories. Each message this array is the
  * name for the corresponding subcategory specified in
- * {@code goog.i18n.CharPickerData.subcategories}.
+ * `goog.i18n.CharPickerData.subcategories`.
  * @type {!Array<string>}
  */
 goog.i18n.CharPickerData.SUBCATEGORY_NAMES_OF_NUMBER = [
@@ -2195,8 +2196,8 @@ goog.i18n.CharPickerData.SUBCATEGORY_NAMES_OF_NUMBER = [
 /**
  * List of characters in base88 encoding scheme. Each base88 encoded
  * charater string represents corresponding subcategory specified in
- * {@code goog.i18n.CharPickerData.subcategories}. Encoding
- * scheme is described in {@code goog.i18n.CharListDecompressor}.
+ * `goog.i18n.CharPickerData.subcategories`. Encoding
+ * scheme is described in `goog.i18n.CharListDecompressor`.
  * @type {!Array<string>}
  */
 goog.i18n.CharPickerData.CHARLIST_OF_NUMBER = [
@@ -2212,7 +2213,7 @@ goog.i18n.CharPickerData.CHARLIST_OF_NUMBER = [
 /**
  * Names of subcategories. Each message this array is the
  * name for the corresponding subcategory specified in
- * {@code goog.i18n.CharPickerData.subcategories}.
+ * `goog.i18n.CharPickerData.subcategories`.
  * @type {!Array<string>}
  */
 goog.i18n.CharPickerData.SUBCATEGORY_NAMES_OF_FORMAT_WHITESPACE = [
@@ -2227,12 +2228,12 @@ goog.i18n.CharPickerData.SUBCATEGORY_NAMES_OF_FORMAT_WHITESPACE = [
 /**
  * List of characters in base88 encoding scheme. Each base88 encoded
  * charater string represents corresponding subcategory specified in
- * {@code goog.i18n.CharPickerData.subcategories}. Encoding
- * scheme is described in {@code goog.i18n.CharListDecompressor}.
+ * `goog.i18n.CharPickerData.subcategories`. Encoding
+ * scheme is described in `goog.i18n.CharListDecompressor`.
  * @type {!Array<string>}
  */
 goog.i18n.CharPickerData.CHARLIST_OF_FORMAT_WHITESPACE = [
-  'vF;Z10c12fHf4gh40;920UX2Uf4U8M2n#0Iej0MQi50sbwt0vME',
+  'vF;Z10c12fHf4gh40;920UX2Uf4U8M2n#0Iej0MQi50sY)W9l8bk0AvME',
   ']=oY506%7E^$zA#LDF1AV1',
   'fEIH602920,H3P4wB40;#s0',
   'w-10f4^#206IV10(970ols0',
@@ -2243,7 +2244,7 @@ goog.i18n.CharPickerData.CHARLIST_OF_FORMAT_WHITESPACE = [
 /**
  * Names of subcategories. Each message this array is the
  * name for the corresponding subcategory specified in
- * {@code goog.i18n.CharPickerData.subcategories}.
+ * `goog.i18n.CharPickerData.subcategories`.
  * @type {!Array<string>}
  */
 goog.i18n.CharPickerData.SUBCATEGORY_NAMES_OF_MODIFIER = [
@@ -2258,8 +2259,8 @@ goog.i18n.CharPickerData.SUBCATEGORY_NAMES_OF_MODIFIER = [
 /**
  * List of characters in base88 encoding scheme. Each base88 encoded
  * charater string represents corresponding subcategory specified in
- * {@code goog.i18n.CharPickerData.subcategories}. Encoding
- * scheme is described in {@code goog.i18n.CharListDecompressor}.
+ * `goog.i18n.CharPickerData.subcategories`. Encoding
+ * scheme is described in `goog.i18n.CharListDecompressor`.
  * @type {!Array<string>}
  */
 goog.i18n.CharPickerData.CHARLIST_OF_MODIFIER = [
@@ -2274,7 +2275,7 @@ goog.i18n.CharPickerData.CHARLIST_OF_MODIFIER = [
 /**
  * Names of subcategories. Each message this array is the
  * name for the corresponding subcategory specified in
- * {@code goog.i18n.CharPickerData.subcategories}.
+ * `goog.i18n.CharPickerData.subcategories`.
  * @type {!Array<string>}
  */
 goog.i18n.CharPickerData.SUBCATEGORY_NAMES_OF_LATIN = [
@@ -2292,8 +2293,8 @@ goog.i18n.CharPickerData.SUBCATEGORY_NAMES_OF_LATIN = [
 /**
  * List of characters in base88 encoding scheme. Each base88 encoded
  * charater string represents corresponding subcategory specified in
- * {@code goog.i18n.CharPickerData.subcategories}. Encoding
- * scheme is described in {@code goog.i18n.CharListDecompressor}.
+ * `goog.i18n.CharPickerData.subcategories`. Encoding
+ * scheme is described in `goog.i18n.CharListDecompressor`.
  * @type {!Array<string>}
  */
 goog.i18n.CharPickerData.CHARLIST_OF_LATIN = [
@@ -2311,7 +2312,7 @@ goog.i18n.CharPickerData.CHARLIST_OF_LATIN = [
 /**
  * Names of subcategories. Each message this array is the
  * name for the corresponding subcategory specified in
- * {@code goog.i18n.CharPickerData.subcategories}.
+ * `goog.i18n.CharPickerData.subcategories`.
  * @type {!Array<string>}
  */
 goog.i18n.CharPickerData.SUBCATEGORY_NAMES_OF_OTHER_EUROPEAN_SCRIPTS = [
@@ -2351,8 +2352,8 @@ goog.i18n.CharPickerData.SUBCATEGORY_NAMES_OF_OTHER_EUROPEAN_SCRIPTS = [
 /**
  * List of characters in base88 encoding scheme. Each base88 encoded
  * charater string represents corresponding subcategory specified in
- * {@code goog.i18n.CharPickerData.subcategories}. Encoding
- * scheme is described in {@code goog.i18n.CharListDecompressor}.
+ * `goog.i18n.CharPickerData.subcategories`. Encoding
+ * scheme is described in `goog.i18n.CharListDecompressor`.
  * @type {!Array<string>}
  */
 goog.i18n.CharPickerData.CHARLIST_OF_OTHER_EUROPEAN_SCRIPTS = [
@@ -2379,7 +2380,7 @@ goog.i18n.CharPickerData.CHARLIST_OF_OTHER_EUROPEAN_SCRIPTS = [
 /**
  * Names of subcategories. Each message this array is the
  * name for the corresponding subcategory specified in
- * {@code goog.i18n.CharPickerData.subcategories}.
+ * `goog.i18n.CharPickerData.subcategories`.
  * @type {!Array<string>}
  */
 goog.i18n.CharPickerData.SUBCATEGORY_NAMES_OF_AMERICAN_SCRIPTS = [
@@ -2393,8 +2394,8 @@ goog.i18n.CharPickerData.SUBCATEGORY_NAMES_OF_AMERICAN_SCRIPTS = [
 /**
  * List of characters in base88 encoding scheme. Each base88 encoded
  * charater string represents corresponding subcategory specified in
- * {@code goog.i18n.CharPickerData.subcategories}. Encoding
- * scheme is described in {@code goog.i18n.CharListDecompressor}.
+ * `goog.i18n.CharPickerData.subcategories`. Encoding
+ * scheme is described in `goog.i18n.CharListDecompressor`.
  * @type {!Array<string>}
  */
 goog.i18n.CharPickerData.CHARLIST_OF_AMERICAN_SCRIPTS = [
@@ -2407,7 +2408,7 @@ goog.i18n.CharPickerData.CHARLIST_OF_AMERICAN_SCRIPTS = [
 /**
  * Names of subcategories. Each message this array is the
  * name for the corresponding subcategory specified in
- * {@code goog.i18n.CharPickerData.subcategories}.
+ * `goog.i18n.CharPickerData.subcategories`.
  * @type {!Array<string>}
  */
 goog.i18n.CharPickerData.SUBCATEGORY_NAMES_OF_AFRICAN_SCRIPTS = [
@@ -2432,8 +2433,8 @@ goog.i18n.CharPickerData.SUBCATEGORY_NAMES_OF_AFRICAN_SCRIPTS = [
 /**
  * List of characters in base88 encoding scheme. Each base88 encoded
  * charater string represents corresponding subcategory specified in
- * {@code goog.i18n.CharPickerData.subcategories}. Encoding
- * scheme is described in {@code goog.i18n.CharListDecompressor}.
+ * `goog.i18n.CharPickerData.subcategories`. Encoding
+ * scheme is described in `goog.i18n.CharListDecompressor`.
  * @type {!Array<string>}
  */
 goog.i18n.CharPickerData.CHARLIST_OF_AFRICAN_SCRIPTS = [
@@ -2454,7 +2455,7 @@ goog.i18n.CharPickerData.CHARLIST_OF_AFRICAN_SCRIPTS = [
 /**
  * Names of subcategories. Each message this array is the
  * name for the corresponding subcategory specified in
- * {@code goog.i18n.CharPickerData.subcategories}.
+ * `goog.i18n.CharPickerData.subcategories`.
  * @type {!Array<string>}
  */
 goog.i18n.CharPickerData.SUBCATEGORY_NAMES_OF_MIDDLE_EASTERN_SCRIPTS = [
@@ -2499,8 +2500,8 @@ goog.i18n.CharPickerData.SUBCATEGORY_NAMES_OF_MIDDLE_EASTERN_SCRIPTS = [
 /**
  * List of characters in base88 encoding scheme. Each base88 encoded
  * charater string represents corresponding subcategory specified in
- * {@code goog.i18n.CharPickerData.subcategories}. Encoding
- * scheme is described in {@code goog.i18n.CharListDecompressor}.
+ * `goog.i18n.CharPickerData.subcategories`. Encoding
+ * scheme is described in `goog.i18n.CharListDecompressor`.
  * @type {!Array<string>}
  */
 goog.i18n.CharPickerData.CHARLIST_OF_MIDDLE_EASTERN_SCRIPTS = [
@@ -2532,7 +2533,7 @@ goog.i18n.CharPickerData.CHARLIST_OF_MIDDLE_EASTERN_SCRIPTS = [
 /**
  * Names of subcategories. Each message this array is the
  * name for the corresponding subcategory specified in
- * {@code goog.i18n.CharPickerData.subcategories}.
+ * `goog.i18n.CharPickerData.subcategories`.
  * @type {!Array<string>}
  */
 goog.i18n.CharPickerData.SUBCATEGORY_NAMES_OF_SOUTH_ASIAN_SCRIPTS = [
@@ -2586,8 +2587,8 @@ goog.i18n.CharPickerData.SUBCATEGORY_NAMES_OF_SOUTH_ASIAN_SCRIPTS = [
 /**
  * List of characters in base88 encoding scheme. Each base88 encoded
  * charater string represents corresponding subcategory specified in
- * {@code goog.i18n.CharPickerData.subcategories}. Encoding
- * scheme is described in {@code goog.i18n.CharListDecompressor}.
+ * `goog.i18n.CharPickerData.subcategories`. Encoding
+ * scheme is described in `goog.i18n.CharListDecompressor`.
  * @type {!Array<string>}
  */
 goog.i18n.CharPickerData.CHARLIST_OF_SOUTH_ASIAN_SCRIPTS = [
@@ -2629,7 +2630,7 @@ goog.i18n.CharPickerData.CHARLIST_OF_SOUTH_ASIAN_SCRIPTS = [
 /**
  * Names of subcategories. Each message this array is the
  * name for the corresponding subcategory specified in
- * {@code goog.i18n.CharPickerData.subcategories}.
+ * `goog.i18n.CharPickerData.subcategories`.
  * @type {!Array<string>}
  */
 goog.i18n.CharPickerData.SUBCATEGORY_NAMES_OF_SOUTHEAST_ASIAN_SCRIPTS = [
@@ -2668,8 +2669,8 @@ goog.i18n.CharPickerData.SUBCATEGORY_NAMES_OF_SOUTHEAST_ASIAN_SCRIPTS = [
 /**
  * List of characters in base88 encoding scheme. Each base88 encoded
  * charater string represents corresponding subcategory specified in
- * {@code goog.i18n.CharPickerData.subcategories}. Encoding
- * scheme is described in {@code goog.i18n.CharListDecompressor}.
+ * `goog.i18n.CharPickerData.subcategories`. Encoding
+ * scheme is described in `goog.i18n.CharListDecompressor`.
  * @type {!Array<string>}
  */
 goog.i18n.CharPickerData.CHARLIST_OF_SOUTHEAST_ASIAN_SCRIPTS = [
@@ -2681,7 +2682,7 @@ goog.i18n.CharPickerData.CHARLIST_OF_SOUTHEAST_ASIAN_SCRIPTS = [
   ';I6073GE8?]2E8UO,m,Hi-2Srl286O',
   'g:3068G68GmM8k8E88G68M86.GU11,GMC4Gc86.8c',
   'QK40-3:1}1WMOO6uEW71918,W6Iwe0V18,D-e0#192MWE8EGkOMH1|8[M;xe0[',
-  'Y%60@3]1k$?O6K4d1u6',
+  'Y%60@3WN2m?O6',
   '2z60t2GU',
   '^@60#4]3,m,mk8c`7,8l2Gn3',
   '^7j0N48O6GUG8H2686K48EG6e68f2',
@@ -2700,7 +2701,7 @@ goog.i18n.CharPickerData.CHARLIST_OF_SOUTHEAST_ASIAN_SCRIPTS = [
 /**
  * Names of subcategories. Each message this array is the
  * name for the corresponding subcategory specified in
- * {@code goog.i18n.CharPickerData.subcategories}.
+ * `goog.i18n.CharPickerData.subcategories`.
  * @type {!Array<string>}
  */
 goog.i18n.CharPickerData.SUBCATEGORY_NAMES_OF_HANGUL = [
@@ -2728,8 +2729,8 @@ goog.i18n.CharPickerData.SUBCATEGORY_NAMES_OF_HANGUL = [
 /**
  * List of characters in base88 encoding scheme. Each base88 encoded
  * charater string represents corresponding subcategory specified in
- * {@code goog.i18n.CharPickerData.subcategories}. Encoding
- * scheme is described in {@code goog.i18n.CharListDecompressor}.
+ * `goog.i18n.CharPickerData.subcategories`. Encoding
+ * scheme is described in `goog.i18n.CharListDecompressor`.
  * @type {!Array<string>}
  */
 goog.i18n.CharPickerData.CHARLIST_OF_HANGUL = [
@@ -2757,7 +2758,7 @@ goog.i18n.CharPickerData.CHARLIST_OF_HANGUL = [
 /**
  * Names of subcategories. Each message this array is the
  * name for the corresponding subcategory specified in
- * {@code goog.i18n.CharPickerData.subcategories}.
+ * `goog.i18n.CharPickerData.subcategories`.
  * @type {!Array<string>}
  */
 goog.i18n.CharPickerData.SUBCATEGORY_NAMES_OF_OTHER_EAST_ASIAN_SCRIPTS = [
@@ -2788,8 +2789,8 @@ goog.i18n.CharPickerData.SUBCATEGORY_NAMES_OF_OTHER_EAST_ASIAN_SCRIPTS = [
 /**
  * List of characters in base88 encoding scheme. Each base88 encoded
  * charater string represents corresponding subcategory specified in
- * {@code goog.i18n.CharPickerData.subcategories}. Encoding
- * scheme is described in {@code goog.i18n.CharListDecompressor}.
+ * `goog.i18n.CharPickerData.subcategories`. Encoding
+ * scheme is described in `goog.i18n.CharListDecompressor`.
  * @type {!Array<string>}
  */
 goog.i18n.CharPickerData.CHARLIST_OF_OTHER_EAST_ASIAN_SCRIPTS = [
@@ -2814,7 +2815,7 @@ goog.i18n.CharPickerData.CHARLIST_OF_OTHER_EAST_ASIAN_SCRIPTS = [
 /**
  * Names of subcategories. Each message this array is the
  * name for the corresponding subcategory specified in
- * {@code goog.i18n.CharPickerData.subcategories}.
+ * `goog.i18n.CharPickerData.subcategories`.
  * @type {!Array<string>}
  */
 goog.i18n.CharPickerData.SUBCATEGORY_NAMES_OF_HAN_1_STROKE_RADICALS = [
@@ -2832,8 +2833,8 @@ goog.i18n.CharPickerData.SUBCATEGORY_NAMES_OF_HAN_1_STROKE_RADICALS = [
 /**
  * List of characters in base88 encoding scheme. Each base88 encoded
  * charater string represents corresponding subcategory specified in
- * {@code goog.i18n.CharPickerData.subcategories}. Encoding
- * scheme is described in {@code goog.i18n.CharListDecompressor}.
+ * `goog.i18n.CharPickerData.subcategories`. Encoding
+ * scheme is described in `goog.i18n.CharListDecompressor`.
  * @type {!Array<string>}
  */
 goog.i18n.CharPickerData.CHARLIST_OF_HAN_1_STROKE_RADICALS = [
@@ -2851,7 +2852,7 @@ goog.i18n.CharPickerData.CHARLIST_OF_HAN_1_STROKE_RADICALS = [
 /**
  * Names of subcategories. Each message this array is the
  * name for the corresponding subcategory specified in
- * {@code goog.i18n.CharPickerData.subcategories}.
+ * `goog.i18n.CharPickerData.subcategories`.
  * @type {!Array<string>}
  */
 goog.i18n.CharPickerData.SUBCATEGORY_NAMES_OF_HAN_2_STROKE_RADICALS = [
@@ -2887,8 +2888,8 @@ goog.i18n.CharPickerData.SUBCATEGORY_NAMES_OF_HAN_2_STROKE_RADICALS = [
 /**
  * List of characters in base88 encoding scheme. Each base88 encoded
  * charater string represents corresponding subcategory specified in
- * {@code goog.i18n.CharPickerData.subcategories}. Encoding
- * scheme is described in {@code goog.i18n.CharListDecompressor}.
+ * `goog.i18n.CharPickerData.subcategories`. Encoding
+ * scheme is described in `goog.i18n.CharListDecompressor`.
  * @type {!Array<string>}
  */
 goog.i18n.CharPickerData.CHARLIST_OF_HAN_2_STROKE_RADICALS = [
@@ -2924,7 +2925,7 @@ goog.i18n.CharPickerData.CHARLIST_OF_HAN_2_STROKE_RADICALS = [
 /**
  * Names of subcategories. Each message this array is the
  * name for the corresponding subcategory specified in
- * {@code goog.i18n.CharPickerData.subcategories}.
+ * `goog.i18n.CharPickerData.subcategories`.
  * @type {!Array<string>}
  */
 goog.i18n.CharPickerData.SUBCATEGORY_NAMES_OF_HAN_3_STROKE_RADICALS = [
@@ -2972,8 +2973,8 @@ goog.i18n.CharPickerData.SUBCATEGORY_NAMES_OF_HAN_3_STROKE_RADICALS = [
 /**
  * List of characters in base88 encoding scheme. Each base88 encoded
  * charater string represents corresponding subcategory specified in
- * {@code goog.i18n.CharPickerData.subcategories}. Encoding
- * scheme is described in {@code goog.i18n.CharListDecompressor}.
+ * `goog.i18n.CharPickerData.subcategories`. Encoding
+ * scheme is described in `goog.i18n.CharListDecompressor`.
  * @type {!Array<string>}
  */
 goog.i18n.CharPickerData.CHARLIST_OF_HAN_3_STROKE_RADICALS = [
@@ -3021,7 +3022,7 @@ goog.i18n.CharPickerData.CHARLIST_OF_HAN_3_STROKE_RADICALS = [
 /**
  * Names of subcategories. Each message this array is the
  * name for the corresponding subcategory specified in
- * {@code goog.i18n.CharPickerData.subcategories}.
+ * `goog.i18n.CharPickerData.subcategories`.
  * @type {!Array<string>}
  */
 goog.i18n.CharPickerData.SUBCATEGORY_NAMES_OF_HAN_4_STROKE_RADICALS = [
@@ -3072,8 +3073,8 @@ goog.i18n.CharPickerData.SUBCATEGORY_NAMES_OF_HAN_4_STROKE_RADICALS = [
 /**
  * List of characters in base88 encoding scheme. Each base88 encoded
  * charater string represents corresponding subcategory specified in
- * {@code goog.i18n.CharPickerData.subcategories}. Encoding
- * scheme is described in {@code goog.i18n.CharListDecompressor}.
+ * `goog.i18n.CharPickerData.subcategories`. Encoding
+ * scheme is described in `goog.i18n.CharListDecompressor`.
  * @type {!Array<string>}
  */
 goog.i18n.CharPickerData.CHARLIST_OF_HAN_4_STROKE_RADICALS = [
@@ -3124,7 +3125,7 @@ goog.i18n.CharPickerData.CHARLIST_OF_HAN_4_STROKE_RADICALS = [
 /**
  * Names of subcategories. Each message this array is the
  * name for the corresponding subcategory specified in
- * {@code goog.i18n.CharPickerData.subcategories}.
+ * `goog.i18n.CharPickerData.subcategories`.
  * @type {!Array<string>}
  */
 goog.i18n.CharPickerData.SUBCATEGORY_NAMES_OF_HAN_5_STROKE_RADICALS = [
@@ -3163,8 +3164,8 @@ goog.i18n.CharPickerData.SUBCATEGORY_NAMES_OF_HAN_5_STROKE_RADICALS = [
 /**
  * List of characters in base88 encoding scheme. Each base88 encoded
  * charater string represents corresponding subcategory specified in
- * {@code goog.i18n.CharPickerData.subcategories}. Encoding
- * scheme is described in {@code goog.i18n.CharListDecompressor}.
+ * `goog.i18n.CharPickerData.subcategories`. Encoding
+ * scheme is described in `goog.i18n.CharListDecompressor`.
  * @type {!Array<string>}
  */
 goog.i18n.CharPickerData.CHARLIST_OF_HAN_5_STROKE_RADICALS = [
@@ -3203,7 +3204,7 @@ goog.i18n.CharPickerData.CHARLIST_OF_HAN_5_STROKE_RADICALS = [
 /**
  * Names of subcategories. Each message this array is the
  * name for the corresponding subcategory specified in
- * {@code goog.i18n.CharPickerData.subcategories}.
+ * `goog.i18n.CharPickerData.subcategories`.
  * @type {!Array<string>}
  */
 goog.i18n.CharPickerData.SUBCATEGORY_NAMES_OF_HAN_6_STROKE_RADICALS = [
@@ -3246,8 +3247,8 @@ goog.i18n.CharPickerData.SUBCATEGORY_NAMES_OF_HAN_6_STROKE_RADICALS = [
 /**
  * List of characters in base88 encoding scheme. Each base88 encoded
  * charater string represents corresponding subcategory specified in
- * {@code goog.i18n.CharPickerData.subcategories}. Encoding
- * scheme is described in {@code goog.i18n.CharListDecompressor}.
+ * `goog.i18n.CharPickerData.subcategories`. Encoding
+ * scheme is described in `goog.i18n.CharListDecompressor`.
  * @type {!Array<string>}
  */
 goog.i18n.CharPickerData.CHARLIST_OF_HAN_6_STROKE_RADICALS = [
@@ -3290,7 +3291,7 @@ goog.i18n.CharPickerData.CHARLIST_OF_HAN_6_STROKE_RADICALS = [
 /**
  * Names of subcategories. Each message this array is the
  * name for the corresponding subcategory specified in
- * {@code goog.i18n.CharPickerData.subcategories}.
+ * `goog.i18n.CharPickerData.subcategories`.
  * @type {!Array<string>}
  */
 goog.i18n.CharPickerData.SUBCATEGORY_NAMES_OF_HAN_7_STROKE_RADICALS = [
@@ -3324,8 +3325,8 @@ goog.i18n.CharPickerData.SUBCATEGORY_NAMES_OF_HAN_7_STROKE_RADICALS = [
 /**
  * List of characters in base88 encoding scheme. Each base88 encoded
  * charater string represents corresponding subcategory specified in
- * {@code goog.i18n.CharPickerData.subcategories}. Encoding
- * scheme is described in {@code goog.i18n.CharListDecompressor}.
+ * `goog.i18n.CharPickerData.subcategories`. Encoding
+ * scheme is described in `goog.i18n.CharListDecompressor`.
  * @type {!Array<string>}
  */
 goog.i18n.CharPickerData.CHARLIST_OF_HAN_7_STROKE_RADICALS = [
@@ -3359,7 +3360,7 @@ goog.i18n.CharPickerData.CHARLIST_OF_HAN_7_STROKE_RADICALS = [
 /**
  * Names of subcategories. Each message this array is the
  * name for the corresponding subcategory specified in
- * {@code goog.i18n.CharPickerData.subcategories}.
+ * `goog.i18n.CharPickerData.subcategories`.
  * @type {!Array<string>}
  */
 goog.i18n.CharPickerData.SUBCATEGORY_NAMES_OF_HAN_8_STROKE_RADICALS = [
@@ -3382,8 +3383,8 @@ goog.i18n.CharPickerData.SUBCATEGORY_NAMES_OF_HAN_8_STROKE_RADICALS = [
 /**
  * List of characters in base88 encoding scheme. Each base88 encoded
  * charater string represents corresponding subcategory specified in
- * {@code goog.i18n.CharPickerData.subcategories}. Encoding
- * scheme is described in {@code goog.i18n.CharListDecompressor}.
+ * `goog.i18n.CharPickerData.subcategories`. Encoding
+ * scheme is described in `goog.i18n.CharListDecompressor`.
  * @type {!Array<string>}
  */
 goog.i18n.CharPickerData.CHARLIST_OF_HAN_8_STROKE_RADICALS = [
@@ -3406,7 +3407,7 @@ goog.i18n.CharPickerData.CHARLIST_OF_HAN_8_STROKE_RADICALS = [
 /**
  * Names of subcategories. Each message this array is the
  * name for the corresponding subcategory specified in
- * {@code goog.i18n.CharPickerData.subcategories}.
+ * `goog.i18n.CharPickerData.subcategories`.
  * @type {!Array<string>}
  */
 goog.i18n.CharPickerData.SUBCATEGORY_NAMES_OF_HAN_9_STROKE_RADICALS = [
@@ -3429,8 +3430,8 @@ goog.i18n.CharPickerData.SUBCATEGORY_NAMES_OF_HAN_9_STROKE_RADICALS = [
 /**
  * List of characters in base88 encoding scheme. Each base88 encoded
  * charater string represents corresponding subcategory specified in
- * {@code goog.i18n.CharPickerData.subcategories}. Encoding
- * scheme is described in {@code goog.i18n.CharListDecompressor}.
+ * `goog.i18n.CharPickerData.subcategories`. Encoding
+ * scheme is described in `goog.i18n.CharListDecompressor`.
  * @type {!Array<string>}
  */
 goog.i18n.CharPickerData.CHARLIST_OF_HAN_9_STROKE_RADICALS = [
@@ -3453,7 +3454,7 @@ goog.i18n.CharPickerData.CHARLIST_OF_HAN_9_STROKE_RADICALS = [
 /**
  * Names of subcategories. Each message this array is the
  * name for the corresponding subcategory specified in
- * {@code goog.i18n.CharPickerData.subcategories}.
+ * `goog.i18n.CharPickerData.subcategories`.
  * @type {!Array<string>}
  */
 goog.i18n.CharPickerData.SUBCATEGORY_NAMES_OF_HAN_10_STROKE_RADICALS = [
@@ -3473,8 +3474,8 @@ goog.i18n.CharPickerData.SUBCATEGORY_NAMES_OF_HAN_10_STROKE_RADICALS = [
 /**
  * List of characters in base88 encoding scheme. Each base88 encoded
  * charater string represents corresponding subcategory specified in
- * {@code goog.i18n.CharPickerData.subcategories}. Encoding
- * scheme is described in {@code goog.i18n.CharListDecompressor}.
+ * `goog.i18n.CharPickerData.subcategories`. Encoding
+ * scheme is described in `goog.i18n.CharListDecompressor`.
  * @type {!Array<string>}
  */
 goog.i18n.CharPickerData.CHARLIST_OF_HAN_10_STROKE_RADICALS = [
@@ -3494,7 +3495,7 @@ goog.i18n.CharPickerData.CHARLIST_OF_HAN_10_STROKE_RADICALS = [
 /**
  * Names of subcategories. Each message this array is the
  * name for the corresponding subcategory specified in
- * {@code goog.i18n.CharPickerData.subcategories}.
+ * `goog.i18n.CharPickerData.subcategories`.
  * @type {!Array<string>}
  */
 goog.i18n.CharPickerData.SUBCATEGORY_NAMES_OF_HAN_11_17_STROKE_RADICALS = [
@@ -3528,8 +3529,8 @@ goog.i18n.CharPickerData.SUBCATEGORY_NAMES_OF_HAN_11_17_STROKE_RADICALS = [
 /**
  * List of characters in base88 encoding scheme. Each base88 encoded
  * charater string represents corresponding subcategory specified in
- * {@code goog.i18n.CharPickerData.subcategories}. Encoding
- * scheme is described in {@code goog.i18n.CharListDecompressor}.
+ * `goog.i18n.CharPickerData.subcategories`. Encoding
+ * scheme is described in `goog.i18n.CharListDecompressor`.
  * @type {!Array<string>}
  */
 goog.i18n.CharPickerData.CHARLIST_OF_HAN_11_17_STROKE_RADICALS = [
@@ -3563,7 +3564,7 @@ goog.i18n.CharPickerData.CHARLIST_OF_HAN_11_17_STROKE_RADICALS = [
 /**
  * Names of subcategories. Each message this array is the
  * name for the corresponding subcategory specified in
- * {@code goog.i18n.CharPickerData.subcategories}.
+ * `goog.i18n.CharPickerData.subcategories`.
  * @type {!Array<string>}
  */
 goog.i18n.CharPickerData.SUBCATEGORY_NAMES_OF_HAN_OTHER = [
@@ -3578,8 +3579,8 @@ goog.i18n.CharPickerData.SUBCATEGORY_NAMES_OF_HAN_OTHER = [
 /**
  * List of characters in base88 encoding scheme. Each base88 encoded
  * charater string represents corresponding subcategory specified in
- * {@code goog.i18n.CharPickerData.subcategories}. Encoding
- * scheme is described in {@code goog.i18n.CharListDecompressor}.
+ * `goog.i18n.CharPickerData.subcategories`. Encoding
+ * scheme is described in `goog.i18n.CharListDecompressor`.
  * @type {!Array<string>}
  */
 goog.i18n.CharPickerData.CHARLIST_OF_HAN_OTHER = [
@@ -3594,7 +3595,7 @@ goog.i18n.CharPickerData.CHARLIST_OF_HAN_OTHER = [
 /**
  * Subcategory names. Each subarray in this array is a list of subcategory
  * names for the corresponding category specified in
- * {@code goog.i18n.CharPickerData.categories}.
+ * `goog.i18n.CharPickerData.categories`.
  * @type {!Array<!Array<string>>}
  */
 goog.i18n.CharPickerData.prototype.subcategories = [
@@ -3631,8 +3632,8 @@ goog.i18n.CharPickerData.prototype.subcategories = [
 /**
  * Character lists in base88 encoding scheme. Each subarray is a list of
  * base88 encoded charater strings representing corresponding subcategory
- * specified in {@code goog.i18n.CharPickerData.categories}. Encoding
- * scheme is described in {@code goog.i18n.CharListDecompressor}.
+ * specified in `goog.i18n.CharPickerData.categories`. Encoding
+ * scheme is described in `goog.i18n.CharListDecompressor`.
  * @type {!Array<!Array<string>>}
  */
 goog.i18n.CharPickerData.prototype.charList = [

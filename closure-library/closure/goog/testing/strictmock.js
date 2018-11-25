@@ -16,9 +16,12 @@
  * @fileoverview This file defines a strict mock implementation.
  */
 
+goog.setTestOnly('goog.testing.StrictMock');
 goog.provide('goog.testing.StrictMock');
 
 goog.require('goog.array');
+goog.require('goog.asserts');
+goog.require('goog.structs.Set');
 goog.require('goog.testing.Mock');
 
 
@@ -39,10 +42,10 @@ goog.require('goog.testing.Mock');
  * @extends {goog.testing.Mock}
  * @final
  */
-goog.testing.StrictMock = function(objectToMock, opt_mockStaticMethods,
-    opt_createProxy) {
-  goog.testing.Mock.call(this, objectToMock, opt_mockStaticMethods,
-      opt_createProxy);
+goog.testing.StrictMock = function(
+    objectToMock, opt_mockStaticMethods, opt_createProxy) {
+  goog.testing.Mock.call(
+      this, objectToMock, opt_mockStaticMethods, opt_createProxy);
 
   /**
    * An array of MockExpectations.
@@ -50,6 +53,9 @@ goog.testing.StrictMock = function(objectToMock, opt_mockStaticMethods,
    * @private
    */
   this.$expectations_ = [];
+
+  /** @private {!goog.structs.Set<!goog.testing.MockExpectation>} */
+  this.awaitingExpectations_ = new goog.structs.Set();
 };
 goog.inherits(goog.testing.StrictMock, goog.testing.Mock);
 
@@ -57,6 +63,9 @@ goog.inherits(goog.testing.StrictMock, goog.testing.Mock);
 /** @override */
 goog.testing.StrictMock.prototype.$recordExpectation = function() {
   this.$expectations_.push(this.$pendingExpectation);
+  if (this.$pendingExpectation) {
+    this.awaitingExpectations_.add(this.$pendingExpectation);
+  }
 };
 
 
@@ -70,7 +79,6 @@ goog.testing.StrictMock.prototype.$recordCall = function(name, args) {
   // enough and then discard it. We're through with it.
   var currentExpectation = this.$expectations_[0];
   while (!this.$verifyCall(currentExpectation, name, args)) {
-
     // This might be an item which has passed its min, and we can now
     // look past it, or it might be below its min and generate an error.
     if (currentExpectation.actualCalls < currentExpectation.minCalls) {
@@ -78,6 +86,8 @@ goog.testing.StrictMock.prototype.$recordCall = function(name, args) {
     }
 
     this.$expectations_.shift();
+    this.awaitingExpectations_.remove(currentExpectation);
+    this.maybeFinishedWithExpectations_();
     if (this.$expectations_.length < 1) {
       // Nothing left, but this may be a failed attempt to call the previous
       // item on the list, which may have been between its min and max.
@@ -96,6 +106,10 @@ goog.testing.StrictMock.prototype.$recordCall = function(name, args) {
   if (currentExpectation.actualCalls == currentExpectation.maxCalls) {
     this.$expectations_.shift();
   }
+  if (currentExpectation.actualCalls >= currentExpectation.minCalls) {
+    this.awaitingExpectations_.remove(currentExpectation);
+    this.maybeFinishedWithExpectations_();
+  }
 
   return this.$do(currentExpectation, args);
 };
@@ -106,6 +120,32 @@ goog.testing.StrictMock.prototype.$reset = function() {
   goog.testing.StrictMock.superClass_.$reset.call(this);
 
   goog.array.clear(this.$expectations_);
+  this.awaitingExpectations_.clear();
+};
+
+
+/** @override */
+goog.testing.StrictMock.prototype.$waitAndVerify = function() {
+  for (var i = 0; i < this.$expectations_.length; i++) {
+    var expectation = this.$expectations_[i];
+    goog.asserts.assert(
+        !isFinite(expectation.maxCalls) ||
+            expectation.minCalls == expectation.maxCalls,
+        'Mock expectations cannot have a loose number of expected calls to ' +
+            'use $waitAndVerify.');
+  }
+  var promise = goog.testing.StrictMock.base(this, '$waitAndVerify');
+  this.maybeFinishedWithExpectations_();
+  return promise;
+};
+
+/**
+ * @private
+ */
+goog.testing.StrictMock.prototype.maybeFinishedWithExpectations_ = function() {
+  if (this.awaitingExpectations_.isEmpty() && this.waitingForExpectations) {
+    this.waitingForExpectations.resolve();
+  }
 };
 
 
@@ -116,9 +156,9 @@ goog.testing.StrictMock.prototype.$verify = function() {
   while (this.$expectations_.length > 0) {
     var expectation = this.$expectations_[0];
     if (expectation.actualCalls < expectation.minCalls) {
-      this.$throwException('Missing a call to ' + expectation.name +
-          '\nExpected: ' + expectation.minCalls + ' but was: ' +
-          expectation.actualCalls);
+      this.$throwException(
+          'Missing a call to ' + expectation.name + '\nExpected: ' +
+          expectation.minCalls + ' but was: ' + expectation.actualCalls);
 
     } else {
       // Don't need to check max, that's handled when the call is made
@@ -126,5 +166,3 @@ goog.testing.StrictMock.prototype.$verify = function() {
     }
   }
 };
-
-

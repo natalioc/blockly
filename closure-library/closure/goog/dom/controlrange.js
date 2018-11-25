@@ -16,6 +16,7 @@
  * @fileoverview Utilities for working with IE control ranges.
  *
  * @author robbyw@google.com (Robby Walker)
+ * @suppress {strictMissingProperties}
  */
 
 
@@ -108,8 +109,8 @@ goog.dom.ControlRange.prototype.clearCachedValues_ = function() {
 
 /** @override */
 goog.dom.ControlRange.prototype.clone = function() {
-  return goog.dom.ControlRange.createFromElements.apply(this,
-                                                        this.getElements());
+  return goog.dom.ControlRange.createFromElements.apply(
+      this, this.getElements());
 };
 
 
@@ -251,8 +252,8 @@ goog.dom.ControlRange.prototype.getText = function() {
 
 /** @override */
 goog.dom.ControlRange.prototype.getHtmlFragment = function() {
-  return goog.array.map(this.getSortedElements(), goog.dom.getOuterHtml).
-      join('');
+  return goog.array.map(this.getSortedElements(), goog.dom.getOuterHtml)
+      .join('');
 };
 
 
@@ -359,7 +360,8 @@ goog.inherits(goog.dom.DomSavedControlRange_, goog.dom.SavedRange);
 /** @override */
 goog.dom.DomSavedControlRange_.prototype.restoreInternal = function() {
   var doc = this.elements_.length ?
-      goog.dom.getOwnerDocument(this.elements_[0]) : document;
+      goog.dom.getOwnerDocument(this.elements_[0]) :
+      document;
   var controlRange = doc.body.createControlRange();
   for (var i = 0, len = this.elements_.length; i < len; i++) {
     controlRange.addElement(this.elements_[i]);
@@ -452,7 +454,7 @@ goog.dom.ControlRangeIterator.prototype.isLast = function() {
 
 /**
  * Move to the next position in the selection.
- * Throws {@code goog.iter.StopIteration} when it passes the end of the range.
+ * Throws `goog.iter.StopIteration` when it passes the end of the range.
  * @return {Node} The node at the next position.
  * @override
  */
@@ -462,9 +464,8 @@ goog.dom.ControlRangeIterator.prototype.next = function() {
     throw goog.iter.StopIteration;
   } else if (!this.depth) {
     var el = this.elements_.shift();
-    this.setPosition(el,
-                     goog.dom.TagWalkType.START_TAG,
-                     goog.dom.TagWalkType.START_TAG);
+    this.setPosition(
+        el, goog.dom.TagWalkType.START_TAG, goog.dom.TagWalkType.START_TAG);
     return el;
   }
 
@@ -475,11 +476,12 @@ goog.dom.ControlRangeIterator.prototype.next = function() {
 
 /** @override */
 goog.dom.ControlRangeIterator.prototype.copyFrom = function(other) {
-  this.elements_ = other.elements_;
-  this.startNode_ = other.startNode_;
-  this.endNode_ = other.endNode_;
+  var that = /** @type {!goog.dom.ControlRangeIterator} */ (other);
+  this.elements_ = that.elements_;
+  this.startNode_ = that.startNode_;
+  this.endNode_ = that.endNode_;
 
-  goog.dom.ControlRangeIterator.superClass_.copyFrom.call(this, other);
+  goog.dom.ControlRangeIterator.superClass_.copyFrom.call(this, that);
 };
 
 

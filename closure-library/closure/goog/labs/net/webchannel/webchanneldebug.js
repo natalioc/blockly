@@ -15,8 +15,6 @@
 /**
  * @fileoverview Provides a utility for tracing and debugging WebChannel
  *     requests.
- *
- * @visibility {:internal}
  */
 
 
@@ -24,6 +22,9 @@ goog.provide('goog.labs.net.webChannel.WebChannelDebug');
 
 goog.require('goog.json');
 goog.require('goog.log');
+
+goog.forwardDeclare('goog.Uri');
+goog.forwardDeclare('goog.net.XmlHttp.ReadyState');
 
 
 
@@ -38,9 +39,15 @@ goog.labs.net.webChannel.WebChannelDebug = function() {
   /**
    * The logger instance.
    * @const
-   * @private
+   * @private {?goog.log.Logger}
    */
   this.logger_ = goog.log.getLogger('goog.labs.net.webChannel.WebChannelDebug');
+
+  /**
+   * Whether to enable redact. Defaults to true.
+   * @private {boolean}
+   */
+  this.redactEnabled_ = true;
 };
 
 
@@ -49,11 +56,10 @@ var WebChannelDebug = goog.labs.net.webChannel.WebChannelDebug;
 
 
 /**
- * Gets the logger used by this ChannelDebug.
- * @return {goog.debug.Logger} The logger used by this WebChannelDebug.
+ * Turns off redact.
  */
-WebChannelDebug.prototype.getLogger = function() {
-  return this.logger_;
+WebChannelDebug.prototype.disableRedact = function() {
+  this.redactEnabled_ = false;
 };
 
 
@@ -62,7 +68,9 @@ WebChannelDebug.prototype.getLogger = function() {
  * @param {goog.Uri} url The URL being requested.
  */
 WebChannelDebug.prototype.browserOfflineResponse = function(url) {
-  this.info('BROWSER_OFFLINE: ' + url);
+  this.info(function() {
+    return 'BROWSER_OFFLINE: ' + url;
+  });
 };
 
 
@@ -74,12 +82,13 @@ WebChannelDebug.prototype.browserOfflineResponse = function(url) {
  * @param {number} attempt Which attempt # the request was.
  * @param {?string} postData The data posted in the request.
  */
-WebChannelDebug.prototype.xmlHttpChannelRequest =
-    function(verb, uri, id, attempt, postData) {
-  this.info(
-      'XMLHTTP REQ (' + id + ') [attempt ' + attempt + ']: ' +
-      verb + '\n' + uri + '\n' +
-      this.maybeRedactPostData_(postData));
+WebChannelDebug.prototype.xmlHttpChannelRequest = function(
+    verb, uri, id, attempt, postData) {
+  var self = this;
+  this.info(function() {
+    return 'XMLHTTP REQ (' + id + ') [attempt ' + attempt + ']: ' + verb +
+        '\n' + uri + '\n' + self.maybeRedactPostData_(postData);
+  });
 };
 
 
@@ -92,11 +101,12 @@ WebChannelDebug.prototype.xmlHttpChannelRequest =
  * @param {goog.net.XmlHttp.ReadyState} readyState The ready state.
  * @param {number} statusCode The HTTP status code.
  */
-WebChannelDebug.prototype.xmlHttpChannelResponseMetaData =
-    function(verb, uri, id, attempt, readyState, statusCode)  {
-  this.info(
-      'XMLHTTP RESP (' + id + ') [ attempt ' + attempt + ']: ' +
-      verb + '\n' + uri + '\n' + readyState + ' ' + statusCode);
+WebChannelDebug.prototype.xmlHttpChannelResponseMetaData = function(
+    verb, uri, id, attempt, readyState, statusCode) {
+  this.info(function() {
+    return 'XMLHTTP RESP (' + id + ') [ attempt ' + attempt + ']: ' + verb +
+        '\n' + uri + '\n' + readyState + ' ' + statusCode;
+  });
 };
 
 
@@ -106,12 +116,13 @@ WebChannelDebug.prototype.xmlHttpChannelResponseMetaData =
  * @param {?string} responseText The response text.
  * @param {?string=} opt_desc Optional request description.
  */
-WebChannelDebug.prototype.xmlHttpChannelResponseText =
-    function(id, responseText, opt_desc) {
-  this.info(
-      'XMLHTTP TEXT (' + id + '): ' +
-      this.redactResponse_(responseText) +
-      (opt_desc ? ' ' + opt_desc : ''));
+WebChannelDebug.prototype.xmlHttpChannelResponseText = function(
+    id, responseText, opt_desc) {
+  var self = this;
+  this.info(function() {
+    return 'XMLHTTP TEXT (' + id + '): ' + self.redactResponse_(responseText) +
+        (opt_desc ? ' ' + opt_desc : '');
+  });
 };
 
 
@@ -120,32 +131,35 @@ WebChannelDebug.prototype.xmlHttpChannelResponseText =
  * @param {goog.Uri} uri The uri that timed out.
  */
 WebChannelDebug.prototype.timeoutResponse = function(uri) {
-  this.info('TIMEOUT: ' + uri);
+  this.info(function() {
+    return 'TIMEOUT: ' + uri;
+  });
 };
 
 
 /**
  * Logs a debug message.
- * @param {string} text The message.
+ * @param {!goog.debug.Loggable} text The message.
  */
 WebChannelDebug.prototype.debug = function(text) {
-  this.info(text);
+  goog.log.fine(this.logger_, text);
 };
 
 
 /**
  * Logs an exception
  * @param {Error} e The error or error event.
- * @param {string=} opt_msg The optional message, defaults to 'Exception'.
+ * @param {goog.debug.Loggable=} opt_msg The optional message,
+ *     defaults to 'Exception'.
  */
 WebChannelDebug.prototype.dumpException = function(e, opt_msg) {
-  this.severe((opt_msg || 'Exception') + e);
+  goog.log.error(this.logger_, opt_msg || 'Exception', e);
 };
 
 
 /**
  * Logs an info message.
- * @param {string} text The message.
+ * @param {!goog.debug.Loggable} text The message.
  */
 WebChannelDebug.prototype.info = function(text) {
   goog.log.info(this.logger_, text);
@@ -154,7 +168,7 @@ WebChannelDebug.prototype.info = function(text) {
 
 /**
  * Logs a warning message.
- * @param {string} text The message.
+ * @param {!goog.debug.Loggable} text The message.
  */
 WebChannelDebug.prototype.warning = function(text) {
   goog.log.warning(this.logger_, text);
@@ -163,7 +177,7 @@ WebChannelDebug.prototype.warning = function(text) {
 
 /**
  * Logs a severe message.
- * @param {string} text The message.
+ * @param {!goog.debug.Loggable} text The message.
  */
 WebChannelDebug.prototype.severe = function(text) {
   goog.log.error(this.logger_, text);
@@ -178,12 +192,16 @@ WebChannelDebug.prototype.severe = function(text) {
  * @private
  */
 WebChannelDebug.prototype.redactResponse_ = function(responseText) {
+  if (!this.redactEnabled_) {
+    return responseText;
+  }
+
   if (!responseText) {
     return null;
   }
-  /** @preserveTry */
+
   try {
-    var responseArray = goog.json.unsafeParse(responseText);
+    var responseArray = JSON.parse(responseText);
     if (responseArray) {
       for (var i = 0; i < responseArray.length; i++) {
         if (goog.isArray(responseArray[i])) {
@@ -218,7 +236,7 @@ WebChannelDebug.prototype.maybeRedactArray_ = function(array) {
   }
 
   var type = dataPart[0];
-  if (type != 'noop' && type != 'stop') {
+  if (type != 'noop' && type != 'stop' && type != 'close') {
     // redact all fields in the array
     for (var i = 1; i < dataPart.length; i++) {
       dataPart[i] = '';
@@ -235,6 +253,10 @@ WebChannelDebug.prototype.maybeRedactArray_ = function(array) {
  * @private
  */
 WebChannelDebug.prototype.maybeRedactPostData_ = function(data) {
+  if (!this.redactEnabled_) {
+    return data;
+  }
+
   if (!data) {
     return null;
   }
@@ -251,7 +273,9 @@ WebChannelDebug.prototype.maybeRedactPostData_ = function(data) {
       if (keyParts.length >= 2 && keyParts[1] == 'type') {
         out += key + '=' + value + '&';
       } else {
-        out += key + '=' + 'redacted' + '&';
+        out += key + '=' +
+            'redacted' +
+            '&';
       }
     }
   }

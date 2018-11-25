@@ -27,6 +27,8 @@ goog.require('goog.dom.SavedRange');
 goog.require('goog.dom.TagName');
 goog.require('goog.string');
 
+goog.forwardDeclare('goog.dom.AbstractRange');
+goog.forwardDeclare('goog.dom.Range');
 
 
 /**
@@ -80,13 +82,13 @@ goog.inherits(goog.dom.SavedCaretRange, goog.dom.SavedRange);
  * Gets the range that this SavedCaretRage represents, without selecting it
  * or removing the carets from the DOM.
  * @return {goog.dom.AbstractRange?} An abstract range.
+ * @suppress {missingRequire,undefinedNames} circular dependency
  */
 goog.dom.SavedCaretRange.prototype.toAbstractRange = function() {
   var range = null;
   var startCaret = this.getCaret(true);
   var endCaret = this.getCaret(false);
   if (startCaret && endCaret) {
-    /** @suppress {missingRequire} circular dependency */
     range = goog.dom.Range.createFromNodes(startCaret, 0, endCaret, 0);
   }
   return range;
@@ -154,9 +156,9 @@ goog.dom.SavedCaretRange.prototype.restoreInternal = function() {
         focusOffset--;
       }
     }
-    /** @suppress {missingRequire} circular dependency */
-    range = goog.dom.Range.createFromNodes(anchorNode, anchorOffset,
-                                           focusNode, focusOffset);
+    /** @suppress {missingRequire,undefinedNames} circular dependency */
+    range = goog.dom.Range.createFromNodes(
+        anchorNode, anchorOffset, focusNode, focusOffset);
     range = this.removeCarets(range);
     range.select();
   } else {
@@ -186,7 +188,8 @@ goog.dom.SavedCaretRange.prototype.disposeInternal = function() {
  * @private
  */
 goog.dom.SavedCaretRange.prototype.createCaret_ = function(start) {
-  return this.dom_.createDom(goog.dom.TagName.SPAN,
+  return this.dom_.createDom(
+      goog.dom.TagName.SPAN,
       {'id': start ? this.startCaretId_ : this.endCaretId_});
 };
 
@@ -211,5 +214,5 @@ goog.dom.SavedCaretRange.CARET_REGEX = /<span\s+id="?goog_\d+"?><\/span>/ig;
 goog.dom.SavedCaretRange.htmlEqual = function(str1, str2) {
   return str1 == str2 ||
       str1.replace(goog.dom.SavedCaretRange.CARET_REGEX, '') ==
-          str2.replace(goog.dom.SavedCaretRange.CARET_REGEX, '');
+      str2.replace(goog.dom.SavedCaretRange.CARET_REGEX, '');
 };

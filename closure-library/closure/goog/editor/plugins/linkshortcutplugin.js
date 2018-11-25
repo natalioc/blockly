@@ -22,6 +22,8 @@ goog.provide('goog.editor.plugins.LinkShortcutPlugin');
 goog.require('goog.editor.Command');
 goog.require('goog.editor.Plugin');
 
+goog.forwardDeclare('goog.editor.Link');
+
 
 
 /**
@@ -58,4 +60,3 @@ goog.editor.plugins.LinkShortcutPlugin.prototype.handleKeyboardShortcut =
 
   return false;
 };
-

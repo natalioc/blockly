@@ -86,14 +86,12 @@ testAgents.ANDROID_WEB_VIEW_4_4 =
 
 
 /** @const {string} */
-testAgents.IE_6 =
-    'Mozilla/5.0 (Windows; U; MSIE 6.0; Windows NT 5.1; SV1;' +
+testAgents.IE_6 = 'Mozilla/5.0 (Windows; U; MSIE 6.0; Windows NT 5.1; SV1;' +
     '.NET CLR 2.0.50727)';
 
 
 /** @const {string} */
-testAgents.IE_7 =
-    'Mozilla/4.0 (compatible; MSIE 7.0; Windows NT 5.1)';
+testAgents.IE_7 = 'Mozilla/4.0 (compatible; MSIE 7.0; Windows NT 5.1)';
 
 
 /** @const {string} */
@@ -156,9 +154,15 @@ testAgents.IE_11_COMPATIBILITY_MSIE_9 =
  * https://msdn.microsoft.com/en-us/library/hh869301%28v=vs.85%29.aspx?f=255&MSPPError=-2147217396#edge
  * @const {string}
  */
-testAgents.IE_EDGE =
+testAgents.EDGE_12_0 =
     'Mozilla/5.0 (Windows NT 6.4; WOW64) AppleWebKit/537.36 ' +
     '(KHTML, like Gecko) Chrome/36.0.1985.143 Safari/537.36 Edge/12.0';
+
+
+/** @const {string} */
+testAgents.EDGE_12_9600 =
+    'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 ' +
+    '(KHTML, like Gecko) Chrome/42.0.2311.135 Safari/537.36 Edge/12.9600';
 
 
 /** @const {string} */
@@ -186,8 +190,7 @@ testAgents.FIREFOX_WINDOWS =
 
 
 /** @const {string} */
-testAgents.SAFARI_6 =
-    'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_8_1) ' +
+testAgents.SAFARI_6 = 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_8_1) ' +
     'AppleWebKit/536.25 (KHTML, like Gecko) ' +
     'Version/6.0 Safari/536.25';
 
@@ -257,8 +260,13 @@ testAgents.WEBVIEW_IPAD =
 
 
 /** @const {string} */
-testAgents.OPERA_10 =
-    'Opera/9.80 (S60; SymbOS; Opera Mobi/447; U; en) ' +
+testAgents.OPERA_MINI =
+    'Opera/9.80 (Android; Opera Mini/7.6.35766/35.5706; U; en)' +
+    ' Presto/2.8.119 Version/11.10';
+
+
+/** @const {string} */
+testAgents.OPERA_10 = 'Opera/9.80 (S60; SymbOS; Opera Mobi/447; U; en) ' +
     'Presto/2.4.18 Version/10.00';
 
 
@@ -280,8 +288,7 @@ testAgents.OPERA_15 =
 
 
 /** @const {string} */
-testAgents.IPAD_4 =
-    'Mozilla/5.0 (iPad; U; CPU OS 3_2 like Mac OS X; en-us)' +
+testAgents.IPAD_4 = 'Mozilla/5.0 (iPad; U; CPU OS 3_2 like Mac OS X; en-us)' +
     ' AppleWebKit/531.21.10 (KHTML, like Gecko) Version/4.0.4 Mobile/7B334b' +
     ' Safari/531.21.10';
 
@@ -293,15 +300,13 @@ testAgents.IPAD_5 =
 
 
 /** @const {string} */
-testAgents.IPAD_6 =
-    'Mozilla/5.0 (iPad; CPU OS 6_0 like Mac OS X) ' +
+testAgents.IPAD_6 = 'Mozilla/5.0 (iPad; CPU OS 6_0 like Mac OS X) ' +
     'AppleWebKit/536.26 (KHTML, like Gecko) ' +
     'Version/6.0 Mobile/10A403 Safari/8536.25';
 
 
 /** @const {string} */
-testAgents.CHROME_25 =
-    'Mozilla/5.0 (Windows; U; Windows NT 5.1; en-US) ' +
+testAgents.CHROME_25 = 'Mozilla/5.0 (Windows; U; Windows NT 5.1; en-US) ' +
     'AppleWebKit/535.8 (KHTML, like Gecko) ' +
     'Chrome/25.0.1000.10 Safari/535.8';
 
@@ -340,6 +345,12 @@ testAgents.CHROME_IPHONE =
 
 
 /** @const {string} */
+testAgents.CHROME_IPAD = 'Mozilla/5.0 (iPad; CPU OS 7_0_4 like Mac OS X) ' +
+    'AppleWebKit/537.51.1 (KHTML, like Gecko) CriOS/32.0.1700.20 ' +
+    'Mobile/11B554a Safari/9537.53';
+
+
+/** @const {string} */
 testAgents.CHROME_LINUX =
     'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.31 (KHTML, like Gecko)' +
     ' Chrome/26.0.1410.33 Safari/537.31';
@@ -371,6 +382,10 @@ testAgents.CHROME_OS_910 =
     'Mozilla/5.0 (X11; U; CrOS i686 9.10.0; en-US) AppleWebKit/532.5' +
     ' (KHTML, like Gecko) Chrome/4.0.253.0 Safari/532.5';
 
+/** @const {string} */
+testAgents.CHROMECAST =
+    'Mozilla/5.0 (CrKey armv7l 1.5.16041) AppleWebKit/537.36' +
+    ' (KHTML, like Gecko) Chrome/31.0.1650.0 Safari/537.36';
 
 /** @const {string} */
 testAgents.KINDLE_FIRE =
@@ -382,5 +397,10 @@ testAgents.KINDLE_FIRE =
 /** @const {string} */
 testAgents.FIREFOX_ANDROID_TABLET =
     'Mozilla/5.0 (Android; Tablet; rv:28.0) Gecko/28.0 Firefox/28.0';
+
+/** @const {string} */
+testAgents.KAIOS =
+    'Mozilla/5.0 (Mobile; LYF/LF-2403N/LYF-LF2403N-000-01-18-270717; rv:48.0)' +
+    ' Gecko/48.0 Firefox/48.0 KaiOS/2.0';
 
 });  // goog.scope

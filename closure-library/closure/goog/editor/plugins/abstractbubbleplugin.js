@@ -297,7 +297,7 @@ goog.editor.plugins.AbstractBubblePlugin.prototype.handleSelectionChange =
           startNode == endNode && startOffset == endOffset - 1) {
         var element = startNode.childNodes[startOffset];
         if (element.nodeType == goog.dom.NodeType.ELEMENT) {
-          selectedElement = element;
+          selectedElement = /** @type {!Element} */ (element);
         }
       }
     }
@@ -315,8 +315,8 @@ goog.editor.plugins.AbstractBubblePlugin.prototype.handleSelectionChange =
  *     event.
  * @protected
  */
-goog.editor.plugins.AbstractBubblePlugin.prototype.
-    handleSelectionChangeInternal = function(selectedElement) {
+goog.editor.plugins.AbstractBubblePlugin.prototype
+    .handleSelectionChangeInternal = function(selectedElement) {
   if (selectedElement) {
     var bubbleTarget = this.getBubbleTargetFromSelection(selectedElement);
     if (bubbleTarget) {
@@ -348,8 +348,8 @@ goog.editor.plugins.AbstractBubblePlugin.prototype.
  * @return {Element?} The HTML bubble target element or null if no element of
  *     the required type is not found.
  */
-goog.editor.plugins.AbstractBubblePlugin.prototype.
-    getBubbleTargetFromSelection = goog.abstractMethod;
+goog.editor.plugins.AbstractBubblePlugin.prototype
+    .getBubbleTargetFromSelection = goog.abstractMethod;
 
 
 /** @override */
@@ -378,8 +378,8 @@ goog.editor.plugins.AbstractBubblePlugin.prototype.disable = function(field) {
  */
 goog.editor.plugins.AbstractBubblePlugin.prototype.getSharedBubble_ =
     function() {
-  var bubbleParent = /** @type {!Element} */ (this.bubbleParent_ ||
-      this.getFieldObject().getAppWindow().document.body);
+  var bubbleParent = /** @type {!Element} */ (
+      this.bubbleParent_ || this.getFieldObject().getAppWindow().document.body);
   this.dom_ = goog.dom.getDomHelper(bubbleParent);
 
   var bubbleMap = this.getBubbleMap();
@@ -387,8 +387,8 @@ goog.editor.plugins.AbstractBubblePlugin.prototype.getSharedBubble_ =
   if (!bubble) {
     var factory = this.bubbleFactory_ ||
         goog.editor.plugins.AbstractBubblePlugin.globalBubbleFactory_;
-    bubble = factory.call(null, bubbleParent,
-        this.getFieldObject().getBaseZindex());
+    bubble =
+        factory.call(null, bubbleParent, this.getFieldObject().getBaseZindex());
     bubbleMap[this.getFieldObject().id] = bubble;
   }
   return bubble;
@@ -405,18 +405,19 @@ goog.editor.plugins.AbstractBubblePlugin.prototype.createBubble = function(
   if (!bubble.hasPanelOfType(this.getBubbleType())) {
     this.targetElement_ = targetElement;
 
-    this.panelId_ = bubble.addPanel(this.getBubbleType(), this.getBubbleTitle(),
-        targetElement,
+    this.panelId_ = bubble.addPanel(
+        this.getBubbleType(), this.getBubbleTitle(), targetElement,
         goog.bind(this.createBubbleContents, this),
         this.shouldPreferBubbleAboveElement());
-    this.eventRegister.listen(bubble, goog.ui.Component.EventType.HIDE,
-        this.handlePanelClosed_);
+    this.eventRegister.listen(
+        bubble, goog.ui.Component.EventType.HIDE, this.handlePanelClosed_);
 
     this.onShow();
 
     if (this.keyboardNavigationEnabled_) {
-      this.eventRegister.listen(bubble.getContentElement(),
-          goog.events.EventType.KEYDOWN, this.onBubbleKey_);
+      this.eventRegister.listen(
+          bubble.getContentElement(), goog.events.EventType.KEYDOWN,
+          this.onBubbleKey_);
     }
   }
 };
@@ -447,8 +448,8 @@ goog.editor.plugins.AbstractBubblePlugin.prototype.getBubbleTitle = function() {
  *     target element.
  * @protected
  */
-goog.editor.plugins.AbstractBubblePlugin.prototype.
-    shouldPreferBubbleAboveElement = goog.functions.FALSE;
+goog.editor.plugins.AbstractBubblePlugin.prototype
+    .shouldPreferBubbleAboveElement = goog.functions.FALSE;
 
 
 /**
@@ -484,8 +485,8 @@ goog.editor.plugins.AbstractBubblePlugin.prototype.registerClickHandler =
  */
 goog.editor.plugins.AbstractBubblePlugin.prototype.registerActionHandler =
     function(target, handler) {
-  this.eventRegister.listenWithWrapper(target, goog.events.actionEventWrapper,
-      handler);
+  this.eventRegister.listenWithWrapper(
+      target, goog.events.actionEventWrapper, handler);
 };
 
 
@@ -537,8 +538,7 @@ goog.editor.plugins.AbstractBubblePlugin.prototype.handlePanelClosed_ =
  * @override
  */
 goog.editor.plugins.AbstractBubblePlugin.prototype.handleKeyDown = function(e) {
-  if (this.keyboardNavigationEnabled_ &&
-      this.isVisible() &&
+  if (this.keyboardNavigationEnabled_ && this.isVisible() &&
       e.keyCode == goog.events.KeyCodes.TAB && !e.shiftKey) {
     var bubbleEl = this.getSharedBubble_().getContentElement();
     var tabbable = goog.dom.getElementByClass(
@@ -561,8 +561,7 @@ goog.editor.plugins.AbstractBubblePlugin.prototype.handleKeyDown = function(e) {
  * @private
  */
 goog.editor.plugins.AbstractBubblePlugin.prototype.onBubbleKey_ = function(e) {
-  if (this.isVisible() &&
-      e.keyCode == goog.events.KeyCodes.TAB) {
+  if (this.isVisible() && e.keyCode == goog.events.KeyCodes.TAB) {
     var bubbleEl = this.getSharedBubble_().getContentElement();
     var tabbables = goog.dom.getElementsByClass(
         goog.editor.plugins.AbstractBubblePlugin.TABBABLE_CLASSNAME_, bubbleEl);
@@ -604,8 +603,8 @@ goog.editor.plugins.AbstractBubblePlugin.prototype.reposition = function() {
 goog.editor.plugins.AbstractBubblePlugin.prototype.createLinkOption = function(
     id) {
   // Dash plus link are together in a span so we can hide/show them easily
-  return this.dom_.createDom(goog.dom.TagName.SPAN,
-      {
+  return this.dom_.createDom(
+      goog.dom.TagName.SPAN, {
         id: id,
         className:
             goog.editor.plugins.AbstractBubblePlugin.OPTION_LINK_CLASSNAME_
@@ -618,7 +617,7 @@ goog.editor.plugins.AbstractBubblePlugin.prototype.createLinkOption = function(
 /**
  * Helper method that creates a link with text set to linkText and optionally
  * wires up a listener for the CLICK event or the link. The link is navigable by
- * tabs if {@code enableKeyboardNavigation(true)} was called.
+ * tabs if `enableKeyboardNavigation(true)` was called.
  * @param {string} linkId The id of the link.
  * @param {string} linkText Text of the link.
  * @param {Function=} opt_onClick Optional function to call when the link is
@@ -640,7 +639,7 @@ goog.editor.plugins.AbstractBubblePlugin.prototype.createLink = function(
 
 /**
  * Helper method to create a link to insert into the bubble. The link is
- * navigable by tabs if {@code enableKeyboardNavigation(true)} was called.
+ * navigable by tabs if `enableKeyboardNavigation(true)` was called.
  * @param {string} linkId The id of the link.
  * @param {string} linkText Text of the link.
  * @param {boolean} isAnchor Set to true to create an actual anchor tag
@@ -674,18 +673,18 @@ goog.editor.plugins.AbstractBubblePlugin.prototype.createLinkHelper = function(
  * calling this method. Call it for other elements if needed.
  *
  * <p>If tabindex is not already set in the element, this function sets it to 0.
- * You'll usually want to also call {@code enableKeyboardNavigation(true)}.
+ * You'll usually want to also call `enableKeyboardNavigation(true)`.
  *
  * @param {!Element} element
  * @protected
  */
-goog.editor.plugins.AbstractBubblePlugin.prototype.setTabbable =
-    function(element) {
+goog.editor.plugins.AbstractBubblePlugin.prototype.setTabbable = function(
+    element) {
   if (!element.hasAttribute('tabindex')) {
     element.setAttribute('tabindex', 0);
   }
-  goog.dom.classlist.add(element,
-      goog.editor.plugins.AbstractBubblePlugin.TABBABLE_CLASSNAME_);
+  goog.dom.classlist.add(
+      element, goog.editor.plugins.AbstractBubblePlugin.TABBABLE_CLASSNAME_);
 };
 
 

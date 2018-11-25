@@ -62,8 +62,8 @@ goog.ui.ToolbarRenderer.CSS_CLASS = goog.getCssName('goog-toolbar');
 goog.ui.ToolbarRenderer.prototype.getDecoratorForChild = function(element) {
   return element.tagName == goog.dom.TagName.HR ?
       new goog.ui.Separator(goog.ui.ToolbarSeparatorRenderer.getInstance()) :
-      goog.ui.ToolbarRenderer.superClass_.getDecoratorForChild.call(this,
-          element);
+      goog.ui.ToolbarRenderer.superClass_.getDecoratorForChild.call(
+          this, element);
 };
 
 
@@ -80,7 +80,7 @@ goog.ui.ToolbarRenderer.prototype.getCssClass = function() {
 
 /**
  * Returns the default orientation of containers rendered or decorated by this
- * renderer.  This implementation returns {@code HORIZONTAL}.
+ * renderer.  This implementation returns `HORIZONTAL`.
  * @return {goog.ui.Container.Orientation} Default orientation for containers
  *     created or decorated by this renderer.
  * @override

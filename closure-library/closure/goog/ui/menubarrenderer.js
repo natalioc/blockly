@@ -33,8 +33,8 @@ goog.require('goog.ui.ContainerRenderer');
  * @final
  */
 goog.ui.MenuBarRenderer = function() {
-  goog.ui.MenuBarRenderer.base(this, 'constructor',
-      goog.a11y.aria.Role.MENUBAR);
+  goog.ui.MenuBarRenderer.base(
+      this, 'constructor', goog.a11y.aria.Role.MENUBAR);
 };
 goog.inherits(goog.ui.MenuBarRenderer, goog.ui.ContainerRenderer);
 goog.addSingletonGetter(goog.ui.MenuBarRenderer);
@@ -58,7 +58,7 @@ goog.ui.MenuBarRenderer.prototype.getCssClass = function() {
 
 /**
  * Returns the default orientation of containers rendered or decorated by this
- * renderer.  This implementation returns {@code HORIZONTAL}.
+ * renderer.  This implementation returns `HORIZONTAL`.
  * @return {goog.ui.Container.Orientation} Default orientation for containers
  *     created or decorated by this renderer.
  * @override

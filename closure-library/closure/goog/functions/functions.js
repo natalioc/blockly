@@ -13,8 +13,16 @@
 // limitations under the License.
 
 /**
- * @fileoverview Utilities for creating functions. Loosely inspired by the
- * java classes: http://goo.gl/GM0Hmu and http://goo.gl/6k7nI8.
+ * @fileoverview Utilities for creating functions. Loosely inspired by these
+ * java classes from the Guava library:
+ * com.google.common.base.Functions
+ * https://google.github.io/guava/releases/snapshot-jre/api/docs/index.html?com/google/common/base/Functions.html
+ *
+ * com.google.common.base.Predicates
+ * https://google.github.io/guava/releases/snapshot-jre/api/docs/index.html?com/google/common/base/Predicates.html
+ *
+ * More about these can be found at
+ * https://github.com/google/guava/wiki/FunctionalExplained
  *
  * @author nicksantos@google.com (Nick Santos)
  */
@@ -30,9 +38,7 @@ goog.provide('goog.functions');
  * @template T
  */
 goog.functions.constant = function(retValue) {
-  return function() {
-    return retValue;
-  };
+  return function() { return retValue; };
 };
 
 
@@ -40,21 +46,27 @@ goog.functions.constant = function(retValue) {
  * Always returns false.
  * @type {function(...): boolean}
  */
-goog.functions.FALSE = goog.functions.constant(false);
+goog.functions.FALSE = function() {
+  return false;
+};
 
 
 /**
  * Always returns true.
  * @type {function(...): boolean}
  */
-goog.functions.TRUE = goog.functions.constant(true);
+goog.functions.TRUE = function() {
+  return true;
+};
 
 
 /**
  * Always returns NULL.
  * @type {function(...): null}
  */
-goog.functions.NULL = goog.functions.constant(null);
+goog.functions.NULL = function() {
+  return null;
+};
 
 
 /**
@@ -77,7 +89,7 @@ goog.functions.identity = function(opt_returnValue, var_args) {
  */
 goog.functions.error = function(message) {
   return function() {
-    throw Error(message);
+    throw new Error(message);
   };
 };
 
@@ -88,9 +100,7 @@ goog.functions.error = function(message) {
  * @return {!Function} The error-throwing function.
  */
 goog.functions.fail = function(err) {
-  return function() {
-    throw err;
-  }
+  return function() { throw err; };
 };
 
 
@@ -105,7 +115,8 @@ goog.functions.fail = function(err) {
 goog.functions.lock = function(f, opt_numArgs) {
   opt_numArgs = opt_numArgs || 0;
   return function() {
-    return f.apply(this, Array.prototype.slice.call(arguments, 0, opt_numArgs));
+    var self = /** @type {*} */ (this);
+    return f.apply(self, Array.prototype.slice.call(arguments, 0, opt_numArgs));
   };
 };
 
@@ -116,8 +127,32 @@ goog.functions.lock = function(f, opt_numArgs) {
  * @return {!Function} A new function.
  */
 goog.functions.nth = function(n) {
+  return function() { return arguments[n]; };
+};
+
+
+/**
+ * Like goog.partial(), except that arguments are added after arguments to the
+ * returned function.
+ *
+ * Usage:
+ * function f(arg1, arg2, arg3, arg4) { ... }
+ * var g = goog.functions.partialRight(f, arg3, arg4);
+ * g(arg1, arg2);
+ *
+ * @param {!Function} fn A function to partially apply.
+ * @param {...*} var_args Additional arguments that are partially applied to fn
+ *     at the end.
+ * @return {!Function} A partially-applied form of the function goog.partial()
+ *     was invoked as a method of.
+ */
+goog.functions.partialRight = function(fn, var_args) {
+  var rightArgs = Array.prototype.slice.call(arguments, 1);
   return function() {
-    return arguments[n];
+    var self = /** @type {*} */ (this);
+    var newArgs = Array.prototype.slice.call(arguments);
+    newArgs.push.apply(newArgs, rightArgs);
+    return fn.apply(self, newArgs);
   };
 };
 
@@ -136,7 +171,7 @@ goog.functions.withReturnValue = function(f, retValue) {
 
 
 /**
- * Creates a function that returns whether its arguement equals the given value.
+ * Creates a function that returns whether its argument equals the given value.
  *
  * Example:
  * var key = goog.object.findKey(obj, goog.functions.equalTo('needle'));
@@ -165,13 +200,14 @@ goog.functions.compose = function(fn, var_args) {
   var functions = arguments;
   var length = functions.length;
   return function() {
+    var self = /** @type {*} */ (this);
     var result;
     if (length) {
-      result = functions[length - 1].apply(this, arguments);
+      result = functions[length - 1].apply(self, arguments);
     }
 
     for (var i = length - 2; i >= 0; i--) {
-      result = functions[i].call(this, result);
+      result = functions[i].call(self, result);
     }
     return result;
   };
@@ -189,9 +225,10 @@ goog.functions.sequence = function(var_args) {
   var functions = arguments;
   var length = functions.length;
   return function() {
+    var self = /** @type {*} */ (this);
     var result;
     for (var i = 0; i < length; i++) {
-      result = functions[i].apply(this, arguments);
+      result = functions[i].apply(self, arguments);
     }
     return result;
   };
@@ -211,8 +248,9 @@ goog.functions.and = function(var_args) {
   var functions = arguments;
   var length = functions.length;
   return function() {
+    var self = /** @type {*} */ (this);
     for (var i = 0; i < length; i++) {
-      if (!functions[i].apply(this, arguments)) {
+      if (!functions[i].apply(self, arguments)) {
         return false;
       }
     }
@@ -234,8 +272,9 @@ goog.functions.or = function(var_args) {
   var functions = arguments;
   var length = functions.length;
   return function() {
+    var self = /** @type {*} */ (this);
     for (var i = 0; i < length; i++) {
-      if (functions[i].apply(this, arguments)) {
+      if (functions[i].apply(self, arguments)) {
         return true;
       }
     }
@@ -253,7 +292,8 @@ goog.functions.or = function(var_args) {
  */
 goog.functions.not = function(f) {
   return function() {
-    return !f.apply(this, arguments);
+    var self = /** @type {*} */ (this);
+    return !f.apply(self, arguments);
   };
 };
 
@@ -268,7 +308,7 @@ goog.functions.not = function(f) {
  *
  * @param {function(new:T, ...)} constructor The constructor for the Object.
  * @param {...*} var_args The arguments to be passed to the constructor.
- * @return {T} A new instance of the class given in {@code constructor}.
+ * @return {T} A new instance of the class given in `constructor`.
  * @template T
  */
 goog.functions.create = function(constructor, var_args) {
@@ -309,8 +349,8 @@ goog.define('goog.functions.CACHE_RETURN_VALUE', true);
  *
  * To cache the return values of functions with parameters, see goog.memoize.
  *
- * @param {!function():T} fn A function to lazily evaluate.
- * @return {!function():T} A wrapped version the function.
+ * @param {function():T} fn A function to lazily evaluate.
+ * @return {function():T} A wrapped version the function.
  * @template T
  */
 goog.functions.cacheReturnValue = function(fn) {
@@ -328,5 +368,141 @@ goog.functions.cacheReturnValue = function(fn) {
     }
 
     return value;
-  }
+  };
+};
+
+
+/**
+ * Wraps a function to allow it to be called, at most, once. All
+ * additional calls are no-ops.
+ *
+ * This is particularly useful for initialization functions
+ * that should be called, at most, once.
+ *
+ * @param {function():*} f Function to call.
+ * @return {function():undefined} Wrapped function.
+ */
+goog.functions.once = function(f) {
+  // Keep a reference to the function that we null out when we're done with
+  // it -- that way, the function can be GC'd when we're done with it.
+  var inner = f;
+  return function() {
+    if (inner) {
+      var tmp = inner;
+      inner = null;
+      tmp();
+    }
+  };
+};
+
+
+/**
+ * Wraps a function to allow it to be called, at most, once per interval
+ * (specified in milliseconds). If the wrapper function is called N times within
+ * that interval, only the Nth call will go through.
+ *
+ * This is particularly useful for batching up repeated actions where the
+ * last action should win. This can be used, for example, for refreshing an
+ * autocomplete pop-up every so often rather than updating with every keystroke,
+ * since the final text typed by the user is the one that should produce the
+ * final autocomplete results. For more stateful debouncing with support for
+ * pausing, resuming, and canceling debounced actions, use
+ * `goog.async.Debouncer`.
+ *
+ * @param {function(this:SCOPE, ...?)} f Function to call.
+ * @param {number} interval Interval over which to debounce. The function will
+ *     only be called after the full interval has elapsed since the last call.
+ * @param {SCOPE=} opt_scope Object in whose scope to call the function.
+ * @return {function(...?): undefined} Wrapped function.
+ * @template SCOPE
+ */
+goog.functions.debounce = function(f, interval, opt_scope) {
+  var timeout = 0;
+  return /** @type {function(...?)} */ (function(var_args) {
+    goog.global.clearTimeout(timeout);
+    var args = arguments;
+    timeout = goog.global.setTimeout(function() {
+      f.apply(opt_scope, args);
+    }, interval);
+  });
+};
+
+
+/**
+ * Wraps a function to allow it to be called, at most, once per interval
+ * (specified in milliseconds). If the wrapper function is called N times in
+ * that interval, both the 1st and the Nth calls will go through.
+ *
+ * This is particularly useful for limiting repeated user requests where the
+ * the last action should win, but you also don't want to wait until the end of
+ * the interval before sending a request out, as it leads to a perception of
+ * slowness for the user.
+ *
+ * @param {function(this:SCOPE, ...?)} f Function to call.
+ * @param {number} interval Interval over which to throttle. The function can
+ *     only be called once per interval.
+ * @param {SCOPE=} opt_scope Object in whose scope to call the function.
+ * @return {function(...?): undefined} Wrapped function.
+ * @template SCOPE
+ */
+goog.functions.throttle = function(f, interval, opt_scope) {
+  var timeout = 0;
+  var shouldFire = false;
+  var args = [];
+
+  var handleTimeout = function() {
+    timeout = 0;
+    if (shouldFire) {
+      shouldFire = false;
+      fire();
+    }
+  };
+
+  var fire = function() {
+    timeout = goog.global.setTimeout(handleTimeout, interval);
+    f.apply(opt_scope, args);
+  };
+
+  return /** @type {function(...?)} */ (function(var_args) {
+    args = arguments;
+    if (!timeout) {
+      fire();
+    } else {
+      shouldFire = true;
+    }
+  });
+};
+
+
+/**
+ * Wraps a function to allow it to be called, at most, once per interval
+ * (specified in milliseconds). If the wrapper function is called N times within
+ * that interval, only the 1st call will go through.
+ *
+ * This is particularly useful for limiting repeated user requests where the
+ * first request is guaranteed to have all the data required to perform the
+ * final action, so there's no need to wait until the end of the interval before
+ * sending the request out.
+ *
+ * @param {function(this:SCOPE, ...?)} f Function to call.
+ * @param {number} interval Interval over which to rate-limit. The function will
+ *     only be called once per interval, and ignored for the remainer of the
+ *     interval.
+ * @param {SCOPE=} opt_scope Object in whose scope to call the function.
+ * @return {function(...?): undefined} Wrapped function.
+ * @template SCOPE
+ */
+goog.functions.rateLimit = function(f, interval, opt_scope) {
+  var timeout = 0;
+
+  var handleTimeout = function() {
+    timeout = 0;
+  };
+
+  return /** @type {function(...?)} */ (function(var_args) {
+    if (!timeout) {
+      timeout = goog.global.setTimeout(handleTimeout, interval);
+      f.apply(opt_scope, arguments);
+    }
+  });
 };

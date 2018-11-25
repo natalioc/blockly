@@ -25,6 +25,8 @@ goog.require('goog.Disposable');
 goog.require('goog.log');
 goog.require('goog.log.Level');
 
+goog.forwardDeclare('goog.messaging.MessageChannel');
+
 
 
 /**
@@ -86,8 +88,7 @@ goog.messaging.LoggerServer.prototype.log_ = function(message) {
   var level = goog.log.Level.getPredefinedLevelByValue(args['level']);
   if (level) {
     var msg = '[' + this.channelName_ + '] ' + args['message'];
-    goog.log.getLogger(args['name'])
-        .log(level, msg, args['exception']);
+    goog.log.getLogger(args['name']).log(level, msg, args['exception']);
   }
 };
 

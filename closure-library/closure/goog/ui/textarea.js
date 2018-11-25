@@ -48,8 +48,9 @@ goog.require('goog.userAgent');
  * @extends {goog.ui.Control}
  */
 goog.ui.Textarea = function(content, opt_renderer, opt_domHelper) {
-  goog.ui.Control.call(this, content, opt_renderer ||
-      goog.ui.TextareaRenderer.getInstance(), opt_domHelper);
+  goog.ui.Control.call(
+      this, content, opt_renderer || goog.ui.TextareaRenderer.getInstance(),
+      opt_domHelper);
 
   this.setHandleMouseEvents(false);
   this.setAllowTextSelection(true);
@@ -67,9 +68,8 @@ goog.tagUnsealableClass(goog.ui.Textarea);
  * @type {boolean}
  * @private
  */
-goog.ui.Textarea.NEEDS_HELP_SHRINKING_ = goog.userAgent.GECKO ||
-    goog.userAgent.WEBKIT ||
-    (goog.userAgent.IE && goog.userAgent.isDocumentModeOrHigher(11));
+goog.ui.Textarea.NEEDS_HELP_SHRINKING_ =
+    !(goog.userAgent.IE && !goog.userAgent.isDocumentModeOrHigher(11));
 
 
 /**
@@ -313,6 +313,7 @@ goog.ui.Textarea.prototype.setValue = function(value) {
 /**
  * Gets the textarea's value.
  * @return {string} value The value of the textarea.
+ * @suppress {strictMissingProperties} Part of the go/strict_warnings_migration
  */
 goog.ui.Textarea.prototype.getValue = function() {
   // We potentially have the placeholder stored in the value.
@@ -342,7 +343,10 @@ goog.ui.Textarea.prototype.setContent = function(content) {
 };
 
 
-/** @override **/
+/**
+ * @override *
+ * @suppress {strictMissingProperties} Part of the go/strict_warnings_migration
+ */
 goog.ui.Textarea.prototype.setEnabled = function(enable) {
   goog.ui.Textarea.superClass_.setEnabled.call(this, enable);
   this.getElement().disabled = !enable;
@@ -372,6 +376,7 @@ goog.ui.Textarea.prototype.supportsNativePlaceholder_ = function() {
 /**
  * Sets the value of the textarea element to the default text.
  * @private
+ * @suppress {strictMissingProperties} Part of the go/strict_warnings_migration
  */
 goog.ui.Textarea.prototype.restorePlaceholder_ = function() {
   if (!this.placeholderText_) {
@@ -383,7 +388,8 @@ goog.ui.Textarea.prototype.restorePlaceholder_ = function() {
   // and the dispose method may have been called prior to this.
   if (this.supportsNativePlaceholder_()) {
     this.getElement().placeholder = this.placeholderText_;
-  } else if (this.getElement() && !this.hasUserInput_ &&
+  } else if (
+      this.getElement() && !this.hasUserInput_ &&
       !this.hasFocusForPlaceholder_) {
     // We only want to set the value + placeholder CSS if we actually have
     // some placeholder text to show.
@@ -408,17 +414,18 @@ goog.ui.Textarea.prototype.enterDocument = function() {
     'boxSizing': 'border-box',
     'MsBoxSizing': 'border-box',
     'WebkitBoxSizing': 'border-box',
-    'MozBoxSizing': 'border-box'});
+    'MozBoxSizing': 'border-box'
+  });
 
   this.paddingBox_ = goog.style.getPaddingBox(textarea);
   this.borderBox_ = goog.style.getBorderBox(textarea);
 
-  this.getHandler().
-      listen(textarea, goog.events.EventType.SCROLL, this.grow_).
-      listen(textarea, goog.events.EventType.FOCUS, this.grow_).
-      listen(textarea, goog.events.EventType.KEYUP, this.grow_).
-      listen(textarea, goog.events.EventType.MOUSEUP, this.mouseUpListener_).
-      listen(textarea, goog.events.EventType.BLUR, this.blur_);
+  this.getHandler()
+      .listen(textarea, goog.events.EventType.SCROLL, this.grow_)
+      .listen(textarea, goog.events.EventType.FOCUS, this.grow_)
+      .listen(textarea, goog.events.EventType.KEYUP, this.grow_)
+      .listen(textarea, goog.events.EventType.MOUSEUP, this.mouseUpListener_)
+      .listen(textarea, goog.events.EventType.BLUR, this.blur_);
 
   this.restorePlaceholder_();
   this.resize();
@@ -443,8 +450,8 @@ goog.ui.Textarea.prototype.getHeight_ = function() {
     this.borderBox_ = goog.style.getBorderBox(textarea);
   }
   // Accounts for a possible (though unlikely) horizontal scrollbar.
-  var height = this.getElement().scrollHeight +
-      this.getHorizontalScrollBarHeight_();
+  var height =
+      this.getElement().scrollHeight + this.getHorizontalScrollBarHeight_();
   if (this.needsPaddingBorderFix_) {
     height -= this.getPaddingBorderBoxHeight_();
   } else {
@@ -481,6 +488,7 @@ goog.ui.Textarea.prototype.setHeight_ = function(height) {
  * This is necessary when the textarea is hidden, in which case scrollHeight
  * is not available.
  * @private
+ * @suppress {strictMissingProperties} Part of the go/strict_warnings_migration
  */
 goog.ui.Textarea.prototype.setHeightToEstimate_ = function() {
   var textarea = this.getElement();
@@ -496,9 +504,8 @@ goog.ui.Textarea.prototype.setHeightToEstimate_ = function() {
  * @return {number} The height of the horizontal scrollbar.
  * @private
  */
-goog.ui.Textarea.prototype.getHorizontalScrollBarHeight_ =
-    function() {
-  var textarea = this.getElement();
+goog.ui.Textarea.prototype.getHorizontalScrollBarHeight_ = function() {
+  var textarea = /** @type {!HTMLElement} */ (this.getElement());
   var height = textarea.offsetHeight - textarea.clientHeight;
   if (!this.scrollHeightIncludesPadding_) {
     var paddingBox = this.paddingBox_;
@@ -527,7 +534,8 @@ goog.ui.Textarea.prototype.getHorizontalScrollBarHeight_ =
  */
 goog.ui.Textarea.prototype.discoverTextareaCharacteristics_ = function() {
   if (!this.hasDiscoveredTextareaCharacteristics_) {
-    var textarea = /** @type {!Element} */ (this.getElement().cloneNode(false));
+    var textarea =
+        /** @type {!HTMLElement} */ (this.getElement().cloneNode(false));
     // We need to overwrite/write box model specific styles that might
     // affect height.
     goog.style.setStyle(textarea, {
@@ -544,8 +552,8 @@ goog.ui.Textarea.prototype.discoverTextareaCharacteristics_ = function() {
 
     textarea.style.padding = '10px';
     var paddingScrollHeight = textarea.scrollHeight;
-    this.scrollHeightIncludesPadding_ = paddingScrollHeight >
-        initialScrollHeight;
+    this.scrollHeightIncludesPadding_ =
+        paddingScrollHeight > initialScrollHeight;
 
     initialScrollHeight = paddingScrollHeight;
     textarea.style.borderWidth = '10px';
@@ -577,6 +585,7 @@ goog.ui.Textarea.TEXTAREA_PLACEHOLDER_CLASS =
  * Called when the element goes out of focus.
  * @param {goog.events.Event=} opt_e The browser event.
  * @private
+ * @suppress {strictMissingProperties} Part of the go/strict_warnings_migration
  */
 goog.ui.Textarea.prototype.blur_ = function(opt_e) {
   if (!this.supportsNativePlaceholder_()) {
@@ -595,12 +604,13 @@ goog.ui.Textarea.prototype.blur_ = function(opt_e) {
  * Resizes the textarea to grow/shrink to match its contents.
  * @param {goog.events.Event=} opt_e The browser event.
  * @private
+ * @suppress {strictMissingProperties} Part of the go/strict_warnings_migration
  */
 goog.ui.Textarea.prototype.grow_ = function(opt_e) {
   if (this.isResizing_) {
     return;
   }
-  var textarea = this.getElement();
+  var textarea = /** @type {!HTMLElement} */ (this.getElement());
   // If the element is getting focus and we don't support placeholders
   // natively, then remove the placeholder class.
   if (!this.supportsNativePlaceholder_() && opt_e &&
@@ -609,8 +619,7 @@ goog.ui.Textarea.prototype.grow_ = function(opt_e) {
     // Remove the placeholder CSS + set the value to empty if we're currently
     // showing the placeholderText_ value if this is the first time we're
     // getting focus.
-    if (textarea.value == this.placeholderText_ &&
-        this.placeholderText_ &&
+    if (textarea.value == this.placeholderText_ && this.placeholderText_ &&
         !this.hasFocusForPlaceholder_) {
       goog.dom.classlist.remove(
           textarea, goog.ui.Textarea.TEXTAREA_PLACEHOLDER_CLASS);
@@ -640,7 +649,7 @@ goog.ui.Textarea.prototype.grow_ = function(opt_e) {
       setMaxHeight = true;
     } else if (currentHeight != newHeight) {
       this.setHeight_(newHeight);
-    // Makes sure that height_ is at least set.
+      // Makes sure that height_ is at least set.
     } else if (!this.height_) {
       this.height_ = newHeight;
     }
@@ -680,7 +689,6 @@ goog.ui.Textarea.prototype.shrink_ = function() {
     } else {
       var currentHeight = this.getHeight_();
       var minHeight = this.getMinHeight_();
-      var maxHeight = this.getMaxHeight_();
       if (!(minHeight && currentHeight <= minHeight)) {
         // Nudge the padding by 1px.
         var paddingBox = this.paddingBox_;
@@ -688,8 +696,8 @@ goog.ui.Textarea.prototype.shrink_ = function() {
         var heightAfterNudge = this.getHeight_();
         // If the one px of padding had no effect, then we can shrink.
         if (heightAfterNudge == currentHeight) {
-          textarea.style.paddingBottom = paddingBox.bottom + scrollHeight +
-              'px';
+          textarea.style.paddingBottom =
+              paddingBox.bottom + scrollHeight + 'px';
           textarea.scrollTop = 0;
           var shrinkToHeight = this.getHeight_() - scrollHeight;
           if (shrinkToHeight >= minHeight) {
@@ -716,7 +724,7 @@ goog.ui.Textarea.prototype.shrink_ = function() {
  * @private
  */
 goog.ui.Textarea.prototype.mouseUpListener_ = function(e) {
-  var textarea = this.getElement();
+  var textarea = /** @type {!HTMLElement} */ (this.getElement());
   var height = textarea.offsetHeight;
 
   // This solves for when the MSIE DropShadow filter is enabled,

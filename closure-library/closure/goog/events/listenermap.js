@@ -15,13 +15,9 @@
 /**
  * @fileoverview A map of listeners that provides utility functions to
  * deal with listeners on an event target. Used by
- * {@code goog.events.EventTarget}.
+ * `goog.events.EventTarget`.
  *
  * WARNING: Do not use this class from outside goog.events package.
- *
- * @visibility {//closure/goog/bin/sizetests:__pkg__}
- * @visibility {//closure/goog/events:__pkg__}
- * @visibility {//closure/goog/labs/events:__pkg__}
  */
 
 goog.provide('goog.events.ListenerMap');
@@ -44,7 +40,7 @@ goog.events.ListenerMap = function(src) {
 
   /**
    * Maps of event type to an array of listeners.
-   * @type {Object<string, !Array<!goog.events.Listener>>}
+   * @type {!Object<string, !Array<!goog.events.Listener>>}
    */
   this.listeners = {};
 
@@ -93,7 +89,7 @@ goog.events.ListenerMap.prototype.getListenerCount = function() {
  * @param {boolean=} opt_useCapture The capture mode of the listener.
  * @param {Object=} opt_listenerScope Object in whose scope to call the
  *     listener.
- * @return {goog.events.ListenableKey} Unique key for the listener.
+ * @return {!goog.events.ListenableKey} Unique key for the listener.
  */
 goog.events.ListenerMap.prototype.add = function(
     type, listener, callOnce, opt_useCapture, opt_listenerScope) {
@@ -159,7 +155,7 @@ goog.events.ListenerMap.prototype.remove = function(
 
 /**
  * Removes the given listener object.
- * @param {goog.events.ListenableKey} listener The listener to remove.
+ * @param {!goog.events.ListenableKey} listener The listener to remove.
  * @return {boolean} Whether the listener is removed.
  */
 goog.events.ListenerMap.prototype.removeByKey = function(listener) {
@@ -170,7 +166,7 @@ goog.events.ListenerMap.prototype.removeByKey = function(listener) {
 
   var removed = goog.array.remove(this.listeners[type], listener);
   if (removed) {
-    listener.markAsRemoved();
+    /** @type {!goog.events.Listener} */ (listener).markAsRemoved();
     if (this.listeners[type].length == 0) {
       delete this.listeners[type];
       this.typeCount_--;
@@ -210,7 +206,7 @@ goog.events.ListenerMap.prototype.removeAll = function(opt_type) {
  * @param {string|!goog.events.EventId} type The type of the listeners
  *     to retrieve.
  * @param {boolean} capture The capture mode of the listeners to retrieve.
- * @return {!Array<goog.events.ListenableKey>} An array of matching
+ * @return {!Array<!goog.events.ListenableKey>} An array of matching
  *     listeners.
  */
 goog.events.ListenerMap.prototype.getListeners = function(type, capture) {
@@ -268,17 +264,16 @@ goog.events.ListenerMap.prototype.hasListener = function(
   var typeStr = hasType ? opt_type.toString() : '';
   var hasCapture = goog.isDef(opt_capture);
 
-  return goog.object.some(
-      this.listeners, function(listenerArray, type) {
-        for (var i = 0; i < listenerArray.length; ++i) {
-          if ((!hasType || listenerArray[i].type == typeStr) &&
-              (!hasCapture || listenerArray[i].capture == opt_capture)) {
-            return true;
-          }
-        }
+  return goog.object.some(this.listeners, function(listenerArray, type) {
+    for (var i = 0; i < listenerArray.length; ++i) {
+      if ((!hasType || listenerArray[i].type == typeStr) &&
+          (!hasCapture || listenerArray[i].capture == opt_capture)) {
+        return true;
+      }
+    }
 
-        return false;
-      });
+    return false;
+  });
 };
 
 
@@ -297,8 +292,7 @@ goog.events.ListenerMap.findListenerIndex_ = function(
     listenerArray, listener, opt_useCapture, opt_listenerScope) {
   for (var i = 0; i < listenerArray.length; ++i) {
     var listenerObj = listenerArray[i];
-    if (!listenerObj.removed &&
-        listenerObj.listener == listener &&
+    if (!listenerObj.removed && listenerObj.listener == listener &&
         listenerObj.capture == !!opt_useCapture &&
         listenerObj.handler == opt_listenerScope) {
       return i;

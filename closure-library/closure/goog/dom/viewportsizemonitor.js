@@ -37,7 +37,7 @@ goog.require('goog.math.Size');
  *
  * Use this class if you want to execute resize/reflow logic each time the
  * user resizes the browser window.  This class is guaranteed to only dispatch
- * {@code RESIZE} events when the pixel dimensions of the viewport change.
+ * `RESIZE` events when the pixel dimensions of the viewport change.
  * (Internet Explorer fires resize events if any element on the page is resized,
  * even if the viewport dimensions are unchanged, which can lead to infinite
  * resize loops.)
@@ -71,8 +71,9 @@ goog.dom.ViewportSizeMonitor = function(opt_window) {
    * {@link goog.events.listen}.
    * @private {goog.events.Key}
    */
-  this.listenerKey_ = goog.events.listen(this.window_,
-      goog.events.EventType.RESIZE, this.handleResize_, false, this);
+  this.listenerKey_ = goog.events.listen(
+      this.window_, goog.events.EventType.RESIZE, this.handleResize_, false,
+      this);
 
   /**
    * The most recently recorded size of the viewport, in pixels.
@@ -96,7 +97,7 @@ goog.dom.ViewportSizeMonitor.getInstanceForWindow = function(opt_window) {
   var uid = goog.getUid(currentWindow);
 
   return goog.dom.ViewportSizeMonitor.windowInstanceMap_[uid] =
-      goog.dom.ViewportSizeMonitor.windowInstanceMap_[uid] ||
+             goog.dom.ViewportSizeMonitor.windowInstanceMap_[uid] ||
       new goog.dom.ViewportSizeMonitor(currentWindow);
 };
 

@@ -17,6 +17,7 @@ goog.setTestOnly('goog.ui.DimensionPickerTest');
 
 goog.require('goog.dom');
 goog.require('goog.dom.TagName');
+goog.require('goog.events.BrowserEvent');
 goog.require('goog.events.KeyCodes');
 goog.require('goog.math.Size');
 goog.require('goog.testing.jsunit');
@@ -35,8 +36,8 @@ function setUpPage() {
 
 function setUp() {
   picker = new goog.ui.DimensionPicker();
-  render.innerHTML = '';
-  decorate.innerHTML = '';
+  goog.dom.removeChildren(render);
+  goog.dom.removeChildren(decorate);
 }
 
 function tearDown() {
@@ -52,25 +53,23 @@ function testRender() {
   picker.render(render);
 
   assertEquals('Should create 1 child', 1, render.childNodes.length);
-  assertEquals('Should be a div', goog.dom.TagName.DIV,
-      render.firstChild.tagName);
+  assertEquals(
+      'Should be a div', String(goog.dom.TagName.DIV), render.firstChild.tagName);
 }
 
 function testDecorate() {
   picker.decorate(decorate);
 
-  assertNotEquals('Should add several children', decorate.firstChild,
-      decorate.lastChild);
+  assertNotEquals(
+      'Should add several children', decorate.firstChild, decorate.lastChild);
 }
 
 function testHighlightedSize() {
   picker.render(render);
 
   var size = picker.getValue();
-  assertEquals('Should have 1 column highlighted initially.',
-      1, size.width);
-  assertEquals('Should have 1 row highlighted initially.',
-      1, size.height);
+  assertEquals('Should have 1 column highlighted initially.', 1, size.width);
+  assertEquals('Should have 1 row highlighted initially.', 1, size.height);
 
   picker.setValue(1, 2);
   size = picker.getValue();
@@ -84,17 +83,25 @@ function testHighlightedSize() {
 
   picker.setValue(new goog.math.Size(-3, 0));
   size = picker.getValue();
-  assertEquals('Should have 1 column highlighted when passed a negative ' +
-      'column value.', 1, size.width);
-  assertEquals('Should have 1 row highlighted when passed 0 as the row ' +
-      'value.', 1, size.height);
+  assertEquals(
+      'Should have 1 column highlighted when passed a negative ' +
+          'column value.',
+      1, size.width);
+  assertEquals(
+      'Should have 1 row highlighted when passed 0 as the row ' +
+          'value.',
+      1, size.height);
 
   picker.setValue(picker.maxColumns + 10, picker.maxRows + 2);
   size = picker.getValue();
-  assertEquals('Column value should be decreased to match max columns ' +
-      'if it is too high.', picker.maxColumns, size.width);
-  assertEquals('Row value should be decreased to match max rows ' +
-      'if it is too high.', picker.maxRows, size.height);
+  assertEquals(
+      'Column value should be decreased to match max columns ' +
+          'if it is too high.',
+      picker.maxColumns, size.width);
+  assertEquals(
+      'Row value should be decreased to match max rows ' +
+          'if it is too high.',
+      picker.maxRows, size.height);
 }
 
 function testSizeShown() {
@@ -133,7 +140,7 @@ function testHandleMove() {
   picker.rightToLeft_ = false;
   var e = {
     target: mouseMoveElem,
-    offsetX: 18, // Each grid square currently a magic 18px.
+    offsetX: 18,  // Each grid square currently a magic 18px.
     offsetY: 36
   };
 
@@ -148,7 +155,8 @@ function testHandleMove() {
   var size = picker.getValue();
   // In RTL we pick from the right side of the picker, so an offsetX of 0
   // would actually mean select all columns.
-  assertEquals('Should have columns to the right of the mouse highlighted',
+  assertEquals(
+      'Should have columns to the right of the mouse highlighted',
       Math.ceil((mouseMoveElem.offsetWidth - e.offsetX) / 18), size.width);
   assertEquals('Should have 2 rows highlighted', 2, size.height);
 }
@@ -191,11 +199,10 @@ function testHandleKeyboardEvents() {
   assertTrue('Should handle LEFT key event', result);
 
   // Pressing LEFT when there is only 1 row should not be handled
-  //allowing SubMenu to close.
+  // allowing SubMenu to close.
   result = picker.handleKeyEvent({keyCode: goog.events.KeyCodes.LEFT});
   assertFalse(
-      'Should not handle LEFT key event when there is only one column',
-      result);
+      'Should not handle LEFT key event when there is only one column', result);
 
   picker.rightToLeft_ = true;
 
@@ -223,27 +230,77 @@ function testDispose() {
   picker.render(render);
   picker.dispose();
   assertTrue('Picker should have been disposed of', picker.isDisposed());
-  assertNull('Picker element reference should have been nulled out',
+  assertNull(
+      'Picker element reference should have been nulled out',
       picker.getElement());
 }
 
 function testRendererDoesntCallGetCssClassInConstructor() {
-  goog.testing.ui.rendererasserts.
-      assertNoGetCssClassCallsInConstructor(
-          goog.ui.DimensionPickerRenderer);
+  goog.testing.ui.rendererasserts.assertNoGetCssClassCallsInConstructor(
+      goog.ui.DimensionPickerRenderer);
 }
 
 function testSetAriaLabel() {
-  assertNull('Picker must not have aria label by default',
-      picker.getAriaLabel());
+  assertNull(
+      'Picker must not have aria label by default', picker.getAriaLabel());
   picker.setAriaLabel('My picker');
   picker.render(render);
   var element = picker.getElementStrict();
   assertNotNull('Element must not be null', element);
-  assertEquals('Picker element must have expected aria-label', 'My picker',
+  assertEquals(
+      'Picker element must have expected aria-label', 'My picker',
       element.getAttribute('aria-label'));
   assertTrue(goog.dom.isFocusableTabIndex(element));
   picker.setAriaLabel('My new picker');
-  assertEquals('Picker element must have updated aria-label', 'My new picker',
+  assertEquals(
+      'Picker element must have updated aria-label', 'My new picker',
       element.getAttribute('aria-label'));
+}
+
+function testHandleTouchTapInsideGrid() {
+  picker.setPointerEventsEnabled(true);
+  picker.render(render);
+
+  var renderer = picker.getRenderer();
+  var mouseMoveElem = renderer.getMouseMoveElement(picker);
+
+  var e = new goog.events.BrowserEvent({
+    target: mouseMoveElem,
+    offsetX: 18,  // Each grid square currently a magic 18px.
+    offsetY: 36,
+    clientX: 8 + 18,
+    clientY: 8 + 36,
+    pointerType: goog.events.BrowserEvent.PointerType.TOUCH
+  });
+
+  picker.handleMouseDown(e);
+  picker.handleMouseUp(e);
+
+  var size = picker.getValue();
+  assertEquals('Should have 1 column highlighted', 1, size.width);
+  assertEquals('Should have 2 rows highlighted', 2, size.height);
+}
+
+function testHandleTouchTapOutsideGrid() {
+  picker.setPointerEventsEnabled(true);
+  picker.render(render);
+
+  var renderer = picker.getRenderer();
+  var mouseMoveElem = renderer.getMouseMoveElement(picker);
+
+  var e = new goog.events.BrowserEvent({
+    target: mouseMoveElem,
+    offsetX: 18,  // Each grid square currently a magic 18px.
+    offsetY: 108, // 6th column is at 108px (6 * 18px)
+    clientX: 8 + 18,
+    clientY: 8 + 108,
+    pointerType: goog.events.BrowserEvent.PointerType.TOUCH
+  });
+
+  picker.handleMouseDown(e);
+  picker.handleMouseUp(e);
+
+  var size = picker.getValue();
+  assertEquals('Should have 1 column highlighted', 1, size.width);
+  assertEquals('Should have 1 rows highlighted', 1, size.height);
 }

@@ -17,8 +17,13 @@ goog.provide('goog.async.run');
 goog.require('goog.async.WorkQueue');
 goog.require('goog.async.nextTick');
 goog.require('goog.async.throwException');
-goog.require('goog.testing.watchers');
 
+/**
+ * @define {boolean} If true, use the global Promise to implement goog.async.run
+ * assuming either the native, or polyfill version will be used. Does still
+ * permit tests to use forceNextTick.
+ */
+goog.define('goog.ASSUME_NATIVE_PROMISE', false);
 
 /**
  * Fires the provided callback just before the current callstack unwinds, or as
@@ -47,11 +52,13 @@ goog.async.run = function(callback, opt_context) {
  * @private
  */
 goog.async.run.initializeRunner_ = function() {
-  // If native Promises are available in the browser, just schedule the callback
-  // on a fulfilled promise, which is specified to be async, but as fast as
-  // possible.
-  if (goog.global.Promise && goog.global.Promise.resolve) {
-    var promise = goog.global.Promise.resolve();
+  if (goog.ASSUME_NATIVE_PROMISE ||
+      (goog.global.Promise && goog.global.Promise.resolve)) {
+    // Use goog.global.Promise instead of just Promise because the relevant
+    // externs may be missing, and don't alias it because this could confuse the
+    // compiler into thinking the polyfill is required when it should be treated
+    // as optional.
+    var promise = goog.global.Promise.resolve(undefined);
     goog.async.run.schedule_ = function() {
       promise.then(goog.async.run.processWorkQueue);
     };
@@ -103,17 +110,12 @@ goog.async.run.workQueue_ = new goog.async.WorkQueue();
 
 if (goog.DEBUG) {
   /**
-   * Reset the work queue.
-   * @private
+   * Reset the work queue. Only available for tests in debug mode.
    */
-  goog.async.run.resetQueue_ = function() {
+  goog.async.run.resetQueue = function() {
     goog.async.run.workQueueScheduled_ = false;
     goog.async.run.workQueue_ = new goog.async.WorkQueue();
   };
-
-  // If there is a clock implemenation in use for testing
-  // and it is reset, reset the queue.
-  goog.testing.watchers.watchClockReset(goog.async.run.resetQueue_);
 }
 
 

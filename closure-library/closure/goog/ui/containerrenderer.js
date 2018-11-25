@@ -31,6 +31,10 @@ goog.require('goog.style');
 goog.require('goog.ui.registry');
 goog.require('goog.userAgent');
 
+goog.forwardDeclare('goog.ui.Container');
+goog.forwardDeclare('goog.ui.Container.Orientation');
+goog.forwardDeclare('goog.ui.Control');
+
 
 
 /**
@@ -88,9 +92,7 @@ goog.ui.ContainerRenderer.getCustomRenderer = function(ctor, cssClassName) {
    * rendered using this renderer.
    * @return {string} Renderer-specific CSS class.
    */
-  renderer.getCssClass = function() {
-    return cssClassName;
-  };
+  renderer.getCssClass = function() { return cssClassName; };
 
   return renderer;
 };
@@ -135,8 +137,8 @@ goog.ui.ContainerRenderer.prototype.enableTabIndex = function(element, enable) {
  * @return {Element} Root element for the container.
  */
 goog.ui.ContainerRenderer.prototype.createDom = function(container) {
-  return container.getDomHelper().createDom(goog.dom.TagName.DIV,
-      this.getClassNames(container).join(' '));
+  return container.getDomHelper().createDom(
+      goog.dom.TagName.DIV, this.getClassNames(container).join(' '));
 };
 
 
@@ -153,7 +155,7 @@ goog.ui.ContainerRenderer.prototype.getContentElement = function(element) {
 
 
 /**
- * Default implementation of {@code canDecorate}; returns true if the element
+ * Default implementation of `canDecorate`; returns true if the element
  * is a DIV, false otherwise.
  * @param {Element} element Element to decorate.
  * @return {boolean} Whether the renderer can decorate the element.
@@ -164,7 +166,7 @@ goog.ui.ContainerRenderer.prototype.canDecorate = function(element) {
 
 
 /**
- * Default implementation of {@code decorate} for {@link goog.ui.Container}s.
+ * Default implementation of `decorate` for {@link goog.ui.Container}s.
  * Decorates the element with the container, and attempts to decorate its child
  * elements.  Returns the decorated element.
  * @param {goog.ui.Container} container Container to decorate the element.
@@ -215,9 +217,10 @@ goog.ui.ContainerRenderer.prototype.decorate = function(container, element) {
  * @param {string} baseClass Base class name used as the root of state-specific
  *     class names (typically the renderer's own class name).
  * @protected
+ * @suppress {missingRequire} goog.ui.Container
  */
-goog.ui.ContainerRenderer.prototype.setStateFromClassName = function(container,
-    className, baseClass) {
+goog.ui.ContainerRenderer.prototype.setStateFromClassName = function(
+    container, className, baseClass) {
   if (className == goog.getCssName(baseClass, 'disabled')) {
     container.setEnabled(false);
   } else if (className == goog.getCssName(baseClass, 'horizontal')) {
@@ -238,8 +241,8 @@ goog.ui.ContainerRenderer.prototype.setStateFromClassName = function(container,
  * @param {Element} element Element whose children are to be decorated.
  * @param {Element=} opt_firstChild the first child to be decorated.
  */
-goog.ui.ContainerRenderer.prototype.decorateChildren = function(container,
-    element, opt_firstChild) {
+goog.ui.ContainerRenderer.prototype.decorateChildren = function(
+    container, element, opt_firstChild) {
   if (element) {
     var node = opt_firstChild || element.firstChild, next;
     // Tag soup HTML may result in a DOM where siblings have different parents.
@@ -248,17 +251,17 @@ goog.ui.ContainerRenderer.prototype.decorateChildren = function(container,
       next = node.nextSibling;
       if (node.nodeType == goog.dom.NodeType.ELEMENT) {
         // Decorate element node.
-        var child = this.getDecoratorForChild(/** @type {!Element} */(node));
+        var child = this.getDecoratorForChild(/** @type {!Element} */ (node));
         if (child) {
           // addChild() may need to look at the element.
-          child.setElementInternal(/** @type {!Element} */(node));
+          child.setElementInternal(/** @type {!Element} */ (node));
           // If the container is disabled, mark the child disabled too.  See
           // bug 1263729.  Note that this must precede the call to addChild().
           if (!container.isEnabled()) {
             child.setEnabled(false);
           }
           container.addChild(child);
-          child.decorate(/** @type {!Element} */(node));
+          child.decorate(/** @type {!Element} */ (node));
         }
       } else if (!node.nodeValue || goog.string.trim(node.nodeValue) == '') {
         // Remove empty text node, otherwise madness ensues (e.g. controls that
@@ -352,10 +355,8 @@ goog.ui.ContainerRenderer.prototype.getClassNames = function(container) {
   var isHorizontal =
       container.getOrientation() == goog.ui.Container.Orientation.HORIZONTAL;
   var classNames = [
-    baseClass,
-    (isHorizontal ?
-        goog.getCssName(baseClass, 'horizontal') :
-        goog.getCssName(baseClass, 'vertical'))
+    baseClass, (isHorizontal ? goog.getCssName(baseClass, 'horizontal') :
+                               goog.getCssName(baseClass, 'vertical'))
   ];
   if (!container.isEnabled()) {
     classNames.push(goog.getCssName(baseClass, 'disabled'));
@@ -366,9 +367,10 @@ goog.ui.ContainerRenderer.prototype.getClassNames = function(container) {
 
 /**
  * Returns the default orientation of containers rendered or decorated by this
- * renderer.  The base class implementation returns {@code VERTICAL}.
+ * renderer.  The base class implementation returns `VERTICAL`.
  * @return {goog.ui.Container.Orientation} Default orientation for containers
  *     created or decorated by this renderer.
+ * @suppress {missingRequire} goog.ui.Container
  */
 goog.ui.ContainerRenderer.prototype.getDefaultOrientation = function() {
   return goog.ui.Container.Orientation.VERTICAL;

@@ -53,8 +53,8 @@ goog.net.MultiIframeLoadMonitor = function(iframes, callback, opt_hasContent) {
   this.callback_ = callback;
 
   for (var i = 0; i < iframes.length; i++) {
-    var iframeLoadMonitor = new goog.net.IframeLoadMonitor(
-        iframes[i], opt_hasContent);
+    var iframeLoadMonitor =
+        new goog.net.IframeLoadMonitor(iframes[i], opt_hasContent);
     if (iframeLoadMonitor.isLoaded()) {
       // Already loaded - don't need to wait
       iframeLoadMonitor.dispose();
@@ -77,6 +77,7 @@ goog.net.MultiIframeLoadMonitor = function(iframes, callback, opt_hasContent) {
 /**
  * Handles a pending iframe load monitor load event.
  * @param {goog.events.Event} e The goog.net.IframeLoadMonitor.LOAD_EVENT event.
+ * @suppress {strictMissingProperties} Part of the go/strict_warnings_migration
  */
 goog.net.MultiIframeLoadMonitor.prototype.handleEvent = function(e) {
   var iframeLoadMonitor = e.target;
@@ -115,4 +116,3 @@ goog.net.MultiIframeLoadMonitor.prototype.stopMonitoring = function() {
   }
   this.pendingIframeLoadMonitors_.length = 0;
 };
-

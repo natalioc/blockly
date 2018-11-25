@@ -77,8 +77,8 @@ goog.ui.BidiInput.prototype.decorateInternal = function(element) {
  */
 goog.ui.BidiInput.prototype.createDom = function() {
   this.setElementInternal(
-      this.getDomHelper().createDom(goog.dom.TagName.INPUT,
-                                    {'type': goog.dom.InputType.TEXT}));
+      this.getDomHelper().createDom(
+          goog.dom.TagName.INPUT, {'type': goog.dom.InputType.TEXT}));
   this.init_();
 };
 
@@ -95,8 +95,8 @@ goog.ui.BidiInput.prototype.init_ = function() {
 
   // Listen to value change events
   this.inputHandler_ = new goog.events.InputHandler(this.getElement());
-  goog.events.listen(this.inputHandler_,
-      goog.events.InputHandler.EventType.INPUT,
+  goog.events.listen(
+      this.inputHandler_, goog.events.InputHandler.EventType.INPUT,
       this.setDirection_, false, this);
 };
 
@@ -126,6 +126,7 @@ goog.ui.BidiInput.prototype.setDirection_ = function() {
  *     enough to determine directionality (e.g. an empty value), and the
  *     direction is inherited from a parent element (typically the body
  *     element).
+ * @suppress {strictMissingProperties} Part of the go/strict_warnings_migration
  */
 goog.ui.BidiInput.prototype.getDirection = function() {
   var dir = this.getElement().dir;
@@ -140,6 +141,7 @@ goog.ui.BidiInput.prototype.getDirection = function() {
  * Sets the value of the underlying input field, and sets the direction
  * according to the given value.
  * @param {string} value  The Value to set in the underlying input field.
+ * @suppress {strictMissingProperties} Part of the go/strict_warnings_migration
  */
 goog.ui.BidiInput.prototype.setValue = function(value) {
   var element = this.getElement();
@@ -155,10 +157,12 @@ goog.ui.BidiInput.prototype.setValue = function(value) {
 /**
  * Returns the value of the underlying input field.
  * @return {string} Value of the underlying input field.
+ * @suppress {strictMissingProperties} Part of the go/strict_warnings_migration
  */
 goog.ui.BidiInput.prototype.getValue = function() {
   var element = this.getElement();
-  return goog.isDefAndNotNull(element.value) ? element.value :
+  return goog.isDefAndNotNull(element.value) ?
+      element.value :
       goog.dom.getRawTextContent(element);
 };
 
@@ -169,6 +173,6 @@ goog.ui.BidiInput.prototype.disposeInternal = function() {
     goog.events.removeAll(this.inputHandler_);
     this.inputHandler_.dispose();
     this.inputHandler_ = null;
-    goog.ui.BidiInput.superClass_.disposeInternal.call(this);
   }
+  goog.ui.BidiInput.base(this, 'disposeInternal');
 };

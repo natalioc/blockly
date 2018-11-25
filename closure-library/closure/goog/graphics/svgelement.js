@@ -35,6 +35,8 @@ goog.require('goog.graphics.PathElement');
 goog.require('goog.graphics.RectElement');
 goog.require('goog.graphics.TextElement');
 
+goog.forwardDeclare('goog.graphics.SvgGraphics');
+
 
 
 /**
@@ -73,8 +75,8 @@ goog.graphics.SvgGroupElement.prototype.clear = function() {
  * @override
  */
 goog.graphics.SvgGroupElement.prototype.setSize = function(width, height) {
-  this.getGraphics().setElementAttributes(this.getElement(),
-      {'width': width, 'height': height});
+  this.getGraphics().setElementAttributes(
+      this.getElement(), {'width': width, 'height': height});
 };
 
 
@@ -106,8 +108,8 @@ goog.inherits(goog.graphics.SvgEllipseElement, goog.graphics.EllipseElement);
  * @override
  */
 goog.graphics.SvgEllipseElement.prototype.setCenter = function(cx, cy) {
-  this.getGraphics().setElementAttributes(this.getElement(),
-      {'cx': cx, 'cy': cy});
+  this.getGraphics().setElementAttributes(
+      this.getElement(), {'cx': cx, 'cy': cy});
 };
 
 
@@ -118,8 +120,8 @@ goog.graphics.SvgEllipseElement.prototype.setCenter = function(cx, cy) {
  * @override
  */
 goog.graphics.SvgEllipseElement.prototype.setRadius = function(rx, ry) {
-  this.getGraphics().setElementAttributes(this.getElement(),
-      {'rx': rx, 'ry': ry});
+  this.getGraphics().setElementAttributes(
+      this.getElement(), {'rx': rx, 'ry': ry});
 };
 
 
@@ -162,8 +164,8 @@ goog.graphics.SvgRectElement.prototype.setPosition = function(x, y) {
  * @override
  */
 goog.graphics.SvgRectElement.prototype.setSize = function(width, height) {
-  this.getGraphics().setElementAttributes(this.getElement(),
-      {'width': width, 'height': height});
+  this.getGraphics().setElementAttributes(
+      this.getElement(), {'width': width, 'height': height});
 };
 
 
@@ -194,9 +196,9 @@ goog.inherits(goog.graphics.SvgPathElement, goog.graphics.PathElement);
  * @override
  */
 goog.graphics.SvgPathElement.prototype.setPath = function(path) {
-  this.getGraphics().setElementAttributes(this.getElement(),
-      {'d': /** @suppress {missingRequire} */
-            goog.graphics.SvgGraphics.getSvgPath(path)});
+  /** @suppress {missingRequire} goog.graphics.SvgGraphics */
+  this.getGraphics().setElementAttributes(
+      this.getElement(), {'d': goog.graphics.SvgGraphics.getSvgPath(path)});
 };
 
 
@@ -227,7 +229,8 @@ goog.inherits(goog.graphics.SvgTextElement, goog.graphics.TextElement);
  * @override
  */
 goog.graphics.SvgTextElement.prototype.setText = function(text) {
-  this.getElement().firstChild.data = text;
+  // This is actually SVGTextElement but we don't have it in externs.
+  /** @type {!Text} */ (this.getElement().firstChild).data = text;
 };
 
 
@@ -268,8 +271,8 @@ goog.graphics.SvgImageElement.prototype.setPosition = function(x, y) {
  * @override
  */
 goog.graphics.SvgImageElement.prototype.setSize = function(width, height) {
-  this.getGraphics().setElementAttributes(this.getElement(),
-      {'width': width, 'height': height});
+  this.getGraphics().setElementAttributes(
+      this.getElement(), {'width': width, 'height': height});
 };
 
 
@@ -279,6 +282,6 @@ goog.graphics.SvgImageElement.prototype.setSize = function(width, height) {
  * @override
  */
 goog.graphics.SvgImageElement.prototype.setSource = function(src) {
-  this.getGraphics().setElementAttributes(this.getElement(),
-      {'xlink:href': src});
+  this.getGraphics().setElementAttributes(
+      this.getElement(), {'xlink:href': src});
 };

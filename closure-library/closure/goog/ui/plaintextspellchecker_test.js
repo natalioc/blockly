@@ -21,6 +21,7 @@ goog.require('goog.events.KeyCodes');
 goog.require('goog.spell.SpellCheck');
 goog.require('goog.testing.events');
 goog.require('goog.testing.jsunit');
+goog.require('goog.ui.AbstractSpellChecker');
 goog.require('goog.ui.PlainTextSpellChecker');
 
 var missspelling = 'missspelling';
@@ -53,8 +54,8 @@ function localSpellCheckingFunction(words, spellChecker, callback) {
     if (found) {
       results.push([word, goog.spell.SpellCheck.WordStatus.VALID]);
     } else {
-      results.push([word, goog.spell.SpellCheck.WordStatus.INVALID,
-        ['foo', 'bar']]);
+      results.push(
+          [word, goog.spell.SpellCheck.WordStatus.INVALID, ['foo', 'bar']]);
     }
   }
   callback.call(spellChecker, results);
@@ -115,7 +116,7 @@ function testPlainTextSpellCheckerNoQuotes() {
     text += generateRandomString(10, false) + '\n';
   }
   el.value = text;
-  // Yes this looks bizzare. This is for '\n' processing.
+  // Yes this looks bizarre. This is for '\n' processing.
   // They get converted to CRLF as part of the above statement.
   text = el.value;
 
@@ -133,8 +134,9 @@ function testPlainTextSpellCheckerNoQuotes() {
 
   goog.Timer.callOnce = timerSav;
 
-  assertEquals('Spell checker run should not change the underlying element.',
-               text, el.value);
+  assertEquals(
+      'Spell checker run should not change the underlying element.', text,
+      el.value);
   s.dispose();
 }
 
@@ -149,7 +151,7 @@ function testPlainTextSpellCheckerWithQuotes() {
     text += generateRandomString(10, true) + '\n';
   }
   el.value = text;
-  // Yes this looks bizzare. This is for '\n' processing.
+  // Yes this looks bizarre. This is for '\n' processing.
   // They get converted to CRLF as part of the above statement.
   text = el.value;
 
@@ -168,8 +170,9 @@ function testPlainTextSpellCheckerWithQuotes() {
 
   goog.Timer.callOnce = timerSav;
 
-  assertEquals('Spell checker run should not change the underlying element.',
-               text, el.value);
+  assertEquals(
+      'Spell checker run should not change the underlying element.', text,
+      el.value);
   s.dispose();
 }
 
@@ -201,8 +204,10 @@ function testPlainTextSpellCheckerWordReplacement() {
   }
 
   if (!wordEl) {
-    assertTrue('Cannot find the world that should have been here.' +
-               'Please revise the test', false);
+    assertTrue(
+        'Cannot find the world that should have been here.' +
+            'Please revise the test',
+        false);
     return;
   }
 
@@ -210,15 +215,18 @@ function testPlainTextSpellCheckerWordReplacement() {
   s.activeElement_ = wordEl;
   var suggestions = s.getSuggestions_();
   s.replaceWord(wordEl, missspelling, 'foo');
-  assertEquals('Should have set the original word attribute!',
+  assertEquals(
+      'Should have set the original word attribute!',
       wordEl.getAttribute(goog.ui.AbstractSpellChecker.ORIGINAL_),
       missspelling);
 
   s.activeWord_ = goog.dom.getTextContent(wordEl);
   s.activeElement_ = wordEl;
   var newSuggestions = s.getSuggestions_();
-  assertEquals('Suggestion list should still be present even if the word ' +
-      'is now correct!', suggestions, newSuggestions);
+  assertEquals(
+      'Suggestion list should still be present even if the word ' +
+          'is now correct!',
+      suggestions, newSuggestions);
 
   s.resume();
   processTimerQueue();
@@ -248,17 +256,19 @@ function testPlainTextSpellCheckerKeyboardNavigateNext() {
   var container = s.overlay_;
 
   // First call just moves focus to first misspelled word.
-  goog.testing.events.fireKeySequence(container, goog.events.KeyCodes.RIGHT,
-      keyEventProperties);
+  goog.testing.events.fireKeySequence(
+      container, goog.events.KeyCodes.RIGHT, keyEventProperties);
 
-  // Test moving from first to second mispelled word.
-  var defaultExecuted = goog.testing.events.fireKeySequence(container,
-      goog.events.KeyCodes.RIGHT, keyEventProperties);
+  // Test moving from first to second misspelled word.
+  var defaultExecuted = goog.testing.events.fireKeySequence(
+      container, goog.events.KeyCodes.RIGHT, keyEventProperties);
 
-  assertFalse('The default action should be prevented for the key event',
+  assertFalse(
+      'The default action should be prevented for the key event',
       defaultExecuted);
-  assertEquals('The second misspelled word should have focus.',
-      document.activeElement, container.children[1]);
+  assertEquals(
+      'The second misspelled word should have focus.', document.activeElement,
+      container.children[1]);
 
   s.resume();
   processTimerQueue();
@@ -288,20 +298,22 @@ function testPlainTextSpellCheckerKeyboardNavigateNextOnLastWord() {
   var container = s.overlay_;
 
   // First call just moves focus to first misspelled word.
-  goog.testing.events.fireKeySequence(container, goog.events.KeyCodes.RIGHT,
-      keyEventProperties);
-  goog.testing.events.fireKeySequence(container, goog.events.KeyCodes.RIGHT,
-      keyEventProperties);
-  goog.testing.events.fireKeySequence(container, goog.events.KeyCodes.RIGHT,
-      keyEventProperties);
+  goog.testing.events.fireKeySequence(
+      container, goog.events.KeyCodes.RIGHT, keyEventProperties);
+  goog.testing.events.fireKeySequence(
+      container, goog.events.KeyCodes.RIGHT, keyEventProperties);
+  goog.testing.events.fireKeySequence(
+      container, goog.events.KeyCodes.RIGHT, keyEventProperties);
 
   // Test moving to the next invalid word.
-  var defaultExecuted = goog.testing.events.fireKeySequence(container,
-      goog.events.KeyCodes.RIGHT, keyEventProperties);
+  var defaultExecuted = goog.testing.events.fireKeySequence(
+      container, goog.events.KeyCodes.RIGHT, keyEventProperties);
 
-  assertFalse('The default action should be prevented for the key event',
+  assertFalse(
+      'The default action should be prevented for the key event',
       defaultExecuted);
-  assertEquals('The third/last misspelled word should have focus.',
+  assertEquals(
+      'The third/last misspelled word should have focus.',
       document.activeElement, container.children[2]);
 
   s.resume();
@@ -332,19 +344,22 @@ function testPlainTextSpellCheckerKeyboardNavigateOpenSuggestions() {
   var container = s.overlay_;
   var suggestionMenu = s.getMenu();
 
-  goog.testing.events.fireKeySequence(container, goog.events.KeyCodes.RIGHT,
-      keyEventProperties);
+  goog.testing.events.fireKeySequence(
+      container, goog.events.KeyCodes.RIGHT, keyEventProperties);
 
-  assertFalse('The suggestion menu should not be visible yet.',
+  assertFalse(
+      'The suggestion menu should not be visible yet.',
       suggestionMenu.isVisible());
 
   keyEventProperties.ctrlKey = false;
-  var defaultExecuted = goog.testing.events.fireKeySequence(container,
-      goog.events.KeyCodes.DOWN, keyEventProperties);
+  var defaultExecuted = goog.testing.events.fireKeySequence(
+      container, goog.events.KeyCodes.DOWN, keyEventProperties);
 
-  assertFalse('The default action should be prevented for the key event',
+  assertFalse(
+      'The default action should be prevented for the key event',
       defaultExecuted);
-  assertTrue('The suggestion menu should be visible after the key event.',
+  assertTrue(
+      'The suggestion menu should be visible after the key event.',
       suggestionMenu.isVisible());
 
   s.resume();
@@ -375,21 +390,23 @@ function testPlainTextSpellCheckerKeyboardNavigatePrevious() {
   var container = s.overlay_;
 
   // Move to the third element, so we can test the move back to the second.
-  goog.testing.events.fireKeySequence(container, goog.events.KeyCodes.RIGHT,
-      keyEventProperties);
-  goog.testing.events.fireKeySequence(container, goog.events.KeyCodes.RIGHT,
-      keyEventProperties);
-  goog.testing.events.fireKeySequence(container, goog.events.KeyCodes.RIGHT,
-      keyEventProperties);
+  goog.testing.events.fireKeySequence(
+      container, goog.events.KeyCodes.RIGHT, keyEventProperties);
+  goog.testing.events.fireKeySequence(
+      container, goog.events.KeyCodes.RIGHT, keyEventProperties);
+  goog.testing.events.fireKeySequence(
+      container, goog.events.KeyCodes.RIGHT, keyEventProperties);
 
-  // Test moving from third to second mispelled word.
-  var defaultExecuted = goog.testing.events.fireKeySequence(container,
-      goog.events.KeyCodes.LEFT, keyEventProperties);
+  // Test moving from third to second misspelled word.
+  var defaultExecuted = goog.testing.events.fireKeySequence(
+      container, goog.events.KeyCodes.LEFT, keyEventProperties);
 
-  assertFalse('The default action should be prevented for the key event',
+  assertFalse(
+      'The default action should be prevented for the key event',
       defaultExecuted);
-  assertEquals('The second misspelled word should have focus.',
-      document.activeElement, container.children[1]);
+  assertEquals(
+      'The second misspelled word should have focus.', document.activeElement,
+      container.children[1]);
 
   s.resume();
   processTimerQueue();
@@ -419,17 +436,19 @@ function testPlainTextSpellCheckerKeyboardNavigatePreviousOnFirstWord() {
   var container = s.overlay_;
 
   // Move to the first invalid word.
-  goog.testing.events.fireKeySequence(container, goog.events.KeyCodes.RIGHT,
-      keyEventProperties);
+  goog.testing.events.fireKeySequence(
+      container, goog.events.KeyCodes.RIGHT, keyEventProperties);
 
   // Test moving to the previous invalid word.
-  var defaultExecuted = goog.testing.events.fireKeySequence(container,
-      goog.events.KeyCodes.LEFT, keyEventProperties);
+  var defaultExecuted = goog.testing.events.fireKeySequence(
+      container, goog.events.KeyCodes.LEFT, keyEventProperties);
 
-  assertFalse('The default action should be prevented for the key event',
+  assertFalse(
+      'The default action should be prevented for the key event',
       defaultExecuted);
-  assertEquals('The first misspelled word should have focus.',
-      document.activeElement, container.children[0]);
+  assertEquals(
+      'The first misspelled word should have focus.', document.activeElement,
+      container.children[0]);
 
   s.resume();
   processTimerQueue();

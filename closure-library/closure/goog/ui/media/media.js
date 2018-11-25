@@ -26,7 +26,7 @@
  *
  * In MVC terms, {@link goog.ui.media.Media} is the Controller,
  * {@link goog.ui.media.MediaRenderer} + CSS definitions are the View and
- * {@code goog.ui.media.MediaModel} is the data Model. Typically,
+ * `goog.ui.media.MediaModel` is the data Model. Typically,
  * MediaRenderer will be subclassed to provide media specific renderers.
  * MediaRenderer subclasses are also responsible for defining the data model.
  *
@@ -55,7 +55,7 @@
  * It requires a few CSS rules to be defined, which you should use to control
  * how the component is displayed. {@link goog.ui.ControlRenderer}s is very CSS
  * intensive, which separates the UI structure (the HTML DOM elements, which is
- * created by the {@code goog.ui.media.MediaRenderer}) from the UI view (which
+ * created by the `goog.ui.media.MediaRenderer`) from the UI view (which
  * nodes are visible, which aren't, where they are positioned. These are defined
  * on the CSS rules for each state). A few examples of CSS selectors that needs
  * to be defined are:
@@ -100,6 +100,8 @@ goog.require('goog.style');
 goog.require('goog.ui.Component');
 goog.require('goog.ui.Control');
 goog.require('goog.ui.ControlRenderer');
+
+goog.forwardDeclare('goog.ui.media.MediaModel');
 
 
 
@@ -192,8 +194,8 @@ goog.inherits(goog.ui.media.MediaRenderer, goog.ui.ControlRenderer);
 
 /**
  * Builds the common DOM structure of medias. Builds an outer div, and appends
- * a child div with the {@code goog.ui.Control.getContent} content. Marks the
- * caption with a {@code this.getClassClass()} + '-caption' css flag, so that
+ * a child div with the `goog.ui.Control.getContent` content. Marks the
+ * caption with a `this.getClassClass()` + '-caption' css flag, so that
  * specific renderers can hide/show the caption as desired.
  *
  * @param {goog.ui.Control} control The control instance.
@@ -209,22 +211,25 @@ goog.ui.media.MediaRenderer.prototype.createDom = function(control) {
   var dataModel = control.getDataModel();
 
   // Only creates DOMs if the data is available.
-  if (dataModel.getCaption()) {
+  var dataCaption = dataModel.getCaption();
+  if (dataCaption) {
     var caption = domHelper.createElement(goog.dom.TagName.DIV);
     caption.className = goog.getCssName(this.getCssClass(), 'caption');
+
     caption.appendChild(domHelper.createDom(
         goog.dom.TagName.P, goog.getCssName(this.getCssClass(), 'caption-text'),
-        dataModel.getCaption()));
+        dataCaption));
     domHelper.appendChild(div, caption);
   }
 
-  if (dataModel.getDescription()) {
+  var dataDescription = dataModel.getDescription();
+  if (dataDescription) {
     var description = domHelper.createElement(goog.dom.TagName.DIV);
     description.className = goog.getCssName(this.getCssClass(), 'description');
     description.appendChild(domHelper.createDom(
         goog.dom.TagName.P,
         goog.getCssName(this.getCssClass(), 'description-text'),
-        dataModel.getDescription()));
+        dataDescription));
     domHelper.appendChild(div, description);
   }
 
@@ -259,8 +264,7 @@ goog.ui.media.MediaRenderer.prototype.createDom = function(control) {
 
   this.setState(
       control,
-      /** @type {goog.ui.Component.State} */ (control.getState()),
-      true);
+      /** @type {goog.ui.Component.State} */ (control.getState()), true);
 
   return div;
 };
@@ -280,11 +284,17 @@ goog.ui.media.MediaRenderer.prototype.createDom = function(control) {
  */
 goog.ui.media.MediaRenderer.prototype.getThumbnailCssName = function(index) {
   switch (index) {
-    case 0: return goog.getCssName(this.getCssClass(), 'thumbnail0');
-    case 1: return goog.getCssName(this.getCssClass(), 'thumbnail1');
-    case 2: return goog.getCssName(this.getCssClass(), 'thumbnail2');
-    case 3: return goog.getCssName(this.getCssClass(), 'thumbnail3');
-    case 4: return goog.getCssName(this.getCssClass(), 'thumbnail4');
-    default: return goog.getCssName(this.getCssClass(), 'thumbnailn');
+    case 0:
+      return goog.getCssName(this.getCssClass(), 'thumbnail0');
+    case 1:
+      return goog.getCssName(this.getCssClass(), 'thumbnail1');
+    case 2:
+      return goog.getCssName(this.getCssClass(), 'thumbnail2');
+    case 3:
+      return goog.getCssName(this.getCssClass(), 'thumbnail3');
+    case 4:
+      return goog.getCssName(this.getCssClass(), 'thumbnail4');
+    default:
+      return goog.getCssName(this.getCssClass(), 'thumbnailn');
   }
 };

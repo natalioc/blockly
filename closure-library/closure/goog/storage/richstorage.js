@@ -27,6 +27,8 @@ goog.provide('goog.storage.RichStorage.Wrapper');
 goog.require('goog.storage.ErrorCode');
 goog.require('goog.storage.Storage');
 
+goog.forwardDeclare('goog.storage.mechanism.Mechanism');
+
 
 
 /**
@@ -117,7 +119,8 @@ goog.storage.RichStorage.Wrapper.unwrapIfPossible = function(wrapper) {
 
 /** @override */
 goog.storage.RichStorage.prototype.set = function(key, value) {
-  goog.storage.RichStorage.base(this, 'set', key,
+  goog.storage.RichStorage.base(
+      this, 'set', key,
       goog.storage.RichStorage.Wrapper.wrapIfNecessary(value));
 };
 

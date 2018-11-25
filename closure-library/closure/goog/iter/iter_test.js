@@ -61,7 +61,6 @@ function testJoin() {
   // Joining an empty iterator should result in an empty string
   iter = new ArrayIterator([]);
   assertEquals('', goog.iter.join(iter, ','));
-
 }
 
 function testRange() {
@@ -107,7 +106,6 @@ function testRange() {
 
   iter = goog.iter.range(5);
   assertEquals('01234', goog.iter.join(iter, ''));
-
 }
 
 function testFilter() {
@@ -135,7 +133,6 @@ function testFilter() {
   assertEquals('68', goog.iter.join(evens2, ''));
   // Note the order here. The next calls are done lazily.
   assertEquals('a0b0a1a2b2a3a4b4a5a6b6a7a8b8a9', sb.join(''));
-
 }
 
 function testFilterFalse() {
@@ -163,7 +160,6 @@ function testFilterFalse() {
   assertEquals('79', goog.iter.join(odds2, ''));
   // Note the order here. The next calls are done lazily.
   assertEquals('a0a1b1a2a3b3a4a5b5a6a7b7a8a9b9', sb.join(''));
-
 }
 
 function testMap() {
@@ -179,19 +175,15 @@ function testMap() {
 function testReduce() {
   var iter = goog.iter.range(1, 5);
   assertEquals(
-      10, // 1 + 2 + 3 + 4
-      goog.iter.reduce(iter, function(val, el) {
-        return val + el;
-      }, 0));
+      10,  // 1 + 2 + 3 + 4
+      goog.iter.reduce(iter, function(val, el) { return val + el; }, 0));
 }
 
 function testReduce2() {
   var iter = goog.iter.range(1, 5);
   assertEquals(
-      24, // 4!
-      goog.iter.reduce(iter, function(val, el) {
-        return val * el;
-      }, 1));
+      24,  // 4!
+      goog.iter.reduce(iter, function(val, el) { return val * el; }, 1));
 }
 
 function testSome() {
@@ -369,9 +361,7 @@ function testEquals() {
   // equality function
   iter = goog.iter.toIterator(['A', 'B', 'C']);
   iter2 = goog.iter.toIterator(['a', 'b', 'c']);
-  var equalsFn = function(a, b) {
-    return a.toLowerCase() == b.toLowerCase();
-  };
+  var equalsFn = function(a, b) { return a.toLowerCase() == b.toLowerCase(); };
   assertTrue('Case-insensitive equal', goog.iter.equals(iter, iter2, equalsFn));
 }
 
@@ -379,14 +369,10 @@ function testEquals() {
 function testToIterator() {
   var iter = new goog.iter.range(5);
   var iter2 = goog.iter.toIterator(iter);
-  assertEquals('toIterator on an iterator should return the same obejct',
-               iter, iter2);
+  assertEquals(
+      'toIterator on an iterator should return the same obejct', iter, iter2);
 
-  var iterLikeObject = {
-    next: function() {
-      throw goog.iter.StopIteration;
-    }
-  };
+  var iterLikeObject = {next: function() { throw goog.iter.StopIteration; }};
   var obj = {
     __iterator__: function(opt_keys) {
       assertFalse(
@@ -396,8 +382,9 @@ function testToIterator() {
     }
   };
 
-  assertEquals('Should return the return value of __iterator_(false)',
-               iterLikeObject, goog.iter.toIterator(obj));
+  assertEquals(
+      'Should return the return value of __iterator_(false)', iterLikeObject,
+      goog.iter.toIterator(obj));
 
   // Array
   var array = [0, 1, 2, 3, 4];
@@ -412,9 +399,7 @@ function testToIterator() {
   // DOM
   var dom = document.getElementById('t1').childNodes;
   iter = goog.iter.toIterator(dom);
-  iter2 = goog.iter.map(iter, function(el) {
-    return el.innerHTML;
-  });
+  iter2 = goog.iter.map(iter, function(el) { return el.innerHTML; });
   assertEquals('012', goog.iter.join(iter2, ''));
 }
 
@@ -422,12 +407,15 @@ function testToIterator() {
 function testNextOrValue() {
   var iter = goog.iter.toIterator([1]);
 
-  assertEquals('Should return value when iterator is non-empty',
-      1, goog.iter.nextOrValue(iter, null));
-  assertNull('Should return given default when iterator is empty',
+  assertEquals(
+      'Should return value when iterator is non-empty', 1,
       goog.iter.nextOrValue(iter, null));
-  assertEquals('Should return given default when iterator is (still) empty',
-      -1, goog.iter.nextOrValue(iter, -1));
+  assertNull(
+      'Should return given default when iterator is empty',
+      goog.iter.nextOrValue(iter, null));
+  assertEquals(
+      'Should return given default when iterator is (still) empty', -1,
+      goog.iter.nextOrValue(iter, -1));
 }
 
 // Return the product of several arrays as an array
@@ -437,13 +425,15 @@ function productAsArray(var_args) {
 }
 
 function testProduct() {
-  assertArrayEquals([[1, 3], [1, 4], [2, 3], [2, 4]],
-      productAsArray([1, 2], [3, 4]));
+  assertArrayEquals(
+      [[1, 3], [1, 4], [2, 3], [2, 4]], productAsArray([1, 2], [3, 4]));
 
-  assertArrayEquals([
-    [1, 3, 5], [1, 3, 6], [1, 4, 5], [1, 4, 6],
-    [2, 3, 5], [2, 3, 6], [2, 4, 5], [2, 4, 6]
-  ], productAsArray([1, 2], [3, 4], [5, 6]));
+  assertArrayEquals(
+      [
+        [1, 3, 5], [1, 3, 6], [1, 4, 5], [1, 4, 6], [2, 3, 5], [2, 3, 6],
+        [2, 4, 5], [2, 4, 6]
+      ],
+      productAsArray([1, 2], [3, 4], [5, 6]));
 
   assertArrayEquals([[1]], productAsArray([1]));
   assertArrayEquals([], productAsArray([1], []));
@@ -472,26 +462,33 @@ function testProductIteration() {
   assertArrayEquals([2, 3], iter.next());
   assertArrayEquals([2, 4], iter.next());
 
-  var ex = assertThrows(function() { iter.next() });
+  var ex = assertThrows(function() {
+    iter.next();
+  });
   assertEquals(goog.iter.StopIteration, ex);
 
   // Ensure the iterator forever throws StopIteration.
   for (var i = 0; i < 5; i++) {
-    var ex = assertThrows(function() { iter.next() });
+    var ex = assertThrows(function() {
+      iter.next();
+    });
     assertEquals(goog.iter.StopIteration, ex);
   }
 
   iter = goog.iter.product();
-  var ex = assertThrows(function() { iter.next() });
+  var ex = assertThrows(function() {
+    iter.next();
+  });
   assertEquals(goog.iter.StopIteration, ex);
 
   iter = goog.iter.product([]);
-  var ex = assertThrows(function() { iter.next() });
+  var ex = assertThrows(function() {
+    iter.next();
+  });
   assertEquals(goog.iter.StopIteration, ex);
 }
 
 function testCycle() {
-
   var regularArray = [1, 2, 3];
   var iter = goog.iter.cycle(regularArray);
 
@@ -518,7 +515,6 @@ function testCycleSingleItemIterable() {
 }
 
 function testCycleEmptyIterable() {
-
   var emptyArray = [];
 
   var iter = goog.iter.cycle(emptyArray);
@@ -591,7 +587,9 @@ function testZipArrays() {
   assertArrayEquals([1, 4, 7], iter.next());
   assertArrayEquals([2, 5, 8], iter.next());
   assertArrayEquals([3, 6, 9], iter.next());
-  var ex = assertThrows(function() { iter.next() });
+  var ex = assertThrows(function() {
+    iter.next();
+  });
   assertEquals(goog.iter.StopIteration, ex);
 }
 
@@ -600,20 +598,26 @@ function testZipSingleArg() {
   assertArrayEquals([1], iter.next());
   assertArrayEquals([2], iter.next());
   assertArrayEquals([3], iter.next());
-  var ex = assertThrows(function() { iter.next() });
+  var ex = assertThrows(function() {
+    iter.next();
+  });
   assertEquals(goog.iter.StopIteration, ex);
 }
 
 function testZipUnevenArgs() {
   var iter = goog.iter.zip([1, 2, 3], [4, 5], [7]);
   assertArrayEquals([1, 4, 7], iter.next());
-  var ex = assertThrows(function() { iter.next() });
+  var ex = assertThrows(function() {
+    iter.next();
+  });
   assertEquals(goog.iter.StopIteration, ex);
 }
 
 function testZipNoArgs() {
   var iter = goog.iter.zip();
-  var ex = assertThrows(function() { iter.next() });
+  var ex = assertThrows(function() {
+    iter.next();
+  });
   assertEquals(goog.iter.StopIteration, ex);
 }
 
@@ -631,7 +635,9 @@ function testZipLongestArrays() {
   assertArrayEquals(['B', 'y'], iter.next());
   assertArrayEquals(['C', '-'], iter.next());
   assertArrayEquals(['D', '-'], iter.next());
-  var ex = assertThrows(function() { iter.next() });
+  var ex = assertThrows(function() {
+    iter.next();
+  });
   assertEquals(goog.iter.StopIteration, ex);
 }
 
@@ -641,7 +647,9 @@ function testZipLongestSingleArg() {
   assertArrayEquals(['B'], iter.next());
   assertArrayEquals(['C'], iter.next());
   assertArrayEquals(['D'], iter.next());
-  var ex = assertThrows(function() { iter.next() });
+  var ex = assertThrows(function() {
+    iter.next();
+  });
   assertEquals(goog.iter.StopIteration, ex);
 }
 
@@ -659,7 +667,9 @@ function testZipLongestIterators() {
   assertArrayEquals([2, 2], iter.next());
   assertArrayEquals([null, 3], iter.next());
   assertArrayEquals([null, 4], iter.next());
-  var ex = assertThrows(function() { iter.next() });
+  var ex = assertThrows(function() {
+    iter.next();
+  });
   assertEquals(goog.iter.StopIteration, ex);
 }
 
@@ -684,7 +694,9 @@ function testGroupByNoKeyFunc() {
   assertArrayEquals(['B', ['B', 'B', 'B', 'B']], iter.next());
   assertArrayEquals(['C', ['C']], iter.next());
   assertArrayEquals(['D', ['D', 'D']], iter.next());
-  var ex = assertThrows(function() { iter.next() });
+  var ex = assertThrows(function() {
+    iter.next();
+  });
   assertEquals(goog.iter.StopIteration, ex);
 }
 
@@ -695,7 +707,9 @@ function testGroupByKeyFunc() {
   assertArrayEquals(['b', ['B', 'B', 'b', 'b', 'B']], iter.next());
   assertArrayEquals(['c', ['C', 'c', 'c']], iter.next());
   assertArrayEquals(['d', ['d', 'd', 'D', 'D']], iter.next());
-  var ex = assertThrows(function() { iter.next() });
+  var ex = assertThrows(function() {
+    iter.next();
+  });
   assertEquals(goog.iter.StopIteration, ex);
 }
 
@@ -704,7 +718,9 @@ function testStarMap() {
   assertEquals(32, iter.next());
   assertEquals(9, iter.next());
   assertEquals(1000, iter.next());
-  var ex = assertThrows(function() { iter.next() });
+  var ex = assertThrows(function() {
+    iter.next();
+  });
   assertEquals(goog.iter.StopIteration, ex);
 }
 
@@ -718,7 +734,9 @@ function testStarMapExtraArgs() {
   assertEquals(42, iter.next());
   assertEquals(255, iter.next());
   assertEquals(5, iter.next());
-  var ex = assertThrows(function() { iter.next() });
+  var ex = assertThrows(function() {
+    iter.next();
+  });
   assertEquals(goog.iter.StopIteration, ex);
 }
 
@@ -732,9 +750,13 @@ function testTeeArray() {
   assertEquals('B', it1.next());
   assertEquals('C', it0.next());
   assertEquals('C', it1.next());
-  var ex = assertThrows(function() { it0.next() });
+  var ex = assertThrows(function() {
+    it0.next();
+  });
   assertEquals(goog.iter.StopIteration, ex);
-  ex = assertThrows(function() { it1.next() });
+  ex = assertThrows(function() {
+    it1.next();
+  });
   assertEquals(goog.iter.StopIteration, ex);
 }
 
@@ -761,7 +783,9 @@ function testEnumerateNoStart() {
   assertArrayEquals([0, 'A'], iter.next());
   assertArrayEquals([1, 'B'], iter.next());
   assertArrayEquals([2, 'C'], iter.next());
-  var ex = assertThrows(function() { iter.next() });
+  var ex = assertThrows(function() {
+    iter.next();
+  });
   assertEquals(goog.iter.StopIteration, ex);
 }
 
@@ -770,7 +794,9 @@ function testEnumerateStart() {
   assertArrayEquals([3, 'D'], iter.next());
   assertArrayEquals([4, 'E'], iter.next());
   assertArrayEquals([5, 'F'], iter.next());
-  var ex = assertThrows(function() { iter.next() });
+  var ex = assertThrows(function() {
+    iter.next();
+  });
   assertEquals(goog.iter.StopIteration, ex);
 }
 
@@ -791,7 +817,9 @@ function testConsumeLess() {
 
 function testConsumeGreater() {
   var iter = goog.iter.consume('ABCDEFG'.split(''), 10);
-  var ex = assertThrows(function() { iter.next() });
+  var ex = assertThrows(function() {
+    iter.next();
+  });
   assertEquals(goog.iter.StopIteration, ex);
 }
 
@@ -807,7 +835,9 @@ function testSliceStop() {
 
 function testSliceStartStopEqual() {
   var iter = goog.iter.slice('ABCDEFG'.split(''), 1, 1);
-  var ex = assertThrows(function() { iter.next() });
+  var ex = assertThrows(function() {
+    iter.next();
+  });
   assertEquals(goog.iter.StopIteration, ex);
 }
 
@@ -818,7 +848,9 @@ function testSliceIterator() {
 
 function testSliceStartGreater() {
   var iter = goog.iter.slice('ABCDEFG'.split(''), 10);
-  var ex = assertThrows(function() { iter.next() });
+  var ex = assertThrows(function() {
+    iter.next();
+  });
   assertEquals(goog.iter.StopIteration, ex);
 }
 
@@ -830,7 +862,9 @@ function testPermutationsNoLength() {
   assertArrayEquals([1, 2, 0], iter.next());
   assertArrayEquals([2, 0, 1], iter.next());
   assertArrayEquals([2, 1, 0], iter.next());
-  var ex = assertThrows(function() { iter.next() });
+  var ex = assertThrows(function() {
+    iter.next();
+  });
   assertEquals(goog.iter.StopIteration, ex);
 }
 
@@ -850,7 +884,9 @@ function testCombinations() {
   assertArrayEquals([0, 1, 3], iter.next());
   assertArrayEquals([0, 2, 3], iter.next());
   assertArrayEquals([1, 2, 3], iter.next());
-  var ex = assertThrows(function() { iter.next() });
+  var ex = assertThrows(function() {
+    iter.next();
+  });
   assertEquals(goog.iter.StopIteration, ex);
 }
 
@@ -862,6 +898,8 @@ function testCombinationsWithReplacement() {
   assertArrayEquals(['B', 'B'], iter.next());
   assertArrayEquals(['B', 'C'], iter.next());
   assertArrayEquals(['C', 'C'], iter.next());
-  var ex = assertThrows(function() { iter.next() });
+  var ex = assertThrows(function() {
+    iter.next();
+  });
   assertEquals(goog.iter.StopIteration, ex);
 }

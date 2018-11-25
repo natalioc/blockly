@@ -36,7 +36,7 @@ goog.require('goog.userAgent');
 /**
  * Image loader utility class.  Raises a {@link goog.events.EventType.LOAD}
  * event for each image loaded, with an {@link Image} object as the target of
- * the event, normalized to have {@code naturalHeight} and {@code naturalWidth}
+ * the event, normalized to have `naturalHeight` and `naturalWidth`
  * attributes.
  *
  * To use this class, run:
@@ -150,8 +150,7 @@ goog.net.ImageLoader.IMAGE_LOAD_EVENTS_ = [
   goog.userAgent.IE && !goog.userAgent.isVersionOrHigher('11') ?
       goog.net.EventType.READY_STATE_CHANGE :
       goog.events.EventType.LOAD,
-  goog.net.EventType.ABORT,
-  goog.net.EventType.ERROR
+  goog.net.EventType.ABORT, goog.net.EventType.ERROR
 ];
 
 
@@ -159,11 +158,11 @@ goog.net.ImageLoader.IMAGE_LOAD_EVENTS_ = [
  * Adds an image to the image loader, and associates it with the given ID
  * string.  If an image with that ID already exists, it is silently replaced.
  * When the image in question is loaded, the target of the LOAD event will be
- * an {@code Image} object with {@code id} and {@code src} attributes based on
+ * an `Image` object with `id` and `src` attributes based on
  * these arguments.
  * @param {string} id The ID of the image to load.
  * @param {string|Image} image Either the source URL of the image or the HTML
- *     image element itself (or any object with a {@code src} property, really).
+ *     image element itself (or any object with a `src` property, really).
  * @param {!goog.net.ImageLoader.CorsRequestType=} opt_corsRequestType The type
  *     of CORS request to use, if any.
  */
@@ -174,8 +173,8 @@ goog.net.ImageLoader.prototype.addImage = function(
     // For now, we just store the source URL for the image.
     this.imageIdToRequestMap_[id] = {
       src: src,
-      corsRequestType: goog.isDef(opt_corsRequestType) ?
-          opt_corsRequestType : null
+      corsRequestType: goog.isDef(opt_corsRequestType) ? opt_corsRequestType :
+                                                         null
     };
   }
 };
@@ -195,8 +194,8 @@ goog.net.ImageLoader.prototype.removeImage = function(id) {
     delete this.imageIdToImageMap_[id];
 
     // Stop listening for events on the image.
-    this.handler_.unlisten(image, goog.net.ImageLoader.IMAGE_LOAD_EVENTS_,
-        this.onNetworkEvent_);
+    this.handler_.unlisten(
+        image, goog.net.ImageLoader.IMAGE_LOAD_EVENTS_, this.onNetworkEvent_);
 
     // If this was the last image, raise a COMPLETE event.
     if (goog.object.isEmpty(this.imageIdToImageMap_) &&
@@ -217,19 +216,18 @@ goog.net.ImageLoader.prototype.start = function() {
   // the initial queued images in case any event handlers decide to add more
   // images before this loop has finished executing.
   var imageIdToRequestMap = this.imageIdToRequestMap_;
-  goog.array.forEach(goog.object.getKeys(imageIdToRequestMap),
-      function(id) {
-        var imageRequest = imageIdToRequestMap[id];
-        if (imageRequest) {
-          delete imageIdToRequestMap[id];
-          this.loadImage_(imageRequest, id);
-        }
-      }, this);
+  goog.array.forEach(goog.object.getKeys(imageIdToRequestMap), function(id) {
+    var imageRequest = imageIdToRequestMap[id];
+    if (imageRequest) {
+      delete imageIdToRequestMap[id];
+      this.loadImage_(imageRequest, id);
+    }
+  }, this);
 };
 
 
 /**
- * Creates an {@code Image} object with the specified ID and source URL, and
+ * Creates an `Image` object with the specified ID and source URL, and
  * listens for network events raised as the image is loaded.
  * @param {!goog.net.ImageLoader.ImageRequest_} imageRequest The request data.
  * @param {string} id The unique ID of the image to load.
@@ -243,6 +241,7 @@ goog.net.ImageLoader.prototype.loadImage_ = function(imageRequest, id) {
     return;
   }
 
+  /** @type {!HTMLImageElement} */
   var image;
   if (this.parent_) {
     var dom = goog.dom.getDomHelper(this.parent_);
@@ -255,8 +254,8 @@ goog.net.ImageLoader.prototype.loadImage_ = function(imageRequest, id) {
     image.crossOrigin = imageRequest.corsRequestType;
   }
 
-  this.handler_.listen(image, goog.net.ImageLoader.IMAGE_LOAD_EVENTS_,
-      this.onNetworkEvent_);
+  this.handler_.listen(
+      image, goog.net.ImageLoader.IMAGE_LOAD_EVENTS_, this.onNetworkEvent_);
   this.imageIdToImageMap_[id] = image;
 
   image.id = id;
@@ -268,6 +267,7 @@ goog.net.ImageLoader.prototype.loadImage_ = function(imageRequest, id) {
  * Handles net events (READY_STATE_CHANGE, LOAD, ABORT, and ERROR).
  * @param {goog.events.Event} evt The network event to handle.
  * @private
+ * @suppress {strictMissingProperties} Part of the go/strict_warnings_migration
  */
 goog.net.ImageLoader.prototype.onNetworkEvent_ = function(evt) {
   var image = /** @type {Element} */ (evt.currentTarget);

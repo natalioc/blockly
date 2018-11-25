@@ -48,8 +48,8 @@ goog.ui.editor.DefaultToolbar.MSG_FONT_NORMAL_SERIF =
  * Common font descriptors for all locales.  Each descriptor has the following
  * attributes:
  * <ul>
- *   <li>{@code caption} - Caption to show in the font menu (e.g. 'Tahoma')
- *   <li>{@code value} - Value for the corresponding 'font-family' CSS style
+ *   <li>`caption` - Caption to show in the font menu (e.g. 'Tahoma')
+ *   <li>`value` - Value for the corresponding 'font-family' CSS style
  *       (e.g. 'Tahoma, Arial, sans-serif')
  * </ul>
  * @type {!Array<{caption:string, value:string}>}
@@ -78,43 +78,30 @@ goog.ui.editor.DefaultToolbar.FONTS_ = [
  * @private
  */
 goog.ui.editor.DefaultToolbar.I18N_FONTS_ = {
-  'ja': [{
-    caption: '\uff2d\uff33 \uff30\u30b4\u30b7\u30c3\u30af',
-    value: 'ms pgothic,sans-serif'
-  }, {
-    caption: '\uff2d\uff33 \uff30\u660e\u671d',
-    value: 'ms pmincho,serif'
-  }, {
-    caption: '\uff2d\uff33 \u30b4\u30b7\u30c3\u30af',
-    value: 'ms gothic,monospace'
-  }],
-  'ko': [{
-    caption: '\uad74\ub9bc',
-    value: 'gulim,sans-serif'
-  }, {
-    caption: '\ubc14\ud0d5',
-    value: 'batang,serif'
-  }, {
-    caption: '\uad74\ub9bc\uccb4',
-    value: 'gulimche,monospace'
-  }],
-  'zh-tw': [{
-    caption: '\u65b0\u7d30\u660e\u9ad4',
-    value: 'pmingliu,serif'
-  }, {
-    caption: '\u7d30\u660e\u9ad4',
-    value: 'mingliu,serif'
-  }],
-  'zh-cn': [{
-    caption: '\u5b8b\u4f53',
-    value: 'simsun,serif'
-  }, {
-    caption: '\u9ed1\u4f53',
-    value: 'simhei,sans-serif'
-  }, {
-    caption: 'MS Song',
-    value: 'ms song,monospace'
-  }]
+  'ja': [
+    {
+      caption: '\uff2d\uff33 \uff30\u30b4\u30b7\u30c3\u30af',
+      value: 'ms pgothic,sans-serif'
+    },
+    {caption: '\uff2d\uff33 \uff30\u660e\u671d', value: 'ms pmincho,serif'}, {
+      caption: '\uff2d\uff33 \u30b4\u30b7\u30c3\u30af',
+      value: 'ms gothic,monospace'
+    }
+  ],
+  'ko': [
+    {caption: '\uad74\ub9bc', value: 'gulim,sans-serif'},
+    {caption: '\ubc14\ud0d5', value: 'batang,serif'},
+    {caption: '\uad74\ub9bc\uccb4', value: 'gulimche,monospace'}
+  ],
+  'zh-tw': [
+    {caption: '\u65b0\u7d30\u660e\u9ad4', value: 'pmingliu,serif'},
+    {caption: '\u7d30\u660e\u9ad4', value: 'mingliu,serif'}
+  ],
+  'zh-cn': [
+    {caption: '\u5b8b\u4f53', value: 'simsun,serif'},
+    {caption: '\u9ed1\u4f53', value: 'simhei,sans-serif'},
+    {caption: 'MS Song', value: 'ms song,monospace'}
+  ]
 };
 
 
@@ -158,8 +145,8 @@ goog.ui.editor.DefaultToolbar.addDefaultFonts = function(button) {
     goog.ui.editor.ToolbarFactory.addFonts(button, fontlist);
   }
   // Add locale-independent default fonts.
-  goog.ui.editor.ToolbarFactory.addFonts(button,
-      goog.ui.editor.DefaultToolbar.FONTS_);
+  goog.ui.editor.ToolbarFactory.addFonts(
+      button, goog.ui.editor.DefaultToolbar.FONTS_);
 };
 
 
@@ -185,8 +172,8 @@ goog.ui.editor.DefaultToolbar.MSG_FONT_SIZE_HUGE = goog.getMsg('Huge');
 /**
  * Font size descriptors, each with the following attributes:
  * <ul>
- *   <li>{@code caption} - Caption to show in the font size menu (e.g. 'Huge')
- *   <li>{@code value} - Value for the corresponding HTML font size (e.g. 6)
+ *   <li>`caption` - Caption to show in the font size menu (e.g. 'Huge')
+ *   <li>`value` - Value for the corresponding HTML font size (e.g. 6)
  * </ul>
  * @type {!Array<{caption:string, value:number}>}
  * @private
@@ -205,8 +192,8 @@ goog.ui.editor.DefaultToolbar.FONT_SIZES_ = [
  * @param {!goog.ui.Select} button Font size menu button.
  */
 goog.ui.editor.DefaultToolbar.addDefaultFontSizes = function(button) {
-  goog.ui.editor.ToolbarFactory.addFontSizes(button,
-      goog.ui.editor.DefaultToolbar.FONT_SIZES_);
+  goog.ui.editor.ToolbarFactory.addFontSizes(
+      button, goog.ui.editor.DefaultToolbar.FONT_SIZES_);
 };
 
 
@@ -233,8 +220,8 @@ goog.ui.editor.DefaultToolbar.MSG_FORMAT_NORMAL = goog.getMsg('Normal');
 /**
  * Format option descriptors, each with the following attributes:
  * <ul>
- *   <li>{@code caption} - Caption to show in the menu (e.g. 'Minor heading')
- *   <li>{@code command} - Corresponding {@link goog.dom.TagName} (e.g.
+ *   <li>`caption` - Caption to show in the menu (e.g. 'Minor heading')
+ *   <li>`command` - Corresponding {@link goog.dom.TagName} (e.g.
  *       'H4')
  * </ul>
  * @type {!Array<{caption: string, command: !goog.dom.TagName}>}
@@ -266,8 +253,8 @@ goog.ui.editor.DefaultToolbar.FORMAT_OPTIONS_ = [
  * @param {!goog.ui.Select} button "Format block" menu button.
  */
 goog.ui.editor.DefaultToolbar.addDefaultFormatOptions = function(button) {
-  goog.ui.editor.ToolbarFactory.addFormatOptions(button,
-      goog.ui.editor.DefaultToolbar.FORMAT_OPTIONS_);
+  goog.ui.editor.ToolbarFactory.addFormatOptions(
+      button, goog.ui.editor.DefaultToolbar.FORMAT_OPTIONS_);
 };
 
 
@@ -282,21 +269,21 @@ goog.ui.editor.DefaultToolbar.addDefaultFormatOptions = function(button) {
  *     parent element.
  * @see goog.ui.editor.DefaultToolbar.DEFAULT_BUTTONS
  */
-goog.ui.editor.DefaultToolbar.makeDefaultToolbar = function(elem,
-    opt_isRightToLeft) {
+goog.ui.editor.DefaultToolbar.makeDefaultToolbar = function(
+    elem, opt_isRightToLeft) {
   var isRightToLeft = opt_isRightToLeft || goog.style.isRightToLeft(elem);
   var buttons = isRightToLeft ?
       goog.ui.editor.DefaultToolbar.DEFAULT_BUTTONS_RTL :
       goog.ui.editor.DefaultToolbar.DEFAULT_BUTTONS;
-  return goog.ui.editor.DefaultToolbar.makeToolbar(buttons, elem,
-      opt_isRightToLeft);
+  return goog.ui.editor.DefaultToolbar.makeToolbar(
+      buttons, elem, opt_isRightToLeft);
 };
 
 
 /**
  * Creates a {@link goog.ui.Toolbar} containing the specified set of
  * toolbar buttons, and renders it into the given parent element.  Each
- * item in the {@code items} array must either be a
+ * item in the `items` array must either be a
  * {@link goog.editor.Command} (to create a built-in button) or a subclass
  * of {@link goog.ui.Control} (to create a custom control).
  * @param {!Array<string|goog.ui.Control>} items Toolbar items; each must
@@ -308,23 +295,23 @@ goog.ui.editor.DefaultToolbar.makeDefaultToolbar = function(elem,
  * @return {!goog.ui.Toolbar} Editor toolbar, rendered into the given parent
  *     element.
  */
-goog.ui.editor.DefaultToolbar.makeToolbar = function(items, elem,
-    opt_isRightToLeft) {
+goog.ui.editor.DefaultToolbar.makeToolbar = function(
+    items, elem, opt_isRightToLeft) {
   var domHelper = goog.dom.getDomHelper(elem);
   var controls = [];
 
   for (var i = 0, button; button = items[i]; i++) {
     if (goog.isString(button)) {
-      button = goog.ui.editor.DefaultToolbar.makeBuiltInToolbarButton(button,
-          domHelper);
+      button = goog.ui.editor.DefaultToolbar.makeBuiltInToolbarButton(
+          button, domHelper);
     }
     if (button) {
       controls.push(button);
     }
   }
 
-  return goog.ui.editor.ToolbarFactory.makeToolbar(controls, elem,
-      opt_isRightToLeft);
+  return goog.ui.editor.ToolbarFactory.makeToolbar(
+      controls, elem, opt_isRightToLeft);
 };
 
 
@@ -339,16 +326,17 @@ goog.ui.editor.DefaultToolbar.makeToolbar = function(items, elem,
  * @return {goog.ui.Button} Toolbar button (null if no built-in button exists
  *     for the command).
  */
-goog.ui.editor.DefaultToolbar.makeBuiltInToolbarButton = function(command,
-    opt_domHelper) {
-  var button;
+goog.ui.editor.DefaultToolbar.makeBuiltInToolbarButton = function(
+    command, opt_domHelper) {
+  var button = null;
   var descriptor = goog.ui.editor.DefaultToolbar.buttons_[command];
   if (descriptor) {
     // Default the factory method to makeToggleButton, since most built-in
     // toolbar buttons are toggle buttons. See also
     // goog.ui.editor.DefaultToolbar.button_list_.
-    var factory = descriptor.factory ||
-        goog.ui.editor.ToolbarFactory.makeToggleButton;
+    /** @type {!Function} */
+    var factory =
+        descriptor.factory || goog.ui.editor.ToolbarFactory.makeToggleButton;
     var id = descriptor.command;
     var tooltip = descriptor.tooltip;
     var caption = descriptor.caption;
@@ -372,17 +360,11 @@ goog.ui.editor.DefaultToolbar.makeBuiltInToolbarButton = function(command,
  * @type {!Array<string>}
  */
 goog.ui.editor.DefaultToolbar.DEFAULT_BUTTONS = [
-  goog.editor.Command.IMAGE,
-  goog.editor.Command.LINK,
-  goog.editor.Command.BOLD,
-  goog.editor.Command.ITALIC,
-  goog.editor.Command.UNORDERED_LIST,
-  goog.editor.Command.FONT_COLOR,
-  goog.editor.Command.FONT_FACE,
-  goog.editor.Command.FONT_SIZE,
-  goog.editor.Command.JUSTIFY_LEFT,
-  goog.editor.Command.JUSTIFY_CENTER,
-  goog.editor.Command.JUSTIFY_RIGHT,
+  goog.editor.Command.IMAGE, goog.editor.Command.LINK, goog.editor.Command.BOLD,
+  goog.editor.Command.ITALIC, goog.editor.Command.UNORDERED_LIST,
+  goog.editor.Command.FONT_COLOR, goog.editor.Command.FONT_FACE,
+  goog.editor.Command.FONT_SIZE, goog.editor.Command.JUSTIFY_LEFT,
+  goog.editor.Command.JUSTIFY_CENTER, goog.editor.Command.JUSTIFY_RIGHT,
   goog.editor.Command.EDIT_HTML
 ];
 
@@ -393,19 +375,12 @@ goog.ui.editor.DefaultToolbar.DEFAULT_BUTTONS = [
  * @type {!Array<string>}
  */
 goog.ui.editor.DefaultToolbar.DEFAULT_BUTTONS_RTL = [
-  goog.editor.Command.IMAGE,
-  goog.editor.Command.LINK,
-  goog.editor.Command.BOLD,
-  goog.editor.Command.ITALIC,
-  goog.editor.Command.UNORDERED_LIST,
-  goog.editor.Command.FONT_COLOR,
-  goog.editor.Command.FONT_FACE,
-  goog.editor.Command.FONT_SIZE,
-  goog.editor.Command.JUSTIFY_RIGHT,
-  goog.editor.Command.JUSTIFY_CENTER,
-  goog.editor.Command.JUSTIFY_LEFT,
-  goog.editor.Command.DIR_RTL,
-  goog.editor.Command.DIR_LTR,
+  goog.editor.Command.IMAGE, goog.editor.Command.LINK, goog.editor.Command.BOLD,
+  goog.editor.Command.ITALIC, goog.editor.Command.UNORDERED_LIST,
+  goog.editor.Command.FONT_COLOR, goog.editor.Command.FONT_FACE,
+  goog.editor.Command.FONT_SIZE, goog.editor.Command.JUSTIFY_RIGHT,
+  goog.editor.Command.JUSTIFY_CENTER, goog.editor.Command.JUSTIFY_LEFT,
+  goog.editor.Command.DIR_RTL, goog.editor.Command.DIR_LTR,
   goog.editor.Command.EDIT_HTML
 ];
 
@@ -426,11 +401,12 @@ goog.ui.editor.DefaultToolbar.DEFAULT_BUTTONS_RTL = [
  *     creation; defaults to the current document if unspecified.
  * @return {!goog.ui.Button} A toolbar button.
  * @private
+ * @suppress {strictMissingProperties} Part of the go/strict_warnings_migration
  */
-goog.ui.editor.DefaultToolbar.rtlButtonFactory_ = function(id, tooltip,
-    caption, opt_classNames, opt_renderer, opt_domHelper) {
-  var button = goog.ui.editor.ToolbarFactory.makeToggleButton(id, tooltip,
-      caption, opt_classNames, opt_renderer, opt_domHelper);
+goog.ui.editor.DefaultToolbar.rtlButtonFactory_ = function(
+    id, tooltip, caption, opt_classNames, opt_renderer, opt_domHelper) {
+  var button = goog.ui.editor.ToolbarFactory.makeToggleButton(
+      id, tooltip, caption, opt_classNames, opt_renderer, opt_domHelper);
   button.updateFromValue = function(value) {
     // Enable/disable right-to-left text editing mode in the toolbar.
     var isRtl = !!value;
@@ -462,11 +438,12 @@ goog.ui.editor.DefaultToolbar.rtlButtonFactory_ = function(id, tooltip,
  *     creation; defaults to the current document if unspecified.
  * @return {!goog.ui.Button} A toolbar button.
  * @private
+ * @suppress {strictMissingProperties} Part of the go/strict_warnings_migration
  */
-goog.ui.editor.DefaultToolbar.undoRedoButtonFactory_ = function(id, tooltip,
-    caption, opt_classNames, opt_renderer, opt_domHelper) {
-  var button = goog.ui.editor.ToolbarFactory.makeButton(id, tooltip,
-      caption, opt_classNames, opt_renderer, opt_domHelper);
+goog.ui.editor.DefaultToolbar.undoRedoButtonFactory_ = function(
+    id, tooltip, caption, opt_classNames, opt_renderer, opt_domHelper) {
+  var button = goog.ui.editor.ToolbarFactory.makeButton(
+      id, tooltip, caption, opt_classNames, opt_renderer, opt_domHelper);
   button.updateFromValue = function(value) {
     button.setEnabled(value);
   };
@@ -490,11 +467,12 @@ goog.ui.editor.DefaultToolbar.undoRedoButtonFactory_ = function(id, tooltip,
  *     creation; defaults to the current document if unspecified.
  * @return {!goog.ui.Button} A toolbar button.
  * @private
+ * @suppress {strictMissingProperties} Part of the go/strict_warnings_migration
  */
-goog.ui.editor.DefaultToolbar.fontFaceFactory_ = function(id, tooltip,
-    caption, opt_classNames, opt_renderer, opt_domHelper) {
-  var button = goog.ui.editor.ToolbarFactory.makeSelectButton(id, tooltip,
-      caption, opt_classNames, opt_renderer, opt_domHelper);
+goog.ui.editor.DefaultToolbar.fontFaceFactory_ = function(
+    id, tooltip, caption, opt_classNames, opt_renderer, opt_domHelper) {
+  var button = goog.ui.editor.ToolbarFactory.makeSelectButton(
+      id, tooltip, caption, opt_classNames, opt_renderer, opt_domHelper);
   goog.ui.editor.DefaultToolbar.addDefaultFonts(button);
   button.setDefaultCaption(goog.ui.editor.DefaultToolbar.MSG_FONT_NORMAL);
   // Font options don't have keyboard accelerators.
@@ -540,11 +518,12 @@ goog.ui.editor.DefaultToolbar.fontFaceFactory_ = function(id, tooltip,
  *     creation; defaults to the current document if unspecified.
  * @return {!goog.ui.Button} A toolbar button.
  * @private
+ * @suppress {strictMissingProperties} Part of the go/strict_warnings_migration
  */
-goog.ui.editor.DefaultToolbar.fontSizeFactory_ = function(id, tooltip,
-    caption, opt_classNames, opt_renderer, opt_domHelper) {
-  var button = goog.ui.editor.ToolbarFactory.makeSelectButton(id, tooltip,
-      caption, opt_classNames, opt_renderer, opt_domHelper);
+goog.ui.editor.DefaultToolbar.fontSizeFactory_ = function(
+    id, tooltip, caption, opt_classNames, opt_renderer, opt_domHelper) {
+  var button = goog.ui.editor.ToolbarFactory.makeSelectButton(
+      id, tooltip, caption, opt_classNames, opt_renderer, opt_domHelper);
   goog.ui.editor.DefaultToolbar.addDefaultFontSizes(button);
   button.setDefaultCaption(goog.ui.editor.DefaultToolbar.MSG_FONT_SIZE_NORMAL);
   // Font size options don't have keyboard accelerators.
@@ -557,8 +536,7 @@ goog.ui.editor.DefaultToolbar.fontSizeFactory_ = function(id, tooltip,
     // integer, so normalize that first.
     // NOTE(user): Gecko returns "6" so can't just normalize all
     // strings, only ones ending in "px".
-    if (goog.isString(value) &&
-        goog.style.getLengthUnits(value) == 'px') {
+    if (goog.isString(value) && goog.style.getLengthUnits(value) == 'px') {
       value = goog.ui.editor.ToolbarFactory.getLegacySizeFromPx(
           parseInt(value, 10));
     }
@@ -583,15 +561,15 @@ goog.ui.editor.DefaultToolbar.fontSizeFactory_ = function(id, tooltip,
  */
 goog.ui.editor.DefaultToolbar.colorUpdateFromValue_ = function(button, color) {
   var value = color;
-  /** @preserveTry */
+
   try {
     if (goog.userAgent.IE) {
       // IE returns a number that, converted to hex, is a BGR color.
       // Convert from decimal to BGR to RGB.
       var hex = '000000' + value.toString(16);
       var bgr = hex.substr(hex.length - 6, 6);
-      value = '#' + bgr.substring(4, 6) + bgr.substring(2, 4) +
-          bgr.substring(0, 2);
+      value =
+          '#' + bgr.substring(4, 6) + bgr.substring(2, 4) + bgr.substring(0, 2);
     }
     if (value != button.getValue()) {
       button.setValue(/** @type {string} */ (value));
@@ -619,15 +597,17 @@ goog.ui.editor.DefaultToolbar.colorUpdateFromValue_ = function(button, color) {
  *     creation; defaults to the current document if unspecified.
  * @return {!goog.ui.Button} A toolbar button.
  * @private
+ * @suppress {strictMissingProperties} Part of the go/strict_warnings_migration
  */
-goog.ui.editor.DefaultToolbar.fontColorFactory_ = function(id, tooltip,
-    caption, opt_classNames, opt_renderer, opt_domHelper) {
-  var button = goog.ui.editor.ToolbarFactory.makeColorMenuButton(id, tooltip,
-      caption, opt_classNames, opt_renderer, opt_domHelper);
+goog.ui.editor.DefaultToolbar.fontColorFactory_ = function(
+    id, tooltip, caption, opt_classNames, opt_renderer, opt_domHelper) {
+  var button = goog.ui.editor.ToolbarFactory.makeColorMenuButton(
+      id, tooltip, caption, opt_classNames, opt_renderer, opt_domHelper);
   // Initialize default foreground color.
   button.setSelectedColor('#000');
   button.updateFromValue = goog.partial(
-      goog.ui.editor.DefaultToolbar.colorUpdateFromValue_, button);
+      goog.ui.editor.DefaultToolbar.colorUpdateFromValue_,
+      /** @type {!goog.ui.ToolbarColorMenuButton} */ (button));
   return button;
 };
 
@@ -649,15 +629,17 @@ goog.ui.editor.DefaultToolbar.fontColorFactory_ = function(id, tooltip,
  *     creation; defaults to the current document if unspecified.
  * @return {!goog.ui.Button} A toolbar button.
  * @private
+ * @suppress {strictMissingProperties} Part of the go/strict_warnings_migration
  */
-goog.ui.editor.DefaultToolbar.backgroundColorFactory_ = function(id, tooltip,
-    caption, opt_classNames, opt_renderer, opt_domHelper) {
-  var button = goog.ui.editor.ToolbarFactory.makeColorMenuButton(id,
-      tooltip, caption, opt_classNames, opt_renderer, opt_domHelper);
+goog.ui.editor.DefaultToolbar.backgroundColorFactory_ = function(
+    id, tooltip, caption, opt_classNames, opt_renderer, opt_domHelper) {
+  var button = goog.ui.editor.ToolbarFactory.makeColorMenuButton(
+      id, tooltip, caption, opt_classNames, opt_renderer, opt_domHelper);
   // Initialize default background color.
   button.setSelectedColor('#FFF');
   button.updateFromValue = goog.partial(
-      goog.ui.editor.DefaultToolbar.colorUpdateFromValue_, button);
+      goog.ui.editor.DefaultToolbar.colorUpdateFromValue_,
+      /** @type {!goog.ui.ToolbarColorMenuButton} */ (button));
   return button;
 };
 
@@ -679,11 +661,12 @@ goog.ui.editor.DefaultToolbar.backgroundColorFactory_ = function(id, tooltip,
  *     creation; defaults to the current document if unspecified.
  * @return {!goog.ui.Button} A toolbar button.
  * @private
+ * @suppress {strictMissingProperties} Part of the go/strict_warnings_migration
  */
-goog.ui.editor.DefaultToolbar.formatBlockFactory_ = function(id, tooltip,
-    caption, opt_classNames, opt_renderer, opt_domHelper) {
-  var button = goog.ui.editor.ToolbarFactory.makeSelectButton(id, tooltip,
-      caption, opt_classNames, opt_renderer, opt_domHelper);
+goog.ui.editor.DefaultToolbar.formatBlockFactory_ = function(
+    id, tooltip, caption, opt_classNames, opt_renderer, opt_domHelper) {
+  var button = goog.ui.editor.ToolbarFactory.makeSelectButton(
+      id, tooltip, caption, opt_classNames, opt_renderer, opt_domHelper);
   goog.ui.editor.DefaultToolbar.addDefaultFormatOptions(button);
   button.setDefaultCaption(goog.ui.editor.DefaultToolbar.MSG_FORMAT_NORMAL);
   // Format options don't have keyboard accelerators.
@@ -837,24 +820,24 @@ goog.ui.editor.DefaultToolbar.MSG_EDIT_HTML_CAPTION = goog.getMsg('Edit HTML');
 
 
 /**
- * Map of {@code goog.editor.Command}s to toolbar button descriptor objects,
+ * Map of `goog.editor.Command`s to toolbar button descriptor objects,
  * each of which has the following attributes:
  * <ul>
- *   <li>{@code command} - The command corresponding to the
+ *   <li>`command` - The command corresponding to the
  *       button (mandatory)
- *   <li>{@code tooltip} - Tooltip text (optional); if unspecified, the button
+ *   <li>`tooltip` - Tooltip text (optional); if unspecified, the button
  *       has no hover text
- *   <li>{@code caption} - Caption to display on the button (optional); if
+ *   <li>`caption` - Caption to display on the button (optional); if
  *       unspecified, the button has no text caption
- *   <li>{@code classes} - CSS class name(s) to be applied to the button's
+ *   <li>`classes` - CSS class name(s) to be applied to the button's
  *       element when rendered (optional); if unspecified, defaults to
  *       'tr-icon'
  *       plus 'tr-' followed by the command ID, but without any leading '+'
- *       character (e.g. if the command ID is '+undo', then {@code classes}
+ *       character (e.g. if the command ID is '+undo', then `classes`
  *       defaults to 'tr-icon tr-undo')
- *   <li>{@code factory} - factory function used to create the button, which
- *       must accept {@code id}, {@code tooltip}, {@code caption}, and
- *       {@code classes} as arguments, and must return an instance of
+ *   <li>`factory` - factory function used to create the button, which
+ *       must accept `id`, `tooltip`, `caption`, and
+ *       `classes` as arguments, and must return an instance of
  *       {@link goog.ui.Button} or an appropriate subclass (optional); if
  *       unspecified, defaults to
  *       {@link goog.ui.editor.DefaultToolbar.makeToggleButton},
@@ -865,17 +848,19 @@ goog.ui.editor.DefaultToolbar.MSG_EDIT_HTML_CAPTION = goog.getMsg('Edit HTML');
  * Note that this object is only used for creating toolbar buttons for
  * built-in editor commands; custom buttons aren't listed here.  Please don't
  * try to hack this!
- * @private {!Object<!goog.ui.editor.ButtonDescriptor>}.
+ * @private {!Object<string, !goog.ui.editor.ButtonDescriptor>}.
  */
 goog.ui.editor.DefaultToolbar.buttons_ = {};
 
 
 /**
- * @typedef {{command: string, tooltip: ?string,
- *   caption: ?goog.ui.ControlContent, classes: ?string,
- *   factory: ?function(string, string, goog.ui.ControlContent, ?string,
- *       goog.ui.ButtonRenderer, goog.dom.DomHelper):goog.ui.Button,
- *   queryable:?boolean}}
+ * @typedef {{
+ *   command: string,
+ *   tooltip: (undefined|string),
+ *   caption: (undefined|goog.ui.ControlContent),
+ *   classes: (undefined|string),
+ *   factory: (undefined|!Function),
+ *   queryable:(undefined|boolean)}}
  */
 goog.ui.editor.ButtonDescriptor;
 
@@ -888,179 +873,208 @@ goog.ui.editor.ButtonDescriptor;
  * itself is deleted and (hopefully) garbage-collected.
  * @private {Array<!goog.ui.editor.ButtonDescriptor>}
  */
-goog.ui.editor.DefaultToolbar.button_list_ = [{
-  command: goog.editor.Command.UNDO,
-  tooltip: goog.ui.editor.DefaultToolbar.MSG_UNDO_TITLE,
-  classes: goog.getCssName('tr-icon') + ' ' + goog.getCssName('tr-undo'),
-  factory: goog.ui.editor.DefaultToolbar.undoRedoButtonFactory_,
-  queryable: true
-}, {
-  command: goog.editor.Command.REDO,
-  tooltip: goog.ui.editor.DefaultToolbar.MSG_REDO_TITLE,
-  classes: goog.getCssName('tr-icon') + ' ' + goog.getCssName('tr-redo'),
-  factory: goog.ui.editor.DefaultToolbar.undoRedoButtonFactory_,
-  queryable: true
-}, {
-  command: goog.editor.Command.FONT_FACE,
-  tooltip: goog.ui.editor.DefaultToolbar.MSG_FONT_FACE_TITLE,
-  classes: goog.getCssName('tr-fontName'),
-  factory: goog.ui.editor.DefaultToolbar.fontFaceFactory_,
-  queryable: true
-}, {
-  command: goog.editor.Command.FONT_SIZE,
-  tooltip: goog.ui.editor.DefaultToolbar.MSG_FONT_SIZE_TITLE,
-  classes: goog.getCssName('tr-fontSize'),
-  factory: goog.ui.editor.DefaultToolbar.fontSizeFactory_,
-  queryable: true
-}, {
-  command: goog.editor.Command.BOLD,
-  tooltip: goog.ui.editor.DefaultToolbar.MSG_BOLD_TITLE,
-  classes: goog.getCssName('tr-icon') + ' ' + goog.getCssName('tr-bold'),
-  queryable: true
-}, {
-  command: goog.editor.Command.ITALIC,
-  tooltip: goog.ui.editor.DefaultToolbar.MSG_ITALIC_TITLE,
-  classes: goog.getCssName('tr-icon') + ' ' + goog.getCssName('tr-italic'),
-  queryable: true
-}, {
-  command: goog.editor.Command.UNDERLINE,
-  tooltip: goog.ui.editor.DefaultToolbar.MSG_UNDERLINE_TITLE,
-  classes: goog.getCssName('tr-icon') + ' ' + goog.getCssName('tr-underline'),
-  queryable: true
-}, {
-  command: goog.editor.Command.FONT_COLOR,
-  tooltip: goog.ui.editor.DefaultToolbar.MSG_FONT_COLOR_TITLE,
-  classes: goog.getCssName('tr-icon') + ' ' + goog.getCssName('tr-foreColor'),
-  factory: goog.ui.editor.DefaultToolbar.fontColorFactory_,
-  queryable: true
-}, {
-  command: goog.editor.Command.BACKGROUND_COLOR,
-  tooltip: goog.ui.editor.DefaultToolbar.MSG_BACKGROUND_COLOR_TITLE,
-  classes: goog.getCssName('tr-icon') + ' ' + goog.getCssName('tr-backColor'),
-  factory: goog.ui.editor.DefaultToolbar.backgroundColorFactory_,
-  queryable: true
-}, {
-  command: goog.editor.Command.LINK,
-  tooltip: goog.ui.editor.DefaultToolbar.MSG_LINK_TITLE,
-  caption: goog.ui.editor.messages.MSG_LINK_CAPTION,
-  classes: goog.getCssName('tr-link'),
-  queryable: true
-}, {
-  command: goog.editor.Command.ORDERED_LIST,
-  tooltip: goog.ui.editor.DefaultToolbar.MSG_ORDERED_LIST_TITLE,
-  classes: goog.getCssName('tr-icon') + ' ' +
-      goog.getCssName('tr-insertOrderedList'),
-  queryable: true
-}, {
-  command: goog.editor.Command.UNORDERED_LIST,
-  tooltip: goog.ui.editor.DefaultToolbar.MSG_UNORDERED_LIST_TITLE,
-  classes: goog.getCssName('tr-icon') + ' ' +
-      goog.getCssName('tr-insertUnorderedList'),
-  queryable: true
-}, {
-  command: goog.editor.Command.OUTDENT,
-  tooltip: goog.ui.editor.DefaultToolbar.MSG_OUTDENT_TITLE,
-  classes: goog.getCssName('tr-icon') + ' ' + goog.getCssName('tr-outdent'),
-  factory: goog.ui.editor.ToolbarFactory.makeButton
-}, {
-  command: goog.editor.Command.INDENT,
-  tooltip: goog.ui.editor.DefaultToolbar.MSG_INDENT_TITLE,
-  classes: goog.getCssName('tr-icon') + ' ' + goog.getCssName('tr-indent'),
-  factory: goog.ui.editor.ToolbarFactory.makeButton
-}, {
-  command: goog.editor.Command.JUSTIFY_LEFT,
-  tooltip: goog.ui.editor.DefaultToolbar.MSG_ALIGN_LEFT_TITLE,
-  classes: goog.getCssName('tr-icon') + ' ' +
-      goog.getCssName('tr-justifyLeft'),
-  queryable: true
-}, {
-  command: goog.editor.Command.JUSTIFY_CENTER,
-  tooltip: goog.ui.editor.DefaultToolbar.MSG_ALIGN_CENTER_TITLE,
-  classes: goog.getCssName('tr-icon') + ' ' +
-      goog.getCssName('tr-justifyCenter'),
-  queryable: true
-}, {
-  command: goog.editor.Command.JUSTIFY_RIGHT,
-  tooltip: goog.ui.editor.DefaultToolbar.MSG_ALIGN_RIGHT_TITLE,
-  classes: goog.getCssName('tr-icon') + ' ' +
-      goog.getCssName('tr-justifyRight'),
-  queryable: true
-}, {
-  command: goog.editor.Command.JUSTIFY_FULL,
-  tooltip: goog.ui.editor.DefaultToolbar.MSG_JUSTIFY_TITLE,
-  classes: goog.getCssName('tr-icon') + ' ' +
-      goog.getCssName('tr-justifyFull'),
-  queryable: true
-}, {
-  command: goog.editor.Command.REMOVE_FORMAT,
-  tooltip: goog.ui.editor.DefaultToolbar.MSG_REMOVE_FORMAT_TITLE,
-  classes: goog.getCssName('tr-icon') + ' ' +
-      goog.getCssName('tr-removeFormat'),
-  factory: goog.ui.editor.ToolbarFactory.makeButton
-}, {
-  command: goog.editor.Command.IMAGE,
-  tooltip: goog.ui.editor.DefaultToolbar.MSG_IMAGE_TITLE,
-  classes: goog.getCssName('tr-icon') + ' ' + goog.getCssName('tr-image'),
-  factory: goog.ui.editor.ToolbarFactory.makeButton
-}, {
-  command: goog.editor.Command.STRIKE_THROUGH,
-  tooltip: goog.ui.editor.DefaultToolbar.MSG_STRIKE_THROUGH_TITLE,
-  classes: goog.getCssName('tr-icon') + ' ' +
-      goog.getCssName('tr-strikeThrough'),
-  queryable: true
-}, {
-  command: goog.editor.Command.SUBSCRIPT,
-  tooltip: goog.ui.editor.DefaultToolbar.MSG_SUBSCRIPT,
-  classes: goog.getCssName('tr-icon') + ' ' + goog.getCssName('tr-subscript'),
-  queryable: true
-} , {
-  command: goog.editor.Command.SUPERSCRIPT,
-  tooltip: goog.ui.editor.DefaultToolbar.MSG_SUPERSCRIPT,
-  classes: goog.getCssName('tr-icon') + ' ' +
-      goog.getCssName('tr-superscript'),
-  queryable: true
-}, {
-  command: goog.editor.Command.DIR_LTR,
-  tooltip: goog.ui.editor.DefaultToolbar.MSG_DIR_LTR_TITLE,
-  classes: goog.getCssName('tr-icon') + ' ' + goog.getCssName('tr-ltr'),
-  queryable: true
-}, {
-  command: goog.editor.Command.DIR_RTL,
-  tooltip: goog.ui.editor.DefaultToolbar.MSG_DIR_RTL_TITLE,
-  classes: goog.getCssName('tr-icon') + ' ' + goog.getCssName('tr-rtl'),
-  factory: goog.ui.editor.DefaultToolbar.rtlButtonFactory_,
-  queryable: true
-}, {
-  command: goog.editor.Command.BLOCKQUOTE,
-  tooltip: goog.ui.editor.DefaultToolbar.MSG_BLOCKQUOTE_TITLE,
-  classes: goog.getCssName('tr-icon') + ' ' +
-      goog.getCssName('tr-BLOCKQUOTE'),
-  queryable: true
-}, {
-  command: goog.editor.Command.FORMAT_BLOCK,
-  tooltip: goog.ui.editor.DefaultToolbar.MSG_FORMAT_BLOCK_TITLE,
-  caption: goog.ui.editor.DefaultToolbar.MSG_FORMAT_BLOCK_CAPTION,
-  classes: goog.getCssName('tr-formatBlock'),
-  factory: goog.ui.editor.DefaultToolbar.formatBlockFactory_,
-  queryable: true
-}, {
-  command: goog.editor.Command.EDIT_HTML,
-  tooltip: goog.ui.editor.DefaultToolbar.MSG_EDIT_HTML_TITLE,
-  caption: goog.ui.editor.DefaultToolbar.MSG_EDIT_HTML_CAPTION,
-  classes: goog.getCssName('tr-editHtml'),
-  factory: goog.ui.editor.ToolbarFactory.makeButton
-}];
+goog.ui.editor.DefaultToolbar.button_list_ = [
+  {
+    command: goog.editor.Command.UNDO,
+    tooltip: goog.ui.editor.DefaultToolbar.MSG_UNDO_TITLE,
+    classes: goog.getCssName('tr-icon') + ' ' + goog.getCssName('tr-undo'),
+    factory: goog.ui.editor.DefaultToolbar.undoRedoButtonFactory_,
+    queryable: true
+  },
+  {
+    command: goog.editor.Command.REDO,
+    tooltip: goog.ui.editor.DefaultToolbar.MSG_REDO_TITLE,
+    classes: goog.getCssName('tr-icon') + ' ' + goog.getCssName('tr-redo'),
+    factory: goog.ui.editor.DefaultToolbar.undoRedoButtonFactory_,
+    queryable: true
+  },
+  {
+    command: goog.editor.Command.FONT_FACE,
+    tooltip: goog.ui.editor.DefaultToolbar.MSG_FONT_FACE_TITLE,
+    classes: goog.getCssName('tr-fontName'),
+    factory: goog.ui.editor.DefaultToolbar.fontFaceFactory_,
+    queryable: true
+  },
+  {
+    command: goog.editor.Command.FONT_SIZE,
+    tooltip: goog.ui.editor.DefaultToolbar.MSG_FONT_SIZE_TITLE,
+    classes: goog.getCssName('tr-fontSize'),
+    factory: goog.ui.editor.DefaultToolbar.fontSizeFactory_,
+    queryable: true
+  },
+  {
+    command: goog.editor.Command.BOLD,
+    tooltip: goog.ui.editor.DefaultToolbar.MSG_BOLD_TITLE,
+    classes: goog.getCssName('tr-icon') + ' ' + goog.getCssName('tr-bold'),
+    queryable: true
+  },
+  {
+    command: goog.editor.Command.ITALIC,
+    tooltip: goog.ui.editor.DefaultToolbar.MSG_ITALIC_TITLE,
+    classes: goog.getCssName('tr-icon') + ' ' + goog.getCssName('tr-italic'),
+    queryable: true
+  },
+  {
+    command: goog.editor.Command.UNDERLINE,
+    tooltip: goog.ui.editor.DefaultToolbar.MSG_UNDERLINE_TITLE,
+    classes: goog.getCssName('tr-icon') + ' ' + goog.getCssName('tr-underline'),
+    queryable: true
+  },
+  {
+    command: goog.editor.Command.FONT_COLOR,
+    tooltip: goog.ui.editor.DefaultToolbar.MSG_FONT_COLOR_TITLE,
+    classes: goog.getCssName('tr-icon') + ' ' + goog.getCssName('tr-foreColor'),
+    factory: goog.ui.editor.DefaultToolbar.fontColorFactory_,
+    queryable: true
+  },
+  {
+    command: goog.editor.Command.BACKGROUND_COLOR,
+    tooltip: goog.ui.editor.DefaultToolbar.MSG_BACKGROUND_COLOR_TITLE,
+    classes: goog.getCssName('tr-icon') + ' ' + goog.getCssName('tr-backColor'),
+    factory: goog.ui.editor.DefaultToolbar.backgroundColorFactory_,
+    queryable: true
+  },
+  {
+    command: goog.editor.Command.LINK,
+    tooltip: goog.ui.editor.DefaultToolbar.MSG_LINK_TITLE,
+    caption: goog.ui.editor.messages.MSG_LINK_CAPTION,
+    classes: goog.getCssName('tr-link'),
+    queryable: true
+  },
+  {
+    command: goog.editor.Command.ORDERED_LIST,
+    tooltip: goog.ui.editor.DefaultToolbar.MSG_ORDERED_LIST_TITLE,
+    classes: goog.getCssName('tr-icon') + ' ' +
+        goog.getCssName('tr-insertOrderedList'),
+    queryable: true
+  },
+  {
+    command: goog.editor.Command.UNORDERED_LIST,
+    tooltip: goog.ui.editor.DefaultToolbar.MSG_UNORDERED_LIST_TITLE,
+    classes: goog.getCssName('tr-icon') + ' ' +
+        goog.getCssName('tr-insertUnorderedList'),
+    queryable: true
+  },
+  {
+    command: goog.editor.Command.OUTDENT,
+    tooltip: goog.ui.editor.DefaultToolbar.MSG_OUTDENT_TITLE,
+    classes: goog.getCssName('tr-icon') + ' ' + goog.getCssName('tr-outdent'),
+    factory: goog.ui.editor.ToolbarFactory.makeButton
+  },
+  {
+    command: goog.editor.Command.INDENT,
+    tooltip: goog.ui.editor.DefaultToolbar.MSG_INDENT_TITLE,
+    classes: goog.getCssName('tr-icon') + ' ' + goog.getCssName('tr-indent'),
+    factory: goog.ui.editor.ToolbarFactory.makeButton
+  },
+  {
+    command: goog.editor.Command.JUSTIFY_LEFT,
+    tooltip: goog.ui.editor.DefaultToolbar.MSG_ALIGN_LEFT_TITLE,
+    classes:
+        goog.getCssName('tr-icon') + ' ' + goog.getCssName('tr-justifyLeft'),
+    queryable: true
+  },
+  {
+    command: goog.editor.Command.JUSTIFY_CENTER,
+    tooltip: goog.ui.editor.DefaultToolbar.MSG_ALIGN_CENTER_TITLE,
+    classes:
+        goog.getCssName('tr-icon') + ' ' + goog.getCssName('tr-justifyCenter'),
+    queryable: true
+  },
+  {
+    command: goog.editor.Command.JUSTIFY_RIGHT,
+    tooltip: goog.ui.editor.DefaultToolbar.MSG_ALIGN_RIGHT_TITLE,
+    classes:
+        goog.getCssName('tr-icon') + ' ' + goog.getCssName('tr-justifyRight'),
+    queryable: true
+  },
+  {
+    command: goog.editor.Command.JUSTIFY_FULL,
+    tooltip: goog.ui.editor.DefaultToolbar.MSG_JUSTIFY_TITLE,
+    classes:
+        goog.getCssName('tr-icon') + ' ' + goog.getCssName('tr-justifyFull'),
+    queryable: true
+  },
+  {
+    command: goog.editor.Command.REMOVE_FORMAT,
+    tooltip: goog.ui.editor.DefaultToolbar.MSG_REMOVE_FORMAT_TITLE,
+    classes:
+        goog.getCssName('tr-icon') + ' ' + goog.getCssName('tr-removeFormat'),
+    factory: goog.ui.editor.ToolbarFactory.makeButton
+  },
+  {
+    command: goog.editor.Command.IMAGE,
+    tooltip: goog.ui.editor.DefaultToolbar.MSG_IMAGE_TITLE,
+    classes: goog.getCssName('tr-icon') + ' ' + goog.getCssName('tr-image'),
+    factory: goog.ui.editor.ToolbarFactory.makeButton
+  },
+  {
+    command: goog.editor.Command.STRIKE_THROUGH,
+    tooltip: goog.ui.editor.DefaultToolbar.MSG_STRIKE_THROUGH_TITLE,
+    classes:
+        goog.getCssName('tr-icon') + ' ' + goog.getCssName('tr-strikeThrough'),
+    queryable: true
+  },
+  {
+    command: goog.editor.Command.SUBSCRIPT,
+    tooltip: goog.ui.editor.DefaultToolbar.MSG_SUBSCRIPT,
+    classes: goog.getCssName('tr-icon') + ' ' + goog.getCssName('tr-subscript'),
+    queryable: true
+  },
+  {
+    command: goog.editor.Command.SUPERSCRIPT,
+    tooltip: goog.ui.editor.DefaultToolbar.MSG_SUPERSCRIPT,
+    classes:
+        goog.getCssName('tr-icon') + ' ' + goog.getCssName('tr-superscript'),
+    queryable: true
+  },
+  {
+    command: goog.editor.Command.DIR_LTR,
+    tooltip: goog.ui.editor.DefaultToolbar.MSG_DIR_LTR_TITLE,
+    classes: goog.getCssName('tr-icon') + ' ' + goog.getCssName('tr-ltr'),
+    queryable: true
+  },
+  {
+    command: goog.editor.Command.DIR_RTL,
+    tooltip: goog.ui.editor.DefaultToolbar.MSG_DIR_RTL_TITLE,
+    classes: goog.getCssName('tr-icon') + ' ' + goog.getCssName('tr-rtl'),
+    factory: goog.ui.editor.DefaultToolbar.rtlButtonFactory_,
+    queryable: true
+  },
+  {
+    command: goog.editor.Command.BLOCKQUOTE,
+    tooltip: goog.ui.editor.DefaultToolbar.MSG_BLOCKQUOTE_TITLE,
+    classes:
+        goog.getCssName('tr-icon') + ' ' + goog.getCssName('tr-BLOCKQUOTE'),
+    queryable: true
+  },
+  {
+    command: goog.editor.Command.FORMAT_BLOCK,
+    tooltip: goog.ui.editor.DefaultToolbar.MSG_FORMAT_BLOCK_TITLE,
+    caption: goog.ui.editor.DefaultToolbar.MSG_FORMAT_BLOCK_CAPTION,
+    classes: goog.getCssName('tr-formatBlock'),
+    factory: goog.ui.editor.DefaultToolbar.formatBlockFactory_,
+    queryable: true
+  },
+  {
+    command: goog.editor.Command.EDIT_HTML,
+    tooltip: goog.ui.editor.DefaultToolbar.MSG_EDIT_HTML_TITLE,
+    caption: goog.ui.editor.DefaultToolbar.MSG_EDIT_HTML_CAPTION,
+    classes: goog.getCssName('tr-editHtml'),
+    factory: goog.ui.editor.ToolbarFactory.makeButton
+  }
+];
 
 
 (function() {
-  // Create the goog.ui.editor.DefaultToolbar.buttons_ map from
-  // goog.ui.editor.DefaultToolbar.button_list_.
-  for (var i = 0, button;
-      button = goog.ui.editor.DefaultToolbar.button_list_[i]; i++) {
-    goog.ui.editor.DefaultToolbar.buttons_[button.command] = button;
-  }
+// Create the goog.ui.editor.DefaultToolbar.buttons_ map from
+// goog.ui.editor.DefaultToolbar.button_list_.
+for (var i = 0, button; button = goog.ui.editor.DefaultToolbar.button_list_[i];
+     i++) {
+  goog.ui.editor.DefaultToolbar.buttons_[button.command] = button;
+}
 
-  // goog.ui.editor.DefaultToolbar.button_list_ is no longer needed
-  // once the map is ready.
-  goog.ui.editor.DefaultToolbar.button_list_ = null;
+// goog.ui.editor.DefaultToolbar.button_list_ is no longer needed
+// once the map is ready.
+goog.ui.editor.DefaultToolbar.button_list_ = null;
 })();

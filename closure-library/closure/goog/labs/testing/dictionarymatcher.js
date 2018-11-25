@@ -18,12 +18,10 @@
  */
 
 
-
 goog.provide('goog.labs.testing.HasEntriesMatcher');
 goog.provide('goog.labs.testing.HasEntryMatcher');
 goog.provide('goog.labs.testing.HasKeyMatcher');
 goog.provide('goog.labs.testing.HasValueMatcher');
-
 
 goog.require('goog.asserts');
 goog.require('goog.labs.testing.Matcher');
@@ -55,13 +53,11 @@ goog.labs.testing.HasEntriesMatcher = function(entries) {
  *
  * @override
  */
-goog.labs.testing.HasEntriesMatcher.prototype.matches =
-    function(actualObject) {
+goog.labs.testing.HasEntriesMatcher.prototype.matches = function(actualObject) {
   goog.asserts.assertObject(actualObject, 'Expected an Object');
-  var object = /** @type {!Object} */(actualObject);
+  var object = /** @type {!Object} */ (actualObject);
   return goog.object.every(this.entries_, function(value, key) {
-    return goog.object.containsKey(object, key) &&
-           object[key] === value;
+    return goog.object.containsKey(object, key) && object[key] === value;
   });
 };
 
@@ -69,14 +65,13 @@ goog.labs.testing.HasEntriesMatcher.prototype.matches =
 /**
  * @override
  */
-goog.labs.testing.HasEntriesMatcher.prototype.describe =
-    function(actualObject) {
+goog.labs.testing.HasEntriesMatcher.prototype.describe = function(
+    actualObject) {
   goog.asserts.assertObject(actualObject, 'Expected an Object');
-  var object = /** @type {!Object} */(actualObject);
+  var object = /** @type {!Object} */ (actualObject);
   var errorString = 'Input object did not contain the following entries:\n';
   goog.object.forEach(this.entries_, function(value, key) {
-    if (!goog.object.containsKey(object, key) ||
-        object[key] !== value) {
+    if (!goog.object.containsKey(object, key) || object[key] !== value) {
       errorString += key + ': ' + value + '\n';
     }
   });
@@ -115,19 +110,17 @@ goog.labs.testing.HasEntryMatcher = function(key, value) {
  *
  * @override
  */
-goog.labs.testing.HasEntryMatcher.prototype.matches =
-    function(actualObject) {
+goog.labs.testing.HasEntryMatcher.prototype.matches = function(actualObject) {
   goog.asserts.assertObject(actualObject);
   return goog.object.containsKey(actualObject, this.key_) &&
-         actualObject[this.key_] === this.value_;
+      actualObject[this.key_] === this.value_;
 };
 
 
 /**
  * @override
  */
-goog.labs.testing.HasEntryMatcher.prototype.describe =
-    function(actualObject) {
+goog.labs.testing.HasEntryMatcher.prototype.describe = function(actualObject) {
   goog.asserts.assertObject(actualObject);
   var errorMsg;
   if (goog.object.containsKey(actualObject, this.key_)) {
@@ -164,8 +157,7 @@ goog.labs.testing.HasKeyMatcher = function(key) {
  *
  * @override
  */
-goog.labs.testing.HasKeyMatcher.prototype.matches =
-    function(actualObject) {
+goog.labs.testing.HasKeyMatcher.prototype.matches = function(actualObject) {
   goog.asserts.assertObject(actualObject);
   return goog.object.containsKey(actualObject, this.key_);
 };
@@ -174,8 +166,7 @@ goog.labs.testing.HasKeyMatcher.prototype.matches =
 /**
  * @override
  */
-goog.labs.testing.HasKeyMatcher.prototype.describe =
-    function(actualObject) {
+goog.labs.testing.HasKeyMatcher.prototype.describe = function(actualObject) {
   goog.asserts.assertObject(actualObject);
   return 'Input object did not contain the key: ' + this.key_;
 };
@@ -206,10 +197,9 @@ goog.labs.testing.HasValueMatcher = function(value) {
  *
  * @override
  */
-goog.labs.testing.HasValueMatcher.prototype.matches =
-    function(actualObject) {
+goog.labs.testing.HasValueMatcher.prototype.matches = function(actualObject) {
   goog.asserts.assertObject(actualObject, 'Expected an Object');
-  var object = /** @type {!Object} */(actualObject);
+  var object = /** @type {!Object} */ (actualObject);
   return goog.object.containsValue(object, this.value_);
 };
 
@@ -217,8 +207,7 @@ goog.labs.testing.HasValueMatcher.prototype.matches =
 /**
  * @override
  */
-goog.labs.testing.HasValueMatcher.prototype.describe =
-    function(actualObject) {
+goog.labs.testing.HasValueMatcher.prototype.describe = function(actualObject) {
   return 'Input object did not contain the value: ' + this.value_;
 };
 
@@ -228,12 +217,12 @@ goog.labs.testing.HasValueMatcher.prototype.describe =
  * in the input object.
  *
  * @param {!Object} entries The entries to check for presence in the object.
- *
  * @return {!goog.labs.testing.HasEntriesMatcher} A HasEntriesMatcher.
  */
-function hasEntries(entries) {
-  return new goog.labs.testing.HasEntriesMatcher(entries);
-}
+var hasEntries =
+    goog.labs.testing.HasEntriesMatcher.hasEntries = function(entries) {
+      return new goog.labs.testing.HasEntriesMatcher(entries);
+    };
 
 
 /**
@@ -241,33 +230,31 @@ function hasEntries(entries) {
  *
  * @param {string} key The key to check for presence in the object.
  * @param {*} value The value to check for presence in the object.
- *
  * @return {!goog.labs.testing.HasEntryMatcher} A HasEntryMatcher.
  */
-function hasEntry(key, value) {
-  return new goog.labs.testing.HasEntryMatcher(key, value);
-}
+var hasEntry =
+    goog.labs.testing.HasEntryMatcher.hasEntry = function(key, value) {
+      return new goog.labs.testing.HasEntryMatcher(key, value);
+    };
 
 
 /**
  * Gives a matcher that asserts an object contains the given key.
  *
  * @param {string} key The key to check for presence in the object.
- *
  * @return {!goog.labs.testing.HasKeyMatcher} A HasKeyMatcher.
  */
-function hasKey(key) {
+var hasKey = goog.labs.testing.HasKeyMatcher.hasKey = function(key) {
   return new goog.labs.testing.HasKeyMatcher(key);
-}
+};
 
 
 /**
  * Gives a matcher that asserts an object contains the given value.
  *
  * @param {*} value The value to check for presence in the object.
- *
  * @return {!goog.labs.testing.HasValueMatcher} A HasValueMatcher.
  */
-function hasValue(value) {
+var hasValue = goog.labs.testing.HasValueMatcher.hasValue = function(value) {
   return new goog.labs.testing.HasValueMatcher(value);
-}
+};

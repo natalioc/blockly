@@ -26,7 +26,7 @@
 /**
  * @fileoverview A Html SAX parser.
  *
- * Examples of usage of the {@code goog.string.html.HtmlParser}:
+ * Examples of usage of the `goog.string.html.HtmlParser`:
  * <pre>
  *   var handler = new MyCustomHtmlVisitorHandlerThatExtendsHtmlSaxHandler();
  *   var parser = new goog.string.html.HtmlParser();
@@ -39,7 +39,8 @@
  * http://www.whatwg.org/specs/web-apps/current-work/multipage/tokenization.html
  * http://www.whatwg.org/specs/web-apps/current-work/multipage/tree-construction.html
  *
- * @supported IE6, IE7, IE8, FF1.5, FF2, FF3, Chrome 3.0, Safari and Opera 10.
+ * @author msamuel@google.com (Mike Samuel)
+ * @supported IE6+, FF1.5+, Chrome 3.0+, Safari and Opera 10.
  */
 
 goog.provide('goog.string.html');
@@ -52,8 +53,8 @@ goog.provide('goog.string.html.HtmlSaxHandler');
 
 
 /**
- * An Html parser: {@code parse} takes a string and calls methods on
- * {@code goog.string.html.HtmlSaxHandler} while it is visiting it.
+ * An Html parser: `parse` takes a string and calls methods on
+ * `goog.string.html.HtmlSaxHandler` while it is visiting it.
  *
  * @constructor
  */
@@ -63,8 +64,8 @@ goog.string.html.HtmlParser = function() {
 
 /**
  * HTML entities that are encoded/decoded.
- * TODO(user): use {@code goog.string.htmlEncode} instead.
- * @type {!Object.<string, string>}
+ * TODO(user): use `goog.string.htmlEncode` instead.
+ * @type {!Object<string, string>}
  */
 goog.string.html.HtmlParser.Entities = {
   'lt': '<',
@@ -114,6 +115,7 @@ goog.string.html.HtmlParser.Elements = {
       goog.string.html.HtmlParser.EFlags.FOLDABLE,
   'br': goog.string.html.HtmlParser.EFlags.EMPTY,
   'button': 0,
+  'canvas': 0,
   'caption': 0,
   'center': 0,
   'cite': 0,
@@ -211,9 +213,9 @@ goog.string.html.HtmlParser.Elements = {
 /**
  * Regular expression that matches &s.
  * @type {RegExp}
- * @private
+ * @package
  */
-goog.string.html.HtmlParser.AMP_RE_ = /&/g;
+goog.string.html.HtmlParser.AMP_RE = /&/g;
 
 
 /**
@@ -228,33 +230,33 @@ goog.string.html.HtmlParser.LOOSE_AMP_RE_ =
 /**
  * Regular expression that matches <.
  * @type {RegExp}
- * @private
+ * @package
  */
-goog.string.html.HtmlParser.LT_RE_ = /</g;
+goog.string.html.HtmlParser.LT_RE = /</g;
 
 
 /**
  * Regular expression that matches >.
  * @type {RegExp}
- * @private
+ * @package
  */
-goog.string.html.HtmlParser.GT_RE_ = />/g;
+goog.string.html.HtmlParser.GT_RE = />/g;
 
 
 /**
  * Regular expression that matches ".
  * @type {RegExp}
- * @private
+ * @package
  */
-goog.string.html.HtmlParser.QUOTE_RE_ = /\"/g;
+goog.string.html.HtmlParser.QUOTE_RE = /\"/g;
 
 
 /**
  * Regular expression that matches =.
  * @type {RegExp}
- * @private
+ * @package
  */
-goog.string.html.HtmlParser.EQUALS_RE_ = /=/g;
+goog.string.html.HtmlParser.EQUALS_RE = /=/g;
 
 
 /**
@@ -352,8 +354,8 @@ goog.string.html.HtmlParser.OUTSIDE_TAG_TOKEN_ = new RegExp(
 
 
 /**
- * Given a SAX-like {@code goog.string.html.HtmlSaxHandler} parses a
- * {@code htmlText} and lets the {@code handler} know the structure while
+ * Given a SAX-like `goog.string.html.HtmlSaxHandler` parses a
+ * `htmlText` and lets the `handler` know the structure while
  * visiting the nodes.
  *
  * @param {goog.string.html.HtmlSaxHandler} handler The HtmlSaxHandler that will
@@ -364,7 +366,8 @@ goog.string.html.HtmlParser.prototype.parse = function(handler, htmlText) {
   var htmlLower = null;
   var inTag = false;  // True iff we're currently processing a tag.
   var attribs = [];  // Accumulates attribute names and values.
-  var tagName;  // The name of the tag currently being processed.
+  /** @type {string|undefined} */
+  var tagName = undefined;  // The name of the tag currently being processed.
   var eflags;  // The element flags for the current tag.
   var openTag;  // True if the current tag is an open tag.
 
@@ -487,8 +490,7 @@ goog.string.html.HtmlParser.prototype.lookupEntity_ = function(name) {
   var m = name.match(goog.string.html.HtmlParser.DECIMAL_ESCAPE_RE_);
   if (m) {
     return String.fromCharCode(parseInt(m[1], 10));
-  } else if (
-      !!(m = name.match(goog.string.html.HtmlParser.HEX_ESCAPE_RE_))) {
+  } else if (m = name.match(goog.string.html.HtmlParser.HEX_ESCAPE_RE_)) {
     return String.fromCharCode(parseInt(m[1], 16));
   }
   return '';
@@ -509,7 +511,7 @@ goog.string.html.HtmlParser.prototype.stripNULs_ = function(s) {
 /**
  * The plain text of a chunk of HTML CDATA which possibly containing.
  *
- * TODO(goto): use {@code goog.string.unescapeEntities} instead ?
+ * TODO(goto): use `goog.string.unescapeEntities` instead ?
  * @param {string} s A chunk of HTML CDATA.  It must not start or end inside
  *   an HTML entity.
  * @return {string} The unescaped entities.
@@ -517,8 +519,10 @@ goog.string.html.HtmlParser.prototype.stripNULs_ = function(s) {
  */
 goog.string.html.HtmlParser.prototype.unescapeEntities_ = function(s) {
   return s.replace(
-      goog.string.html.HtmlParser.ENTITY_RE_,
-      goog.bind(this.lookupEntity_, this));
+      goog.string.html.HtmlParser.ENTITY_RE_, goog.bind(
+          function(fullEntity, name) {
+               return this.lookupEntity_(name);
+          }, this));
 };
 
 
@@ -531,8 +535,8 @@ goog.string.html.HtmlParser.prototype.unescapeEntities_ = function(s) {
 goog.string.html.HtmlParser.prototype.normalizeRCData_ = function(rcdata) {
   return rcdata.
       replace(goog.string.html.HtmlParser.LOOSE_AMP_RE_, '&amp;$1').
-      replace(goog.string.html.HtmlParser.LT_RE_, '&lt;').
-      replace(goog.string.html.HtmlParser.GT_RE_, '&gt;');
+      replace(goog.string.html.HtmlParser.LT_RE, '&lt;').
+      replace(goog.string.html.HtmlParser.GT_RE, '&gt;');
 };
 
 
@@ -557,7 +561,7 @@ goog.string.html.toLowerCase = function(str) {
 
 
 /**
- * An interface to the {@code goog.string.html.HtmlParser} visitor, that gets
+ * An interface to the `goog.string.html.HtmlParser` visitor, that gets
  * called while the HTML is being parsed.
  *
  * @interface
@@ -569,7 +573,7 @@ goog.string.html.HtmlSaxHandler = function() {
 /**
  * Handler called when the parser found a new tag.
  * @param {string} name The name of the tag that is starting.
- * @param {Array.<string>} attributes The attributes of the tag.
+ * @param {Array<string>} attributes The attributes of the tag.
  */
 goog.string.html.HtmlSaxHandler.prototype.startTag = goog.abstractMethod;
 

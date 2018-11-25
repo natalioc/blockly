@@ -47,21 +47,22 @@ function testGetCount() {
 
 function testKeys() {
   var m = getMap();
-  assertEquals('getKeys, The keys should be a,b,c', m.getKeys().join(','),
-      'a,b,c,d');
+  assertEquals(
+      'getKeys, The keys should be a,b,c', m.getKeys().join(','), 'a,b,c,d');
 }
 
 function testValues() {
   var m = getMap();
-  assertEquals('getValues, The values should be 0,1,2',
-      m.getValues().join(','), '0,1,2,3');
+  assertEquals(
+      'getValues, The values should be 0,1,2', m.getValues().join(','),
+      '0,1,2,3');
 }
 
 function testContainsKey() {
   var m = getMap();
   assertTrue("containsKey, Should contain the 'a' key", m.containsKey('a'));
-  assertFalse("containsKey, Should not contain the 'e' key",
-      m.containsKey('e'));
+  assertFalse(
+      "containsKey, Should not contain the 'e' key", m.containsKey('e'));
 }
 
 function testClear() {
@@ -81,14 +82,16 @@ function testAddAll() {
   m2.addAll(m);
   assertTrue('addAll so it should not be empty', !m2.isEmpty());
   assertTrue("addAll so it should contain 'c' key", m2.containsKey('c'));
+
+  m2.addAll(null);  // Ensure that passing a null object does not err.
 }
 
 function testConstructor() {
   var m = getMap();
   var m2 = new goog.structs.Map(m);
   assertTrue('constr with Map so it should not be empty', !m2.isEmpty());
-  assertTrue("constr with Map so it should contain 'c' key",
-      m2.containsKey('c'));
+  assertTrue(
+      "constr with Map so it should contain 'c' key", m2.containsKey('c'));
 }
 
 
@@ -228,8 +231,8 @@ function testObjectProperties() {
   assertEquals(m.get(':foo'), 'happy');
 
   var keys = m.getKeys().join(',');
-  assertEquals(keys,
-      'toString,valueOf,eval,toSource,prototype,hasOwnProperty,:foo');
+  assertEquals(
+      keys, 'toString,valueOf,eval,toSource,prototype,hasOwnProperty,:foo');
 
   var values = m.getValues().join(',');
   assertEquals(values, 'once,upon,a,midnight,dreary,dark,happy');
@@ -272,8 +275,8 @@ function testGetKeyIterator() {
   m.remove('b');
   m.remove('d');
   iter = m.getKeyIterator();
-  assertEquals('Should not contain the removed keys',
-               'ace', goog.iter.join(iter, ''));
+  assertEquals(
+      'Should not contain the removed keys', 'ace', goog.iter.join(iter, ''));
 }
 
 function testGetValueIterator() {
@@ -290,8 +293,8 @@ function testGetValueIterator() {
   m.remove('b');
   m.remove('d');
   iter = m.getValueIterator();
-  assertEquals('Should not contain the removed keys',
-               '135', goog.iter.join(iter, ''));
+  assertEquals(
+      'Should not contain the removed keys', '135', goog.iter.join(iter, ''));
 }
 
 function testDefaultIterator() {
@@ -308,8 +311,8 @@ function testDefaultIterator() {
 
   m.remove('b');
   m.remove('d');
-  assertEquals('Should not contain the removed keys',
-               '135', goog.iter.join(m, ''));
+  assertEquals(
+      'Should not contain the removed keys', '135', goog.iter.join(m, ''));
 }
 
 function testMutatedIterator() {
@@ -323,10 +326,9 @@ function testMutatedIterator() {
 
   var iter = m.getValueIterator();
   m.set('e', 5);
-  var ex = assertThrows('Expected an exception since the map has changed',
-      function() {
-        iter.next();
-      });
+  var ex = assertThrows(
+      'Expected an exception since the map has changed',
+      function() { iter.next(); });
   assertEquals(message, ex.message);
 
   m = new goog.structs.Map;
@@ -337,10 +339,9 @@ function testMutatedIterator() {
 
   iter = m.getValueIterator();
   m.remove('d');
-  var ex = assertThrows('Expected an exception since the map has changed',
-      function() {
-        iter.next();
-      });
+  var ex = assertThrows(
+      'Expected an exception since the map has changed',
+      function() { iter.next(); });
   assertEquals(message, ex.message);
 
   m = new goog.structs.Map;
@@ -365,8 +366,8 @@ function testTranspose() {
   m.set('e', 5);
 
   var transposed = m.transpose();
-  assertEquals('Should contain the keys', 'abcde',
-      goog.iter.join(transposed, ''));
+  assertEquals(
+      'Should contain the keys', 'abcde', goog.iter.join(transposed, ''));
 }
 
 function testToObject() {
@@ -376,8 +377,8 @@ function testToObject() {
     map.set('a', 0);
     var obj = map.toObject();
     assertTrue('object representation has key "a"', obj.hasOwnProperty('a'));
-    assertFalse('object representation does not have key "b"',
-        obj.hasOwnProperty('b'));
+    assertFalse(
+        'object representation does not have key "b"', obj.hasOwnProperty('b'));
     assertEquals('value for key "a"', 0, obj['a']);
   } finally {
     delete Object.prototype.b;
@@ -420,7 +421,9 @@ function testEqualsWithCustomEqualityFn() {
   map2.set('a', '0');
   map2.set('b', '1');
 
-  var equalsFn = function(a, b) { return a == b };
+  var equalsFn = function(a, b) {
+    return a == b;
+  };
 
   assertTrue('maps are equal with ==', map1.equals(map2, equalsFn));
 }

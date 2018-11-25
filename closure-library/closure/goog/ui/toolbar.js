@@ -34,14 +34,15 @@ goog.require('goog.ui.ToolbarRenderer');
  * @param {goog.ui.ToolbarRenderer=} opt_renderer Renderer used to render or
  *     decorate the toolbar; defaults to {@link goog.ui.ToolbarRenderer}.
  * @param {?goog.ui.Container.Orientation=} opt_orientation Toolbar orientation;
- *     defaults to {@code HORIZONTAL}.
+ *     defaults to `HORIZONTAL`.
  * @param {goog.dom.DomHelper=} opt_domHelper Optional DOM helper.
  * @constructor
  * @extends {goog.ui.Container}
  */
 goog.ui.Toolbar = function(opt_renderer, opt_orientation, opt_domHelper) {
-  goog.ui.Container.call(this, opt_orientation, opt_renderer ||
-      goog.ui.ToolbarRenderer.getInstance(), opt_domHelper);
+  goog.ui.Container.call(
+      this, opt_orientation,
+      opt_renderer || goog.ui.ToolbarRenderer.getInstance(), opt_domHelper);
 };
 goog.inherits(goog.ui.Toolbar, goog.ui.Container);
 

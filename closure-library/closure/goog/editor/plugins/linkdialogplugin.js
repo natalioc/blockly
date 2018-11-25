@@ -57,7 +57,8 @@ goog.editor.plugins.LinkDialogPlugin = function() {
    */
   this.safeToOpenSchemes_ = ['http', 'https', 'ftp'];
 };
-goog.inherits(goog.editor.plugins.LinkDialogPlugin,
+goog.inherits(
+    goog.editor.plugins.LinkDialogPlugin,
     goog.editor.plugins.AbstractDialogPlugin);
 
 
@@ -85,6 +86,15 @@ goog.editor.plugins.LinkDialogPlugin.prototype.emailWarning_;
  */
 goog.editor.plugins.LinkDialogPlugin.prototype.showOpenLinkInNewWindow_ = false;
 
+
+/**
+ * Whether to focus the text to display input instead of the url input if the
+ * text to display input is empty when the dialog opens.
+ * @type {boolean}
+ * @private
+ */
+goog.editor.plugins.LinkDialogPlugin.prototype
+    .focusTextToDisplayOnOpenIfEmpty_ = false;
 
 /**
  * Whether the "open link in new window" checkbox should be checked when the
@@ -151,8 +161,8 @@ goog.editor.plugins.LinkDialogPlugin.prototype.setBlockOpeningUnsafeSchemes =
  * @param {Array<string>} schemes String array of URL schemes to allow (http,
  *     https, etc.).
  */
-goog.editor.plugins.LinkDialogPlugin.prototype.setSafeToOpenSchemes =
-    function(schemes) {
+goog.editor.plugins.LinkDialogPlugin.prototype.setSafeToOpenSchemes = function(
+    schemes) {
   this.safeToOpenSchemes_ = schemes;
 };
 
@@ -172,6 +182,16 @@ goog.editor.plugins.LinkDialogPlugin.prototype.showOpenLinkInNewWindow =
 
 
 /**
+ * Tells the dialog to focus the text to display input instead of the url field
+ * if the text to display input is empty when the dialog is opened.
+ */
+goog.editor.plugins.LinkDialogPlugin.prototype.focusTextToDisplayOnOpenIfEmpty =
+    function() {
+  this.focusTextToDisplayOnOpenIfEmpty_ = true;
+};
+
+
+/**
  * Tells the dialog to show a checkbox where the user can choose to have
  * 'rel=nofollow' attribute added to the link.
  */
@@ -186,8 +206,8 @@ goog.editor.plugins.LinkDialogPlugin.prototype.showRelNoFollow = function() {
  * @return {boolean} Whether the"open link in new window" checkbox was checked
  *     last time the dialog was closed.
  */
-goog.editor.plugins.LinkDialogPlugin.prototype.
-    getOpenLinkInNewWindowCheckedState = function() {
+goog.editor.plugins.LinkDialogPlugin.prototype
+    .getOpenLinkInNewWindowCheckedState = function() {
   return this.isOpenLinkInNewWindowChecked_;
 };
 
@@ -230,7 +250,7 @@ goog.editor.plugins.LinkDialogPlugin.prototype.setEmailWarning = function(
  */
 goog.editor.plugins.LinkDialogPlugin.prototype.execCommandInternal = function(
     command, opt_arg) {
-  this.currentLink_ = /** @type {goog.editor.Link} */(opt_arg);
+  this.currentLink_ = /** @type {goog.editor.Link} */ (opt_arg);
   return goog.editor.plugins.LinkDialogPlugin.base(
       this, 'execCommandInternal', command, opt_arg);
 };
@@ -251,7 +271,7 @@ goog.editor.plugins.LinkDialogPlugin.prototype.handleAfterHide = function(e) {
 /**
  * @return {goog.events.EventHandler<T>} The event handler.
  * @protected
- * @this T
+ * @this {T}
  * @template T
  */
 goog.editor.plugins.LinkDialogPlugin.prototype.getEventHandler = function() {
@@ -279,7 +299,8 @@ goog.editor.plugins.LinkDialogPlugin.prototype.getCurrentLink = function() {
  */
 goog.editor.plugins.LinkDialogPlugin.prototype.createDialog = function(
     dialogDomHelper, opt_link) {
-  var dialog = new goog.ui.editor.LinkDialog(dialogDomHelper,
+  var dialog = new goog.ui.editor.LinkDialog(
+      dialogDomHelper,
       /** @type {goog.editor.Link} */ (opt_link));
   if (this.emailWarning_) {
     dialog.setEmailWarning(this.emailWarning_);
@@ -287,16 +308,20 @@ goog.editor.plugins.LinkDialogPlugin.prototype.createDialog = function(
   if (this.showOpenLinkInNewWindow_) {
     dialog.showOpenLinkInNewWindow(this.isOpenLinkInNewWindowChecked_);
   }
+  if (this.focusTextToDisplayOnOpenIfEmpty_) {
+    dialog.focusTextToDisplayOnOpenIfEmpty();
+  }
   if (this.showRelNoFollow_) {
     dialog.showRelNoFollow();
   }
   dialog.setStopReferrerLeaks(this.stopReferrerLeaks_);
-  this.eventHandler_.
-      listen(dialog, goog.ui.editor.AbstractDialog.EventType.OK,
-          this.handleOk).
-      listen(dialog, goog.ui.editor.AbstractDialog.EventType.CANCEL,
-          this.handleCancel_).
-      listen(dialog, goog.ui.editor.LinkDialog.EventType.BEFORE_TEST_LINK,
+  this.eventHandler_
+      .listen(dialog, goog.ui.editor.AbstractDialog.EventType.OK, this.handleOk)
+      .listen(
+          dialog, goog.ui.editor.AbstractDialog.EventType.CANCEL,
+          this.handleCancel_)
+      .listen(
+          dialog, goog.ui.editor.LinkDialog.EventType.BEFORE_TEST_LINK,
           this.handleBeforeTestLink);
   return dialog;
 };
@@ -350,8 +375,8 @@ goog.editor.plugins.LinkDialogPlugin.prototype.handleOk = function(e) {
  * @param {goog.events.Event} e Event object.
  * @private
  */
-goog.editor.plugins.LinkDialogPlugin.prototype.touchUpAnchorOnOk_ =
-    function(anchor, e) {
+goog.editor.plugins.LinkDialogPlugin.prototype.touchUpAnchorOnOk_ = function(
+    anchor, e) {
   if (this.showOpenLinkInNewWindow_) {
     if (e.openInNewWindow) {
       anchor.target = '_blank';
@@ -401,8 +426,8 @@ goog.editor.plugins.LinkDialogPlugin.prototype.handleCancel_ = function(e) {
  *     object.
  * @protected
  */
-goog.editor.plugins.LinkDialogPlugin.prototype.handleBeforeTestLink =
-    function(e) {
+goog.editor.plugins.LinkDialogPlugin.prototype.handleBeforeTestLink = function(
+    e) {
   if (!this.shouldOpenUrl(e.url)) {
     /** @desc Message when the user tries to test (preview) a link, but the
      * link cannot be tested. */
@@ -431,8 +456,8 @@ goog.editor.plugins.LinkDialogPlugin.prototype.shouldOpenUrl = function(url) {
  * @return {boolean} Whether the url has a safe scheme.
  * @private
  */
-goog.editor.plugins.LinkDialogPlugin.prototype.isSafeSchemeToOpen_ =
-    function(url) {
+goog.editor.plugins.LinkDialogPlugin.prototype.isSafeSchemeToOpen_ = function(
+    url) {
   var scheme = goog.uri.utils.getScheme(url) || 'http';
   return goog.array.contains(this.safeToOpenSchemes_, scheme.toLowerCase());
 };

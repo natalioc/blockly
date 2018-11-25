@@ -15,7 +15,6 @@
 goog.provide('goog.json.processorTest');
 goog.setTestOnly('goog.json.processorTest');
 
-goog.require('goog.json.EvalJsonProcessor');
 goog.require('goog.json.NativeJsonProcessor');
 goog.require('goog.testing.jsunit');
 goog.require('goog.userAgent');
@@ -38,11 +37,6 @@ var REVIVER = function(k, v) {
 // Just sanity check parsing and stringifying.
 // Thorough tests are in json_test.html.
 
-function testJsParser() {
-  var json = '{"a":1,"b":{"c":2}}';
-  runParsingTest(new goog.json.EvalJsonProcessor(), json, json);
-}
-
 function testNativeParser() {
   if (!SUPPORTS_NATIVE_JSON) {
     return;
@@ -51,17 +45,13 @@ function testNativeParser() {
   runParsingTest(new goog.json.NativeJsonProcessor(), json, json);
 }
 
-function testJsParser_withReplacer() {
-  runParsingTest(new goog.json.EvalJsonProcessor(REPLACER),
-      '{"a":"foo","b":"goo"}', '{"a":"food","b":"good"}');
-}
-
 function testNativeParser_withReplacer() {
   if (!SUPPORTS_NATIVE_JSON) {
     return;
   }
-  runParsingTest(new goog.json.NativeJsonProcessor(REPLACER),
-      '{"a":"foo","b":"goo"}', '{"a":"food","b":"good"}');
+  runParsingTest(
+      new goog.json.NativeJsonProcessor(REPLACER), '{"a":"foo","b":"goo"}',
+      '{"a":"food","b":"good"}');
 }
 
 function testNativeParser_withReviver() {
@@ -69,18 +59,8 @@ function testNativeParser_withReviver() {
     return;
   }
   var json = '{"a":"fod","b":"god"}';
-  runParsingTest(new goog.json.NativeJsonProcessor(REPLACER, REVIVER),
-      json, json);
-}
-
-function testUnsafeJsParser() {
-  var json = '{"a":1,"b":{"c":2}}';
-  runParsingTest(new goog.json.EvalJsonProcessor(null, true), json, json);
-}
-
-function testUnsafeJsParser_withReplacer() {
-  runParsingTest(new goog.json.EvalJsonProcessor(REPLACER, true),
-      '{"a":"foo","b":"goo"}', '{"a":"food","b":"good"}');
+  runParsingTest(
+      new goog.json.NativeJsonProcessor(REPLACER, REVIVER), json, json);
 }
 
 function runParsingTest(parser, input, expected) {

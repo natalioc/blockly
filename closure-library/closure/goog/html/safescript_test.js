@@ -19,6 +19,7 @@
 goog.provide('goog.html.safeScriptTest');
 
 goog.require('goog.html.SafeScript');
+goog.require('goog.object');
 goog.require('goog.string.Const');
 goog.require('goog.testing.jsunit');
 
@@ -41,16 +42,19 @@ function testSafeScript() {
 
 /** @suppress {checkTypes} */
 function testUnwrap() {
+  var privateFieldName = 'privateDoNotAccessOrElseSafeScriptWrappedValue_';
+  var markerFieldName = 'SAFE_SCRIPT_TYPE_MARKER_GOOG_HTML_SECURITY_PRIVATE_';
+  var propNames = goog.object.getKeys(
+      goog.html.SafeScript.fromConstant(goog.string.Const.from('')));
+  assertContains(privateFieldName, propNames);
+  assertContains(markerFieldName, propNames);
   var evil = {};
-  evil.safeScriptValueWithSecurityContract__googHtmlSecurityPrivate_ =
-      'var string = \'evil\';';
-  evil.SAFE_STYLE_TYPE_MARKER__GOOG_HTML_SECURITY_PRIVATE_ = {};
+  evil[privateFieldName] = 'var string = \'evil\';';
+  evil[markerFieldName] = {};
 
-  var exception = assertThrows(function() {
-    goog.html.SafeScript.unwrap(evil);
-  });
-  assertTrue(
-      exception.message.indexOf('expected object of type SafeScript') > 0);
+  var exception =
+      assertThrows(function() { goog.html.SafeScript.unwrap(evil); });
+  assertContains('expected object of type SafeScript', exception.message);
 }
 
 
@@ -63,4 +67,42 @@ function testFromConstant_allowsEmptyString() {
 
 function testEmpty() {
   assertEquals('', goog.html.SafeScript.unwrap(goog.html.SafeScript.EMPTY));
+}
+
+
+function testFromConstantAndArgs() {
+  var script = goog.html.SafeScript.fromConstantAndArgs(
+      goog.string.Const.from(
+          'function(str, num, nul, json) { foo(str, num, nul, json); }'),
+      'hello world', 42, null, {'foo': 'bar'});
+  assertEquals(
+      '(function(str, num, nul, json) { foo(str, num, nul, json); })' +
+          '("hello world", 42, null, {"foo":"bar"});',
+      goog.html.SafeScript.unwrap(script));
+}
+
+
+function testFromConstantAndArgs_escaping() {
+  var script = goog.html.SafeScript.fromConstantAndArgs(
+      goog.string.Const.from('function(str) { alert(str); }'),
+      '</script</script');
+  assertEquals(
+      '(function(str) { alert(str); })' +
+          '("\\x3c/script\\x3c/script");',
+      goog.html.SafeScript.unwrap(script));
+}
+
+
+function testFromConstantAndArgs_eval() {
+  var script = goog.html.SafeScript.fromConstantAndArgs(
+      goog.string.Const.from('function(arg1, arg2) { return arg1 * arg2; }'),
+      21, 2);
+  var result = eval(goog.html.SafeScript.unwrap(script));
+  assertEquals(42, result);
+}
+
+
+function testFromJson() {
+  var json = goog.html.SafeScript.fromJson({'a': 1, 'b': testFromJson});
+  assertEquals('{"a":1}', goog.html.SafeScript.unwrap(json));
 }

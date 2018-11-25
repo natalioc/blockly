@@ -15,8 +15,6 @@
 /**
  * @fileoverview Static utilities for collecting stats associated with
  * ChannelRequest.
- *
- * @visibility {:internal}
  */
 
 
@@ -67,7 +65,7 @@ requestStats.ServerReachability = {
   REQUEST_MADE: 1,
   REQUEST_SUCCEEDED: 2,
   REQUEST_FAILED: 3,
-  BACK_CHANNEL_ACTIVITY: 4
+  BACK_CHANNEL_ACTIVITY: 4  // any response data received
 };
 
 
@@ -83,8 +81,8 @@ requestStats.ServerReachability = {
  * @extends {goog.events.Event}
  */
 requestStats.ServerReachabilityEvent = function(target, reachabilityType) {
-  goog.events.Event.call(this,
-      requestStats.Event.SERVER_REACHABILITY_EVENT, target);
+  goog.events.Event.call(
+      this, requestStats.Event.SERVER_REACHABILITY_EVENT, target);
 
   /**
    * @type {requestStats.ServerReachability}
@@ -142,7 +140,7 @@ requestStats.Stat = {
 
   /**
    * Event indicating that the second piece of test data was received and it was
-   * recieved separately from the first.
+   * received separately from the first.
    */
   TEST_STAGE_TWO_DATA_TWO: 6,
 
@@ -267,8 +265,7 @@ requestStats.Event.TIMING_EVENT = 'timingevent';
  * @extends {goog.events.Event}
  */
 requestStats.TimingEvent = function(target, size, rtt, retries) {
-  goog.events.Event.call(this,
-      requestStats.Event.TIMING_EVENT, target);
+  goog.events.Event.call(this, requestStats.Event.TIMING_EVENT, target);
 
   /**
    * @type {number}
@@ -299,8 +296,7 @@ goog.inherits(requestStats.TimingEvent, goog.events.Event);
 requestStats.notifyTimingEvent = function(size, rtt, retries) {
   var target = requestStats.statEventTarget_;
   target.dispatchEvent(
-      new requestStats.TimingEvent(
-          target, size, rtt, retries));
+      new requestStats.TimingEvent(target, size, rtt, retries));
 };
 
 
@@ -332,7 +328,7 @@ requestStats.setEndThreadExecutionHook = function(endHook) {
  * @type {Function}
  * @private
  */
-requestStats.startExecutionHook_ = function() { };
+requestStats.startExecutionHook_ = function() {};
 
 
 /**
@@ -341,7 +337,7 @@ requestStats.startExecutionHook_ = function() { };
  * @type {Function}
  * @private
  */
-requestStats.endExecutionHook_ = function() { };
+requestStats.endExecutionHook_ = function() {};
 
 
 /**
@@ -369,7 +365,7 @@ requestStats.onEndExecution = function() {
  */
 requestStats.setTimeout = function(fn, ms) {
   if (!goog.isFunction(fn)) {
-    throw Error('Fn must not be null and must be a function');
+    throw new Error('Fn must not be null and must be a function');
   }
   return goog.global.setTimeout(function() {
     requestStats.onStartExecution();

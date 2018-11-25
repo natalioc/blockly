@@ -29,7 +29,7 @@ goog.require('goog.events.EventTarget');
 
 
 /**
- * Manages undo and redo operations through a series of {@code UndoRedoState}s
+ * Manages undo and redo operations through a series of `UndoRedoState`s
  * maintained on undo and redo stacks.
  *
  * @constructor
@@ -87,14 +87,14 @@ goog.editor.plugins.UndoRedoManager.EventType = {
 
   /**
    * Signifies that a state was just added to the undo stack. Events of this
-   * type will have a {@code state} property whose value is the state that
+   * type will have a `state` property whose value is the state that
    * was just added.
    */
   STATE_ADDED: 'state_added',
 
   /**
    * Signifies that the undo method of a state is about to be called.
-   * Events of this type will have a {@code state} property whose value is the
+   * Events of this type will have a `state` property whose value is the
    * state whose undo action is about to be performed. If the event is cancelled
    * the action does not proceed, but the state will still transition between
    * stacks.
@@ -103,7 +103,7 @@ goog.editor.plugins.UndoRedoManager.EventType = {
 
   /**
    * Signifies that the redo method of a state is about to be called.
-   * Events of this type will have a {@code state} property whose value is the
+   * Events of this type will have a `state` property whose value is the
    * state whose redo action is about to be performed. If the event is cancelled
    * the action does not proceed, but the state will still transition between
    * stacks.
@@ -125,8 +125,8 @@ goog.editor.plugins.UndoRedoManager.prototype.inProgressActionKey_ = null;
  * Set the max undo stack depth (not the real memory usage).
  * @param {number} depth Depth of the stack.
  */
-goog.editor.plugins.UndoRedoManager.prototype.setMaxUndoDepth =
-    function(depth) {
+goog.editor.plugins.UndoRedoManager.prototype.setMaxUndoDepth = function(
+    depth) {
   this.maxUndoDepth_ = depth;
 };
 
@@ -269,6 +269,7 @@ goog.editor.plugins.UndoRedoManager.prototype.addAction_ = function(action) {
  * Executes the action at the front of the pending actions queue. If an action
  * is already in progress or the queue is empty, does nothing.
  * @private
+ * @suppress {strictMissingProperties} Part of the go/strict_warnings_migration
  */
 goog.editor.plugins.UndoRedoManager.prototype.doAction_ = function() {
   if (this.inProgressActionKey_ || this.pendingActions_.length == 0) {
@@ -277,15 +278,12 @@ goog.editor.plugins.UndoRedoManager.prototype.doAction_ = function() {
 
   var action = this.pendingActions_.shift();
 
-  var e = {
-    type: action.type,
-    state: action.state
-  };
+  var e = {type: action.type, state: action.state};
 
   if (this.dispatchEvent(e)) {
     if (action.state.isAsynchronous()) {
-      this.inProgressActionKey_ = goog.events.listen(action.state,
-          goog.editor.plugins.UndoRedoState.ACTION_COMPLETED,
+      this.inProgressActionKey_ = goog.events.listen(
+          action.state, goog.editor.plugins.UndoRedoState.ACTION_COMPLETED,
           this.finishAction_, false, this);
       action.func.call(action.state);
     } else {

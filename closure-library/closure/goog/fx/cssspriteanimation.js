@@ -24,13 +24,16 @@ goog.provide('goog.fx.CssSpriteAnimation');
 
 goog.require('goog.fx.Animation');
 
+goog.forwardDeclare('goog.math.Box');
+goog.forwardDeclare('goog.math.Size');
+
 
 
 /**
  * This animation class is used to animate a CSS sprite (moving a background
  * image).  This moves through a series of images in a single image sprite. By
  * default, the animation loops when done.  Looping can be disabled by setting
- * {@code opt_disableLoop} and results in the animation stopping on the last
+ * `opt_disableLoop` and results in the animation stopping on the last
  * image in the image sprite.  You should set up the {@code background-image}
  * and size in a CSS rule for the relevant element.
  *
@@ -50,11 +53,12 @@ goog.require('goog.fx.Animation');
  *    after a single loop of the images in the sprite.
  *
  * @constructor
+ * @struct
  * @extends {goog.fx.Animation}
  * @final
  */
-goog.fx.CssSpriteAnimation = function(element, size, box, time, opt_acc,
-    opt_disableLoop) {
+goog.fx.CssSpriteAnimation = function(
+    element, size, box, time, opt_acc, opt_disableLoop) {
   var start = [box.left, box.top];
   // We never draw for the end so we do not need to subtract for the size
   var end = [box.right, box.bottom];

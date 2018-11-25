@@ -21,6 +21,7 @@
 goog.provide('goog.labs.testing.AllOfMatcher');
 goog.provide('goog.labs.testing.AnyOfMatcher');
 goog.provide('goog.labs.testing.IsNotMatcher');
+goog.provide('goog.labs.testing.logicMatchers');
 
 
 goog.require('goog.array');
@@ -65,8 +66,7 @@ goog.labs.testing.AllOfMatcher.prototype.matches = function(actualValue) {
  *
  * @override
  */
-goog.labs.testing.AllOfMatcher.prototype.describe =
-    function(actualValue) {
+goog.labs.testing.AllOfMatcher.prototype.describe = function(actualValue) {
   // TODO(user) : Optimize this to remove duplication with matches ?
   var errorString = '';
   goog.array.forEach(this.matchers_, function(matcher) {
@@ -115,8 +115,7 @@ goog.labs.testing.AnyOfMatcher.prototype.matches = function(actualValue) {
  *
  * @override
  */
-goog.labs.testing.AnyOfMatcher.prototype.describe =
-    function(actualValue) {
+goog.labs.testing.AnyOfMatcher.prototype.describe = function(actualValue) {
   // TODO(user) : Optimize this to remove duplication with matches ?
   var errorString = '';
   goog.array.forEach(this.matchers_, function(matcher) {
@@ -163,8 +162,7 @@ goog.labs.testing.IsNotMatcher.prototype.matches = function(actualValue) {
  *
  * @override
  */
-goog.labs.testing.IsNotMatcher.prototype.describe =
-    function(actualValue) {
+goog.labs.testing.IsNotMatcher.prototype.describe = function(actualValue) {
   return 'The following is false: ' + this.matcher_.describe(actualValue);
 };
 
@@ -178,10 +176,10 @@ goog.labs.testing.IsNotMatcher.prototype.describe =
  *
  * @return {!goog.labs.testing.AllOfMatcher} The AllOf matcher.
  */
-function allOf(var_args) {
+var allOf = goog.labs.testing.AllOfMatcher.allOf = function(var_args) {
   var matchers = goog.array.toArray(arguments);
   return new goog.labs.testing.AllOfMatcher(matchers);
-}
+};
 
 
 /**
@@ -193,10 +191,10 @@ function allOf(var_args) {
  *
  * @return {!goog.labs.testing.AnyOfMatcher} The AnyOf matcher.
  */
-function anyOf(var_args) {
+var anyOf = goog.labs.testing.AnyOfMatcher.anyOf = function(var_args) {
   var matchers = goog.array.toArray(arguments);
   return new goog.labs.testing.AnyOfMatcher(matchers);
-}
+};
 
 
 /**
@@ -207,6 +205,11 @@ function anyOf(var_args) {
  *
  * @return {!goog.labs.testing.IsNotMatcher} The IsNot matcher.
  */
-function isNot(matcher) {
+var isNot = goog.labs.testing.IsNotMatcher.isNot = function(matcher) {
   return new goog.labs.testing.IsNotMatcher(matcher);
-}
+};
+
+// Export functions via namespace for use by tests written with goog.module.
+goog.labs.testing.logicMatchers.allOf = allOf;
+goog.labs.testing.logicMatchers.anyOf = anyOf;
+goog.labs.testing.logicMatchers.isNot = isNot;

@@ -40,7 +40,8 @@ goog.require('goog.userAgent');
  *     given image if the image successfully loads.
  */
 goog.labs.net.image.load = function(uri, opt_image) {
-  return new goog.Promise(function(resolve, reject) {
+  return new goog.Promise(/** @suppress {strictPrimitiveOperators} Part of the go/strict_warnings_migration */
+                          function(resolve, reject) {
     var image;
     if (!goog.isDef(opt_image)) {
       image = new Image();
@@ -60,12 +61,12 @@ goog.labs.net.image.load = function(uri, opt_image) {
     // See:
     // http://msdn.microsoft.com/en-us/library/ie/dn467845(v=vs.85).aspx
     var loadEvent = (goog.userAgent.IE && goog.userAgent.VERSION < 11) ?
-        goog.net.EventType.READY_STATE_CHANGE : goog.events.EventType.LOAD;
+        goog.net.EventType.READY_STATE_CHANGE :
+        goog.events.EventType.LOAD;
 
     var handler = new goog.events.EventHandler();
     handler.listen(
-        image,
-        [loadEvent, goog.net.EventType.ABORT, goog.net.EventType.ERROR],
+        image, [loadEvent, goog.net.EventType.ABORT, goog.net.EventType.ERROR],
         function(e) {
 
           // We only registered listeners for READY_STATE_CHANGE for IE.

@@ -12,13 +12,6 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-/**
- * @fileoverview Utilities used by goog.labs.userAgent tools. These functions
- * should not be used outside of goog.labs.userAgent.*.
- *
- *
- * @author nnaze@google.com (Nathan Naze)
- */
 
 goog.provide('goog.labs.userAgent.util');
 
@@ -71,8 +64,8 @@ goog.labs.userAgent.util.userAgent_ =
  * @param {?string=} opt_userAgent The User-Agent override.
  */
 goog.labs.userAgent.util.setUserAgent = function(opt_userAgent) {
-  goog.labs.userAgent.util.userAgent_ = opt_userAgent ||
-      goog.labs.userAgent.util.getNativeUserAgentString_();
+  goog.labs.userAgent.util.userAgent_ =
+      opt_userAgent || goog.labs.userAgent.util.getNativeUserAgentString_();
 };
 
 
@@ -86,8 +79,7 @@ goog.labs.userAgent.util.getUserAgent = function() {
 
 /**
  * @param {string} str
- * @return {boolean} Whether the user agent contains the given string, ignoring
- *     case.
+ * @return {boolean} Whether the user agent contains the given string.
  */
 goog.labs.userAgent.util.matchUserAgent = function(str) {
   var userAgent = goog.labs.userAgent.util.getUserAgent();
@@ -97,7 +89,8 @@ goog.labs.userAgent.util.matchUserAgent = function(str) {
 
 /**
  * @param {string} str
- * @return {boolean} Whether the user agent contains the given string.
+ * @return {boolean} Whether the user agent contains the given string, ignoring
+ *     case.
  */
 goog.labs.userAgent.util.matchUserAgentIgnoreCase = function(str) {
   var userAgent = goog.labs.userAgent.util.getUserAgent();
@@ -123,10 +116,10 @@ goog.labs.userAgent.util.extractVersionTuples = function(userAgent) {
       // (i.e. 'Mobile Safari' in 'Mobile Safari/5.0')
       '(\\w[\\w ]+)' +
 
-      '/' +                // slash
-      '([^\\s]+)' +        // version (i.e. '5.0b')
-      '\\s*' +             // whitespace
-      '(?:\\((.*?)\\))?',  // parenthetical info. parentheses not matched.
+          '/' +                // slash
+          '([^\\s]+)' +        // version (i.e. '5.0b')
+          '\\s*' +             // whitespace
+          '(?:\\((.*?)\\))?',  // parenthetical info. parentheses not matched.
       'g');
 
   var data = [];
@@ -145,4 +138,3 @@ goog.labs.userAgent.util.extractVersionTuples = function(userAgent) {
 
   return data;
 };
-

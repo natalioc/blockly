@@ -45,30 +45,41 @@ goog.require('goog.style.transition');
  * that expands on the width and then followed by the height:
  *
  * <pre>
- *   initialStyle: {width: 10px, height: 10px}
- *   finalStyle: {width: 100px, height: 100px}
- *   transitions: [
- *     {property: width, duration: 1, timing: 'ease-in', delay: 0},
- *     {property: height, duration: 1, timing: 'ease-in', delay: 1}
- *   ]
+ *   var animation = new goog.fx.css3.Transition(
+ *     element,
+ *     duration,
+ *     {width: 10px, height: 10px},
+ *     {width: 100px, height: 100px},
+ *     [
+ *       {property: width, duration: 1, timing: 'ease-in', delay: 0},
+ *       {property: height, duration: 1, timing: 'ease-in', delay: 1}
+ *     ]
+ *   );
  * </pre>
  *
  * @param {Element} element The element to be transitioned.
  * @param {number} duration The duration of the transition in seconds.
- *     This should be the longest of all transitions.
+ *     This should be the longest of all transitions, including any delay.
  * @param {Object} initialStyle Initial style properties of the element before
- *     animating. Set using {@code goog.style.setStyle}.
+ *     animating. Set using `goog.style.setStyle`.
  * @param {Object} finalStyle Final style properties of the element after
- *     animating. Set using {@code goog.style.setStyle}.
+ *     animating. Set using `goog.style.setStyle`.
  * @param {goog.style.transition.Css3Property|
  *     Array<goog.style.transition.Css3Property>} transitions A single CSS3
  *     transition property or an array of it.
  * @extends {goog.fx.TransitionBase}
  * @constructor
+ * @struct
  */
 goog.fx.css3.Transition = function(
     element, duration, initialStyle, finalStyle, transitions) {
   goog.fx.css3.Transition.base(this, 'constructor');
+
+  /**
+   * Timer id to be used to cancel animation part-way.
+   * @private {number}
+   */
+  this.timerId_;
 
   /**
    * @type {Element}
@@ -101,14 +112,6 @@ goog.fx.css3.Transition = function(
   this.transitions_ = goog.isArray(transitions) ? transitions : [transitions];
 };
 goog.inherits(goog.fx.css3.Transition, goog.fx.TransitionBase);
-
-
-/**
- * Timer id to be used to cancel animation part-way.
- * @type {number}
- * @private
- */
-goog.fx.css3.Transition.prototype.timerId_;
 
 
 /** @override */
