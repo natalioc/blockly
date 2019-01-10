@@ -28,7 +28,8 @@ goog.provide('Blockly.FieldLabel');
 
 goog.require('Blockly.Field');
 goog.require('Blockly.Tooltip');
-goog.require('goog.dom');
+goog.require('Blockly.utils');
+
 goog.require('goog.math.Size');
 
 
@@ -42,9 +43,23 @@ goog.require('goog.math.Size');
 Blockly.FieldLabel = function(text, opt_class) {
   this.size_ = new goog.math.Size(0, 17.5);
   this.class_ = opt_class;
-  this.setText(text);
+  this.setValue(text);
+  this.tooltip_ = '';
 };
 goog.inherits(Blockly.FieldLabel, Blockly.Field);
+
+/**
+ * Construct a FieldLabel from a JSON arg object,
+ * dereferencing any string table references.
+ * @param {!Object} options A JSON object with options (text, and class).
+ * @returns {!Blockly.FieldLabel} The new field instance.
+ * @package
+ * @nocollapse
+ */
+Blockly.FieldLabel.fromJson = function(options) {
+  var text = Blockly.utils.replaceMessageReferences(options['text']);
+  return new Blockly.FieldLabel(text, options['class']);
+};
 
 /**
  * Editable fields are saved by the XML renderer, non-editable fields are not.
@@ -53,39 +68,42 @@ Blockly.FieldLabel.prototype.EDITABLE = false;
 
 /**
  * Install this text on a block.
- * @param {!Blockly.Block} block The block containing this text.
  */
-Blockly.FieldLabel.prototype.init = function(block) {
-  if (this.sourceBlock_) {
+Blockly.FieldLabel.prototype.init = function() {
+  if (this.textElement_) {
     // Text has already been initialized once.
     return;
   }
-  this.sourceBlock_ = block;
-
   // Build the DOM.
-  this.textElement_ = Blockly.createSvgElement('text',
+  this.textElement_ = Blockly.utils.createSvgElement('text',
       {'class': 'blocklyText', 'y': this.size_.height - 5}, null);
   if (this.class_) {
-    Blockly.addClass_(this.textElement_, this.class_);
+    Blockly.utils.addClass(this.textElement_, this.class_);
   }
   if (!this.visible_) {
     this.textElement_.style.display = 'none';
   }
-  block.getSvgRoot().appendChild(this.textElement_);
+  this.sourceBlock_.getSvgRoot().appendChild(this.textElement_);
 
-  // Configure the field to be transparent with respect to tooltips.
-  this.textElement_.tooltip = this.sourceBlock_;
+  if (this.tooltip_) {
+    this.textElement_.tooltip = this.tooltip_;
+  } else {
+    // Configure the field to be transparent with respect to tooltips.
+    this.textElement_.tooltip = this.sourceBlock_;
+  }
   Blockly.Tooltip.bindMouseEvents(this.textElement_);
   // Force a render.
-  this.updateTextNode_();
+  this.render_();
 };
 
 /**
  * Dispose of all DOM objects belonging to this text.
  */
 Blockly.FieldLabel.prototype.dispose = function() {
-  goog.dom.removeNode(this.textElement_);
-  this.textElement_ = null;
+  if (this.textElement_) {
+    Blockly.utils.removeNode(this.textElement_);
+    this.textElement_ = null;
+  }
 };
 
 /**
@@ -103,5 +121,10 @@ Blockly.FieldLabel.prototype.getSvgRoot = function() {
  *     link to for its tooltip.
  */
 Blockly.FieldLabel.prototype.setTooltip = function(newTip) {
-  this.textElement_.tooltip = newTip;
+  this.tooltip_ = newTip;
+  if (this.textElement_) {
+    this.textElement_.tooltip = newTip;
+  }
 };
+
+Blockly.Field.register('field_label', Blockly.FieldLabel);
