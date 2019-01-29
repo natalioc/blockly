@@ -737,6 +737,27 @@ Blockly.Flyout.prototype.show = function(xmlList) {
 };
 
 
+// this.isVisible is set to false upon entry in this function as a solution 
+// to the bug that prevents the flyout from being visible after the first 
+//display
+
+/**
+ * Set whether the flyout is visible. A value of true does not necessarily mean
+ * that the flyout is shown. It could be hidden because its container is hidden.
+ * @param {boolean} visible True if visible.
+ */
+Blockly.Flyout.prototype.setVisible = function(visible) {
+	
+  this.isVisible_ = false;
+  var visibilityChanged = (visible != this.isVisible());
+
+  this.isVisible_ = visible;
+  if (visibilityChanged) {
+    this.updateDisplay_();
+  }
+};
+
+
 
 /**
  * When the selection changes, the block name is updated for screenreader
