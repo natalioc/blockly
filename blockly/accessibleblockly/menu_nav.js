@@ -371,34 +371,36 @@ Blockly.Toolbox.TreeNode.prototype.onKeyDown = function(e) {
 };
 
 
-
-
+/*New Flyout.hide. 
+this function is overriden from Blockly library and the implementation has changed 
+in new version of Blockly. So I've updated and the flyout now functions correctly
+*/
+ 
 /**
  * Hide and empty the flyout.
  */
 Blockly.Flyout.prototype.hide = function() {
-menuVars.opened = false;
-
- //remove highlight
- var highlight = Blockly.Accessibility.InBlock.storedHighlight;
- Blockly.Connection.removeHighlight(highlight);
-
+	
+//remove highlight
+  var highlight = Blockly.Accessibility.InBlock.storedHighlight;
+  Blockly.Connection.removeHighlight(highlight);
   if (!this.isVisible()) {
     return;
   }
-  this.svgGroup_.style.display = 'none';
+  this.setVisible(false);
   // Delete all the event listeners.
   for (var x = 0, listen; listen = this.listeners_[x]; x++) {
     Blockly.unbindEvent_(listen);
   }
   this.listeners_.length = 0;
   if (this.reflowWrapper_) {
-    Blockly.unbindEvent_(this.reflowWrapper_);
+    this.workspace_.removeChangeListener(this.reflowWrapper_);
     this.reflowWrapper_ = null;
   }
   // Do NOT delete the blocks here.  Wait until Flyout.show.
   // https://neil.fraser.name/news/2014/08/09/
 };
+ 
 
 
 /*
@@ -737,25 +739,6 @@ Blockly.Flyout.prototype.show = function(xmlList) {
 };
 
 
-// this.isVisible is set to false upon entry in this function as a solution 
-// to the bug that prevents the flyout from being visible after the first 
-//display
-
-/**
- * Set whether the flyout is visible. A value of true does not necessarily mean
- * that the flyout is shown. It could be hidden because its container is hidden.
- * @param {boolean} visible True if visible.
- */
-Blockly.Flyout.prototype.setVisible = function(visible) {
-	
-  this.isVisible_ = false;
-  var visibilityChanged = (visible != this.isVisible());
-
-  this.isVisible_ = visible;
-  if (visibilityChanged) {
-    this.updateDisplay_();
-  }
-};
 
 
 
