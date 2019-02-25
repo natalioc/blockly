@@ -595,3 +595,42 @@ Blockly.Constants.Logic.LOGIC_TERNARY_ONCHANGE_MIXIN = {
 
 Blockly.Extensions.registerMixin('logic_ternary',
     Blockly.Constants.Logic.LOGIC_TERNARY_ONCHANGE_MIXIN);
+	
+	
+/*======== This are the custom mutator blocks implementation for else if and if blocks
+These were implemented in Javascript and have be replaced with JSON.
+*/
+//TO-DO replace blocks with JSON definitions
+//==========================MUTATORS CONVERTED TO INDIVIDUAL BLOCKS=======================
+//else if block
+Blockly.Blocks['controls_elseif'] = {
+init: function() {
+    this.appendValueInput("valueInput")
+        .setAlign(Blockly.ALIGN_RIGHT)
+        .appendField("else if")
+        .setCheck('Boolean')
+    this.appendStatementInput("elseifInput");
+    //this.appendStatementInput("elseifInput");
+    this.setPreviousStatement(true, 'elseif');
+    this.setNextStatement(true, ['else','elseif']);
+    this.setColour(210);
+    this.setTooltip(Blockly.Msg.CONTROLS_IF_ELSEIF_TOOLTIP);
+    this.setHelpUrl('http://www.example.com/');
+  }
+		};
+
+//else block
+Blockly.Blocks['controls_else'] = {
+init: function() {
+    this.appendDummyInput()
+        .setAlign(Blockly.ALIGN_RIGHT)
+        .appendField("else")
+    this.appendStatementInput("elseInput");
+    this.setPreviousStatement(true, 'else');
+    this.setNextStatement(true,'blocks');
+    this.setColour(210);
+    this.setTooltip(Blockly.Msg.CONTROLS_IF_ELSE_TOOLTIP);
+    this.setHelpUrl('http://www.example.com/');
+  }
+		};
+

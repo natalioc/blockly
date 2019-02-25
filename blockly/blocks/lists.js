@@ -131,6 +131,7 @@ Blockly.Blocks['lists_create_with'] = {
    * Block for creating a list with any number of elements of any type.
    * @this Blockly.Block
    */
+  /*
   init: function() {
     this.setHelpUrl(Blockly.Msg['LISTS_CREATE_WITH_HELPURL']);
     this.setColour(Blockly.Msg['LISTS_HUE']);
@@ -140,6 +141,64 @@ Blockly.Blocks['lists_create_with'] = {
     this.setMutator(new Blockly.Mutator(['lists_create_with_item']));
     this.setTooltip(Blockly.Msg['LISTS_CREATE_WITH_TOOLTIP']);
   },
+  */
+  
+  /* the code below is accessibleBlockly's code for the lists_create_with mutators
+  */
+  
+  init: function() {
+    this.setHelpUrl(Blockly.Msg.LISTS_CREATE_WITH_HELPURL);
+    this.setColour(Blockly.Msg['LISTS_HUE']);
+    this.appendValueInput("textinput1")
+        .appendField("create list with")
+        .appendField(new Blockly.FieldTextInput("3"), "inputcount")
+        .appendField("items");
+    var text_inputcount = this.getFieldValue('inputcount');
+    this.itemCount_ = text_inputcount-1;
+    this.updateShape_();
+    this.setOutput(true, 'Array');
+    this.setTooltip(Blockly.Msg.LISTS_CREATE_WITH_TOOLTIP);
+  },
+
+   /**
+   * Update list inputs dynamically
+   */
+  onchange: function(){
+      var text_inputcount = this.getFieldValue('inputcount');
+
+      if(text_inputcount <= 1 || text_inputcount >= 10){
+
+        this.setFieldValue(this.itemCount_+1,'inputcount');
+        Blockly.Accessibility.Speech.Say("Please enter number between 2 and 9");
+        return;
+      }
+
+      //update block when new number is entered
+      if(text_inputcount != this.itemCount_+1 && text_inputcount!= ""){
+
+          //maximum of 9
+          if(text_inputcount > 9){
+            text_inputcount = 9;
+            this.setFieldValue(9,'inputcount');
+          }
+
+          //minimum of 2 combined
+          if(text_inputcount <= 1){
+            text_inputcount = 1;
+            this.setFieldValue(1,'inputcount');
+          }
+
+          this.itemCount_ = text_inputcount-1;
+          this.updateShape_();
+      }
+
+      if(text_inputcount == ""){
+        this.setFieldValue(this.itemCount_+1,'inputcount');
+      }
+  },
+  //End of accessibleBlockly's code
+  
+  
   /**
    * Create XML to represent list inputs.
    * @return {!Element} XML storage element.
@@ -231,14 +290,15 @@ Blockly.Blocks['lists_create_with'] = {
       this.removeInput('EMPTY');
     } else if (!this.itemCount_ && !this.getInput('EMPTY')) {
       this.appendDummyInput('EMPTY')
-          .appendField(Blockly.Msg['LISTS_CREATE_EMPTY_TITLE']);
+          //.appendField(Blockly.Msg['LISTS_CREATE_EMPTY_TITLE']); //commented out by accessibleBlockly to allow custom mutator block render
+																	// properly
     }
     // Add new inputs.
     for (var i = 0; i < this.itemCount_; i++) {
       if (!this.getInput('ADD' + i)) {
         var input = this.appendValueInput('ADD' + i);
         if (i == 0) {
-          input.appendField(Blockly.Msg['LISTS_CREATE_WITH_INPUT_WITH']);
+          //input.appendField(Blockly.Msg['LISTS_CREATE_WITH_INPUT_WITH']); //commented out by accessibleBlockly
         }
       }
     }
