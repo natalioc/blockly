@@ -781,7 +781,7 @@ Blockly.Accessibility.MenuNav.flyoutToWorkspace = function(){
     var xml;                       //dom version of the xml to be added to the workspace
 
     //block svg to block xml then add to workspace
-    var blockXML = Blockly.Xml.blockToDom_(menuVars.flyoutArr[menuVars.prevIndex]);//the current block tab on from the flyout
+    var blockXML = Blockly.Xml.blockToDom(menuVars.flyoutArr[menuVars.prevIndex]);//the current block tab on from the flyout
     var block    = Blockly.Block.obtain(workspace, blockXML.getAttribute("type"));
     block.initSvg();
     block.render();

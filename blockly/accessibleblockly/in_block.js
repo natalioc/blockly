@@ -619,6 +619,7 @@ Blockly.Accessibility.InBlock.hideDropDown = function(){
      try{
   
     	  console.log("Unselected!");
+    	   this.clearHighlights();
     	  this.selectionList[this.connectionsIndex].sourceBlock_.select();
      }
      catch(e){
@@ -774,7 +775,7 @@ Blockly.Connection.prototype.returnHighlight = function () {
     var xy = this.sourceBlock_.getRelativeToSurfaceXY();
     var x = this.x_ - xy.x;
     var y = this.y_ - xy.y;
-    return Blockly.createSvgElement('path',
+    return Blockly.utils.createSvgElement('path',
         {
             'class': 'blocklyHighlightedConnectionPath',
             'd': steps,
@@ -816,7 +817,7 @@ Blockly.Field.prototype.highlight = function () {
     var x = mat.e;
     var y = mat.f+13;
 
-    return Blockly.createSvgElement('path',
+    return Blockly.utils.createSvgElement('path',
         {
             'class': 'blocklyHighlightedConnectionPath',
             'd': steps,
