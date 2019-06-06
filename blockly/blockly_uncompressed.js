@@ -1736,6 +1736,7 @@ goog.addDependency("../../../" + dir + "/accessibleblockly/in_block.js", ['Block
 goog.addDependency("../../../" + dir + "/accessibleblockly/menu_nav.js", ['Blockly.Accessibility.MenuNav'], []);
 goog.addDependency("../../../" + dir + "/accessibleblockly/speech.js", ['Blockly.Accessibility.Speech'], []);
 goog.addDependency("../../../" + dir + "/accessibleblockly/core_overwrites.js", ['Blockly.Overwrites'], []);
+goog.addDependency("../../../" + dir + "/accessibleblockly/cursor_navigation.js", ['Blockly.Accessibility.CursorNavigation'], []);
 
 
 // Load Blockly.
@@ -1839,6 +1840,7 @@ goog.require('Blockly.Accessibility.Prefixes');
 goog.require('Blockly.Accessibility.MenuNav');
 goog.require('Blockly.Accessibility.InBlock');
 goog.require('Blockly.Accessibility.Keystrokes');
+goog.require('Blockly.Accessibility.CursorNavigation');
 
 delete root.BLOCKLY_DIR;
 delete root.BLOCKLY_BOOT;

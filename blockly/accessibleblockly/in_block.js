@@ -78,6 +78,7 @@ Blockly.Accessibility.InBlock.enterCurrentBlock = function () {
         // If the connection is null it means nothing can be connected there, so we don't need to remember the input
         if (Blockly.selected.inputList[i].connection != null) {
             this.selectionList.push(Blockly.selected.inputList[i]);
+			console.log('ABOU enterCurrentBlock input i :' + Blockly.selected.inputList[i].name);
         }
     }
 
@@ -94,9 +95,10 @@ Blockly.Accessibility.InBlock.enterCurrentBlock = function () {
 
     if(Blockly.Accessibility.Speech.keyboardState == "editMode"){
         Blockly.Accessibility.Speech.readConnection(this.selectionList[this.connectionsIndex].name, this.connectionsIndex);
+		console.log('ABOU: connection Name: ' + this.selectionList[this.connectionsIndex].name);
     }
     this.highlightSelection();
-
+	console.log('ABOU: enterCurrentBlock: selectionList: ' + this.selectionList);
     return true;
 };
 
@@ -284,6 +286,7 @@ Blockly.Accessibility.InBlock.highlightSelection = function(){
     else if (this.selectionList[this.connectionsIndex] instanceof Blockly.Field) {
         this.highlightList.push(this.selectionList[this.connectionsIndex].highlight());
     }
+	console.log('ABOU: connection Name: ' + this.selectionList[this.connectionsIndex].name);
 }
 
 /**

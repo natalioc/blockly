@@ -27,6 +27,11 @@ goog.require('Blockly.Accessibility.MenuNav');
 goog.require('Blockly.Accessibility.Speech');
 goog.require('Blockly.Accessibility');
 
+///ABOU
+goog.require('Blockly.Accessibility.CursorNavigation');
+
+///ABOU
+
 
 /**
  * The xml dom that describes the current scene in the Blockly workspace
@@ -36,7 +41,7 @@ var xmlDoc = null;
 /**
  * The current node that is selected in Blockly.
  */
-Blockly.Accessibility.Navigation.currentNode = null;
+Blockly.Accessibility.Navigation.currentNode = null; //ABOU: this is an xml node for a block
 
 /**
  * If this variable is true then updateXmlSelection will skip.
@@ -71,9 +76,9 @@ Blockly.BlockSvg.prototype.defaultDispose = Blockly.BlockSvg.prototype.dispose;
 /**
  * Select this block.  Highlight it visually.
  */
-Blockly.BlockSvg.prototype.select = function () {
+Blockly.BlockSvg.prototype.select = function () { //ABOU: mainly to set currentNode
 
-    var prevSelect = Blockly.selected;
+    var prevSelect = Blockly.selected; 
     this.defaultSelect();
 
     if (Blockly.Accessibility.Navigation.getBlockNodeById(this.id)) {
@@ -84,12 +89,16 @@ Blockly.BlockSvg.prototype.select = function () {
         Blockly.Accessibility.Speech.updateBlockReader(this.type, this);
        // Blockly.Accessibility.Speech.changedResult = undefined;
     //}
+	
+	//ABOU
+	Blockly.Accessibility.CursorNavigation.initialize();
+	//ABOU
 };
 
 /**
  * Unselect this block.  Remove its highlighting.
  */
-Blockly.BlockSvg.prototype.unselect = function () {
+Blockly.BlockSvg.prototype.unselect = function () { //ABOU: mainly to set reset currentNode and clear connection highlight
 
     this.defaultUnselect();
     Blockly.ContextMenu.hide();
@@ -115,7 +124,7 @@ Blockly.BlockSvg.prototype.unselect = function () {
  *     block from the workspace's list of top blocks.
  */
 Blockly.BlockSvg.prototype.dispose = function (healStack, animate,
-                                              opt_dontRemoveFromWorkspace) {
+                                              opt_dontRemoveFromWorkspace) {   //ABOU: mainly because to update xmlDoc after disposal
 
     this.defaultDispose(healStack, animate, opt_dontRemoveFromWorkspace);
     
@@ -161,6 +170,7 @@ Blockly.Accessibility.Navigation.updateXmlSelection = function (noSelect) {
 
         idDifference = parseInt(Blockly.Accessibility.Navigation.findContainers()[0].getAttribute('id')) - idDifference;
         Blockly.Accessibility.Navigation.jumpToID(pastId + idDifference);
+		console.log('ABOU: on mouse up');
     }
         // Otherwise this is a non-issue
     else {
@@ -294,6 +304,8 @@ Blockly.Accessibility.Navigation.jumpToID = function(id) {
  * Goes out of a block to go up a level
  */
 Blockly.Accessibility.Navigation.traverseOut = function () {
+	
+	console.log('ABOU: inside traverseOut');
 
     // Null check
     if (!Blockly.selected) {
@@ -306,9 +318,11 @@ Blockly.Accessibility.Navigation.traverseOut = function () {
     var surroundParent = Blockly.selected.getSurroundParent();
     var selectedIndex = childBlocks.indexOf(Blockly.selected);
     console.log(surroundParent);
-    //select the previous block at the same level if there is one
+	console.log('ABOU: child blocks');
+	console.log(childBlocks);
+    //select the previous block at the same level if there is one //ABOU: this selects the next block at the same level if there is one
     if(childBlocks.length > 1 && !Blockly.selected.previousConnection){
-
+		console.log('ABOU: traverseout with children and null prev-con');
         for (var i = 0; i < childBlocks.length; i++){
 
             if(Blockly.selected != childBlocks[i]){
@@ -325,6 +339,7 @@ Blockly.Accessibility.Navigation.traverseOut = function () {
 
     //select the surrounding block
     else if (surroundParent){
+		console.log('ABOU: traverseout No children and/or null prev-con');
         surroundParent.select();
     }
     //inform the user they've reached the end
@@ -341,6 +356,8 @@ Blockly.Accessibility.Navigation.traverseOut = function () {
  * TODO: clean up this function, the if statements may be redundant or simplified but for now it works
  */
 Blockly.Accessibility.Navigation.traverseIn = function() {
+	
+	console.log('ABOU: inside traverseIn');
 
     // Null check
     if (Blockly.selected == null) {
@@ -357,6 +374,7 @@ Blockly.Accessibility.Navigation.traverseIn = function() {
         //select next child
         //TODO: clean up this if statement if possible
         if(Blockly.selected.childBlocks_[i].previousConnection != null && Blockly.selected.childBlocks_[i].previousConnection.type == 4){
+			console.log('ABOU: outside child (next statement) is selected at index ' +  i );
             Blockly.selected.childBlocks_[i].select();
             return;
         }
@@ -399,6 +417,8 @@ Blockly.Accessibility.Navigation.traverseIn = function() {
  * Goes from one block to the next above it (no travel between layers)
  */
 Blockly.Accessibility.Navigation.traverseUp = function() {
+	
+	
 
     // Null check
     if (Blockly.selected == null) {
@@ -409,20 +429,23 @@ Blockly.Accessibility.Navigation.traverseUp = function() {
 
     if (Blockly.selected.previousConnection != null &&
         Blockly.selected.previousConnection.targetConnection != null) {
+		console.log("ABOU: same section of stacked blocks");
         Blockly.selected.previousConnection.targetConnection.sourceBlock_.select();
         Blockly.Accessibility.Speech.updateBlockReader(Blockly.selected.type, Blockly.selected);
     }
     else {
         //Blockly.Accessibility.Speech.Say('Cannot move further up from here');
-
+		//ABOU this section handles W key press when we are at the topmost node on
+		//the workspace or when we are at the top of a separate section of blocks(still to confirm this)
         if (this.currentNode == this.getOutermostNode(this.currentNode)) {
-
+			console.log("ABOU: current Node: " + this.currentNode);
+			console.log("ABOU: moved out to parent of stacked blocks");
             var containers = Blockly.Accessibility.MenuNav.containersArr;
 
             for(var i = 0; i < containers.length; i++){
-
+				
                 if(containers[i] == Blockly.selected){
-
+					console.log("ABOU: container i == selected i is " + i);
                     if(containers[i-1]){
                        var count = i-1;
                        containers[count].select();
@@ -432,6 +455,7 @@ Blockly.Accessibility.Navigation.traverseUp = function() {
                     }
                 }
             }
+			console.log("ABOU: length containersArr:" + containers.length);
             containers[containers.length-1].select();
             Blockly.Accessibility.Speech.updateBlockReader(Blockly.selected.type, Blockly.selected);
 
@@ -465,13 +489,15 @@ Blockly.Accessibility.Navigation.traverseDown = function() {
         // Check to make sure we're on the first layer before doing anything.
         //if (this.currentNode == this.findBottom(this.getOutermostNode(this.currentNode))) {
         if (this.currentNode == this.getOutermostNode(this.currentNode)) {
+			console.log("ABOU: Down current Node: " + this.currentNode);
+			console.log("ABOU: Down moved out to parent of stacked blocks");
 
             var containers = Blockly.Accessibility.MenuNav.containersArr;
 
             for(var i = 0; i < containers.length; i++){
 
                 if(containers[i] == Blockly.selected){
-
+					console.log("ABOU: container i == selected i is " + i);
                     if(containers[i+1]){
                        var count = i+1;
                        containers[count].select();
@@ -481,6 +507,7 @@ Blockly.Accessibility.Navigation.traverseDown = function() {
                     }  
                 }
             }
+			console.log("ABOU: length containersArr:" + containers.length);
             containers[0].select();
             Blockly.Accessibility.Speech.updateBlockReader(Blockly.selected.type, Blockly.selected);
 
@@ -492,24 +519,29 @@ Blockly.Accessibility.Navigation.traverseDown = function() {
 * Traverse through inline blocks (such as if statements)
 */
 Blockly.Accessibility.Navigation.inlineBlockTraverseIn = function(){
+	
+	console.log('ABOU: inline traversal');
 
     var inputList = Blockly.selected.inputList;
     var sourceBlock;
-
+	console.log('ABOU: inline traversal selected: ' + Blockly.selected);
+	console.log('ABOU: inline traversal input list: ' + inputList);
     for(var i = 0; i < inputList.length; i ++){
-
+		console.log('ABOU: inline traversal inputlistlength: ' + inputList.length);
         try{
             if(inputList[i].connection.targetConnection!=null){
 
                  sourceBlock = inputList[i].connection.targetConnection.sourceBlock_;
-
+				console.log('ABOU: inline traversal SourceBlock: ' + sourceBlock);
                  if(sourceBlock != Blockly.selected){
                     sourceBlock.select();
+					console.log('ABOU: inline traversal SourceBlock');
                     break;
                  }
             }
             else{
                 inputList = Blockly.selected.parentBlock_.inputList
+				console.log('ABOU: inline traversal parentBlock');
             }
         }
         catch(e){
@@ -629,6 +661,7 @@ Blockly.Accessibility.Navigation.findTop = function(myNode) {
         myNode = myNode.parentNode.parentNode;
         return Blockly.Accessibility.Navigation.findTop(myNode);
     }
+	console.log("ABOU: Top block in section of stacked blocks")
     // If it's not the child of a next node, then it's the top node.
     return myNode;
 };
@@ -735,7 +768,7 @@ Blockly.Accessibility.Navigation.getOutermostNode = function(inputNode){
     // If myNode and lastNode are equal, then we've reached the outermost block
     while (myNode != lastNode) {
         lastNode = myNode;
-
+		console.log("ABOU: node : " + lastNode);
         //Go to the top of the section
         myNode = this.findTop(myNode);
 
@@ -746,7 +779,7 @@ Blockly.Accessibility.Navigation.getOutermostNode = function(inputNode){
         }
 
     }
-
+	console.log("ABOU: Top block (as outermost) same section of stacked blocks")
     return myNode;
 };
 
@@ -802,3 +835,9 @@ Blockly.Accessibility.Navigation.getAllChildrenOfStatement = function(currentNod
 };
 
 //#endregion
+
+//The functions below are implement to mimic Google Abby's navigation 
+
+Blockly.Accessibility.Navigation.GoDown = function(){
+	
+};

@@ -23,6 +23,7 @@ goog.require('Blockly.Accessibility.Speech');
 goog.require('Blockly.Accessibility.Prefixes');
 goog.require('Blockly.BlockSvg');
 goog.require('Blockly.Flyout');
+goog.require('Blockly.Accessibility.CursorNavigation');
 
 //default constructor
 Blockly.Accessibility.Keystrokes = function(){
@@ -279,6 +280,7 @@ document.onkeydown = document.onkeyup = function(e){
 		else if(map[13]){
 			console.log('hotkeyMode Enter key pressed');
 			Blockly.Accessibility.InBlock.hideDropDown();
+			Blockly.Accessibility.CursorNavigation.initialize();
 		}
 
 		else if(map[8]){
@@ -322,6 +324,7 @@ document.onkeydown = document.onkeyup = function(e){
 			console.log('hotkeyMode A key pressed');
 			if(!Blockly.selected) return;
 			if(Blockly.selected.id[0] != ":" && !Blockly.Accessibility.Keystrokes.prototype.isConnecting){
+				console.log('ABOU: traverseOut call in nav A key');
 				Blockly.Accessibility.Navigation.traverseOut();
 			}
 		}
@@ -340,7 +343,8 @@ document.onkeydown = document.onkeyup = function(e){
 			console.log('hotkeyMode D key pressed');
 			if(!Blockly.selected) return;
 			if(Blockly.selected.id[0] != ":" && !Blockly.Accessibility.Keystrokes.prototype.isConnecting){
-				Blockly.Accessibility.Navigation.traverseIn();
+				//Blockly.Accessibility.Navigation.traverseIn();
+				Blockly.Accessibility.CursorNavigation.goLeft();
 			}
 		}
 
@@ -394,15 +398,17 @@ document.onkeydown = document.onkeyup = function(e){
 			var role = document.activeElement.getAttribute("role");
 
 			if(!Blockly.selected) return;
-
+	
 			else if(role == "menu"){
 				Blockly.Accessibility.InBlock.ddNavDown();
 			}
 			
 			//if not on toolbox navigate down through blocks
 			else if(document.activeElement.id[0] != ":"  && !Blockly.Accessibility.Keystrokes.prototype.isConnecting){
-				Blockly.Accessibility.Navigation.traverseDown();
+				//Blockly.Accessibility.Navigation.traverseDown();
+				Blockly.Accessibility.CursorNavigation.goDown();
 			}
+		
 		}
 
 		else if(map[87]){ //W
@@ -420,7 +426,13 @@ document.onkeydown = document.onkeyup = function(e){
 
 			else if(document.activeElement.id[0] != ":" && !Blockly.Accessibility.Keystrokes.prototype.isConnecting){
 
-				Blockly.Accessibility.Navigation.traverseUp();
+				//Blockly.Accessibility.Navigation.traverseUp();
+				//console.log("Abou: selected" + Blockly.selected.nextConnection);
+				//console.log("Abou: currentNode" + Blockly.Accessibility.Navigation.currentNode.nodeName);
+				
+				//Blockly.selected.nextConnection.returnHighlight()
+				Blockly.Accessibility.CursorNavigation.goUp();
+				
 			}
 
 		}
