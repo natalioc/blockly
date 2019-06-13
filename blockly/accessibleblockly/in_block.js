@@ -71,6 +71,8 @@ Blockly.Accessibility.InBlock.enterCurrentBlock = function () {
                 if (!(Blockly.selected.inputList[i].fieldRow[j] instanceof Blockly.FieldLabel) &&
                     !(Blockly.selected.inputList[i].fieldRow[j] instanceof Blockly.FieldImage)) {
                     this.selectionList.push(Blockly.selected.inputList[i].fieldRow[j]);
+					console.log('ABOU: field row has been put');
+					console.log('ABOU: field name of ' + i + Blockly.selected.inputList[i].fieldRow[j].name);
 
                 }
             }
@@ -78,7 +80,7 @@ Blockly.Accessibility.InBlock.enterCurrentBlock = function () {
         // If the connection is null it means nothing can be connected there, so we don't need to remember the input
         if (Blockly.selected.inputList[i].connection != null) {
             this.selectionList.push(Blockly.selected.inputList[i]);
-			console.log('ABOU enterCurrentBlock input i :' + Blockly.selected.inputList[i].name);
+			console.log('ABOU enterCurrentBlock input i  i is : ' + i + Blockly.selected.inputList[i].name);
         }
     }
 

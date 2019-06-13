@@ -325,7 +325,8 @@ document.onkeydown = document.onkeyup = function(e){
 			if(!Blockly.selected) return;
 			if(Blockly.selected.id[0] != ":" && !Blockly.Accessibility.Keystrokes.prototype.isConnecting){
 				console.log('ABOU: traverseOut call in nav A key');
-				Blockly.Accessibility.Navigation.traverseOut();
+				//Blockly.Accessibility.Navigation.traverseOut();
+				Blockly.Accessibility.CursorNavigation.goRight();
 			}
 		}
 

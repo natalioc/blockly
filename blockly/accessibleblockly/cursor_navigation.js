@@ -22,11 +22,13 @@ Blockly.Accessibility.CursorNavigation.currentInputIndex = 0;
  */
 
 Blockly.Accessibility.CursorNavigation.goDown =  function(){
+	console.log('ABOU: goDown current Loc is ' + this.currentLocation); 
 	if(this.currentLocation === 1){
 		this.currentSelection = this.currentSelection.sourceBlock_;
 		this.goToBlock();
+		console.log('ABOU: goDown location is 1');
 		
-	}else if(this.currentLocation === 2 && Blockly.selected){
+	}else if(this.currentLocation === 2 && Blockly.selected && Blockly.selected.outputConnection == null){
 		
 		this.currentLocation = 3;
 		this.currentSelection = Blockly.selected.nextConnection;
@@ -37,17 +39,24 @@ Blockly.Accessibility.CursorNavigation.goDown =  function(){
 		Blockly.selected = selected;
 	}
 	else if(this.currentLocation === 3 && this.currentSelection != null && this.currentSelection.targetConnection !=null ){
-		this.currentLocation = 2;
-		Blockly.Connection.removeHighlight(this.currentHighlight);
+		//this.currentLocation = 2;
+		//Blockly.Connection.removeHighlight(this.currentHighlight);
 		this.currentSelection = this.currentSelection.targetConnection.sourceBlock_;
-		this.currentSelection.select();
-		this.currentHighlight = null;
+		//this.currentSelection.select();
+		//this.currentHighlight = null;
+		this.goToBlock();
 		
 	}
 	else if(this.currentLocation === 4){ //ABOU this is not responding as expected
 		this.currentInputIndex ++;
 		if (this.currentInputIndex >= Blockly.selected.inputList.length){
 			this.currentInputIndex = Blockly.selected.inputList.length - 1;
+		}
+		
+		if(Blockly.selected.inputList[this.currentInputIndex].connection == null){ // handle case when input is a dummy input
+																				   //need to write a general function to handle in case of 
+																				   //consecutive dummy inputs
+			this.currentInputIndex++; 
 		}
 		Blockly.Connection.removeHighlight(this.currentHighlight);
 		this.currentSelection = Blockly.selected.inputList[this.currentInputIndex].connection;
@@ -61,7 +70,7 @@ Blockly.Accessibility.CursorNavigation.goDown =  function(){
 
 /**
  * For traversing Up from next-connection to block to previous-connection etc
- * For traverses to up/to the right through the input connections of a block.
+ * For traversing to up/to the right through the input connections of a block.
  *
  */
 Blockly.Accessibility.CursorNavigation.goUp = function(){
@@ -69,7 +78,8 @@ Blockly.Accessibility.CursorNavigation.goUp = function(){
 		this.currentSelection = this.currentSelection.sourceBlock_;
 		this.goToBlock();
 		
-	}else if(this.currentLocation === 2 && Blockly.selected && this.currentSelection.previousConnection != null && this.currentSelection.previousConnection.targetConnection != null ){
+	}else if(this.currentLocation === 2 && Blockly.selected && this.currentSelection.previousConnection != null &&
+		this.currentSelection.previousConnection.targetConnection != null && Blockly.selected.outputConnection == null){
 		
 		this.currentLocation = 3;
 		this.currentSelection = Blockly.selected.previousConnection.targetConnection;
@@ -79,7 +89,8 @@ Blockly.Accessibility.CursorNavigation.goUp = function(){
 		Blockly.selected.unselect();
 		Blockly.selected = selected;
 	}
-	else if(this.currentLocation === 2 && Blockly.selected && this.currentSelection.previousConnection != null && this.currentSelection.previousConnection.targetConnection == null ){
+	else if(this.currentLocation === 2 && Blockly.selected && this.currentSelection.previousConnection != null && 
+		this.currentSelection.previousConnection.targetConnection == null && Blockly.selected.outputConnection == null ){
 		
 		this.currentLocation = 1;
 		this.currentSelection = Blockly.selected.previousConnection;
@@ -88,6 +99,23 @@ Blockly.Accessibility.CursorNavigation.goUp = function(){
 		var selected = Blockly.selected;
 		Blockly.selected.unselect();
 		Blockly.selected = selected;
+	}
+	else if(this.currentLocation === 4){
+		this.currentInputIndex--;
+		if (this.currentInputIndex < 0){
+			this.currentInputIndex = 0;
+		}
+		if(Blockly.selected.inputList[this.currentInputIndex].connection == null){ // handle case when input is a dummy input
+																				   //need to write a general function to handle in case of 
+																				   //consecutive dummy inputs
+			this.currentInputIndex--; 
+		}
+		Blockly.Connection.removeHighlight(this.currentHighlight);
+		this.currentSelection = Blockly.selected.inputList[this.currentInputIndex].connection;
+		this.currentHighlight = this.currentSelection.returnHighlight();
+		
+		
+		
 	}
 	
 	console.log('ABOU: goUp');
@@ -103,7 +131,7 @@ Blockly.Accessibility.CursorNavigation.goUp = function(){
  */
 Blockly.Accessibility.CursorNavigation.goLeft = function(){
 	if(this.currentLocation === 2 && Blockly.selected){
-		this.currentLocation = 4 //for inputs
+		this.currentLocation = 4; //for inputs
 		this.currentInputIndex = 0;
 		this.currentSelection = Blockly.selected.inputList[this.currentInputIndex].connection;
 		this.currentHighlight = this.currentSelection.returnHighlight();
@@ -121,6 +149,29 @@ Blockly.Accessibility.CursorNavigation.goLeft = function(){
 		//this.currentSelection.select();
 		//this.currentHighlight = null;
 		this.goToBlock();
+	}
+	
+}
+
+
+
+Blockly.Accessibility.CursorNavigation.goRight = function(){
+	
+	if(this.currentLocation === 4){
+		
+		this.currentSelection = this.currentSelection.sourceBlock_;
+		this.goToBlock();
+		console.log("ABOU: block type: " + this.currentSelection.type);
+	}
+	else if(this.currentLocation ===2 && Blockly.selected && Blockly.selected.outputConnection != null){
+		this.currentLocation = 4;
+		this.currentSelection = Blockly.selected.outputConnection.targetConnection;
+		this.currentHighlight = this.currentSelection.returnHighlight();
+		var selected = Blockly.selected;
+		Blockly.selected.unselect();
+		Blockly.selected = selected.outputConnection.targetConnection.sourceBlock_;
+		
+		
 	}
 	
 }
