@@ -72,7 +72,7 @@ Blockly.Accessibility.InBlock.enterCurrentBlock = function () {
                     !(Blockly.selected.inputList[i].fieldRow[j] instanceof Blockly.FieldImage)) {
                     this.selectionList.push(Blockly.selected.inputList[i].fieldRow[j]);
 					console.log('ABOU: field row has been put');
-					console.log('ABOU: field name of ' + i + Blockly.selected.inputList[i].fieldRow[j].name);
+					console.log('ABOU: field name of ' + i + ' ' + Blockly.selected.inputList[i].fieldRow[j].name);
 
                 }
             }
@@ -80,8 +80,11 @@ Blockly.Accessibility.InBlock.enterCurrentBlock = function () {
         // If the connection is null it means nothing can be connected there, so we don't need to remember the input
         if (Blockly.selected.inputList[i].connection != null) {
             this.selectionList.push(Blockly.selected.inputList[i]);
-			console.log('ABOU enterCurrentBlock input i  i is : ' + i + Blockly.selected.inputList[i].name);
+			console.log('ABOU enterCurrentBlock input i  i is : ' + i + ' ' + Blockly.selected.inputList[i].name);
         }
+		else{ //ABOU this else part added for debugging
+			console.log('ABOU enterCurrentBlock is connection null i is : ' + i);
+		}
     }
 
     if (Blockly.selected.outputConnection != null) {
@@ -112,7 +115,7 @@ Blockly.Accessibility.InBlock.selectNext = function () {
 
     this.connectionsIndex++;
     if (this.connectionsIndex >= this.selectionList.length) {
-        this.connectionsIndex = 0;
+        this.connectionsIndex = this.selectionList.length -1; // remain at the end no circularity
     }
     
     Blockly.Accessibility.Speech.readConnection(this.selectionList[this.connectionsIndex].name, this.connectionsIndex);
@@ -130,7 +133,7 @@ Blockly.Accessibility.InBlock.selectPrev = function () {
 
     this.connectionsIndex--;
     if (this.connectionsIndex < 0) {
-        this.connectionsIndex = this.selectionList.length - 1;
+        this.connectionsIndex = 0; //remain on start
     }
 
 
@@ -139,6 +142,25 @@ Blockly.Accessibility.InBlock.selectPrev = function () {
     this.highlightSelection();
 
 };
+
+
+/**
+ * Selects current value or field based on this.connectionsIndex;
+ */
+Blockly.Accessibility.InBlock.selectCurrent = function (){
+	this.unhighlightSelection();
+
+	if(this.connectionsIndex >= 0 && this.connectionsIndex < this.selectionList.length){
+
+		Blockly.Accessibility.Speech.readConnection(this.selectionList[this.connectionsIndex].name, this.connectionsIndex);
+
+		this.highlightSelection();
+	}
+}
+
+
+
+
 
 /**
  * Selects the current field if a field is selected, or selects

@@ -326,7 +326,7 @@ document.onkeydown = document.onkeyup = function(e){
 			if(Blockly.selected.id[0] != ":" && !Blockly.Accessibility.Keystrokes.prototype.isConnecting){
 				console.log('ABOU: traverseOut call in nav A key');
 				//Blockly.Accessibility.Navigation.traverseOut();
-				Blockly.Accessibility.CursorNavigation.goRight();
+				Blockly.Accessibility.CursorNavigation.goLeft();
 			}
 		}
 
@@ -345,7 +345,7 @@ document.onkeydown = document.onkeyup = function(e){
 			if(!Blockly.selected) return;
 			if(Blockly.selected.id[0] != ":" && !Blockly.Accessibility.Keystrokes.prototype.isConnecting){
 				//Blockly.Accessibility.Navigation.traverseIn();
-				Blockly.Accessibility.CursorNavigation.goLeft();
+				Blockly.Accessibility.CursorNavigation.goRight();
 			}
 		}
 
