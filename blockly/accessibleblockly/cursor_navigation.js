@@ -33,13 +33,15 @@ Blockly.Accessibility.CursorNavigation.goDown =  function(){
 		
 	}else if(this.currentLocation === 2 && Blockly.selected && Blockly.selected.outputConnection == null){
 		
-		this.currentLocation = 3;
-		this.currentSelection = Blockly.selected.nextConnection;
-		this.currentHighlight = this.currentSelection.returnHighlight();
-		
-		var selected = Blockly.selected;
-		Blockly.selected.unselect();
-		Blockly.selected = selected;
+		if(Blockly.selected.nextConnection != null){
+			this.currentLocation = 3;
+			this.currentSelection = Blockly.selected.nextConnection;
+			this.currentHighlight = this.currentSelection.returnHighlight();
+			
+			var selected = Blockly.selected;
+			Blockly.selected.unselect();
+			Blockly.selected = selected;
+		}
 	}
 	else if(this.currentLocation === 3 && this.currentSelection != null && this.currentSelection.targetConnection !=null ){
 		//this.currentLocation = 2;
@@ -233,32 +235,65 @@ Blockly.Accessibility.CursorNavigation.goLeft = function(){
 		this.goToInputConnectionOfSelectedConnection();
 		
 	}
-	else if (this.currentLocation ===2 && Blockly.selected && Blockly.selected.outputConnection == null &&
-				Blockly.selected.getSurroundParent() != null){ // from child block to firstConnection
+	else if (this.currentLocation ===2 && Blockly.selected && Blockly.selected.outputConnection == null){ // from child block to firstConnection
 																//point of surrounding block (statement block)
-		this.currentLocation = 4;
-		this.currentSelection = Blockly.selected.getSurroundParent().getFirstStatementConnection();
 		
+		if(Blockly.selected.getSurroundParent() != null){
 		
-		// take cursor to the input connection 
-		
-		this.goToInputConnectionOfSelectedConnection();
+			this.currentLocation = 4;
+			this.currentSelection = Blockly.selected.getSurroundParent().getFirstStatementConnection();
+			
+			
+			// take cursor to the input connection 
+			
+			this.goToInputConnectionOfSelectedConnection();
+		}
+		else { // case outmost stack of blocks, take cursor to previous connection of topmost block
+				// this is a temporary solution because in Abby's work, the cursor is actually taken to a point on the workspace
+				// above the previous connection of the first block
+				
+			this.currentLocation = 1;
+			this.currentSelection = Blockly.selected.getRootBlock().previousConnection;
+			
+			this.currentHighlight = this.currentSelection.returnHighlight();
+			
+			Blockly.selected.unselect();
+			Blockly.selected = this.currentSelection.sourceBlock_;
+			
+		}
 		
 	}
-	else if ((this.currentLocation === 1 || this.currentLocation === 3 ) && 
-				this.currentSelection.sourceBlock_.getSurroundParent() != null ){ // from previou-connection or next-connection of child block to 
+	else if ((this.currentLocation === 1 || this.currentLocation === 3 ) ){ // from previou-connection or next-connection of child block to 
 																				  // to firstConnection point of surrounding block (statement block)
-		this.currentLocation = 4;
-		this.currentSelection = this.currentSelection.sourceBlock_.getSurroundParent().getFirstStatementConnection();
-		
-		
-		// take cursor to the input connection 
-		
-		this.goToInputConnectionOfSelectedConnection();			
+		if(this.currentSelection.sourceBlock_.getSurroundParent() != null){ // for child blocks with a surroundParent
+			this.currentLocation = 4;
+			this.currentSelection = this.currentSelection.sourceBlock_.getSurroundParent().getFirstStatementConnection();
+			
+			
+			// take cursor to the input connection 
+			
+			this.goToInputConnectionOfSelectedConnection();			
 
-		//remove highlight 
-		Blockly.Connection.removeHighlight(this.currentHighlight);
-		this.currentHighlight = null;
+			//remove highlight 
+			Blockly.Connection.removeHighlight(this.currentHighlight);
+			this.currentHighlight = null;
+		}
+		else{ //for connection points on outmost blocks. Again, this is a temporary solution because 
+				//in Abby's work, the cursor is actually taken to a point on the workspace
+				// above the previous connection of the first block
+			this.currentLocation = 1;
+			this.currentSelection = this.currentSelection.sourceBlock_.getRootBlock().previousConnection;
+	
+			//clear current hightlighted connection point
+			Blockly.Connection.removeHighlight(this.currentHighlight);
+			
+			//hightlight the new location
+			this.currentHighlight = this.currentSelection.returnHighlight();
+			
+			Blockly.selected = this.currentSelection.sourceBlock_;
+			
+			
+		}
 		
 	}
 	
