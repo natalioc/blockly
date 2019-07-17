@@ -348,7 +348,8 @@ document.onkeydown = document.onkeyup = function(e){
 				Blockly.Accessibility.CursorNavigation.goRight();
 			}
 		}
-
+		
+		/*ABOU: Edit mode disabled because in Google's model, there is no edit mode
 		else if(map[69]){ //E
 			//Edit block of code or edit comment
 			console.log('E key pressed');
@@ -358,7 +359,7 @@ document.onkeydown = document.onkeyup = function(e){
 			    Blockly.Accessibility.Speech.Say("Edit Mode entered now");
 			}
 		}
-
+		*/
 		else if (map[70]) { //F traverse inline blocks
 			console.log('hotkeyMode F key pressed');
 			Blockly.Accessibility.Navigation.inlineBlockTraverseIn();

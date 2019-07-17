@@ -194,18 +194,20 @@ Blockly.Accessibility.CursorNavigation.goRight = function(){
 		// inputConnection can be of type input or of any of the field types
 		//depending on the type, the sourceBlock_ variable is accessed differently.
 		if (this.currentSelection instanceof Blockly.Input) { 
-			if(this.currentSelection.connection.targetConnection.sourceBlock_.outputConnection != null){ 
-				this.currentSelection = this.currentSelection.connection.targetConnection.sourceBlock_;
-				this.goToBlock();
-			}
-			else {
-				this.currentLocation = 1;
-				this.currentSelection = this.currentSelection.connection.targetConnection.sourceBlock_.previousConnection;
-				this.currentHighlight = this.currentSelection.returnHighlight();
-				
-				//var selected = Blockly.selected;
-				//Blockly.selected.unselect();
-				Blockly.selected = this.currentSelection.connection.targetConnection.sourceBlock_;
+			if(this.currentSelection.connection.targetConnection != null){ // check if there is a target connection
+				if(this.currentSelection.connection.targetConnection.sourceBlock_.outputConnection != null){ 
+					this.currentSelection = this.currentSelection.connection.targetConnection.sourceBlock_;
+					this.goToBlock();
+				}
+				else {
+					this.currentLocation = 1;
+					this.currentSelection = this.currentSelection.connection.targetConnection.sourceBlock_.previousConnection;
+					this.currentHighlight = this.currentSelection.returnHighlight();
+					
+					//var selected = Blockly.selected;
+					//Blockly.selected.unselect();
+					Blockly.selected = this.currentSelection.connection.targetConnection.sourceBlock_;
+				}
 			}
 		}
 		
@@ -327,8 +329,14 @@ Blockly.Accessibility.CursorNavigation.goToBlock = function(){
 
 Blockly.Accessibility.CursorNavigation.initialize = function(){
 	Blockly.Accessibility.InBlock.clearHighlights();
+	
+	if(this.currentHighlight != null){
+		Blockly.Connection.removeHighlight(this.currentHighlight);
+		this.currentHighlight = null;
+	}
 	this.currentLocation = 2;
 	this.currentSelection = Blockly.selected;
+	
 	console.log('ABOU: init successful');
 	this.initBlockInputList();
 	
