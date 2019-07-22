@@ -204,6 +204,7 @@ Blockly.Toolbox.prototype.init = function() {
   tree.setShowLines(false);
   tree.setShowExpandIcons(false);
   tree.setSelectedItem(null);
+
   var openNode = this.populate_(workspace.options.languageTree);
   tree.render(this.HtmlDiv);
   if (openNode) {
@@ -211,6 +212,8 @@ Blockly.Toolbox.prototype.init = function() {
   }
   this.addColour_();
   this.position();
+
+  this.focusOnFirstElement();
 };
 
 /**
@@ -421,6 +424,14 @@ Blockly.Toolbox.prototype.addColour_ = function(opt_tree) {
     this.addColour_(child);
   }
 };
+
+Blockly.Toolbox.prototype.focusOnFirstElement = function(opt_tree) {
+  var tree = opt_tree || this.tree_; 
+  var children = tree.getChildren(false);
+  var firstToolElement = children[0].element_;
+
+  firstToolElement.focus();
+}
 
 /**
  * Unhighlight any previously specified option.
