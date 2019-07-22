@@ -101,7 +101,7 @@ function start() {
               scaleSpeed: 1.1
              },
           });
-  if (Blockly.Realtime.isEnabled()) {
+  if (Blockly && Blockly.Realtime && Blockly.Realtime.isEnabled()) {
     enableRealtimeSpecificUi();
   }
 

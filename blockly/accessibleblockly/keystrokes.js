@@ -429,7 +429,7 @@ document.onkeydown = document.onkeyup = function(e){
 		else{
 
 			//stop jumping to menu when typing a comment
-			if(Blockly.selected.comment.isVisible()){
+			if(Blockly.selected && Blockly.selected.comment && Blockly.selected.comment.isVisible()){
 				keyboardState = "typingMode";
 				return;
 			}
