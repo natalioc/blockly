@@ -112,7 +112,8 @@ document.onkeydown = document.onkeyup = function(e){
 
 		else if (map[69]) { //E
 			Blockly.Accessibility.Speech.Say("Edit Mode exited now");
-		    Blockly.Accessibility.InBlock.enterSelected();
+			Blockly.Accessibility.InBlock.enterSelected();
+			workspace.getAudioManager().play('1_Nest');
 		    e.preventDefault(); // Prevent default in case this opens up a typing prompt
 		    try { // Try block in case something breaks, we still default back to hotkeymode
 		        Blockly.Accessibility.InBlock.enterSelected();
@@ -354,6 +355,7 @@ document.onkeydown = document.onkeyup = function(e){
 			//Edit block of code or edit comment
 			console.log('E key pressed');
 			console.log('Edit mode activated!');
+			workspace.getAudioManager().play('C_FINALSelectBlock');
 			if (Blockly.Accessibility.InBlock.enterCurrentBlock()) { // Returns false if nothing is selected
 			    keyboardState = 'editMode';
 			    Blockly.Accessibility.Speech.Say("Edit Mode entered now");
