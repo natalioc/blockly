@@ -389,7 +389,34 @@ Blockly.inject.loadSounds_ = function(pathToMedia, workspace) {
         pathToMedia + 'delete.ogg',
         pathToMedia + 'delete.wav'
       ], 'delete');
-
+  audioMgr.load(
+      [
+        pathToMedia + '1_Nest.mp3'
+      ], '1nest');
+  audioMgr.load(
+      [
+        pathToMedia + 'BoundarySound.mp3'
+      ], 'boundary');
+  audioMgr.load(
+      [
+        pathToMedia + 'DragBlock2.mp3'
+      ], 'dragblock');
+  audioMgr.load(
+      [
+        pathToMedia + 'DropBlock.mp3'
+      ], 'dropblock');
+  audioMgr.load(
+      [
+        pathToMedia + 'DeselectBlock.mp3'
+      ], 'deselectblock');
+  audioMgr.load(
+      [
+        pathToMedia + 'A_FINALIdentifyBlock.mp3'
+      ], 'identifyblock');
+  audioMgr.load(
+      [
+        pathToMedia + 'C_FINALSelectBlock.mp3'
+      ], 'selectblock');
   // Bind temporary hooks that preload the sounds.
   var soundBinds = [];
   var unbindSounds = function() {

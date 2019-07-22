@@ -321,7 +321,10 @@ document.onkeydown = document.onkeyup = function(e){
 		else if(map[65]){ //A
 			console.log('hotkeyMode A key pressed');
 			if(!Blockly.selected) return;
+
 			if(Blockly.selected.id[0] != ":" && !Blockly.Accessibility.Keystrokes.prototype.isConnecting){
+				console.log('blockmode A key pressed calling selectblock audio');
+				workspace.getAudioManager().play('selectblock');
 				Blockly.Accessibility.Navigation.traverseOut();
 			}
 		}
@@ -339,7 +342,10 @@ document.onkeydown = document.onkeyup = function(e){
 			//Navigate in
 			console.log('hotkeyMode D key pressed');
 			if(!Blockly.selected) return;
+
 			if(Blockly.selected.id[0] != ":" && !Blockly.Accessibility.Keystrokes.prototype.isConnecting){
+				console.log('blockmode D key pressed calling selectblock audio');
+				workspace.getAudioManager().play('selectblock');
 				Blockly.Accessibility.Navigation.traverseIn();
 			}
 		}
@@ -393,7 +399,7 @@ document.onkeydown = document.onkeyup = function(e){
 			console.log('hotkeyMode S key pressed');
 			var role = document.activeElement.getAttribute("role");
 
-			if(!Blockly.selected) return;
+			if(!Blockly.selected)  return;
 
 			else if(role == "menu"){
 				Blockly.Accessibility.InBlock.ddNavDown();
@@ -401,6 +407,8 @@ document.onkeydown = document.onkeyup = function(e){
 			
 			//if not on toolbox navigate down through blocks
 			else if(document.activeElement.id[0] != ":"  && !Blockly.Accessibility.Keystrokes.prototype.isConnecting){
+				console.log('blockmode S key pressed calling selectblock audio');
+				workspace.getAudioManager().play('selectblock');
 				Blockly.Accessibility.Navigation.traverseDown();
 			}
 		}
@@ -419,7 +427,8 @@ document.onkeydown = document.onkeyup = function(e){
 			}
 
 			else if(document.activeElement.id[0] != ":" && !Blockly.Accessibility.Keystrokes.prototype.isConnecting){
-
+				console.log('blockmode W key pressed calling selectblock audio');
+				workspace.getAudioManager().play('selectblock');
 				Blockly.Accessibility.Navigation.traverseUp();
 			}
 
