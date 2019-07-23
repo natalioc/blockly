@@ -302,12 +302,11 @@ Blockly.Accessibility.Navigation.traverseOut = function () {
         return;
     }
 
-    var childBlocks = Blockly.selected.parentBlock_.childBlocks_;
+    var childBlocks = Blockly.selected.parentBlock_ && Blockly.selected.parentBlock_.childBlocks_;
     var surroundParent = Blockly.selected.getSurroundParent();
-    var selectedIndex = childBlocks.indexOf(Blockly.selected);
     console.log(surroundParent);
     //select the previous block at the same level if there is one
-    if(childBlocks.length > 1 && !Blockly.selected.previousConnection){
+    if(childBlocks && childBlocks.length > 1 && !Blockly.selected.previousConnection){
 
         for (var i = 0; i < childBlocks.length; i++){
 
