@@ -246,4 +246,16 @@ Blockly.Accessibility.helpSelectedBlock = function(){
   window.open(fullUrl,'_blank');
 };
 
+// Play audio cue based on the audio settings.
+Blockly.Accessibility.PlayAudioCues = function(audioCueIdentifier) {
+
+  if(!window.audioSettings) {
+    workspace.getAudioManager().play(audioCueIdentifier);
+  }
+
+  if(window.audioSettings[audioCueIdentifier]) {
+    workspace.getAudioManager().play(audioCueIdentifier);
+  }
+}
+
 //#endregion
