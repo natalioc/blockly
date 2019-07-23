@@ -114,7 +114,7 @@ document.onkeydown = document.onkeyup = function (e) {
 		else if (map[69]) { //E
 			Blockly.Accessibility.Speech.Say("Edit Mode exited now");
 			Blockly.Accessibility.InBlock.enterSelected();
-			workspace.getAudioManager().play('deselectblock');
+			Blockly.Accessibility.PlayAudioCues('deselectblock');
 			e.preventDefault(); // Prevent default in case this opens up a typing prompt
 			try { // Try block in case something breaks, we still default back to hotkeymode
 				Blockly.Accessibility.InBlock.enterSelected();
@@ -282,8 +282,8 @@ document.onkeydown = document.onkeyup = function (e) {
 
 			var role = document.activeElement.getAttribute("role");
 
-			if(role !== "treeitem") {
-				workspace.getAudioManager().play('dropblock');
+			if (role !== "treeitem") {
+				Blockly.Accessibility.PlayAudioCues('dropblock');
 			}
 			Blockly.Accessibility.InBlock.hideDropDown();
 		}
@@ -331,7 +331,7 @@ document.onkeydown = document.onkeyup = function (e) {
 
 			if (Blockly.selected.id[0] != ":" && !Blockly.Accessibility.Keystrokes.prototype.isConnecting) {
 				console.log('blockmode A key pressed calling selectblock audio');
-				workspace.getAudioManager().play('selectblock');
+				Blockly.Accessibility.PlayAudioCues('selectblock');
 				Blockly.Accessibility.Navigation.traverseOut();
 			}
 		}
@@ -352,7 +352,7 @@ document.onkeydown = document.onkeyup = function (e) {
 
 			if (Blockly.selected.id[0] != ":" && !Blockly.Accessibility.Keystrokes.prototype.isConnecting) {
 				console.log('blockmode D key pressed calling selectblock audio');
-				workspace.getAudioManager().play('selectblock');
+				Blockly.Accessibility.PlayAudioCues('selectblock');
 				Blockly.Accessibility.Navigation.traverseIn();
 			}
 		}
@@ -361,7 +361,7 @@ document.onkeydown = document.onkeyup = function (e) {
 			//Edit block of code or edit comment
 			console.log('E key pressed');
 			console.log('Edit mode activated!');
-			workspace.getAudioManager().play('1nest');
+			Blockly.Accessibility.PlayAudioCues('1nest');
 			if (Blockly.Accessibility.InBlock.enterCurrentBlock()) { // Returns false if nothing is selected
 				keyboardState = 'editMode';
 				Blockly.Accessibility.Speech.Say("Edit Mode entered now");
@@ -416,7 +416,7 @@ document.onkeydown = document.onkeyup = function (e) {
 			//if not on toolbox navigate down through blocks
 			else if (document.activeElement.id[0] != ":" && !Blockly.Accessibility.Keystrokes.prototype.isConnecting) {
 				console.log('blockmode S key pressed calling selectblock audio');
-				workspace.getAudioManager().play('selectblock');
+				Blockly.Accessibility.PlayAudioCues('selectblock');
 				Blockly.Accessibility.Navigation.traverseDown();
 			}
 		}
@@ -436,7 +436,7 @@ document.onkeydown = document.onkeyup = function (e) {
 
 			else if (document.activeElement.id[0] != ":" && !Blockly.Accessibility.Keystrokes.prototype.isConnecting) {
 				console.log('blockmode W key pressed calling selectblock audio');
-				workspace.getAudioManager().play('selectblock');
+				Blockly.Accessibility.PlayAudioCues('selectblock');
 				Blockly.Accessibility.Navigation.traverseUp();
 			}
 
