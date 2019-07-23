@@ -47,6 +47,7 @@ document.onmouseup = function (e) {
 document.onkeydown = document.onkeyup = function (e) {
 
 	e = e || event;
+	map = [];
 	map[e.keyCode] = e.type == 'keydown';
 
 	if (keyboardState == 'typingMode') { //if you are typing, hotkeys disabled
@@ -60,7 +61,7 @@ document.onkeydown = document.onkeyup = function (e) {
 
 
 		}
-		else if (map[17] && map[67]) { //CTRL C
+		else if (e.ctrlKey && map[67]) { //CTRL C
 			console.log('Ctrl C keys pressed');
 			keyboardState = 'hotkeyMode';
 			Blockly.selected.comment.setVisible(false);
@@ -113,7 +114,7 @@ document.onkeydown = document.onkeyup = function (e) {
 		else if (map[69]) { //E
 			Blockly.Accessibility.Speech.Say("Edit Mode exited now");
 			Blockly.Accessibility.InBlock.enterSelected();
-			workspace.getAudioManager().play('deselectblock');
+			Blockly.Accessibility.PlayAudioCues('deselectblock');
 			e.preventDefault(); // Prevent default in case this opens up a typing prompt
 			try { // Try block in case something breaks, we still default back to hotkeymode
 				Blockly.Accessibility.InBlock.enterSelected();
@@ -232,25 +233,25 @@ document.onkeydown = document.onkeyup = function (e) {
 	//===========================================NORMAL HOTKEYS=======================================
 	else if (keyboardState == 'hotkeyMode') {
 
-		if (map[17] && map[89]) { //Ctrl Y
+		if (e.ctrlKey && map[89]) { //Ctrl Y
 			console.log('Ctrl Y keys pressed');
 			Blockly.Accessibility.Navigation.redo();
 			e.preventDefault();
 		}
 
-		else if (map[17] && map[90]) { //Ctrl Z
+		else if (e.ctrlKey && map[90]) { //Ctrl Z
 			console.log('Ctrl Z keys pressed');
 			Blockly.Accessibility.Navigation.undo();
 			e.preventDefault();
 		}
-		else if (map[18] && map[16] && map[67]) { //Alt Shift C
+		else if (e.altKey && e.shiftKey && map[67]) { //Alt Shift C
 			console.log('Alt Shift C keys pressed.');
 			//Keystroke for collapsing or expanding a block
 			Blockly.Accessibility.toggleCollapse();
 			e.preventDefault();
 		}
 
-		else if (map[18] && map[16] && map[68]) { //Alt Shift D
+		else if (e.altKey && e.shiftKey && map[68]) { //Alt Shift D
 			console.log('Alt Shift D keys pressed.');
 			//Keystroke for enabling or disabling a block
 			Blockly.Accessibility.toggleDisable();
@@ -258,27 +259,32 @@ document.onkeydown = document.onkeyup = function (e) {
 			Blockly.Accessibility.Navigation.updateXmlSelection();
 		}
 
-		else if (map[18] && map[16] && map[72]) { //Alt Shift H
+		else if (e.altKey && e.shiftKey && map[72]) { //Alt Shift H
 			console.log('Alt Shift H keys pressed.');
 			Blockly.Accessibility.InBlock.getHelpUrl();
 			e.preventDefault();
-			map = [];
 		}
 
-		else if (map[18] && map[16] && map[73]) { //Alt Shift I
+		else if (e.altKey && e.shiftKey && map[73]) { //Alt Shift I
 			console.log('Alt Shift I keys pressed.');
 			//Toggle inline in a block
 			Blockly.Accessibility.toggleInline();
 			e.preventDefault();
 		}
 
-		else if (map[16] && map[70]) {//shift f
+		else if (e.shiftKey && map[70]) {//shift f
 			console.log('shift f keys pressed');
 			Blockly.Accessibility.Navigation.inlineBlockTraverseOut();
 		}
 
 		else if (map[13]) {
 			console.log('hotkeyMode Enter key pressed');
+
+			var role = document.activeElement.getAttribute("role");
+
+			if (role !== "treeitem") {
+				Blockly.Accessibility.PlayAudioCues('dropblock');
+			}
 			Blockly.Accessibility.InBlock.hideDropDown();
 		}
 
@@ -326,7 +332,6 @@ document.onkeydown = document.onkeyup = function (e) {
 
 			if (Blockly.selected.id[0] != ":" && !Blockly.Accessibility.Keystrokes.prototype.isConnecting) {
 				console.log('blockmode A key pressed calling selectblock audio');
-				workspace.getAudioManager().play('selectblock');
 				Blockly.Accessibility.Navigation.traverseOut();
 			}
 		}
@@ -347,7 +352,6 @@ document.onkeydown = document.onkeyup = function (e) {
 
 			if (Blockly.selected.id[0] != ":" && !Blockly.Accessibility.Keystrokes.prototype.isConnecting) {
 				console.log('blockmode D key pressed calling selectblock audio');
-				workspace.getAudioManager().play('selectblock');
 				Blockly.Accessibility.Navigation.traverseIn();
 			}
 		}
@@ -356,7 +360,7 @@ document.onkeydown = document.onkeyup = function (e) {
 			//Edit block of code or edit comment
 			console.log('E key pressed');
 			console.log('Edit mode activated!');
-			workspace.getAudioManager().play('1nest');
+			Blockly.Accessibility.PlayAudioCues('1nest');
 			if (Blockly.Accessibility.InBlock.enterCurrentBlock()) { // Returns false if nothing is selected
 				keyboardState = 'editMode';
 				Blockly.Accessibility.Speech.Say("Edit Mode entered now");
@@ -411,7 +415,7 @@ document.onkeydown = document.onkeyup = function (e) {
 			//if not on toolbox navigate down through blocks
 			else if (document.activeElement.id[0] != ":" && !Blockly.Accessibility.Keystrokes.prototype.isConnecting) {
 				console.log('blockmode S key pressed calling selectblock audio');
-				workspace.getAudioManager().play('selectblock');
+				Blockly.Accessibility.PlayAudioCues('selectblock');
 				Blockly.Accessibility.Navigation.traverseDown();
 			}
 		}
@@ -431,7 +435,7 @@ document.onkeydown = document.onkeyup = function (e) {
 
 			else if (document.activeElement.id[0] != ":" && !Blockly.Accessibility.Keystrokes.prototype.isConnecting) {
 				console.log('blockmode W key pressed calling selectblock audio');
-				workspace.getAudioManager().play('selectblock');
+				Blockly.Accessibility.PlayAudioCues('selectblock');
 				Blockly.Accessibility.Navigation.traverseUp();
 			}
 

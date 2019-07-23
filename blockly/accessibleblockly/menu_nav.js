@@ -29,7 +29,7 @@ goog.provide('Blockly.Accessibility.MenuNav');
  * class to handle menu navigation
  * @constructor
  */
-Blockly.Accessibility.MenuNav = function(){
+Blockly.Accessibility.MenuNav = function () {
 
 };
 
@@ -51,139 +51,139 @@ Blockly.Accessibility.MenuNav.containersArr = [];
 *   currentFlyoutArr: array containing all currently shown blocks
 */
 var menuVars = {
-    flyoutArr: [],   
-    oldLength: 0,    
-    currIndex: 0,    
-    prevIndex: 0,
-    opened: false, 
-    currentFlyoutArr: [],
-    blockSelected:false,
+  flyoutArr: [],
+  oldLength: 0,
+  currIndex: 0,
+  prevIndex: 0,
+  opened: false,
+  currentFlyoutArr: [],
+  blockSelected: false,
 
 
-    /*
-    * Checks if flyout was opened for the first time or first block in newly opened flyout
-    * @return{bool}
-    */
-    isFirstBlock: function() {
-        if (menuVars.currIndex <= menuVars.oldLength) {
-            return true;
-        }
-
-        else if (menuVars.currIndex - 1 < 0) {
-            return true;
-        }
-
-        else return false;
-    },
-
-    /*
-    * Checks if second block in flyout selected
-    * important for deselecting correct block
-    * @return{bool}
-    */
-    isSecondBlock: function() {
-        if (menuVars.currIndex == menuVars.oldLength) {
-            return false;
-        }
-        else if (menuVars.prevIndex != menuVars.oldLength + 1) {
-            return false;
-        }
-        else return true;
-    },
-
-    /*
-    * Checks if flyout contains only 2 blocks
-    * normal looping does not work with only 2
-    * @return {bool}
-    */
-    hasTwoBlocks: function() {
-        return (menuVars.flyoutArr.length - menuVars.oldLength != 2) ? false : true;
-    },
-
-    /*
-    * Checks if flyout only contains 1 block
-    * @return{bool}
-    */
-    hasOneBlock: function() {
-        return (menuVars.flyoutArr.length - menuVars.oldLength == 1) ? true : false;
-    },
-
-    /*
-    * Checks if the user switched directions from up to down.
-    * @return {bool}
-    */
-    switchingDown: function() {
-        return (menuVars.prevIndex == menuVars.currIndex + 1) ? true : false;
-    },
-
-    /*
-    * Checks if the user switched directions from down to up.
-    * @return {bool}
-    */
-    switchingUp: function() {
-        return (menuVars.prevIndex == menuVars.currIndex - 1) ? true : false;
-    },
-
-     /*
-    * Checks if the user is at the top of the flyout
-    * @return {bool}
-    */
-    atTopOfFlyout: function() {
-
-        return (menuVars.currIndex >= menuVars.flyoutArr.length) ? true : false;
-    },
-
-    /*
-    * Checks if the user is at the bottom of the flyout
-    * @return {bool}
-    */
-    atBottomOfFlyout: function() {
-        return (menuVars.currIndex >= menuVars.flyoutArr.length - 1) ? true : false;
-    },
-
-    /*
-    * Checks if looping from top to bottom
-    * @return{bool}
-    */
-    loopingUp: function() {
-        if (menuVars.currIndex <= menuVars.oldLength - 1) {
-            return true;
-        }
-
-        else if (menuVars.currIndex - 2 < menuVars.oldLength) {
-           return (menuVars.prevIndex == menuVars.currIndex - 1) ? true : false;
-        }
-    },
-
-    /*
-    * Checks if looping from bottom to top
-    * @return{bool}
-    */
-    loopingDown: function() {
-        if (menuVars.currIndex >= menuVars.flyoutArr.length) {
-            return true;
-        }
-
-        else if (menuVars.prevIndex == menuVars.currIndex + 1) {
-
-             return (menuVars.currIndex + 2 >= menuVars.flyoutArr.length) ? true : false;
-        }
+  /*
+  * Checks if flyout was opened for the first time or first block in newly opened flyout
+  * @return{bool}
+  */
+  isFirstBlock: function () {
+    if (menuVars.currIndex <= menuVars.oldLength) {
+      return true;
     }
+
+    else if (menuVars.currIndex - 1 < 0) {
+      return true;
+    }
+
+    else return false;
+  },
+
+  /*
+  * Checks if second block in flyout selected
+  * important for deselecting correct block
+  * @return{bool}
+  */
+  isSecondBlock: function () {
+    if (menuVars.currIndex == menuVars.oldLength) {
+      return false;
+    }
+    else if (menuVars.prevIndex != menuVars.oldLength + 1) {
+      return false;
+    }
+    else return true;
+  },
+
+  /*
+  * Checks if flyout contains only 2 blocks
+  * normal looping does not work with only 2
+  * @return {bool}
+  */
+  hasTwoBlocks: function () {
+    return (menuVars.flyoutArr.length - menuVars.oldLength != 2) ? false : true;
+  },
+
+  /*
+  * Checks if flyout only contains 1 block
+  * @return{bool}
+  */
+  hasOneBlock: function () {
+    return (menuVars.flyoutArr.length - menuVars.oldLength == 1) ? true : false;
+  },
+
+  /*
+  * Checks if the user switched directions from up to down.
+  * @return {bool}
+  */
+  switchingDown: function () {
+    return (menuVars.prevIndex == menuVars.currIndex + 1) ? true : false;
+  },
+
+  /*
+  * Checks if the user switched directions from down to up.
+  * @return {bool}
+  */
+  switchingUp: function () {
+    return (menuVars.prevIndex == menuVars.currIndex - 1) ? true : false;
+  },
+
+  /*
+ * Checks if the user is at the top of the flyout
+ * @return {bool}
+ */
+  atTopOfFlyout: function () {
+
+    return (menuVars.currIndex >= menuVars.flyoutArr.length) ? true : false;
+  },
+
+  /*
+  * Checks if the user is at the bottom of the flyout
+  * @return {bool}
+  */
+  atBottomOfFlyout: function () {
+    return (menuVars.currIndex >= menuVars.flyoutArr.length - 1) ? true : false;
+  },
+
+  /*
+  * Checks if looping from top to bottom
+  * @return{bool}
+  */
+  loopingUp: function () {
+    if (menuVars.currIndex <= menuVars.oldLength - 1) {
+      return true;
+    }
+
+    else if (menuVars.currIndex - 2 < menuVars.oldLength) {
+      return (menuVars.prevIndex == menuVars.currIndex - 1) ? true : false;
+    }
+  },
+
+  /*
+  * Checks if looping from bottom to top
+  * @return{bool}
+  */
+  loopingDown: function () {
+    if (menuVars.currIndex >= menuVars.flyoutArr.length) {
+      return true;
+    }
+
+    else if (menuVars.prevIndex == menuVars.currIndex + 1) {
+
+      return (menuVars.currIndex + 2 >= menuVars.flyoutArr.length) ? true : false;
+    }
+  }
 };
 
-Blockly.Toolbox.TreeNode.prototype.initAccessibility = function() {
+Blockly.Toolbox.TreeNode.prototype.initAccessibility = function () {
   goog.ui.tree.BaseNode.prototype.initAccessibility.call(this);
-  
+
   var el = this.getElement();
-  el.setAttribute('tabIndex', 0);   
+  el.setAttribute('tabIndex', 0);
   Blockly.bindEvent_(el, 'keydown', this, this.onKeyDown);
 };
- 
+
 /*
 * Handles Keyboard input in the toolbox/flyout
 * @param {event}
 */
-Blockly.Toolbox.TreeNode.prototype.onKeyDown = function(e) {
+Blockly.Toolbox.TreeNode.prototype.onKeyDown = function (e) {
   var handled = true; //used for preventing the screen from scrolling
   switch (e.keyCode) {
     //prevent default letter keys from skipping to categories
@@ -199,30 +199,30 @@ Blockly.Toolbox.TreeNode.prototype.onKeyDown = function(e) {
     //ESCAPE
     //removes highlight if escape is pressed while navigating the menu
     case 27:
-        var highlight = Blockly.Accessibility.InBlock.storedHighlight;
-        Blockly.Connection.removeHighlight(highlight);
-        Blockly.Accessibility.Keystrokes.prototype.isConnecting = false;
-        break;
+      var highlight = Blockly.Accessibility.InBlock.storedHighlight;
+      Blockly.Connection.removeHighlight(highlight);
+      Blockly.Accessibility.Keystrokes.prototype.isConnecting = false;
+      break;
 
     //W
     case 87:
 
       //select previous block
-      if(this.getExpanded()){
+      if (this.getExpanded()) {
         Blockly.Accessibility.MenuNav.prototype.menuNavUp();
-        workspace.getAudioManager().play('identifyblock');
+        Blockly.Accessibility.PlayAudioCues('identifyblock');
       }
 
       //select previous category
-      else{
+      else {
         var previousSibling = this.getPreviousSibling(this.selected);
 
         //if not the top category
-        if(previousSibling != null){
-           previousSibling.select();
-           workspace.getAudioManager().play('identifyCategory');
-           Blockly.Accessibility.InBlock.disableIncompatibleBlocks();
-           document.getElementById(previousSibling.id_).focus();
+        if (previousSibling != null) {
+          previousSibling.select();
+          Blockly.Accessibility.PlayAudioCues('identifyCategory');
+          Blockly.Accessibility.InBlock.disableIncompatibleBlocks();
+          document.getElementById(previousSibling.id_).focus();
         }
 
       }
@@ -232,24 +232,24 @@ Blockly.Toolbox.TreeNode.prototype.onKeyDown = function(e) {
     case 83:
 
       //select next block
-      if(this.getExpanded()){
-            Blockly.Accessibility.MenuNav.prototype.menuNavDown();
-            workspace.getAudioManager().play('identifyblock');
+      if (this.getExpanded()) {
+        Blockly.Accessibility.MenuNav.prototype.menuNavDown();
+        Blockly.Accessibility.PlayAudioCues('identifyblock');
       }
 
       //select next category
-      else{
+      else {
         var nextSibling = this.getNextSibling(this.selected);
 
 
         //if not the bottome category
-        if(nextSibling != null){
-             nextSibling.select();
-             workspace.getAudioManager().play('identifyCategory');
-             Blockly.Accessibility.InBlock.disableIncompatibleBlocks();
-             document.getElementById(nextSibling.id_).focus();
+        if (nextSibling != null) {
+          nextSibling.select();
+          Blockly.Accessibility.PlayAudioCues('identifyCategory');
+          Blockly.Accessibility.InBlock.disableIncompatibleBlocks();
+          document.getElementById(nextSibling.id_).focus();
         }
-       
+
       }
       break;
 
@@ -257,112 +257,112 @@ Blockly.Toolbox.TreeNode.prototype.onKeyDown = function(e) {
     //A
     case 65:
 
-      if(this.getExpanded()){
-          this.setExpanded(false);
-          menuVars.flyoutArr[menuVars.prevIndex].removeSelect();
-          menuVars.blockSelected = false;
+      if (this.getExpanded()) {
+        this.setExpanded(false);
+        menuVars.flyoutArr[menuVars.prevIndex].removeSelect();
+        menuVars.blockSelected = false;
       }
-    break;
+      break;
 
     //move inside the flyout to select blocks
     //D
     case 68:
-        this.select();
-        this.setExpanded(true);
-        Blockly.Accessibility.InBlock.disableIncompatibleBlocks();
-        Blockly.Accessibility.MenuNav.prototype.menuNavDown();
-        menuVars.blockSelected = true;
-    break;
+      this.select();
+      this.setExpanded(true);
+      Blockly.Accessibility.InBlock.disableIncompatibleBlocks();
+      Blockly.Accessibility.MenuNav.prototype.menuNavDown();
+      menuVars.blockSelected = true;
+      break;
 
     //ENTER
     case 13:
 
-        //open the flyout
-        if(!this.getExpanded()){
-            this.select();
-            Blockly.Accessibility.InBlock.disableIncompatibleBlocks();
+      //open the flyout
+      if (!this.getExpanded()) {
+        this.select();
+        Blockly.Accessibility.InBlock.disableIncompatibleBlocks();
+      }
+
+      //selecting and connecting blocks
+      else if (this.getExpanded()) {
+
+        //connect to a block on the workspace
+        if (Blockly.Accessibility.Keystrokes.prototype.isConnecting && menuVars.blockSelected) {
+          Blockly.Accessibility.Keystrokes.prototype.isConnecting = false;
+          menuVars.blockSelected = false;
+          this.setExpanded(false);
+          this.getTree().setSelectedItem(null);
+
+          Blockly.Accessibility.InBlock.addBlock();
+          document.getElementById("blockReader").focus();
         }
 
-       //selecting and connecting blocks
-       else if(this.getExpanded()){
+        /** top blocks move or connect new blocks so they dont automatically default to (0,0)**/
+        else if (!Blockly.Accessibility.Keystrokes.prototype.isConnecting && menuVars.blockSelected) {
 
-            //connect to a block on the workspace
-            if(Blockly.Accessibility.Keystrokes.prototype.isConnecting && menuVars.blockSelected){
-              Blockly.Accessibility.Keystrokes.prototype.isConnecting = false;
-              menuVars.blockSelected = false;
-              this.setExpanded(false);
-              this.getTree().setSelectedItem(null);
+          //reset everything
+          menuVars.blockSelected = false;
+          this.setExpanded(false);
+          this.getTree().setSelectedItem(null);
 
-              Blockly.Accessibility.InBlock.addBlock();
-              document.getElementById("blockReader").focus();
+          var containers = Blockly.Accessibility.MenuNav.containersArr;
+          var curBlock = menuVars.flyoutArr[menuVars.prevIndex];
+          var menuBlock = Blockly.selected;
+          var contLength = Blockly.Accessibility.MenuNav.containersArr.length;
+
+
+          //if not a statement block
+          if (!curBlock.nextConnection) {
+
+            //handle procedure(function) blocks
+            if (curBlock.type == "procedures_defnoreturn" || curBlock.type == "procedures_defreturn") {
+
+              Blockly.Accessibility.MenuNav.flyoutToWorkspace();
+
+              var proBlock = Blockly.selected;
+              Blockly.Accessibility.MenuNav.containersArr.push(proBlock);
+              Blockly.Accessibility.MenuNav.moveToBottom();
+
             }
 
-            /** top blocks move or connect new blocks so they dont automatically default to (0,0)**/
-            else if(!Blockly.Accessibility.Keystrokes.prototype.isConnecting && menuVars.blockSelected){
-              
-              //reset everything
-              menuVars.blockSelected  = false;
-              this.setExpanded(false);
-              this.getTree().setSelectedItem(null);
-              
-              var containers = Blockly.Accessibility.MenuNav.containersArr;
-              var curBlock   = menuVars.flyoutArr[menuVars.prevIndex];
-              var menuBlock  = Blockly.selected;
-              var contLength = Blockly.Accessibility.MenuNav.containersArr.length;
-
-
-              //if not a statement block
-              if(!curBlock.nextConnection){
-
-                //handle procedure(function) blocks
-                if(curBlock.type == "procedures_defnoreturn" || curBlock.type == "procedures_defreturn"){
-
-                    Blockly.Accessibility.MenuNav.flyoutToWorkspace();
-
-                    var proBlock = Blockly.selected;
-                    Blockly.Accessibility.MenuNav.containersArr.push(proBlock);
-                    Blockly.Accessibility.MenuNav.moveToBottom();
-
-                }
-
-                else{
-                    Blockly.Accessibility.Speech.Say("This block should be connected to another block");
-                }
-              }
-
-              //first iteration
-              else if(containers.length == 0){
-
-                Blockly.Accessibility.MenuNav.flyoutToWorkspace();
-                Blockly.Accessibility.MenuNav.containersArr.push(Blockly.selected);
-
-              }
-
-              else{
-                 Blockly.Accessibility.MenuNav.flyoutToWorkspace();
-                 Blockly.Accessibility.MenuNav.containersArr.push(Blockly.selected);
-
-
-                 Blockly.mainWorkspace.addTopBlock(menuBlock);
-
-                 // if(!Blockly.Accessibility.MenuNav.containersArr){
-                 //    Blockly.Accessibility.MenuNav.containersArr = Blockly.mainWorkspace.getTopBlocks(true);
-                 // }
-
-                 Blockly.Accessibility.MenuNav.connectToLastBlock(menuBlock);
-                 Blockly.mainWorkspace.removeTopBlock(menuBlock);
-              }
-              document.getElementById("blockReader").focus(); 
+            else {
+              Blockly.Accessibility.Speech.Say("This block should be connected to another block");
             }
-        }   
-    break;
+          }
+
+          //first iteration
+          else if (containers.length == 0) {
+
+            Blockly.Accessibility.MenuNav.flyoutToWorkspace();
+            Blockly.Accessibility.MenuNav.containersArr.push(Blockly.selected);
+
+          }
+
+          else {
+            Blockly.Accessibility.MenuNav.flyoutToWorkspace();
+            Blockly.Accessibility.MenuNav.containersArr.push(Blockly.selected);
+
+
+            Blockly.mainWorkspace.addTopBlock(menuBlock);
+
+            // if(!Blockly.Accessibility.MenuNav.containersArr){
+            //    Blockly.Accessibility.MenuNav.containersArr = Blockly.mainWorkspace.getTopBlocks(true);
+            // }
+
+            Blockly.Accessibility.MenuNav.connectToLastBlock(menuBlock);
+            Blockly.mainWorkspace.removeTopBlock(menuBlock);
+          }
+          document.getElementById("blockReader").focus();
+        }
+      }
+      break;
 
     default:
-        handled = false;
-    break;
+      handled = false;
+      break;
   }
 
-// clear type ahead buffer as user navigates with arrow keys
+  // clear type ahead buffer as user navigates with arrow keys
   if (handled) {
     e.preventDefault();
     var t = this.getTree();
@@ -379,13 +379,13 @@ Blockly.Toolbox.TreeNode.prototype.onKeyDown = function(e) {
 this function is overriden from Blockly library and the implementation has changed 
 in new version of Blockly. So I've updated and the flyout now functions correctly
 */
- 
+
 /**
  * Hide and empty the flyout.
  */
-Blockly.Flyout.prototype.hide = function() {
-	
-//remove highlight
+Blockly.Flyout.prototype.hide = function () {
+
+  //remove highlight
   var highlight = Blockly.Accessibility.InBlock.storedHighlight;
   Blockly.Connection.removeHighlight(highlight);
   if (!this.isVisible()) {
@@ -404,79 +404,79 @@ Blockly.Flyout.prototype.hide = function() {
   // Do NOT delete the blocks here.  Wait until Flyout.show.
   // https://neil.fraser.name/news/2014/08/09/
 };
- 
+
 
 
 /*
 *   Traverse to the next block in the flyout
 */
-Blockly.Accessibility.MenuNav.prototype.menuNavDown= function() {
-    //prevent this from being called when the flyout is closed
-    if (!menuVars.opened) {
-        return;
+Blockly.Accessibility.MenuNav.prototype.menuNavDown = function () {
+  //prevent this from being called when the flyout is closed
+  if (!menuVars.opened) {
+    return;
+  }
+
+  //handle flyouts with only 2 blocks
+  if (menuVars.hasTwoBlocks()) {
+
+    //if bottom block is selected
+    if (menuVars.currIndex >= menuVars.flyoutArr.length - 1) {
+
+      menuVars.currIndex = menuVars.oldLength;
+      menuVars.prevIndex = menuVars.flyoutArr.length - 1;
+
+      menuVars.flyoutArr[menuVars.currIndex].addSelect();
+      menuVars.flyoutArr[menuVars.prevIndex].removeSelect();
+
+      menuVars.prevIndex = menuVars.oldLength;
     }
 
-    //handle flyouts with only 2 blocks
-    if (menuVars.hasTwoBlocks()) {
+    //if top block is selected
+    else if (menuVars.currIndex <= menuVars.oldLength) {
 
-        //if bottom block is selected
-        if (menuVars.currIndex >= menuVars.flyoutArr.length - 1) {
+      menuVars.currIndex = menuVars.flyoutArr.length - 1;
+      menuVars.prevIndex = menuVars.oldLength;
 
-            menuVars.currIndex = menuVars.oldLength;
-            menuVars.prevIndex = menuVars.flyoutArr.length - 1;
+      menuVars.flyoutArr[menuVars.currIndex].addSelect();
+      menuVars.flyoutArr[menuVars.prevIndex].removeSelect();
 
-            menuVars.flyoutArr[menuVars.currIndex].addSelect();
-            menuVars.flyoutArr[menuVars.prevIndex].removeSelect();
+      menuVars.prevIndex = menuVars.flyoutArr.length - 1;
 
-            menuVars.prevIndex = menuVars.oldLength;
-        }
-
-        //if top block is selected
-        else if (menuVars.currIndex <= menuVars.oldLength) {
-
-            menuVars.currIndex = menuVars.flyoutArr.length - 1;
-            menuVars.prevIndex = menuVars.oldLength;
-
-            menuVars.flyoutArr[menuVars.currIndex].addSelect();
-            menuVars.flyoutArr[menuVars.prevIndex].removeSelect();
-
-            menuVars.prevIndex = menuVars.flyoutArr.length - 1;
-
-        }
-        return;
     }
-    //if not the first time the flyout is opened
-    if (!menuVars.isFirstBlock()) {
+    return;
+  }
+  //if not the first time the flyout is opened
+  if (!menuVars.isFirstBlock()) {
 
-        menuVars.flyoutArr[menuVars.currIndex - 1].removeSelect();
-    }
+    menuVars.flyoutArr[menuVars.currIndex - 1].removeSelect();
+  }
 
-    //handle looping through flyout
-    if (menuVars.loopingDown()) {
+  //handle looping through flyout
+  if (menuVars.loopingDown()) {
 
-        menuVars.currIndex = menuVars.oldLength;
-        menuVars.prevIndex = menuVars.flyoutArr.length - 1;
+    menuVars.currIndex = menuVars.oldLength;
+    menuVars.prevIndex = menuVars.flyoutArr.length - 1;
 
-        menuVars.flyoutArr[menuVars.prevIndex].removeSelect();
-    }
+    menuVars.flyoutArr[menuVars.prevIndex].removeSelect();
+  }
 
 
 
-   //handle switching directions
-   if (menuVars.switchingDown()) {
+  //handle switching directions
+  if (menuVars.switchingDown()) {
 
-        menuVars.flyoutArr[menuVars.prevIndex].removeSelect();
-        menuVars.currIndex += 2;
-    }
+    menuVars.flyoutArr[menuVars.prevIndex].removeSelect();
+    menuVars.currIndex += 2;
+  }
 
-    //select next and update
-    menuVars.flyoutArr[menuVars.currIndex].addSelect();
+  //select next and update
+  menuVars.flyoutArr[menuVars.currIndex].addSelect();
 
-    //read selected
-    Blockly.Accessibility.MenuNav.readToolbox();
+  //read selected
+  Blockly.Accessibility.MenuNav.readToolbox();
 
-    menuVars.prevIndex = menuVars.currIndex;
-    menuVars.currIndex++;
+  menuVars.prevIndex = menuVars.currIndex;
+  menuVars.currIndex++;
 
 };
 
@@ -486,71 +486,71 @@ Blockly.Accessibility.MenuNav.prototype.menuNavDown= function() {
 /*
 *   Traverse to the previous block in the flyout
 */
-Blockly.Accessibility.MenuNav.prototype.menuNavUp = function() {
-    if (!menuVars.opened) {
-        return;
+Blockly.Accessibility.MenuNav.prototype.menuNavUp = function () {
+  if (!menuVars.opened) {
+    return;
+  }
+
+  //if flyout has only 2 blocks
+  if (menuVars.hasTwoBlocks()) {
+
+    //bottom block
+    if (menuVars.currIndex == menuVars.flyoutArr.length - 1) {
+
+      menuVars.currIndex = menuVars.oldLength;
+      menuVars.prevIndex = menuVars.oldLength;
+
+      menuVars.flyoutArr[menuVars.currIndex].addSelect();
+      menuVars.flyoutArr[menuVars.flyoutArr.length - 1].removeSelect();
     }
 
-    //if flyout has only 2 blocks
-    if (menuVars.hasTwoBlocks()) {
+    //top block
+    else if (menuVars.currIndex == menuVars.oldLength) {
 
-        //bottom block
-        if (menuVars.currIndex == menuVars.flyoutArr.length - 1) {
+      menuVars.currIndex = menuVars.flyoutArr.length - 1;
+      menuVars.prevIndex = menuVars.flyoutArr.length - 1;
 
-            menuVars.currIndex = menuVars.oldLength;
-            menuVars.prevIndex = menuVars.oldLength;
-
-            menuVars.flyoutArr[menuVars.currIndex].addSelect();
-            menuVars.flyoutArr[menuVars.flyoutArr.length - 1].removeSelect();
-        }
-
-        //top block
-        else if (menuVars.currIndex == menuVars.oldLength) {
-
-            menuVars.currIndex = menuVars.flyoutArr.length - 1;
-            menuVars.prevIndex = menuVars.flyoutArr.length - 1;
-
-            menuVars.flyoutArr[menuVars.currIndex].addSelect();
-            menuVars.flyoutArr[menuVars.oldLength].removeSelect();
-        }
-        return;
+      menuVars.flyoutArr[menuVars.currIndex].addSelect();
+      menuVars.flyoutArr[menuVars.oldLength].removeSelect();
     }
+    return;
+  }
 
-    //remove select
-    //not first time opened || not second item on list
-    if (!menuVars.isSecondBlock()) {
-        menuVars.flyoutArr[menuVars.prevIndex].removeSelect();
-    }
+  //remove select
+  //not first time opened || not second item on list
+  if (!menuVars.isSecondBlock()) {
+    menuVars.flyoutArr[menuVars.prevIndex].removeSelect();
+  }
 
-    //handle loops
-    //top block selected || only 1 block in flyout|| trying to switch directions at the top of the flyout
-    if (menuVars.hasOneBlock() || menuVars.loopingUp()) {
+  //handle loops
+  //top block selected || only 1 block in flyout|| trying to switch directions at the top of the flyout
+  if (menuVars.hasOneBlock() || menuVars.loopingUp()) {
 
-        menuVars.prevIndex = menuVars.oldLength;
-        menuVars.currIndex = menuVars.flyoutArr.length - 1;
+    menuVars.prevIndex = menuVars.oldLength;
+    menuVars.currIndex = menuVars.flyoutArr.length - 1;
 
-        menuVars.flyoutArr[menuVars.prevIndex].removeSelect();
-    }
-
-
-
-    //handle switching from down to up
-    //normal switch scenario && not the first block
-    if (menuVars.switchingUp() && !menuVars.isFirstBlock()) {
-
-        menuVars.flyoutArr[menuVars.prevIndex].removeSelect();
-        menuVars.currIndex -= 2;
-    }
+    menuVars.flyoutArr[menuVars.prevIndex].removeSelect();
+  }
 
 
-    menuVars.flyoutArr[menuVars.currIndex].addSelect();
 
-    //read selected
-    Blockly.Accessibility.MenuNav.readToolbox();
+  //handle switching from down to up
+  //normal switch scenario && not the first block
+  if (menuVars.switchingUp() && !menuVars.isFirstBlock()) {
+
+    menuVars.flyoutArr[menuVars.prevIndex].removeSelect();
+    menuVars.currIndex -= 2;
+  }
 
 
-    menuVars.prevIndex = menuVars.currIndex;
-    menuVars.currIndex--;
+  menuVars.flyoutArr[menuVars.currIndex].addSelect();
+
+  //read selected
+  Blockly.Accessibility.MenuNav.readToolbox();
+
+
+  menuVars.prevIndex = menuVars.currIndex;
+  menuVars.currIndex--;
 };
 
 
@@ -567,54 +567,54 @@ Blockly.Accessibility.MenuNav.prototype.menuNavUp = function() {
  * @param {!Blockly.Workspace} workspace The flyout's workspace.
  */
 Blockly.Procedures.flyoutCategory = function (blocks, gaps, margin, workspace) {
-    menuVars.opened    = true;
+  menuVars.opened = true;
 
-    if (Blockly.Blocks['procedures_defnoreturn']) {
-        var block = Blockly.Block.obtain(workspace, 'procedures_defnoreturn');
-        block.initSvg();
-        blocks.push(block);
-        menuVars.flyoutArr.push(block);//added for blockly navigation.js
-        gaps.push(margin * 2);
-    }
-    if (Blockly.Blocks['procedures_defreturn']) {
-        var block = Blockly.Block.obtain(workspace, 'procedures_defreturn');
-        block.initSvg();
-        blocks.push(block);
-        menuVars.flyoutArr.push(block);//added for blockly navigation.js
-        gaps.push(margin * 2);
-    }
-    if (Blockly.Blocks['procedures_ifreturn']) {
-        var block = Blockly.Block.obtain(workspace, 'procedures_ifreturn');
-        block.initSvg();
-        blocks.push(block);
-        menuVars.flyoutArr.push(block);//added for blockly navigation.js
-        gaps.push(margin * 2);
-    }
-    if (gaps.length) {
-        // Add slightly larger gap between system blocks and user calls.
-        gaps[gaps.length - 1] = margin * 3;
-    }
+  if (Blockly.Blocks['procedures_defnoreturn']) {
+    var block = Blockly.Block.obtain(workspace, 'procedures_defnoreturn');
+    block.initSvg();
+    blocks.push(block);
+    menuVars.flyoutArr.push(block);//added for blockly navigation.js
+    gaps.push(margin * 2);
+  }
+  if (Blockly.Blocks['procedures_defreturn']) {
+    var block = Blockly.Block.obtain(workspace, 'procedures_defreturn');
+    block.initSvg();
+    blocks.push(block);
+    menuVars.flyoutArr.push(block);//added for blockly navigation.js
+    gaps.push(margin * 2);
+  }
+  if (Blockly.Blocks['procedures_ifreturn']) {
+    var block = Blockly.Block.obtain(workspace, 'procedures_ifreturn');
+    block.initSvg();
+    blocks.push(block);
+    menuVars.flyoutArr.push(block);//added for blockly navigation.js
+    gaps.push(margin * 2);
+  }
+  if (gaps.length) {
+    // Add slightly larger gap between system blocks and user calls.
+    gaps[gaps.length - 1] = margin * 3;
+  }
 
-    function populateProcedures(procedureList, templateName) {
-        for (var x = 0; x < procedureList.length; x++) {
-            var block = Blockly.Block.obtain(workspace, templateName);
-            block.setFieldValue(procedureList[x][0], 'NAME');
-            var tempIds = [];
-            for (var t = 0; t < procedureList[x][1].length; t++) {
-                tempIds[t] = 'ARG' + t;
-            }
-            block.setProcedureParameters(procedureList[x][1], tempIds);
-            block.initSvg();
-            blocks.push(block);
-            menuVars.flyoutArr.push(block);//added for blockly navigation.js
+  function populateProcedures(procedureList, templateName) {
+    for (var x = 0; x < procedureList.length; x++) {
+      var block = Blockly.Block.obtain(workspace, templateName);
+      block.setFieldValue(procedureList[x][0], 'NAME');
+      var tempIds = [];
+      for (var t = 0; t < procedureList[x][1].length; t++) {
+        tempIds[t] = 'ARG' + t;
+      }
+      block.setProcedureParameters(procedureList[x][1], tempIds);
+      block.initSvg();
+      blocks.push(block);
+      menuVars.flyoutArr.push(block);//added for blockly navigation.js
 
-            gaps.push(margin * 2);
-        }
+      gaps.push(margin * 2);
     }
+  }
 
-    var tuple = Blockly.Procedures.allProcedures(workspace.targetWorkspace);
-    populateProcedures(tuple[0], 'procedures_callnoreturn');
-    populateProcedures(tuple[1], 'procedures_callreturn');
+  var tuple = Blockly.Procedures.allProcedures(workspace.targetWorkspace);
+  populateProcedures(tuple[0], 'procedures_callnoreturn');
+  populateProcedures(tuple[1], 'procedures_callreturn');
 };
 
 /**
@@ -623,25 +623,25 @@ Blockly.Procedures.flyoutCategory = function (blocks, gaps, margin, workspace) {
  * @param {!Array|string} xmlList List of blocks to show.
  *     Variables and procedures have a custom set of blocks.
  */
- 
+
 
 
 
 //new Flyout.show
-Blockly.Flyout.prototype.show = function(xmlList) {
-	
-	
-	menuVars.currentFlyoutArr = [];
-    menuVars.opened    = true;
-    menuVars.oldLength = menuVars.flyoutArr.length; //update the length of the last array 
+Blockly.Flyout.prototype.show = function (xmlList) {
 
 
-    if(menuVars.oldLength > 0){ //ignore first time opening
-        menuVars.currIndex  = menuVars.oldLength;
-    }
-	
-	//end
-	
+  menuVars.currentFlyoutArr = [];
+  menuVars.opened = true;
+  menuVars.oldLength = menuVars.flyoutArr.length; //update the length of the last array 
+
+
+  if (menuVars.oldLength > 0) { //ignore first time opening
+    menuVars.currIndex = menuVars.oldLength;
+  }
+
+  //end
+
   this.workspace_.setResizesEnabled(false);
   //this.hide();
   this.clearOldBlocks_();
@@ -651,10 +651,10 @@ Blockly.Flyout.prototype.show = function(xmlList) {
   // valid XML list.
   if (typeof xmlList == 'string') {
     var fnToApply = this.workspace_.targetWorkspace.getToolboxCategoryCallback(
-        xmlList);
+      xmlList);
     if (typeof fnToApply != 'function') {
       throw TypeError('Couldn\'t find a callback function when opening' +
-          ' a toolbox category.');
+        ' a toolbox category.');
     }
     xmlList = fnToApply(this.workspace_.targetWorkspace);
     if (!Array.isArray(xmlList)) {
@@ -678,13 +678,13 @@ Blockly.Flyout.prototype.show = function(xmlList) {
           // Do not enable these blocks as a result of capacity filtering.
           this.permanentlyDisabled_.push(curBlock);
         }
-        contents.push({type: 'block', block: curBlock});
-		
-		 menuVars.flyoutArr.push(curBlock);
-         menuVars.currentFlyoutArr.push(curBlock);
-         //gaps.push(margin * 3);
-		 
-		 var gap = parseInt(xml.getAttribute('gap'), 10);
+        contents.push({ type: 'block', block: curBlock });
+
+        menuVars.flyoutArr.push(curBlock);
+        menuVars.currentFlyoutArr.push(curBlock);
+        //gaps.push(margin * 3);
+
+        var gap = parseInt(xml.getAttribute('gap'), 10);
         gaps.push(isNaN(gap) ? default_gap : gap);
       } else if (xml.tagName.toUpperCase() == 'SEP') {
         // Change the gap between two blocks.
@@ -704,8 +704,8 @@ Blockly.Flyout.prototype.show = function(xmlList) {
         // Labels behave the same as buttons, but are styled differently.
         var isLabel = tagName == 'LABEL';
         var curButton = new Blockly.FlyoutButton(this.workspace_,
-            this.targetWorkspace_, xml, isLabel);
-        contents.push({type: 'button', button: curButton});
+          this.targetWorkspace_, xml, isLabel);
+        contents.push({ type: 'button', button: curButton });
         gaps.push(default_gap);
       }
     }
@@ -715,7 +715,7 @@ Blockly.Flyout.prototype.show = function(xmlList) {
 
   // IE 11 is an incompetent browser that fails to fire mouseout events.
   // When the mouse is over the background, deselect all blocks.
-  var deselectAll = function() {
+  var deselectAll = function () {
     var topBlocks = this.workspace_.getTopBlocks(false);
     for (var i = 0, block; block = topBlocks[i]; i++) {
       block.removeSelect();
@@ -723,7 +723,7 @@ Blockly.Flyout.prototype.show = function(xmlList) {
   };
 
   this.listeners_.push(Blockly.bindEventWithChecks_(this.svgBackground_,
-      'mouseover', this, deselectAll));
+    'mouseover', this, deselectAll));
 
   if (this.horizontalLayout_) {
     this.height_ = 0;
@@ -749,145 +749,145 @@ Blockly.Flyout.prototype.show = function(xmlList) {
 /**
  * When the selection changes, the block name is updated for screenreader
  */
- Blockly.Accessibility.MenuNav.readToolbox = function(){
-    var blockSvg = menuVars.flyoutArr[menuVars.currIndex];
-    var active   = document.activeElement;
-    var lastCategory; //track the category so that it does not deselect
-    var blockReader = document.getElementById("blockReader");
-    if(blockSvg == undefined){
-        return;
-    }
+Blockly.Accessibility.MenuNav.readToolbox = function () {
+  var blockSvg = menuVars.flyoutArr[menuVars.currIndex];
+  var active = document.activeElement;
+  var lastCategory; //track the category so that it does not deselect
+  var blockReader = document.getElementById("blockReader");
+  if (blockSvg == undefined) {
+    return;
+  }
 
 
-    var say = Blockly.Accessibility.Speech.blockToString(blockSvg.type, blockSvg.disabled);
-    Blockly.Accessibility.Speech.Say(say);
+  var say = Blockly.Accessibility.Speech.blockToString(blockSvg.type, blockSvg.disabled);
+  Blockly.Accessibility.Speech.Say(say);
 
 
-    //Blockly.Accessibility.Speech.updateBlockReader(blockSvg.type, blockSvg);
+  //Blockly.Accessibility.Speech.updateBlockReader(blockSvg.type, blockSvg);
 
-    //if category is selected save it (all categories begin with : )
-    //then label with aria attributes so that any change will be announced
-    // if(active.id[0] ==":"){
-    //     lastCategory = active;
-    //     lastCategory.setAttribute("aria-owns", "readBox");
-    //     lastCategory.setAttribute("aria-labelledBy", "readBox"); 
-    // }
+  //if category is selected save it (all categories begin with : )
+  //then label with aria attributes so that any change will be announced
+  // if(active.id[0] ==":"){
+  //     lastCategory = active;
+  //     lastCategory.setAttribute("aria-owns", "readBox");
+  //     lastCategory.setAttribute("aria-labelledBy", "readBox"); 
+  // }
 
   //Blockly.Accessibility.Speech.Say(say);
 };
 
-Blockly.Accessibility.MenuNav.flyoutToWorkspace = function(){
+Blockly.Accessibility.MenuNav.flyoutToWorkspace = function () {
 
-    var workspaceBlocksString = "";//text of what is on the workspace
-    var workspaceBlocks;           //xml of what is on the workspace
-    var incompleteXml;             //xml string before the chosen block has been added
-    var completeXmlStr;            //string of xml to be added to workspace
-    var xml;                       //dom version of the xml to be added to the workspace
+  var workspaceBlocksString = "";//text of what is on the workspace
+  var workspaceBlocks;           //xml of what is on the workspace
+  var incompleteXml;             //xml string before the chosen block has been added
+  var completeXmlStr;            //string of xml to be added to workspace
+  var xml;                       //dom version of the xml to be added to the workspace
 
-    //block svg to block xml then add to workspace
-    var blockXML = Blockly.Xml.blockToDom(menuVars.flyoutArr[menuVars.prevIndex]);//the current block tab on from the flyout
-    var block    = Blockly.Block.obtain(workspace, blockXML.getAttribute("type"));
-    block.initSvg();
-    block.render();
-    document.activeElement.blur();
-    block.select();
+  //block svg to block xml then add to workspace
+  var blockXML = Blockly.Xml.blockToDom(menuVars.flyoutArr[menuVars.prevIndex]);//the current block tab on from the flyout
+  var block = Blockly.Block.obtain(workspace, blockXML.getAttribute("type"));
+  block.initSvg();
+  block.render();
+  document.activeElement.blur();
+  block.select();
 
-    //The following is used to put new, unconnected blocks at the bottom of the workspace
-    // var topBlocks = Blockly.mainWorkspace.getTopBlocks();
-    // var index = topBlocks.length-1;
-    // var totalHeight = -topBlocks[0].height/2;
- 
-    // if(!Blockly.selectedConnection && index>0){
-    //     for(var i = 0; i< topBlocks.length-1; i++){
-    //         totalHeight += topBlocks[i].height;
-    //     }
-    //     block.moveBy(0, totalHeight+32);
-    // }
+  //The following is used to put new, unconnected blocks at the bottom of the workspace
+  // var topBlocks = Blockly.mainWorkspace.getTopBlocks();
+  // var index = topBlocks.length-1;
+  // var totalHeight = -topBlocks[0].height/2;
 
-    Blockly.Accessibility.Keystrokes.prototype.isConnecting = false;
+  // if(!Blockly.selectedConnection && index>0){
+  //     for(var i = 0; i< topBlocks.length-1; i++){
+  //         totalHeight += topBlocks[i].height;
+  //     }
+  //     block.moveBy(0, totalHeight+32);
+  // }
 
-    
-    return block;
-    //var workspace = Blockly.Generator.prototype.workspaceToCode();
-    // var textInput = Blockly.Xml.domToText(input);                    //the svg turned into pain text'
-
-    // //taking the xml declaration from the block after domToText adds it in
-    // var partOne = textInput.substring(0, 7);                  //before the xml declaration
-    // var partTwo = textInput.substring(44, textInput.length);  //after the xml declaration
-    // var blockString = '<xml>' + partOne + partTwo + '</xml>'; //the complete block str from the flyout that we want to add
-    // return partTwo
-    // incompleteXml  = workspaceBlocksString.substring(0, workspaceBlocksString.length-6);//the xml before the chosen block has been added...stripped the </xml>
-    // completeXmlStr = blockString;               //incompleteXml + blockString;//the completeXML string to be added to the workspace
-    // xml = Blockly.Xml.textToDom(completeXmlStr);//take the complete xml string and change to dom
-
-    //  // The following allows us to immediately identify the block in the scene and grab it.
-    //  var commentNode = Blockly.Xml.textToDom('<xml><comment pinned="false" h="80" w="160">`4*K</comment></xml>');
-    //  xml.childNodes[0].appendChild(commentNode.childNodes[0]);
+  Blockly.Accessibility.Keystrokes.prototype.isConnecting = false;
 
 
+  return block;
+  //var workspace = Blockly.Generator.prototype.workspaceToCode();
+  // var textInput = Blockly.Xml.domToText(input);                    //the svg turned into pain text'
 
-    // Blockly.Xml.domToWorkspace(workspace, xml);//adds the xml var to the main workspace
+  // //taking the xml declaration from the block after domToText adds it in
+  // var partOne = textInput.substring(0, 7);                  //before the xml declaration
+  // var partTwo = textInput.substring(44, textInput.length);  //after the xml declaration
+  // var blockString = '<xml>' + partOne + partTwo + '</xml>'; //the complete block str from the flyout that we want to add
+  // return partTwo
+  // incompleteXml  = workspaceBlocksString.substring(0, workspaceBlocksString.length-6);//the xml before the chosen block has been added...stripped the </xml>
+  // completeXmlStr = blockString;               //incompleteXml + blockString;//the completeXML string to be added to the workspace
+  // xml = Blockly.Xml.textToDom(completeXmlStr);//take the complete xml string and change to dom
 
-    // Blockly.Accessibility.Navigation.updateXmlSelection();//updates the xml
-    // // Blockly.hideChaff();//hides the toolbox once done
+  //  // The following allows us to immediately identify the block in the scene and grab it.
+  //  var commentNode = Blockly.Xml.textToDom('<xml><comment pinned="false" h="80" w="160">`4*K</comment></xml>');
+  //  xml.childNodes[0].appendChild(commentNode.childNodes[0]);
 
-    //  var comments = xmlDoc.getElementsByTagName('COMMENT');
 
-    // // //set comment text to null
-    // for (var i = 0; i < comments.length; i++) {
-    //     if (comments[i].childNodes[0].nodeValue == '`4*K') {
-    //         //var xmlStr =  comments[i].parentNode;
-    //         //var xmlBlock = Blockly.Xml.domToBlock(Blockly.mainWorkspace,xmlStr,true);
 
-    //         //var block = Blockly.Block.getById(comments[i].parentNode, Blockly.mainWorkspace);
-    //         //console.log();
-    //         //block.setCommentText(null);
-    //         //var block = Blockly.selected;
-    //         return block;
-    //     }
-    // }
-    // //console.log("WARNING. ADDED BLOCK NOT FOUND");
-    // return null;
+  // Blockly.Xml.domToWorkspace(workspace, xml);//adds the xml var to the main workspace
+
+  // Blockly.Accessibility.Navigation.updateXmlSelection();//updates the xml
+  // // Blockly.hideChaff();//hides the toolbox once done
+
+  //  var comments = xmlDoc.getElementsByTagName('COMMENT');
+
+  // // //set comment text to null
+  // for (var i = 0; i < comments.length; i++) {
+  //     if (comments[i].childNodes[0].nodeValue == '`4*K') {
+  //         //var xmlStr =  comments[i].parentNode;
+  //         //var xmlBlock = Blockly.Xml.domToBlock(Blockly.mainWorkspace,xmlStr,true);
+
+  //         //var block = Blockly.Block.getById(comments[i].parentNode, Blockly.mainWorkspace);
+  //         //console.log();
+  //         //block.setCommentText(null);
+  //         //var block = Blockly.selected;
+  //         return block;
+  //     }
+  // }
+  // //console.log("WARNING. ADDED BLOCK NOT FOUND");
+  // return null;
 };
 
 
 
-Blockly.Accessibility.MenuNav.addNext = function(){
-    //var workspaceBlockId = Blockly.Accessibility.Navigation.getRetainedNode();// the selected block on the workspace
-    //console.log(workspaceBlockId)
-    var blockIdStr = '<xml> <block type="controls_if" id="8" inline="false" x="11" y="11">'//"id=\"" + "8" + "\"";
-    console.log(blockIdStr);
+Blockly.Accessibility.MenuNav.addNext = function () {
+  //var workspaceBlockId = Blockly.Accessibility.Navigation.getRetainedNode();// the selected block on the workspace
+  //console.log(workspaceBlockId)
+  var blockIdStr = '<xml> <block type="controls_if" id="8" inline="false" x="11" y="11">'//"id=\"" + "8" + "\"";
+  console.log(blockIdStr);
 
-    var input     = Blockly.Xml.blockToDom_(menuVars.flyoutArr[menuVars.prevIndex]);//the current block tab on from the flyout
-    var textInput = Blockly.Xml.domToText(input);//the svg turned into pain text
+  var input = Blockly.Xml.blockToDom_(menuVars.flyoutArr[menuVars.prevIndex]);//the current block tab on from the flyout
+  var textInput = Blockly.Xml.domToText(input);//the svg turned into pain text
 
-    //taking the xml declaration from the block after domToText adds it in
-    var partOne = textInput.substring(0, 7)                 //before the xml declaration
-    var partTwo = textInput.substring(44, textInput.length);//after the xml declaration
+  //taking the xml declaration from the block after domToText adds it in
+  var partOne = textInput.substring(0, 7)                 //before the xml declaration
+  var partTwo = textInput.substring(44, textInput.length);//after the xml declaration
 
-    var blockString = '<statement name="DO0">' + partOne + partTwo + '</statement>'; //the complete block str from the flyout that we want to add
-    //console.log(blockString);
+  var blockString = '<statement name="DO0">' + partOne + partTwo + '</statement>'; //the complete block str from the flyout that we want to add
+  //console.log(blockString);
 
-    var workspaceBlocks       = Blockly.Xml.workspaceToDom(Blockly.mainWorkspace);//the workspace as an xml doc
-    var workspaceBlocksString = Blockly.Xml.domToText(workspaceBlocks);           //the text version of what is currently on the workspace
-    var completeXmlStr        = blockIdStr + blockString + '</block>' + '</xml>';
-    //console.log(completeXmlStr);
+  var workspaceBlocks = Blockly.Xml.workspaceToDom(Blockly.mainWorkspace);//the workspace as an xml doc
+  var workspaceBlocksString = Blockly.Xml.domToText(workspaceBlocks);           //the text version of what is currently on the workspace
+  var completeXmlStr = blockIdStr + blockString + '</block>' + '</xml>';
+  //console.log(completeXmlStr);
 
-    var xml = Blockly.Xml.textToDom(completeXmlStr);//take the complete xml string and change to dom
+  var xml = Blockly.Xml.textToDom(completeXmlStr);//take the complete xml string and change to dom
 
-    Blockly.mainWorkspace.clear();                         //clears the previous blocks on the workspace
-    Blockly.Xml.domToWorkspace(Blockly.mainWorkspace, xml);//adds the xml var to the main workspace
+  Blockly.mainWorkspace.clear();                         //clears the previous blocks on the workspace
+  Blockly.Xml.domToWorkspace(Blockly.mainWorkspace, xml);//adds the xml var to the main workspace
 
-    Blockly.Accessibility.Navigation.updateXmlSelection();//updates the xml
-    Blockly.hideChaff();                                  //hides the toolbox once done
+  Blockly.Accessibility.Navigation.updateXmlSelection();//updates the xml
+  Blockly.hideChaff();                                  //hides the toolbox once done
 };
 
-Blockly.Accessibility.MenuNav.getToolboxChoices = function(){
-    return menuVars.currentFlyoutArr;
+Blockly.Accessibility.MenuNav.getToolboxChoices = function () {
+  return menuVars.currentFlyoutArr;
 };
 
-Blockly.Accessibility.MenuNav.getMenuSelection = function(){
-    return menuVars.flyoutArr[menuVars.prevIndex];
+Blockly.Accessibility.MenuNav.getMenuSelection = function () {
+  return menuVars.flyoutArr[menuVars.prevIndex];
 };
 
 /**
@@ -899,40 +899,40 @@ Blockly.Accessibility.MenuNav.getMenuSelection = function(){
  * @param {!Blockly.Workspace} workspace The flyout's workspace.
  */
 Blockly.Variables.flyoutCategory = function (blocks, gaps, margin, workspace) {
-    menuVars.opened    = true;
-    var variableList = Blockly.Variables.allVariables(workspace.targetWorkspace);
-    variableList.sort(goog.string.caseInsensitiveCompare);
-    // In addition to the user's variables, we also want to display the default
-    // variable name at the top.  We also don't want this duplicated if the
-    // user has created a variable of the same name.
-    variableList.unshift(null);
-    var defaultVariable = undefined;
-    for (var i = 0; i < variableList.length; i++) {
-        if (variableList[i] === defaultVariable) {
-            continue;
-        }
-        var getBlock = Blockly.Blocks['variables_get'] ?
-            Blockly.Block.obtain(workspace, 'variables_get') : null;
-        getBlock && getBlock.initSvg();
-        var setBlock = Blockly.Blocks['variables_set'] ?
-            Blockly.Block.obtain(workspace, 'variables_set') : null;
-        setBlock && setBlock.initSvg();
-        if (variableList[i] === null) {
-            defaultVariable = (getBlock || setBlock).getVars()[0];
-        } else {
-            getBlock && getBlock.setFieldValue(variableList[i], 'VAR');
-            setBlock && setBlock.setFieldValue(variableList[i], 'VAR');
-        }
-        setBlock && blocks.push(setBlock);
-        menuVars.flyoutArr.push(setBlock);//added for blockly navigation.js
-        getBlock && blocks.push(getBlock);
-        menuVars.flyoutArr.push(getBlock);//added for blockly navigation.js
-        if (getBlock && setBlock) {
-            gaps.push(margin, margin * 3);
-        } else {
-            gaps.push(margin * 2);
-        }
+  menuVars.opened = true;
+  var variableList = Blockly.Variables.allVariables(workspace.targetWorkspace);
+  variableList.sort(goog.string.caseInsensitiveCompare);
+  // In addition to the user's variables, we also want to display the default
+  // variable name at the top.  We also don't want this duplicated if the
+  // user has created a variable of the same name.
+  variableList.unshift(null);
+  var defaultVariable = undefined;
+  for (var i = 0; i < variableList.length; i++) {
+    if (variableList[i] === defaultVariable) {
+      continue;
     }
+    var getBlock = Blockly.Blocks['variables_get'] ?
+      Blockly.Block.obtain(workspace, 'variables_get') : null;
+    getBlock && getBlock.initSvg();
+    var setBlock = Blockly.Blocks['variables_set'] ?
+      Blockly.Block.obtain(workspace, 'variables_set') : null;
+    setBlock && setBlock.initSvg();
+    if (variableList[i] === null) {
+      defaultVariable = (getBlock || setBlock).getVars()[0];
+    } else {
+      getBlock && getBlock.setFieldValue(variableList[i], 'VAR');
+      setBlock && setBlock.setFieldValue(variableList[i], 'VAR');
+    }
+    setBlock && blocks.push(setBlock);
+    menuVars.flyoutArr.push(setBlock);//added for blockly navigation.js
+    getBlock && blocks.push(getBlock);
+    menuVars.flyoutArr.push(getBlock);//added for blockly navigation.js
+    if (getBlock && setBlock) {
+      gaps.push(margin, margin * 3);
+    } else {
+      gaps.push(margin * 2);
+    }
+  }
 };
 
 //=====================================HANDLES ADDING BLOCKS WHEN NOT CONNECTING=============================
@@ -940,30 +940,30 @@ Blockly.Variables.flyoutCategory = function (blocks, gaps, margin, workspace) {
 /*when adding a block and not connecting, add to the last statement on the workspace
  *@param menuBlock - the block that is being added to the workspace from the menu
 */
-Blockly.Accessibility.MenuNav.connectToLastBlock = function(menuBlock){
+Blockly.Accessibility.MenuNav.connectToLastBlock = function (menuBlock) {
 
-    var containers = Blockly.Accessibility.MenuNav.containersArr;
-    var bottom = Blockly.Accessibility.MenuNav.containersArr.length-1;    
+  var containers = Blockly.Accessibility.MenuNav.containersArr;
+  var bottom = Blockly.Accessibility.MenuNav.containersArr.length - 1;
 
-     //functions cant connect to statement blocks
-    if(containers[bottom-1].type == "procedures_defreturn" || containers[bottom-1].type == "procedures_defnoreturn"){
-        Blockly.Accessibility.MenuNav.moveToBottom();
-    }
-    else{ 
+  //functions cant connect to statement blocks
+  if (containers[bottom - 1].type == "procedures_defreturn" || containers[bottom - 1].type == "procedures_defnoreturn") {
+    Blockly.Accessibility.MenuNav.moveToBottom();
+  }
+  else {
 
-        var newBlock = Blockly.selected;
-        Blockly.Accessibility.InBlock.enterCurrentBlock();
-        Blockly.Accessibility.InBlock.selectNext();
-        Blockly.Accessibility.InBlock.selectConnection();
+    var newBlock = Blockly.selected;
+    Blockly.Accessibility.InBlock.enterCurrentBlock();
+    Blockly.Accessibility.InBlock.selectNext();
+    Blockly.Accessibility.InBlock.selectConnection();
 
-        Blockly.Accessibility.MenuNav.containersArr[bottom-1].select();
+    Blockly.Accessibility.MenuNav.containersArr[bottom - 1].select();
 
-        Blockly.Accessibility.InBlock.enterCurrentBlock();
-        Blockly.Accessibility.InBlock.selectConnection();
-        Blockly.Accessibility.InBlock.enterSelected();
+    Blockly.Accessibility.InBlock.enterCurrentBlock();
+    Blockly.Accessibility.InBlock.selectConnection();
+    Blockly.Accessibility.InBlock.enterSelected();
 
-        newBlock.select();  
-    }
+    newBlock.select();
+  }
 
 }
 
@@ -971,16 +971,16 @@ Blockly.Accessibility.MenuNav.connectToLastBlock = function(menuBlock){
 *  Moves a newly added block to the bottom of the workspace.
 *  Used for procedure blocks and the block after a procedure block
 */
-Blockly.Accessibility.MenuNav.moveToBottom = function(){
+Blockly.Accessibility.MenuNav.moveToBottom = function () {
 
-    var containers = Blockly.Accessibility.MenuNav.containersArr;
-    var totalHeight = 0;
+  var containers = Blockly.Accessibility.MenuNav.containersArr;
+  var totalHeight = 0;
 
-    for(var i = 0; i < containers.length-1; i++){
-        totalHeight += containers[i].height;
-    }
+  for (var i = 0; i < containers.length - 1; i++) {
+    totalHeight += containers[i].height;
+  }
 
-    Blockly.selected.moveBy(0, totalHeight-3);
+  Blockly.selected.moveBy(0, totalHeight - 3);
 }
 
 

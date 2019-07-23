@@ -32,16 +32,16 @@ var lastId = 99;
 
 //#region ACCESSIBILITY_OVERRIDES
 
- /**
- * Initialize accessibility properties
- * @override
- */
+/**
+* Initialize accessibility properties
+* @override
+*/
 // Blockly.Toolbox.TreeNode.prototype.initAccessibility = function() {
 //   goog.ui.tree.BaseNode.prototype.initAccessibility.call(this);
-  
+
 //   var el = this.getElement();
 //   el.setAttribute('tabIndex', 0);
-  
+
 //   //Register the onKeyDown handler because nothing else does
 //   Blockly.bindEvent_(el, 'keydown', this, this.onKeyDown);
 // };
@@ -166,60 +166,60 @@ var lastId = 99;
 /**
  * Adds a comment to the selected block
  */
-Blockly.Accessibility.addComment = function(){
-	if(!Blockly.selected.comment){
-	    Blockly.selected.setCommentText('');
+Blockly.Accessibility.addComment = function () {
+  if (!Blockly.selected.comment) {
+    Blockly.selected.setCommentText('');
 
-	}
-	//Blockly.selected.comment.createEditor_();
-	Blockly.selected.comment.setVisible(true);
-	Blockly.selected.comment.textareaFocus_();
+  }
+  //Blockly.selected.comment.createEditor_();
+  Blockly.selected.comment.setVisible(true);
+  Blockly.selected.comment.textareaFocus_();
 };
 
 /**
  * removes comment block
  */
-Blockly.Accessibility.removeComment = function(){
-	
-	Blockly.Accessibility.Navigation.updateXmlSelection();
-	Blockly.Accessibility.Prefixes.generateTree();
-	Blockly.selected.comment.setVisible(false);
+Blockly.Accessibility.removeComment = function () {
+
+  Blockly.Accessibility.Navigation.updateXmlSelection();
+  Blockly.Accessibility.Prefixes.generateTree();
+  Blockly.selected.comment.setVisible(false);
 };
 /**
  * Expands the selected block if it is collapsed or collapses the selected block if it isn't
  */
-Blockly.Accessibility.toggleCollapse = function(){
+Blockly.Accessibility.toggleCollapse = function () {
   console.log("COLLAPSING");
-	Blockly.selected.setCollapsed(!Blockly.selected.collapsed_);
+  Blockly.selected.setCollapsed(!Blockly.selected.collapsed_);
 };
 
 /**
  * Enables the selected block if it is disabled or disables the selected block if it is enabled
  */
-Blockly.Accessibility.toggleDisable = function(){
-	Blockly.selected.setDisabled(!Blockly.selected.disabled);
+Blockly.Accessibility.toggleDisable = function () {
+  Blockly.selected.setDisabled(!Blockly.selected.disabled);
 };
 
 /**
  * Duplicates the selected block
  */
-Blockly.Accessibility.duplicateSelected = function(){
-	Blockly.selected.duplicate_();
+Blockly.Accessibility.duplicateSelected = function () {
+  Blockly.selected.duplicate_();
 };
 
 /**
  * Toggles inline for blocks so values are either external or internal
  */
-Blockly.Accessibility.toggleInline = function(){
-	Blockly.selected.setInputsInline(!Blockly.selected.inputsInline);
+Blockly.Accessibility.toggleInline = function () {
+  Blockly.selected.setInputsInline(!Blockly.selected.inputsInline);
 };
 
 /**
  * Calls the help function for the selected block
  */
-Blockly.Accessibility.helpSelectedBlock = function(){
+Blockly.Accessibility.helpSelectedBlock = function () {
 
-	//Blockly.selected.showHelp_();
+  //Blockly.selected.showHelp_();
 
   //set up the initial urls 
   var urlPt1 = "./quick_reference/";
@@ -227,7 +227,7 @@ Blockly.Accessibility.helpSelectedBlock = function(){
   var fullUrl;
 
   //get the appropriate file
-  switch(Blockly.selected.type.substr(0,3)){
+  switch (Blockly.selected.type.substr(0, 3)) {
 
     case "con":
     case "log":
@@ -236,14 +236,26 @@ Blockly.Accessibility.helpSelectedBlock = function(){
 
     default:
       break;
-    }
+  }
 
   //jump to a specific block on the page 
-  urlPt2  = "#" + Blockly.selected.type;
+  urlPt2 = "#" + Blockly.selected.type;
 
   //combine the strings and open new tab with the help
   fullUrl = urlPt1 + urlPt2;
-  window.open(fullUrl,'_blank');
+  window.open(fullUrl, '_blank');
 };
+
+// Play audio cue based on the audio settings.
+Blockly.Accessibility.PlayAudioCues = function (audioCueIdentifier) {
+
+  if (!window.audioSettings) {
+    workspace.getAudioManager().play(audioCueIdentifier);
+  } else if (!window.audioSettings.hasOwnProperty(audioCueIdentifier)
+    || window.audioSettings[audioCueIdentifier]
+  ) {
+    workspace.getAudioManager().play(audioCueIdentifier);
+  }
+}
 
 //#endregion

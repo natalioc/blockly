@@ -302,22 +302,24 @@ Blockly.Accessibility.Navigation.traverseOut = function () {
         return;
     }
 
-    var childBlocks = Blockly.selected.parentBlock_.childBlocks_;
+    var childBlocks = Blockly.selected.parentBlock_ && Blockly.selected.parentBlock_.childBlocks_;
     var surroundParent = Blockly.selected.getSurroundParent();
-    var selectedIndex = childBlocks.indexOf(Blockly.selected);
     console.log(surroundParent);
     //select the previous block at the same level if there is one
-    if(childBlocks.length > 1 && !Blockly.selected.previousConnection){
+    if(childBlocks && childBlocks.length > 1 && !Blockly.selected.previousConnection){
 
         for (var i = 0; i < childBlocks.length; i++){
 
             if(Blockly.selected != childBlocks[i]){
                 childBlocks[i].select();
+                Blockly.Accessibility.PlayAudioCues('closeParenthesis');
+
                 return;
             }
 
             else{
                 surroundParent.select();  
+                Blockly.Accessibility.PlayAudioCues('closeParenthesis');
                 return;
             }
         }     
@@ -326,6 +328,7 @@ Blockly.Accessibility.Navigation.traverseOut = function () {
     //select the surrounding block
     else if (surroundParent){
         surroundParent.select();
+        Blockly.Accessibility.PlayAudioCues('closeParenthesis');
     }
     //inform the user they've reached the end
     else{
@@ -357,6 +360,7 @@ Blockly.Accessibility.Navigation.traverseIn = function() {
         //select next child
         //TODO: clean up this if statement if possible
         if(Blockly.selected.childBlocks_[i].previousConnection != null && Blockly.selected.childBlocks_[i].previousConnection.type == 4){
+            Blockly.Accessibility.PlayAudioCues('openParenthesis');
             Blockly.selected.childBlocks_[i].select();
             return;
         }
@@ -374,6 +378,7 @@ Blockly.Accessibility.Navigation.traverseIn = function() {
                 //make sure its not the same block
                 if(Blockly.selected != parentBlock.childBlocks_[j] ){
                     parentBlock.childBlocks_[j].select();
+                    Blockly.Accessibility.PlayAudioCues('openParenthesis');
                 }
 
             }
@@ -388,6 +393,7 @@ Blockly.Accessibility.Navigation.traverseIn = function() {
             
             if(Blockly.selected != parentBlock.childBlocks_[i]){
                 parentBlock.childBlocks_[i].select();
+                Blockly.Accessibility.PlayAudioCues('openParenthesis');
             }
 
         }
@@ -403,7 +409,6 @@ Blockly.Accessibility.Navigation.traverseUp = function() {
     // Null check
     if (Blockly.selected == null) {
         //Blockly.Accessibility.Speech.Say('Cannot move further up from here.');
-
         return;
     }
 
