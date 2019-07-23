@@ -219,6 +219,7 @@ Blockly.Toolbox.TreeNode.prototype.onKeyDown = function(e) {
         //if not the top category
         if(previousSibling != null){
            previousSibling.select();
+           workspace.getAudioManager().play('identifyCategory');
            Blockly.Accessibility.InBlock.disableIncompatibleBlocks();
            document.getElementById(previousSibling.id_).focus();
         }
@@ -242,6 +243,7 @@ Blockly.Toolbox.TreeNode.prototype.onKeyDown = function(e) {
         //if not the bottome category
         if(nextSibling != null){
              nextSibling.select();
+             workspace.getAudioManager().play('identifyCategory');
              Blockly.Accessibility.InBlock.disableIncompatibleBlocks();
              document.getElementById(nextSibling.id_).focus();
         }
