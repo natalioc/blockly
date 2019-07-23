@@ -283,7 +283,24 @@ function toggleColorDD(){
       opts.setAttribute("aria-hidden", "false");
       audioCueDiv.setAttribute("aria-expanded", "true");
     }
+
+    if(!opts.attributes.getNamedItem("listenerAttached")) {
+      opts.querySelectorAll("input").forEach(function(elem) {
+      elem.addEventListener("click", function(event) {
+          var clickedInput = event && event.target && event.target.id;
+          if(clickedInput) {
+            if(!window.audioSettings) { 
+              window.audioSettings = {};
+            }
+
+            window.audioSettings[clickedInput] = event.target.checked;
+          }
+        });
+      });
+      opts.setAttribute("listenerAttached", true)
   }
+}
+
 </script>
 <link rel="stylesheet" href="interface.css"></link>
 <style>
