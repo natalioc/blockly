@@ -267,23 +267,23 @@ function toggleColorDD(){
   }
 }
 
-//toggle Audio Cue Menu
-function toggleAudioMenu() {
-  var opts = document.getElementById("audioOptions");
-  var audioCueDiv = document.getElementById("audioCueDiv");
+  //toggle Audio Cue Menu
+  function toggleAudioMenu() {
+    var opts = document.getElementById("audioOptions");
+    var audioCueDiv = document.getElementById("audioCueDiv");
 
-  if (opts.style.display == "inline-block") {
-    opts.style.display = "none";
-    opts.setAttribute("aria-hidden", "true");
-    audioCueDiv.setAttribute("aira-expanded", "false");
-    document.getElementById("audioButton").focus();
+    if (opts.style.display == "inline-block") {
+      opts.style.display = "none";
+      opts.setAttribute("aria-hidden", "true");
+      audioCueDiv.setAttribute("aira-expanded", "false");
+      document.getElementById("audioButton").focus();
+    }
+    else {
+      opts.style.display = "inline-block";
+      opts.setAttribute("aria-hidden", "false");
+      audioCueDiv.setAttribute("aria-expanded", "true");
+    }
   }
-  else {
-    opts.style.display = "inline-block";
-    opts.setAttribute("aria-hidden", "false");
-    audioCueDiv.setAttribute("aria-expanded", "true");
-  }
-}
 </script>
 <link rel="stylesheet" href="interface.css"></link>
 <style>
@@ -756,10 +756,34 @@ color: black;
     <div id="audioOptions" aria-hidden="true" role="menu">
         <fieldset>
           <legend>Audio Cue Toogle</legend>
-          <input type="checkbox" id="menunav" checked>
-          <label for="menunav">Menu Nav</label>
-          <input type="checkbox" id="workspace" checked>
-          <label for="menunav">Workspace</label>
+          <div>
+            <input type="checkbox" id="1nest" checked>
+            <label for="1nest">Enter Edit</label>
+          </div>
+          <div>
+              <input type="checkbox" id="deselectblock" checked>
+              <label for="deselectblock">Exit Edit</label>
+          </div>
+          <div>
+              <input type="checkbox" id="dropblock" checked>
+              <label for="dropblock">Drop Block</label>
+          </div>
+          <div>
+              <input type="checkbox" id="identifyblock" checked>
+              <label for="identifyblock">Block Transverse</label>
+          </div>
+          <div>
+              <input type="checkbox" id="identifyCategory" checked>
+              <label for="identifyCategory">Category Traverse</label>
+          </div>
+          <div>
+              <input type="checkbox" id="openParenthesis" checked>
+              <label for="openParenthesis">Enter Nest</label>
+          </div>
+          <div>
+              <input type="checkbox" id="closeParenthesis" checked>
+              <label for="closeParenthesis">Exit Nest</label>
+          </div>
         </fieldset>
     </div>
 
