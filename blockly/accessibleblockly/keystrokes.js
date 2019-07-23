@@ -276,6 +276,12 @@ document.onkeydown = document.onkeyup = function (e) {
 			console.log('shift f keys pressed');
 			Blockly.Accessibility.Navigation.inlineBlockTraverseOut();
 		}
+		else if (e.ctrlKey && e.shiftKey && map[81]) { //Ctrl Shift Q
+			console.log('CTRL Shift q keys pressed.');
+			// show the Audio opts
+			Blockly.Accessibility.showAudioSettingsFlyout();
+			e.preventDefault();
+		}
 
 		else if (map[13]) {
 			console.log('hotkeyMode Enter key pressed');

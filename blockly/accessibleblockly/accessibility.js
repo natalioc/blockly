@@ -258,4 +258,19 @@ Blockly.Accessibility.PlayAudioCues = function (audioCueIdentifier) {
   }
 }
 
+Blockly.Accessibility.showAudioSettingsFlyout = function() {
+
+  var audioOptButton = document.getElementById('audioCueDiv');
+
+  if(audioOptButton.style.display == "none") {
+    audioOptButton.style.display = "block";
+    audioOptButton.setAttribute("aria-hidden", "false");
+    audioOptButton.setAttribute("aria-expanded","true");
+  } else {
+    audioOptButton.style.display = "none";
+    audioOptButton.setAttribute("aria-hidden", "true");
+    audioOptButton.setAttribute("aira-expanded", "false");
+  }
+}
+
 //#endregion
