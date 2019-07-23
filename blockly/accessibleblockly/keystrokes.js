@@ -308,6 +308,7 @@ document.onkeydown = document.onkeyup = function (e) {
 			document.activeElement.blur();
 
 			document.getElementById("colorOptions").style.display = "none";
+			document.getElementById("audioOptions").style.display = "none";
 
 			//Get out of the current menu
 			e.preventDefault();

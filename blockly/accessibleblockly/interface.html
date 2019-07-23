@@ -267,6 +267,24 @@ function toggleColorDD(){
   }
 }
 
+//toggle Audio Cue Menu
+function toggleAudioMenu() {
+  var opts = document.getElementById("audioOptions");
+  var audioCueDiv = document.getElementById("audioCueDiv");
+
+  if (opts.style.display == "none") {
+    opts.style.display = "inline-block";
+    opts.setAttribute("aria-hidden", "false");
+    audioCueDiv.setAttribute("aria-expanded", "true");
+  }
+  else {
+    opts.style.display = "none";
+    opts.setAttribute("aria-hidden", "true");
+    audioCueDiv.setAttribute("aira-expanded", "false");
+    document.getElementById("audioButton").focus();
+  }
+}
+
 
 </script>
 <link rel="stylesheet" href="interface.css"></link>
@@ -424,7 +442,7 @@ color: black;
   margin-top: 30px;
 }
 
-#colorOptions{
+#colorOptions {
   display: none;
   position: absolute;
   box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
@@ -439,6 +457,21 @@ color: black;
   text-decoration: none;
   display: block;
   padding: 5px;
+}
+
+#audioCueDiv {
+  margin-top: 10px;
+  float: right;
+  clear: both;
+}
+
+#audioOptions {
+  display: none;
+  box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+  z-index: 100;
+  float:left;
+  padding: 10px;
+  margin-right: 5px;
 }
 
 
@@ -715,6 +748,32 @@ color: black;
   </p>
   -->
   </div>
+  
+  <div id="audioCueDiv">
+    <button class="audioOpts" id="audioButton" aria-haspopup="true" 
+      aria-owns="audioOptions" audio-controls="audioOptions" aria-expanded="false"
+      onclick="toggleAudioMenu()">
+      Audio Cue Options
+    </button>
+    <div id="audioOptions" aria-hidden="true" role="menu">
+        <fieldset>
+          <legend>Audio Cue Toogle</legend>
+          <input type="checkbox" id="menunav" checked>
+          <label for="menunav">Menu Nav</label>
+          <input type="checkbox" id="workspace" checked>
+          <label for="menunav">Workspace</label>
+        </fieldset>
+    </div>
+  </dialog>
+
+  <!-- <div id="audioCues" class="audioCues">
+    <fieldset>
+      <legend>Audio Cue Toogle</legend>
+        <input type="checkbox" id="menunav" checked>
+        <label for="menunav">Menu Nav</label>
+    </fieldset>
+  </div> -->
+
   <!-- Realtime setup buttons. -->
 
   <div id="realtime" style="display: none">
