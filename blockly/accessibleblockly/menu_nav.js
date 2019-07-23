@@ -210,6 +210,7 @@ Blockly.Toolbox.TreeNode.prototype.onKeyDown = function(e) {
       //select previous block
       if(this.getExpanded()){
         Blockly.Accessibility.MenuNav.prototype.menuNavUp();
+        workspace.getAudioManager().play('identifyblock');
       }
 
       //select previous category
@@ -233,6 +234,7 @@ Blockly.Toolbox.TreeNode.prototype.onKeyDown = function(e) {
       //select next block
       if(this.getExpanded()){
             Blockly.Accessibility.MenuNav.prototype.menuNavDown();
+            workspace.getAudioManager().play('identifyblock');
       }
 
       //select next category
