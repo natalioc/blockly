@@ -312,11 +312,14 @@ Blockly.Accessibility.Navigation.traverseOut = function () {
 
             if(Blockly.selected != childBlocks[i]){
                 childBlocks[i].select();
+                Blockly.Accessibility.PlayAudioCues('closeParenthesis');
+
                 return;
             }
 
             else{
                 surroundParent.select();  
+                Blockly.Accessibility.PlayAudioCues('closeParenthesis');
                 return;
             }
         }     
@@ -325,6 +328,7 @@ Blockly.Accessibility.Navigation.traverseOut = function () {
     //select the surrounding block
     else if (surroundParent){
         surroundParent.select();
+        Blockly.Accessibility.PlayAudioCues('closeParenthesis');
     }
     //inform the user they've reached the end
     else{
@@ -356,6 +360,7 @@ Blockly.Accessibility.Navigation.traverseIn = function() {
         //select next child
         //TODO: clean up this if statement if possible
         if(Blockly.selected.childBlocks_[i].previousConnection != null && Blockly.selected.childBlocks_[i].previousConnection.type == 4){
+            Blockly.Accessibility.PlayAudioCues('openParenthesis');
             Blockly.selected.childBlocks_[i].select();
             return;
         }
@@ -373,6 +378,7 @@ Blockly.Accessibility.Navigation.traverseIn = function() {
                 //make sure its not the same block
                 if(Blockly.selected != parentBlock.childBlocks_[j] ){
                     parentBlock.childBlocks_[j].select();
+                    Blockly.Accessibility.PlayAudioCues('openParenthesis');
                 }
 
             }
@@ -387,6 +393,7 @@ Blockly.Accessibility.Navigation.traverseIn = function() {
             
             if(Blockly.selected != parentBlock.childBlocks_[i]){
                 parentBlock.childBlocks_[i].select();
+                Blockly.Accessibility.PlayAudioCues('openParenthesis');
             }
 
         }
@@ -402,7 +409,6 @@ Blockly.Accessibility.Navigation.traverseUp = function() {
     // Null check
     if (Blockly.selected == null) {
         //Blockly.Accessibility.Speech.Say('Cannot move further up from here.');
-
         return;
     }
 

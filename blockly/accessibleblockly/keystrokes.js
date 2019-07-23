@@ -331,7 +331,6 @@ document.onkeydown = document.onkeyup = function (e) {
 
 			if (Blockly.selected.id[0] != ":" && !Blockly.Accessibility.Keystrokes.prototype.isConnecting) {
 				console.log('blockmode A key pressed calling selectblock audio');
-				Blockly.Accessibility.PlayAudioCues('selectblock');
 				Blockly.Accessibility.Navigation.traverseOut();
 			}
 		}
@@ -352,7 +351,6 @@ document.onkeydown = document.onkeyup = function (e) {
 
 			if (Blockly.selected.id[0] != ":" && !Blockly.Accessibility.Keystrokes.prototype.isConnecting) {
 				console.log('blockmode D key pressed calling selectblock audio');
-				Blockly.Accessibility.PlayAudioCues('selectblock');
 				Blockly.Accessibility.Navigation.traverseIn();
 			}
 		}
