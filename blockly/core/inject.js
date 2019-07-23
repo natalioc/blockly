@@ -417,6 +417,10 @@ Blockly.inject.loadSounds_ = function(pathToMedia, workspace) {
       [
         pathToMedia + 'C_FINALSelectBlock.mp3'
       ], 'selectblock');
+  audioMgr.load(
+      [
+          pathToMedia + 'identifyCategory.mp3'
+      ], 'identifyCategory');
   // Bind temporary hooks that preload the sounds.
   var soundBinds = [];
   var unbindSounds = function() {
