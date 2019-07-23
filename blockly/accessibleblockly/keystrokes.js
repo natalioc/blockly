@@ -279,6 +279,12 @@ document.onkeydown = document.onkeyup = function (e) {
 
 		else if (map[13]) {
 			console.log('hotkeyMode Enter key pressed');
+
+			var role = document.activeElement.getAttribute("role");
+
+			if(role !== "treeitem") {
+				workspace.getAudioManager().play('dropblock');
+			}
 			Blockly.Accessibility.InBlock.hideDropDown();
 		}
 
