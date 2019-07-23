@@ -272,20 +272,18 @@ function toggleAudioMenu() {
   var opts = document.getElementById("audioOptions");
   var audioCueDiv = document.getElementById("audioCueDiv");
 
-  if (opts.style.display == "none") {
-    opts.style.display = "inline-block";
-    opts.setAttribute("aria-hidden", "false");
-    audioCueDiv.setAttribute("aria-expanded", "true");
-  }
-  else {
+  if (opts.style.display == "inline-block") {
     opts.style.display = "none";
     opts.setAttribute("aria-hidden", "true");
     audioCueDiv.setAttribute("aira-expanded", "false");
     document.getElementById("audioButton").focus();
   }
+  else {
+    opts.style.display = "inline-block";
+    opts.setAttribute("aria-hidden", "false");
+    audioCueDiv.setAttribute("aria-expanded", "true");
+  }
 }
-
-
 </script>
 <link rel="stylesheet" href="interface.css"></link>
 <style>
@@ -764,7 +762,6 @@ color: black;
           <label for="menunav">Workspace</label>
         </fieldset>
     </div>
-  </dialog>
 
   <!-- <div id="audioCues" class="audioCues">
     <fieldset>
@@ -802,10 +799,6 @@ color: black;
   <!--This is where the screen reader is updated-->
   <div id="blockReader" tabindex="-1" aria-live="assertive">
   </div>
-  
-
-
-
   
 </body>
 </html>
