@@ -77,7 +77,7 @@ Blockly.BlockSvg.prototype.defaultDispose = Blockly.BlockSvg.prototype.dispose;
  * Select this block.  Highlight it visually.
  */
 Blockly.BlockSvg.prototype.select = function () { //ABOU: mainly to set currentNode
-
+	
     var prevSelect = Blockly.selected; 
     this.defaultSelect();
 
@@ -92,6 +92,7 @@ Blockly.BlockSvg.prototype.select = function () { //ABOU: mainly to set currentN
 	
 	//ABOU
 	Blockly.Accessibility.CursorNavigation.initialize();
+	console.log('Abou init called');
 	//ABOU
 };
 
