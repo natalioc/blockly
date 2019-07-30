@@ -29,19 +29,24 @@ Blockly.Accessibility.CursorNavigation.goDown =  function(){
 		console.log('ABOU connection type: '+ this.currentSelection.type);
 		this.currentSelection = this.currentSelection.sourceBlock_;
 		this.goToBlock();
-		console.log('ABOU: goDown location is 1');
+		console.log('ABOU: goDown location is 1'); 
 		
-	}else if(this.currentLocation === 2 && Blockly.selected && Blockly.selected.outputConnection == null){
+	}
+	else if(this.currentLocation === 2 && Blockly.selected && Blockly.selected.outputConnection == null){
 		
 		if(Blockly.selected.nextConnection != null){
+			var str = ""
 			this.currentLocation = 3;
 			this.currentSelection = Blockly.selected.nextConnection;
 			this.currentHighlight = this.currentSelection.returnHighlight();
-			
 			var selected = Blockly.selected;
 			Blockly.selected.unselect();
 			Blockly.selected = selected;
-		}
+			//console.log(Blockly.Accessibility.Speech.blockToString(this.currentSelection.sourceBlock_.type));
+			str = Blockly.Accessibility.Speech.blockToString(this.currentSelection.sourceBlock_.type);
+			console.log(str);
+			Blockly.Accessibility.Speech.Say(str + "Bottom Connection");
+		} 
 	}
 	else if(this.currentLocation === 3 && this.currentSelection != null && this.currentSelection.targetConnection !=null ){
 		//this.currentLocation = 2;
@@ -50,8 +55,9 @@ Blockly.Accessibility.CursorNavigation.goDown =  function(){
 		//this.currentSelection.select();
 		//this.currentHighlight = null;
 		this.goToBlock();
-		
-	}
+		//Blockly.Accessibility.Speech.Say("Top Connection");
+		//console.log(Blockly.Accessibility.Speech.blockToString(this.currentSelection.sourceBlock_.type));
+	} 
 	else if(this.currentLocation === 4){ 
 		
 		/**
@@ -62,7 +68,7 @@ Blockly.Accessibility.CursorNavigation.goDown =  function(){
 		
 		if(Blockly.selected.inputList[this.currentInputIndex].connection == null){ // handle case when input is a dummy input
 																				   //need to write a general function to handle in case of 
-																				   //consecutive dummy inputs
+            																	   //consecutive dummy inputs
 			this.currentInputIndex++; 
 		}
 		Blockly.Connection.removeHighlight(this.currentHighlight);
@@ -78,7 +84,7 @@ Blockly.Accessibility.CursorNavigation.goDown =  function(){
 	
 	console.log('ABOU: go down');
 	
-};
+}; 
 
 
 /**
@@ -93,30 +99,35 @@ Blockly.Accessibility.CursorNavigation.goUp = function(){
 		console.log('ABOU connection type: '+ this.currentSelection.type);
 		this.currentSelection = this.currentSelection.sourceBlock_;
 		this.goToBlock();
-		
 	}else if(this.currentLocation === 2 && Blockly.selected && this.currentSelection.previousConnection != null &&
 		this.currentSelection.previousConnection.targetConnection != null && Blockly.selected.outputConnection == null){
 			
 		//check whether currentLocation is not a first child block if it is not, go the nextConnection of previous block
 		if(this.currentSelection.getSurroundParent() != this.currentSelection.parentBlock_){
+			var str =""
 			this.currentLocation = 3;
 			this.currentSelection = Blockly.selected.previousConnection.targetConnection;
 			this.currentHighlight = this.currentSelection.returnHighlight();
-			
 			var selected = Blockly.selected;
 			Blockly.selected.unselect();
 			Blockly.selected = selected;
-		}
+			str = Blockly.Accessibility.Speech.blockToString(this.currentSelection.sourceBlock_.type);
+			Blockly.Accessibility.Speech.Say(str + "Bottom Connection");
+		} 
 		else{// if it is a first child block go to the previousConnection of the block
-			
+			var str =""
 			this.goFromBlockToPreviousConnection();
-			
+			str = Blockly.Accessibility.Speech.blockToString(this.currentSelection.sourceBlock_.type);
+			Blockly.Accessibility.Speech.Say(str + "Top Connection");
+			//go to previous connection of child block
 		}
 	}
 	else if(this.currentLocation === 2 && Blockly.selected && this.currentSelection.previousConnection != null && 
 		this.currentSelection.previousConnection.targetConnection == null && Blockly.selected.outputConnection == null ){
-		
+		var str =""
 		this.goFromBlockToPreviousConnection();
+		str = Blockly.Accessibility.Speech.blockToString(this.currentSelection.sourceBlock_.type);
+		Blockly.Accessibility.Speech.Say(str + "Top Connection");
 	}
 	else if (this.currentLocation == 1 && this.currentSelection != null && 
 				this.currentSelection.targetConnection != null){
@@ -132,7 +143,7 @@ Blockly.Accessibility.CursorNavigation.goUp = function(){
 		Blockly.Connection.removeHighlight(this.currentHighlight);
 		this.currentHighlight = null;
 		
-		
+		//if on child previous connection go to parent do connection
 	}
 	else if(this.currentLocation === 4){
 		/*
@@ -151,7 +162,7 @@ Blockly.Accessibility.CursorNavigation.goUp = function(){
 		*/
 		Blockly.Accessibility.InBlock.selectPrev();
 		this.currentSelection = this.returnCurrentlySelectedInput();
-		
+		//cycle through inputs 
 		
 	}
 	
@@ -470,7 +481,6 @@ Blockly.Accessibility.CursorNavigation.goToInputConnectionOfSelectedConnection =
 	Blockly.Accessibility.InBlock.selectCurrent();
 	this.currentSelection = this.returnCurrentlySelectedInput();
 	console.log('ABOU connection name of surroundParent: ' +  Blockly.Accessibility.InBlock.selectionList[Blockly.Accessibility.InBlock.connectionsIndex].name);
-		
 }
 
 

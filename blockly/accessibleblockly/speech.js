@@ -594,5 +594,6 @@ Blockly.Accessibility.Speech.blockToString = function(type, disabled){
      if(this.changedResult){
      	this.result = this.changedResult;
      }
-     return disabledText + this.result + " block.";
+     console.log("here");
+     return disabledText + this.result + " block ";
 };
