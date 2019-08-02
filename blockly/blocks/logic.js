@@ -597,8 +597,8 @@ Blockly.Extensions.registerMixin('logic_ternary',
     Blockly.Constants.Logic.LOGIC_TERNARY_ONCHANGE_MIXIN);
 	
 	
-/*======== This are the custom mutator blocks implementation for else if and if blocks
-These were implemented in Javascript and have be replaced with JSON.
+/*======== These are the custom mutator blocks implementation for else if and if blocks
+These were implemented in Javascript and have to be replaced with JSON.
 */
 //TO-DO replace blocks with JSON definitions
 //==========================MUTATORS CONVERTED TO INDIVIDUAL BLOCKS=======================

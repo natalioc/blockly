@@ -626,7 +626,7 @@ Blockly.Procedures.flyoutCategory = function (blocks, gaps, margin, workspace) {
 //new Flyout.show
 Blockly.Flyout.prototype.show = function(xmlList) {
 	
-	
+	console.log('ABOU: xml list ' + xmlList); 
 	menuVars.currentFlyoutArr = [];
     menuVars.opened    = true;
     menuVars.oldLength = menuVars.flyoutArr.length; //update the length of the last array 
@@ -646,6 +646,7 @@ Blockly.Flyout.prototype.show = function(xmlList) {
   // Look up the correct category generation function and call that to get a
   // valid XML list.
   if (typeof xmlList == 'string') {
+	console.log('ABOU: xml list ' + xmlList); 
     var fnToApply = this.workspace_.targetWorkspace.getToolboxCategoryCallback(
         xmlList);
     if (typeof fnToApply != 'function') {
@@ -894,6 +895,11 @@ Blockly.Accessibility.MenuNav.getMenuSelection = function(){
  * @param {number} margin Standard margin width for calculating gaps.
  * @param {!Blockly.Workspace} workspace The flyout's workspace.
  */
+ 
+/*ABOU Commenting this out for now in order to use the original version in the updated library
+It is not clear why the variables category was modified. However, one issue currently observed is 
+that the "create variable" button is skipped when navigating with the keyboard.
+
 Blockly.Variables.flyoutCategory = function (blocks, gaps, margin, workspace) {
     menuVars.opened    = true;
     var variableList = Blockly.Variables.allVariables(workspace.targetWorkspace);
@@ -930,6 +936,8 @@ Blockly.Variables.flyoutCategory = function (blocks, gaps, margin, workspace) {
         }
     }
 };
+
+*/
 
 //=====================================HANDLES ADDING BLOCKS WHEN NOT CONNECTING=============================
 
