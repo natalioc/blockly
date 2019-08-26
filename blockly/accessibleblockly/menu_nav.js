@@ -566,23 +566,29 @@ Blockly.Procedures.flyoutCategory = function (blocks, gaps, margin, workspace) {
     menuVars.opened    = true;
 
     if (Blockly.Blocks['procedures_defnoreturn']) {
-        var block = Blockly.Block.obtain(workspace, 'procedures_defnoreturn');
+        //var block = Blockly.Block.obtain(workspace, 'procedures_defnoreturn');
+		var block = workspace.newBlock('procedures_defnoreturn');
         block.initSvg();
-        blocks.push(block);
+        //blocks.push(block);
+		blocks.push({type: 'block', block: block});
         menuVars.flyoutArr.push(block);//added for blockly navigation.js
         gaps.push(margin * 2);
     }
     if (Blockly.Blocks['procedures_defreturn']) {
-        var block = Blockly.Block.obtain(workspace, 'procedures_defreturn');
+        //var block = Blockly.Block.obtain(workspace, 'procedures_defreturn');
+		var block = workspace.newBlock('procedures_defreturn');
         block.initSvg();
-        blocks.push(block);
+        //blocks.push(block);
+		blocks.push({type: 'block', block: block});
         menuVars.flyoutArr.push(block);//added for blockly navigation.js
         gaps.push(margin * 2);
     }
     if (Blockly.Blocks['procedures_ifreturn']) {
-        var block = Blockly.Block.obtain(workspace, 'procedures_ifreturn');
+        //var block = Blockly.Block.obtain(workspace, 'procedures_ifreturn');
+		var block = workspace.newBlock('procedures_ifreturn');
         block.initSvg();
-        blocks.push(block);
+        //blocks.push(block);
+		blocks.push({type: 'block', block: block});
         menuVars.flyoutArr.push(block);//added for blockly navigation.js
         gaps.push(margin * 2);
     }
@@ -593,15 +599,17 @@ Blockly.Procedures.flyoutCategory = function (blocks, gaps, margin, workspace) {
 
     function populateProcedures(procedureList, templateName) {
         for (var x = 0; x < procedureList.length; x++) {
-            var block = Blockly.Block.obtain(workspace, templateName);
+            //var block = Blockly.Block.obtain(workspace, templateName);
+			block = workspace.newBlock(templateName);
             block.setFieldValue(procedureList[x][0], 'NAME');
             var tempIds = [];
             for (var t = 0; t < procedureList[x][1].length; t++) {
                 tempIds[t] = 'ARG' + t;
             }
-            block.setProcedureParameters(procedureList[x][1], tempIds);
+            block.setProcedureParameters_(procedureList[x][1], tempIds);
             block.initSvg();
-            blocks.push(block);
+            //blocks.push(block);
+			blocks.push({type: 'block', block: block});
             menuVars.flyoutArr.push(block);//added for blockly navigation.js
 
             gaps.push(margin * 2);
@@ -645,6 +653,7 @@ Blockly.Flyout.prototype.show = function(xmlList) {
   // Handle dynamic categories, represented by a name instead of a list of XML.
   // Look up the correct category generation function and call that to get a
   // valid XML list.
+  /*
   if (typeof xmlList == 'string') {
 	console.log('ABOU: xml list ' + xmlList); 
     var fnToApply = this.workspace_.targetWorkspace.getToolboxCategoryCallback(
@@ -657,55 +666,69 @@ Blockly.Flyout.prototype.show = function(xmlList) {
     if (!Array.isArray(xmlList)) {
       throw TypeError('Result of toolbox category callback must be an array.');
     }
-  }
+  }*/
 
   this.setVisible(true);
   // Create the blocks to be shown in this flyout.
   var contents = [];
   var gaps = [];
   this.permanentlyDisabled_.length = 0;
-  for (var i = 0, xml; xml = xmlList[i]; i++) {
-    if (xml.tagName) {
-      var tagName = xml.tagName.toUpperCase();
-      var default_gap = this.horizontalLayout_ ? this.GAP_X : this.GAP_Y;
-      if (tagName == 'BLOCK') {
-        var curBlock = Blockly.Xml.domToBlock(xml, this.workspace_);
-        if (curBlock.disabled) {
-          // Record blocks that were initially disabled.
-          // Do not enable these blocks as a result of capacity filtering.
-          this.permanentlyDisabled_.push(curBlock);
-        }
-        contents.push({type: 'block', block: curBlock});
-		
-		 menuVars.flyoutArr.push(curBlock);
-         menuVars.currentFlyoutArr.push(curBlock);
-         //gaps.push(margin * 3);
-		 
-		 var gap = parseInt(xml.getAttribute('gap'), 10);
-        gaps.push(isNaN(gap) ? default_gap : gap);
-      } else if (xml.tagName.toUpperCase() == 'SEP') {
-        // Change the gap between two blocks.
-        // <sep gap="36"></sep>
-        // The default gap is 24, can be set larger or smaller.
-        // This overwrites the gap attribute on the previous block.
-        // Note that a deprecated method is to add a gap to a block.
-        // <block type="math_arithmetic" gap="8"></block>
-        var newGap = parseInt(xml.getAttribute('gap'), 10);
-        // Ignore gaps before the first block.
-        if (!isNaN(newGap) && gaps.length > 0) {
-          gaps[gaps.length - 1] = newGap;
-        } else {
-          gaps.push(default_gap);
-        }
-      } else if (tagName == 'BUTTON' || tagName == 'LABEL') {
-        // Labels behave the same as buttons, but are styled differently.
-        var isLabel = tagName == 'LABEL';
-        var curButton = new Blockly.FlyoutButton(this.workspace_,
-            this.targetWorkspace_, xml, isLabel);
-        contents.push({type: 'button', button: curButton});
-        gaps.push(default_gap);
-      }
-    }
+  var margin = this.horizontalLayout_ ? this.GAP_X : this.GAP_Y;
+  
+  if (xmlList == Blockly.Variables.NAME_TYPE) {
+        // Special category for variables.
+        Blockly.Variables.flyoutCategory(contents, gaps, margin,
+            /** @type {!Blockly.Workspace} */ (this.workspace_));
+  } else if (xmlList == Blockly.Procedures.NAME_TYPE) {
+		// Special category for procedures.
+		Blockly.Procedures.flyoutCategory(contents, gaps, margin,
+			/** @type {!Blockly.Workspace} */ (this.workspace_));
+  } else{
+  
+	  for (var i = 0, xml; xml = xmlList[i]; i++) {
+		if (xml.tagName) {
+		  var tagName = xml.tagName.toUpperCase();
+		  var default_gap = this.horizontalLayout_ ? this.GAP_X : this.GAP_Y;
+		  if (tagName == 'BLOCK') {
+			var curBlock = Blockly.Xml.domToBlock(xml, this.workspace_);
+			if (curBlock.disabled) {
+			  // Record blocks that were initially disabled.
+			  // Do not enable these blocks as a result of capacity filtering.
+			  this.permanentlyDisabled_.push(curBlock);
+			}
+			contents.push({type: 'block', block: curBlock});
+			
+			 menuVars.flyoutArr.push(curBlock);
+			 menuVars.currentFlyoutArr.push(curBlock);
+			 //gaps.push(margin * 3);
+			 
+			 var gap = parseInt(xml.getAttribute('gap'), 10);
+			gaps.push(isNaN(gap) ? default_gap : gap);
+		  } else if (xml.tagName.toUpperCase() == 'SEP') {
+			// Change the gap between two blocks.
+			// <sep gap="36"></sep>
+			// The default gap is 24, can be set larger or smaller.
+			// This overwrites the gap attribute on the previous block.
+			// Note that a deprecated method is to add a gap to a block.
+			// <block type="math_arithmetic" gap="8"></block>
+			var newGap = parseInt(xml.getAttribute('gap'), 10);
+			// Ignore gaps before the first block.
+			if (!isNaN(newGap) && gaps.length > 0) {
+			  gaps[gaps.length - 1] = newGap;
+			} else {
+			  gaps.push(default_gap);
+			}
+		  } else if (tagName == 'BUTTON' || tagName == 'LABEL') {
+			// Labels behave the same as buttons, but are styled differently.
+			var isLabel = tagName == 'LABEL';
+			var curButton = new Blockly.FlyoutButton(this.workspace_,
+				this.targetWorkspace_, xml, isLabel);
+			contents.push({type: 'button', button: curButton});
+			gaps.push(default_gap);
+		  }
+		}
+	  }
+  
   }
 
   this.layout_(contents, gaps);
