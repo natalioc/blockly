@@ -675,16 +675,33 @@ Blockly.Flyout.prototype.show = function(xmlList) {
   this.permanentlyDisabled_.length = 0;
   var margin = this.horizontalLayout_ ? this.GAP_X : this.GAP_Y;
   
-  if (xmlList == Blockly.Variables.NAME_TYPE) {
+  //if (xmlList == Blockly.Variables.NAME_TYPE) {
         // Special category for variables.
-        Blockly.Variables.flyoutCategory(contents, gaps, margin,
-            /** @type {!Blockly.Workspace} */ (this.workspace_));
-  } else if (xmlList == Blockly.Procedures.NAME_TYPE) {
+       // Blockly.Variables.flyoutCategory(contents, gaps, margin,
+     //       /** @type {!Blockly.Workspace} */ (this.workspace_));
+  //} else 
+	  
+ if (xmlList == Blockly.Procedures.NAME_TYPE) {
 		// Special category for procedures.
 		Blockly.Procedures.flyoutCategory(contents, gaps, margin,
 			/** @type {!Blockly.Workspace} */ (this.workspace_));
   } else{
-  
+	  
+	if (typeof xmlList == 'string') {
+		console.log('ABOU: xml list ' + xmlList); 
+		var fnToApply = this.workspace_.targetWorkspace.getToolboxCategoryCallback(
+			xmlList);
+		if (typeof fnToApply != 'function') {
+		  throw TypeError('Couldn\'t find a callback function when opening' +
+			  ' a toolbox category.');
+		}
+		xmlList = fnToApply(this.workspace_.targetWorkspace);
+		if (!Array.isArray(xmlList)) {
+		  throw TypeError('Result of toolbox category callback must be an array.');
+		}
+	}  
+	
+	
 	  for (var i = 0, xml; xml = xmlList[i]; i++) {
 		if (xml.tagName) {
 		  var tagName = xml.tagName.toUpperCase();
@@ -724,6 +741,9 @@ Blockly.Flyout.prototype.show = function(xmlList) {
 			var curButton = new Blockly.FlyoutButton(this.workspace_,
 				this.targetWorkspace_, xml, isLabel);
 			contents.push({type: 'button', button: curButton});
+			
+			//menuVars.flyoutArr.push(curButton);
+			//menuVars.currentFlyoutArr.push(curButton);
 			gaps.push(default_gap);
 		  }
 		}

@@ -171,6 +171,14 @@ Blockly.Variables.flyoutCategory = function(workspace) {
  */
 Blockly.Variables.flyoutCategoryBlocks = function(workspace) {
   var variableModelList = workspace.getVariablesOfType('');
+  
+  
+  
+  
+  var variableFromFunctions = Blockly.Variables.generateVariableListFromFunctionArg(workspace); 
+  //variableModelList = variableModelList.concat(variableFromFunctions);
+  
+  
   variableModelList.sort(Blockly.VariableModel.compareByName);
 
   var xmlList = [];
@@ -216,6 +224,33 @@ Blockly.Variables.flyoutCategoryBlocks = function(workspace) {
   }
   return xmlList;
 };
+
+
+// construct variables from function arguments
+Blockly.Variables.generateVariableListFromFunctionArg = function (workspace){
+	var blocks = workspace.getAllBlocks();
+	var listOfVar = [];
+	
+	for(var i = 0; i < blocks.length; i++){
+		if(blocks[i].getVars){
+			var blockArguments = blocks[i].getVars();
+			var oldVars = blocks[i].getVarModels();
+			if(oldVars.length != 0){
+				for(var k = 0; k< oldVars.length; k++){
+					//workspace.deleteVariableInternal_(oldVars[k], workspace.getVariableUsesById(oldVars[k].getId()));
+				}
+			}
+			for (var j = 0; j < blockArguments.length; j++) {
+				var varName = blockArguments[j];
+				var variableModel = Blockly.Variables.getOrCreateVariablePackage(workspace, null, varName, '');
+				blocks[i].argumentVarModels_.push(variableModel);
+				listOfVar.push(variableModel);
+			}
+		}
+	}
+	
+	return listOfVar;
+}
 
 /**
  * Return a new variable name that is not yet being used. This will try to

@@ -117,9 +117,11 @@ Blockly.Blocks['procedures_defnoreturn'] = {
 
         //number shown beginning with 1 not 0
         var showNum = this.count+1;
+		
+		var fieldName = "arg" + showNum;
 
         //add input with default name arg showNum
-        dummy.appendField(new Blockly.FieldTextInput("arg " + showNum), "arg" + this.count);
+        dummy.appendField(new Blockly.FieldTextInput(fieldName), fieldName);
         this.arguments_.push(dummy.fieldRow[dummy.fieldRow.length-1].name);
 
         //change string to be read aloud
@@ -129,7 +131,6 @@ Blockly.Blocks['procedures_defnoreturn'] = {
         }
         this.count++;
       }
-
     }
 
     //remove input
@@ -150,7 +151,7 @@ Blockly.Blocks['procedures_defnoreturn'] = {
 
       //remove last input
       if(text_inputcount == 0){
-        dummy.removeField("arg0");
+        dummy.removeField("arg1");
         this.arguments_.pop();
         this.count = 0;
       }
@@ -158,13 +159,20 @@ Blockly.Blocks['procedures_defnoreturn'] = {
 
     //update parameter names
     else{
+		
       for(var i = 0; i < this.arguments_.length-1; i++){
         var fieldIndex = dummy.fieldRow.length-1-i;
-
+		
         this.arguments_[i+1] = dummy.fieldRow[fieldIndex].text_;
-        this.arguments_[0]   = dummy.fieldRow[6].text_; 
+        this.arguments_[0]   = dummy.fieldRow[6].text_;
+
+		dummy.fieldRow[fieldIndex].setValue(dummy.fieldRow[fieldIndex].text_);	
+		dummy.fieldRow[6].setValue(dummy.fieldRow[6].text_);
       }
-    } 
+    }
+
+	
+	
   },
 
   /**   * Initialization of the block has completed, clean up anything that may be
@@ -577,75 +585,7 @@ Blockly.Blocks['procedures_defreturn'] = {
 
 
   //allow the inputs to be changed dynamically
-  onchange: function(){
-    var text_inputcount = this.getFieldValue('inputcount');
-    var dummy = this.getInput("dummy");
-
-
-    //maximum of 9 parameters
-    if(text_inputcount > 9){
-        this.setFieldValue(9,'inputcount');
-
-        //read it with screenreader
-        Blockly.Accessibility.Speech.Say("Please enter number between 1 and 9");
-        return;
-    }
-
-    //do nothing when erasing
-    if(text_inputcount == ""){
-        return;
-    }
-
-    //add input
-    else if(text_inputcount > this.count && text_inputcount != 0){
-
-      for(var i = this.count; i < text_inputcount; i++){
-        var showNum = this.count+1;
-        dummy.appendField(new Blockly.FieldTextInput("arg " + showNum), "arg" + this.count);
-        this.arguments_.push(dummy.fieldRow[dummy.fieldRow.length-1].name);
-
-        this.count++;
-      }
-
-    }
-
-    //remove input
-   else if(text_inputcount < this.count){
-      
-      //keep removing until there is enough
-      while(text_inputcount < this.count && this.count > 1){
-
-         var removing = dummy.fieldRow[dummy.fieldRow.length-1].name;
-
-         if(removing[3] >= 1 && text_inputcount > -1){
-            dummy.removeField(removing);
-            this.arguments_.pop();
-
-            this.count--;
-         }
-      }
-
-      if(text_inputcount == 0){
-        //dummy.removeField()
-        dummy.removeField("arg0");
-        this.arguments_.pop();
-
-        this.count = 0;
-      }
-    }
-
-     //update parameter names
-    else{
-        if(this.arguments_.length > 0){
-         for(var i = 0; i < this.arguments_.length-1; i++){
-              var fieldIndex = dummy.fieldRow.length-1-i;
-
-              this.arguments_[i+1] = dummy.fieldRow[fieldIndex].text_;
-              this.arguments_[0]   = dummy.fieldRow[6].text_; 
-         }
-      }
-    } 
-  },
+  onchange: Blockly.Blocks['procedures_defnoreturn'].onchange,
   validate: Blockly.Blocks['procedures_defnoreturn'].validate,
   
   // custom ends
