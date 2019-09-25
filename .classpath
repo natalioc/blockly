@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<classpath>
+	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
+	<classpathentry kind="src" path="blockly/demos/mobile/android/app/src/androidTest/java"/>
+	<classpathentry kind="src" path="blockly/demos/mobile/android/app/src/main/java"/>
+	<classpathentry kind="src" path="blockly/demos/mobile/android/app/src/test/java"/>
+	<classpathentry kind="lib" path="blockly/demos/mobile/android/gradle/wrapper/gradle-wrapper.jar"/>
+	<classpathentry kind="lib" path="blockly/demos/plane/soy/SoyMsgExtractor.jar"/>
+	<classpathentry kind="lib" path="blockly/demos/plane/soy/SoyToJsSrcCompiler.jar"/>
+	<classpathentry kind="output" path="bin"/>
+</classpath>
