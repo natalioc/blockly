@@ -634,7 +634,7 @@ Blockly.Procedures.flyoutCategory = function (blocks, gaps, margin, workspace) {
 //new Flyout.show
 Blockly.Flyout.prototype.show = function(xmlList) {
 	
-	console.log('ABOU: xml list ' + xmlList); 
+	//console.log(': xml list ' + xmlList); 
 	menuVars.currentFlyoutArr = [];
     menuVars.opened    = true;
     menuVars.oldLength = menuVars.flyoutArr.length; //update the length of the last array 
@@ -655,7 +655,7 @@ Blockly.Flyout.prototype.show = function(xmlList) {
   // valid XML list.
   /*
   if (typeof xmlList == 'string') {
-	console.log('ABOU: xml list ' + xmlList); 
+	//console.log(': xml list ' + xmlList); 
     var fnToApply = this.workspace_.targetWorkspace.getToolboxCategoryCallback(
         xmlList);
     if (typeof fnToApply != 'function') {
@@ -688,7 +688,7 @@ Blockly.Flyout.prototype.show = function(xmlList) {
   } else{
 	  
 	if (typeof xmlList == 'string') {
-		console.log('ABOU: xml list ' + xmlList); 
+		//console.log(': xml list ' + xmlList); 
 		var fnToApply = this.workspace_.targetWorkspace.getToolboxCategoryCallback(
 			xmlList);
 		if (typeof fnToApply != 'function') {
@@ -939,7 +939,7 @@ Blockly.Accessibility.MenuNav.getMenuSelection = function(){
  * @param {!Blockly.Workspace} workspace The flyout's workspace.
  */
  
-/*ABOU Commenting this out for now in order to use the original version in the updated library
+/* Commenting this out for now in order to use the original version in the updated library
 It is not clear why the variables category was modified. However, one issue currently observed is 
 that the "create variable" button is skipped when navigating with the keyboard.
 

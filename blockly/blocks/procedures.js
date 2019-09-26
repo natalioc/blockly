@@ -36,7 +36,7 @@ Blockly.Blocks['procedures_defnoreturn'] = {
    * @this Blockly.Block
    */
    
-  /*Abou commented out to add coustom definition of procedures 
+  /*>>> commented out to add coustom definition of procedures 
   init: function() {
     var nameField = new Blockly.FieldTextInput('',
         Blockly.Procedures.rename);
@@ -64,7 +64,7 @@ Blockly.Blocks['procedures_defnoreturn'] = {
   */
   
   
-  //Abou Custom definition from previous version
+  //>>> Custom definition from previous version
   count:0,
   
   init: function() {
