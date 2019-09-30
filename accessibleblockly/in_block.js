@@ -26,6 +26,7 @@ goog.require('Blockly.Accessibility.Navigation');
 goog.require('Blockly.Accessibility.Speech');
 goog.require('Blockly.Accessibility.Keystrokes');
 goog.require('Blockly.Accessibility');
+goog.require('Blockly.utils.dom');
 
 Blockly.Accessibility.InBlock.storedConnection = null;
 /**
@@ -775,7 +776,7 @@ Blockly.Connection.prototype.returnHighlight = function () {
     var xy = this.sourceBlock_.getRelativeToSurfaceXY();
     var x = this.x_ - xy.x;
     var y = this.y_ - xy.y;
-    return Blockly.utils.createSvgElement('path',
+    return Blockly.utils.dom.createSvgElement('path',
         {
             'class': 'blocklyHighlightedConnectionPath',
             'd': steps,
@@ -817,7 +818,7 @@ Blockly.Field.prototype.highlight = function () {
     var x = mat.e;
     var y = mat.f+13;
 
-    return Blockly.utils.createSvgElement('path',
+    return Blockly.utils.dom.createSvgElement('path',
         {
             'class': 'blocklyHighlightedConnectionPath',
             'd': steps,
