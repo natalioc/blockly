@@ -1753,6 +1753,16 @@ goog.addDependency("webgl/webgl.js", ['goog.webgl'], []);
 goog.addDependency("window/window.js", ['goog.window'], ['goog.dom.TagName', 'goog.dom.safe', 'goog.html.SafeUrl', 'goog.html.uncheckedconversions', 'goog.labs.userAgent.platform', 'goog.string', 'goog.string.Const', 'goog.userAgent']);
 goog.addDependency("window/window_test.js", ['goog.windowTest'], ['goog.Promise', 'goog.dom', 'goog.dom.TagName', 'goog.events', 'goog.functions', 'goog.html.SafeUrl', 'goog.labs.userAgent.browser', 'goog.labs.userAgent.engine', 'goog.labs.userAgent.platform', 'goog.string', 'goog.testing.PropertyReplacer', 'goog.testing.TestCase', 'goog.testing.jsunit', 'goog.window']);
 
+//accessibleblockly
+goog.addDependency("../../../" + dir + "/accessibleblockly/accessibility.js", ['Blockly.Accessibility'], []);
+goog.addDependency("../../../" + dir + "/accessibleblockly/navigation.js", ['Blockly.Accessibility.Navigation'], ['Blockly.BlockSvg', 'Blockly.Block', 'Blockly.Connection', 'Blockly.FieldColour', 'Blockly.FieldTextInput', 'Blockly.FieldDropdown', 'Blockly.FieldCheckbox']);
+goog.addDependency("../../../" + dir + "/accessibleblockly/prefixes.js", ['Blockly.Accessibility.Prefixes'], []);
+goog.addDependency("../../../" + dir + "/accessibleblockly/keystrokes.js", ['Blockly.Accessibility.Keystrokes'], []);
+goog.addDependency("../../../" + dir + "/accessibleblockly/in_block.js", ['Blockly.Accessibility.InBlock'], []);
+goog.addDependency("../../../" + dir + "/accessibleblockly/menu_nav.js", ['Blockly.Accessibility.MenuNav'], []);
+goog.addDependency("../../../" + dir + "/accessibleblockly/speech.js", ['Blockly.Accessibility.Speech'], []);
+goog.addDependency("../../../" + dir + "/accessibleblockly/core_overwrites.js", ['Blockly.Overwrites'], []);
+
 // Load Blockly.
 goog.require('Blockly');
 goog.require('Blockly.Block');
@@ -1864,6 +1874,14 @@ goog.require('Blockly.utils.svgPaths');
 goog.require('Blockly.utils.uiMenu');
 goog.require('Blockly.utils.userAgent');
 goog.require('Blockly.utils.xml');
+
+
+//accessibleblockly
+goog.require('Blockly.Accessibility.Navigation');
+goog.require('Blockly.Accessibility.Prefixes');
+goog.require('Blockly.Accessibility.MenuNav');
+goog.require('Blockly.Accessibility.InBlock');
+goog.require('Blockly.Accessibility.Keystrokes');
 
 delete root.BLOCKLY_DIR;
 delete root.BLOCKLY_BOOT;

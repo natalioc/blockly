@@ -35,6 +35,7 @@ Blockly.Blocks['procedures_defnoreturn'] = {
    * Block for defining a procedure with no return value.
    * @this Blockly.Block
    */
+  /*>>> commented out to add coustom definition of procedures
   init: function() {
     var nameField = new Blockly.FieldTextInput('',
         Blockly.Procedures.rename);
@@ -58,6 +59,133 @@ Blockly.Blocks['procedures_defnoreturn'] = {
     this.setStatements_(true);
     this.statementConnection_ = null;
   },
+  
+  */
+  
+  
+  
+  //>>> accessibleblockly Custom definition from previous version
+  count:0,
+  
+  init: function() {
+    this.setHelpUrl(Blockly.Msg.PROCEDURES_DEFNORETURN_HELPURL);
+    this.setColour(Blockly.Msg['PROCEDURES_HUE']);
+    var nameField = new Blockly.FieldTextInput(
+        Blockly.Msg.PROCEDURES_DEFNORETURN_PROCEDURE,
+        Blockly.Procedures.rename);
+    nameField.setSpellcheck(false);
+    this.appendDummyInput("dummy")
+        .appendField(Blockly.Msg.PROCEDURES_DEFNORETURN_TITLE)
+        .appendField(nameField, 'NAME')
+        .appendField('', 'PARAMS')
+        .appendField("with ")
+        .appendField(new Blockly.FieldTextInput("0"), "inputcount")
+        .appendField("parameters");
+    this.setTooltip(Blockly.Msg.PROCEDURES_DEFNORETURN_TOOLTIP);
+    this.arguments_ = [];
+	this.argumentVarModels_ = [];
+    this.setStatements_(true);
+    this.statementConnection_ = null;
+  },
+
+  
+//allow the inputs to be changed dynamically
+  onchange: function(){
+    var text_inputcount = this.getFieldValue('inputcount');
+    var dummy = this.getInput("dummy");
+
+
+
+    //maximum of 9 parameters
+    if(text_inputcount > 9){
+      this.setFieldValue(9,'inputcount');
+
+      //read it with screenreader
+      Blockly.Accessibility.Speech.Say("Please enter number between 1 and 9");
+      return;
+    }
+
+    //do nothing when erasing
+    if(text_inputcount == ""){
+        return;
+    }
+
+    //add input
+    else if(text_inputcount > this.count && text_inputcount != 0){
+
+      for(var i = this.count; i < text_inputcount; i++){
+
+        //number shown beginning with 1 not 0
+        var showNum = this.count+1;
+		
+		var fieldName = "arg" + showNum;
+
+        //add input with default name arg showNum
+        dummy.appendField(new Blockly.FieldTextInput(fieldName), fieldName);
+        this.arguments_.push(dummy.fieldRow[dummy.fieldRow.length-1].name);
+
+        //change string to be read aloud
+        Blockly.Accessibility.Speech.changedResult = Blockly.Accessibility.Speech.result + " \'\' ";
+        for(var j = 0; j < this.count; j++){
+          Blockly.Accessibility.Speech.changedResult += " \'\' ";
+        }
+        this.count++;
+      }
+    }
+
+    //remove input
+   else if(text_inputcount < this.count){
+      
+      //keep removing each field until there is enough
+      while(text_inputcount < this.count && this.count > 1){
+
+         //get next field to remove
+         var removing = dummy.fieldRow[dummy.fieldRow.length-1].name;
+
+         if(removing[3] >= 1 && text_inputcount > -1){
+            dummy.removeField(removing);
+            this.arguments_.pop();
+            this.count--;
+         }         
+      }
+
+      //remove last input
+      if(text_inputcount == 0){
+        dummy.removeField("arg1");
+        this.arguments_.pop();
+        this.count = 0;
+      }
+    }
+
+    //update parameter names
+    else{
+		
+      for(var i = 0; i < this.arguments_.length-1; i++){
+        var fieldIndex = dummy.fieldRow.length-1-i;
+		
+        this.arguments_[i+1] = dummy.fieldRow[fieldIndex].text_;
+        this.arguments_[0]   = dummy.fieldRow[6].text_;
+
+		dummy.fieldRow[fieldIndex].setValue(dummy.fieldRow[fieldIndex].text_);	
+		dummy.fieldRow[6].setValue(dummy.fieldRow[6].text_);
+      }
+    }
+
+	
+	
+  },
+
+  /**   * Initialization of the block has completed, clean up anything that may be
+   * inconsistent as a result of the XML loading.
+   * @this Blockly.Block
+   */
+  validate: function () {
+    var name = Blockly.Procedures.findLegalName(
+        this.getFieldValue('NAME'), this);
+    this.setFieldValue(name, 'NAME');
+  },
+  
+  //Custom definition ends
   /**
    * Add or remove the statement block from this function definition.
    * @param {boolean} hasStatements True if a statement block is needed.
@@ -411,6 +539,7 @@ Blockly.Blocks['procedures_defreturn'] = {
    * Block for defining a procedure with a return value.
    * @this Blockly.Block
    */
+  /*
   init: function() {
     var nameField = new Blockly.FieldTextInput('',
         Blockly.Procedures.rename);
@@ -437,6 +566,44 @@ Blockly.Blocks['procedures_defreturn'] = {
     this.setStatements_(true);
     this.statementConnection_ = null;
   },
+  */
+  
+  //>>> accessibleblockly custom starts
+  
+  count:0,
+  init: function() {
+    this.setHelpUrl(Blockly.Msg.PROCEDURES_DEFRETURN_HELPURL);
+    //this.setColour(Blockly.Blocks.procedures.HUE);
+	this.setColour(Blockly.Msg['PROCEDURES_HUE']);
+    var nameField = new Blockly.FieldTextInput(
+        Blockly.Msg.PROCEDURES_DEFRETURN_PROCEDURE,
+        Blockly.Procedures.rename);
+    nameField.setSpellcheck(false);
+    this.appendDummyInput("dummy")
+        .appendField(Blockly.Msg.PROCEDURES_DEFRETURN_TITLE)
+        .appendField(nameField, 'NAME')
+        .appendField('', 'PARAMS')
+        .appendField("with ")
+        .appendField(new Blockly.FieldTextInput("0"), "inputcount")
+        .appendField("parameters");
+    this.appendValueInput('RETURN')
+        .setAlign(Blockly.ALIGN_RIGHT)
+        .appendField(Blockly.Msg.PROCEDURES_DEFRETURN_RETURN);
+    // this.setMutator(new Blockly.Mutator(['procedures_mutatorarg']));
+    this.setTooltip(Blockly.Msg.PROCEDURES_DEFRETURN_TOOLTIP);
+    this.arguments_ = [];
+	this.argumentVarModels_ = [];
+    this.setStatements_(true);
+    this.statementConnection_ = null;
+  },
+
+
+  //allow the inputs to be changed dynamically
+  onchange: Blockly.Blocks['procedures_defnoreturn'].onchange,
+  validate: Blockly.Blocks['procedures_defnoreturn'].validate,
+  
+  // custom ends
+  
   setStatements_: Blockly.Blocks['procedures_defnoreturn'].setStatements_,
   updateParams_: Blockly.Blocks['procedures_defnoreturn'].updateParams_,
   mutationToDom: Blockly.Blocks['procedures_defnoreturn'].mutationToDom,
