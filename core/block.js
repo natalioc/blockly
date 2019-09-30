@@ -347,6 +347,29 @@ Blockly.Block.prototype.initModel = function() {
   }
 };
 
+
+//>>>accessibleblockly
+//needed for comments to works properly
+
+/**
+ * Find all the blocks that are directly nested inside this one.
+ * Excludes any connection on an output tab or any preceding statement or next statements.
+ * @return {!Array.<!Blockly.Block>} Array of blocks.
+ */
+Blockly.Block.prototype.getNestedChildren = function() {
+	 var blocks = [];
+	 var children = this.childBlocks_;
+	 var length = children.length;
+	  for (var i = 0; i < length; i++) {
+		  if (children[i] != this.getNextBlock()){
+			  blocks.push(children[i]);
+		  }
+
+	 }
+	  return blocks;
+};
+
+// end accessibleblockly custom code
 /**
  * Unplug this block from its superior block.  If this block is a statement,
  * optionally reconnect the block underneath with the block on top.
