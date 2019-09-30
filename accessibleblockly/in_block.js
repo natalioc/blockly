@@ -780,6 +780,7 @@ Blockly.Connection.prototype.returnHighlight = function () {
         {
             'class': 'blocklyHighlightedConnectionPath',
             'd': steps,
+			'style' : 'stroke: black',
             transform: 'translate(' + x + ', ' + y + ')'
         },
         this.sourceBlock_.getSvgRoot());
@@ -822,6 +823,7 @@ Blockly.Field.prototype.highlight = function () {
         {
             'class': 'blocklyHighlightedConnectionPath',
             'd': steps,
+			'style' : 'stroke: black',
             transform: 'translate(' + x + ', ' + y + ')'
         },
         this.sourceBlock_.getSvgRoot());
