@@ -421,6 +421,7 @@ document.onkeydown = document.onkeyup = function(e){
 			else if(document.activeElement.id[0] != ":" && !Blockly.Accessibility.Keystrokes.prototype.isConnecting){
 
 				Blockly.Accessibility.Navigation.traverseUp();
+				console.log(">>> Traverse-up called");
 			}
 
 		}
@@ -429,10 +430,12 @@ document.onkeydown = document.onkeyup = function(e){
 		else{
 
 			//stop jumping to menu when typing a comment
+			/* >>> commented out for now
 			if(Blockly.selected.comment.isVisible()){
 				keyboardState = "typingMode";
 				return;
 			}
+			*/
 			//loop through the numbers on keyboard to access menu
 			for(var i = 48; i < 57; i++){
 

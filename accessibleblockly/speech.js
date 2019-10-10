@@ -37,7 +37,7 @@ Blockly.Accessibility.Speech.Say = function(string){
 	 //for safari
 	 blockReader.setAttribute("aria-live", "assertive");
 	 blockReader.setAttribute("aria-label", string);
-	 blockReader.setAttribute("role", "alert");
+	 //blockReader.setAttribute("role", "alert");
 
 	 //for chrome
 	 blockReader.innerHTML = string;

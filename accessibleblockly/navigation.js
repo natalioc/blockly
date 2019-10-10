@@ -81,7 +81,7 @@ Blockly.BlockSvg.prototype.select = function () {
     }
     
     //if(prevSelect != Blockly.selected){
-        Blockly.Accessibility.Speech.updateBlockReader(this.type, this);
+       // Blockly.Accessibility.Speech.updateBlockReader(this.type, this);
        // Blockly.Accessibility.Speech.changedResult = undefined;
     //}
 };
