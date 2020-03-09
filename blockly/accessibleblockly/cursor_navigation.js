@@ -22,14 +22,27 @@ Blockly.Accessibility.CursorNavigation.blockInputList = [];
  * For traverses to down/to the left through the input connections of a block.
  *
  */
+Blockly.Accessibility.CursorNavigation.goDown = function(){
 
-Blockly.Accessibility.CursorNavigation.goDown =  function(){
+	if(this.currentLocation != 4){
+		this.goDown2();
+		this.goDown2();
+		this.goDown2();
+		this.goFromBlockToPreviousConnection();
+		console.log("Plane: printed")
+	}
+	else{
+		//this.goDown2();
+	}
+}
+
+Blockly.Accessibility.CursorNavigation.goDown2 =  function(){
 	console.log('ABOU: goDown current Loc is ' + this.currentLocation); 
 	if(this.currentLocation === 1){
 		console.log('ABOU connection type: '+ this.currentSelection.type);
 		this.currentSelection = this.currentSelection.sourceBlock_;
 		this.goToBlock();
-		console.log('ABOU: goDown location is 1'); 
+		console.log('ABOU: goDown location is 1 top'); 
 		
 	}
 	else if(this.currentLocation === 2 && Blockly.selected && Blockly.selected.outputConnection == null){
@@ -322,7 +335,7 @@ Blockly.Accessibility.CursorNavigation.goToBlock = function(){
 	Blockly.Connection.removeHighlight(this.currentHighlight);
 	//this.currentSelection = this.currentSelection.sourceBlock_;
 	Blockly.selected = null;
-	this.currentSelection.select();
+	this.currentSelection.select(1);
 	this.currentHighlight = null;
 	this.initBlockInputList();
 	
@@ -347,6 +360,7 @@ Blockly.Accessibility.CursorNavigation.initialize = function(){
 	}
 	this.currentLocation = 2;
 	this.currentSelection = Blockly.selected;
+	this.goFromBlockToPreviousConnection();
 	
 	console.log('ABOU: init successful');
 	this.initBlockInputList();

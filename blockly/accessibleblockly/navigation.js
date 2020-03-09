@@ -76,7 +76,7 @@ Blockly.BlockSvg.prototype.defaultDispose = Blockly.BlockSvg.prototype.dispose;
 /**
  * Select this block.  Highlight it visually.
  */
-Blockly.BlockSvg.prototype.select = function () { //ABOU: mainly to set currentNode
+Blockly.BlockSvg.prototype.select = function (calledFromCode) { //ABOU: mainly to set currentNode
 	
     var prevSelect = Blockly.selected; 
     this.defaultSelect();
@@ -91,9 +91,31 @@ Blockly.BlockSvg.prototype.select = function () { //ABOU: mainly to set currentN
     //}
 	
 	//ABOU
-	Blockly.Accessibility.CursorNavigation.initialize();
+    if(calledFromCode == undefined){
+	   Blockly.Accessibility.CursorNavigation.initialize();
+    }
 	console.log('Abou init called');
 	//ABOU
+};
+
+Blockly.BlockSvg.prototype.select2 = function () { //ABOU: mainly to set currentNode
+    
+    var prevSelect = Blockly.selected; 
+    this.defaultSelect();
+
+    if (Blockly.Accessibility.Navigation.getBlockNodeById(this.id)) {
+        Blockly.Accessibility.Navigation.currentNode = Blockly.Accessibility.Navigation.getBlockNodeById(this.id);
+    }
+    
+    //if(prevSelect != Blockly.selected){
+        Blockly.Accessibility.Speech.updateBlockReader(this.type, this);
+       // Blockly.Accessibility.Speech.changedResult = undefined;
+    //}
+    
+    //ABOU
+    //Blockly.Accessibility.CursorNavigation.initialize();
+    console.log('Abou init called');
+    //ABOU
 };
 
 /**
