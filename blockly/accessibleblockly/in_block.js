@@ -101,6 +101,7 @@ Blockly.Accessibility.InBlock.enterCurrentBlock = function () {
     if(Blockly.Accessibility.Speech.keyboardState == "editMode"){
         Blockly.Accessibility.Speech.readConnection(this.selectionList[this.connectionsIndex].name, this.connectionsIndex);
 		console.log('ABOU: connection Name: ' + this.selectionList[this.connectionsIndex].name);
+        console.log('ABOU: connection type: '+ this.selectionList[this.connectionsIndex].type)
     }
     this.highlightSelection();
 	console.log('ABOU: enterCurrentBlock: selectionList: ' + this.selectionList);
@@ -311,6 +312,7 @@ Blockly.Accessibility.InBlock.highlightSelection = function(){
         this.highlightList.push(this.selectionList[this.connectionsIndex].highlight());
     }
 	console.log('ABOU: connection Name: ' + this.selectionList[this.connectionsIndex].name);
+    console.log('ABOU: connection Type: ' + this.selectionList[this.connectionsIndex].type);
 }
 
 /**
