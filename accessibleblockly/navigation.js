@@ -313,11 +313,13 @@ Blockly.Accessibility.Navigation.traverseOut = function () {
 
             if(Blockly.selected != childBlocks[i]){
                 childBlocks[i].select();
+                Blockly.Accessibility.Speech.updateBlockReader(Blockly.selected.type, Blockly.selected);
                 return;
             }
 
             else{
-                surroundParent.select();  
+                surroundParent.select(); 
+                Blockly.Accessibility.Speech.updateBlockReader(Blockly.selected.type, Blockly.selected); 
                 return;
             }
         }     
@@ -326,6 +328,7 @@ Blockly.Accessibility.Navigation.traverseOut = function () {
     //select the surrounding block
     else if (surroundParent){
         surroundParent.select();
+         Blockly.Accessibility.Speech.updateBlockReader(Blockly.selected.type, Blockly.selected);
     }
     //inform the user they've reached the end
     else{
@@ -341,7 +344,7 @@ Blockly.Accessibility.Navigation.traverseOut = function () {
  * TODO: clean up this function, the if statements may be redundant or simplified but for now it works
  */
 Blockly.Accessibility.Navigation.traverseIn = function() {
-
+    console.log(">>>: inside Nav.traverseIn")
     // Null check
     if (Blockly.selected == null) {
         Blockly.Accessibility.Speech.Say('Cannot move further inwards from here.');
@@ -358,6 +361,7 @@ Blockly.Accessibility.Navigation.traverseIn = function() {
         //TODO: clean up this if statement if possible
         if(Blockly.selected.childBlocks_[i].previousConnection != null && Blockly.selected.childBlocks_[i].previousConnection.type == 4){
             Blockly.selected.childBlocks_[i].select();
+            Blockly.Accessibility.Speech.updateBlockReader(Blockly.selected.type, Blockly.selected);
             return;
         }
         //select next child of PARENT ( [1] + 2 ) ->  (1 + [2])
@@ -374,6 +378,7 @@ Blockly.Accessibility.Navigation.traverseIn = function() {
                 //make sure its not the same block
                 if(Blockly.selected != parentBlock.childBlocks_[j] ){
                     parentBlock.childBlocks_[j].select();
+                    Blockly.Accessibility.Speech.updateBlockReader(Blockly.selected.type, Blockly.selected);
                 }
 
             }
@@ -388,6 +393,7 @@ Blockly.Accessibility.Navigation.traverseIn = function() {
             
             if(Blockly.selected != parentBlock.childBlocks_[i]){
                 parentBlock.childBlocks_[i].select();
+                Blockly.Accessibility.Speech.updateBlockReader(Blockly.selected.type, Blockly.selected);
             }
 
         }
@@ -445,6 +451,7 @@ Blockly.Accessibility.Navigation.traverseUp = function() {
  */
 Blockly.Accessibility.Navigation.traverseDown = function() {
 
+    console.log(">>>: inside Nav.traverseDown")
     // Null check
     if (Blockly.selected == null) {
         //Blockly.Accessibility.Speech.Say('Cannot move further down from here.');
@@ -505,6 +512,8 @@ Blockly.Accessibility.Navigation.inlineBlockTraverseIn = function(){
 
                  if(sourceBlock != Blockly.selected){
                     sourceBlock.select();
+                    console.log(">>>: inside Nav.inlineBlockTraverseIn Block selected")
+                    Blockly.Accessibility.Speech.updateBlockReader(Blockly.selected.type, Blockly.selected);
                     break;
                  }
             }
@@ -524,7 +533,7 @@ Blockly.Accessibility.Navigation.inlineBlockTraverseIn = function(){
 * Precondition: must be in edit mode which should select the first child block
 */
 Blockly.Accessibility.Navigation.inlineBlockTraverseOut = function(){
- 
+    console.log(">>>: Nav.inlineBlockTraverseOut")
    //select childblocks of currently selected block
   if(Blockly.selected.childBlocks_.length < Blockly.Accessibility.Navigation.inlineCount){
         
