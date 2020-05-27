@@ -205,6 +205,7 @@ Blockly.Accessibility.CursorNavigation.goRight = function(){
 		// inputConnection can be of type input or of any of the field types
 		//depending on the type, the sourceBlock_ variable is accessed differently.
 		if (this.currentSelection instanceof Blockly.Input) { 
+			//console.log(">>>: " + this.currentSelection.connection.targetConnection.sourceBlock_)
 			if(this.currentSelection.connection.targetConnection != null){ // check if there is a target connection
 				if(this.currentSelection.connection.targetConnection.sourceBlock_.outputConnection != null){ 
 					this.currentSelection = this.currentSelection.connection.targetConnection.sourceBlock_;
@@ -217,8 +218,18 @@ Blockly.Accessibility.CursorNavigation.goRight = function(){
 					
 					//var selected = Blockly.selected;
 					//Blockly.selected.unselect();
-					Blockly.selected = this.currentSelection.connection.targetConnection.sourceBlock_;
+					Blockly.selected = this.currentSelection.sourceBlock_;
+					str = Blockly.Accessibility.Speech.blockToString(this.currentSelection.sourceBlock_.type);
+					Blockly.Accessibility.Speech.Say(str + "top Connection");
+
+
 				}
+			}
+			else{
+				//console.log(">>>: dead end")
+				Blockly.Accessibility.Speech.readConnection(this.currentSelection.name,
+				Blockly.Accessibility.InBlock.connectionsIndex);
+
 			}
 		}
 		
