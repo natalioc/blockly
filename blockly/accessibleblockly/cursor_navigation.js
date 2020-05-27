@@ -282,14 +282,17 @@ Blockly.Accessibility.CursorNavigation.goRight2 = function(){
 					this.goToBlock();
 				}
 				else {
-					this.currentLocation = 1;
-					this.currentSelection = this.currentSelection.connection.targetConnection.sourceBlock_.previousConnection;
-					this.currentHighlight = this.currentSelection.returnHighlight();
-					
-					//var selected = Blockly.selected;
-					//Blockly.selected.unselect();
-					Blockly.selected = this.currentSelection.connection.targetConnection.sourceBlock_;
+					this.currentLocation = 2;
+					this.currentSelection = this.currentSelection.connection.targetConnection.sourceBlock_;
+					this.goToBlock();
+					this.goFromBlockToPreviousConnection();
 				}
+			}
+			else{
+				//console.log(">>>: dead end")
+				Blockly.Accessibility.Speech.readConnection(this.currentSelection.name,
+				Blockly.Accessibility.InBlock.connectionsIndex);
+
 			}
 		}
 		
