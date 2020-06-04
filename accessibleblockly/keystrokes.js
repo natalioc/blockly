@@ -367,12 +367,18 @@ document.onkeydown = document.onkeyup = function(e){
 		}
 
 		else if(map[74]){//J jump into workspace or top block of workspace
-  
+  			console.log(">>>: J key pressed")
 			var topBlocks = Blockly.Accessibility.MenuNav.containersArr;
-            
-			if(topBlocks.length>0){
-				topBlocks[0].select();
+            // Blockly.Accessibility.MenuNav.containersArr is populated only 
+            // when blocks at added to workspace using the keyboard
+			
+
+			if(topBlocks.length <= 0){//handle case when blocks at added using mouse or preloaded from file
+				topBlocks = Blockly.mainWorkspace.getTopBlocks(false);
+
 			}
+			topBlocks[0].select();
+			Blockly.Accessibility.Speech.updateBlockReader(Blockly.selected.type, Blockly.selected);
 
 		}
 
