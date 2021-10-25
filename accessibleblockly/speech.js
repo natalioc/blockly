@@ -24,6 +24,7 @@ goog.require('Blockly.Accessibility.InBlock');
 Blockly.Accessibility.Speech.changedResult = undefined;
 Blockly.Accessibility.Speech.changedSelect = true;
 Blockly.Accessibility.Speech.result;
+Blockly.Accessibility.Speech.repeatStr = "";
 
 
 /*
@@ -74,8 +75,15 @@ Blockly.Accessibility.Speech.updateBlockReader = function(type, blockSvg){
     
 	//update the blockReader
      Blockly.Accessibility.Speech.Say(newStr);
+     this.repeatStr = newStr;
+
 };
 
+Blockly.Accessibility.Speech.repeatBlockReader = function(){
+    
+    Blockly.Accessibility.Speech.Say(this.repeatStr);
+    Blockly.Accessibility.Speech.Say(" replayed");
+}
 
 
 /*
