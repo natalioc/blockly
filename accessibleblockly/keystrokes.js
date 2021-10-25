@@ -279,6 +279,7 @@ document.onkeydown = document.onkeyup = function(e){
 		else if(map[13]){
 			console.log('hotkeyMode Enter key pressed');
 			Blockly.Accessibility.InBlock.hideDropDown();
+			console.log(">>> " + Blockly.selected.childBlocks_);
 		}
 
 		else if(map[8]){
@@ -324,6 +325,7 @@ document.onkeydown = document.onkeyup = function(e){
 			if(Blockly.selected.id[0] != ":" && !Blockly.Accessibility.Keystrokes.prototype.isConnecting){
 				Blockly.Accessibility.Navigation.traverseOut();
 			}
+			console.log(">>>D " + Blockly.selected.childBlocks_);
 		}
 
 		else if(map[67]){ //C
@@ -342,6 +344,7 @@ document.onkeydown = document.onkeyup = function(e){
 			if(Blockly.selected.id[0] != ":" && !Blockly.Accessibility.Keystrokes.prototype.isConnecting){
 				Blockly.Accessibility.Navigation.traverseIn();
 			}
+			console.log(">>>D " + Blockly.selected.childBlocks_);
 		}
 
 		else if(map[69]){ //E
@@ -391,8 +394,11 @@ document.onkeydown = document.onkeyup = function(e){
 		else if(map[82]){ //R
 			//Jumps to the top of the currently selected container
 			//Blockly.Accessibility.Navigation.jumpToTopOfSection();
-			Blockly.Accessibility.Prefixes.formatTreeView();
-			Blockly.Accessibility.Prefixes.infoBoxFill(Blockly.selected);
+			//>> commented below lines
+			//Blockly.Accessibility.Prefixes.formatTreeView();
+			//Blockly.Accessibility.Prefixes.infoBoxFill(Blockly.selected);
+
+			Blockly.Accessibility.Speech.repeatBlockReader();
 		}
 
 		else if(map[83]){ //S
@@ -410,6 +416,7 @@ document.onkeydown = document.onkeyup = function(e){
 			else if(document.activeElement.id[0] != ":"  && !Blockly.Accessibility.Keystrokes.prototype.isConnecting){
 				Blockly.Accessibility.Navigation.traverseDown();
 			}
+			console.log(">>>S " + Blockly.selected.childBlocks_);
 		}
 
 		else if(map[87]){ //W
@@ -430,6 +437,7 @@ document.onkeydown = document.onkeyup = function(e){
 				Blockly.Accessibility.Navigation.traverseUp();
 				console.log(">>> Traverse-up called");
 			}
+			console.log(">>>W " + Blockly.selected.childBlocks_);
 
 		}
 

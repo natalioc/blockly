@@ -354,36 +354,39 @@ Blockly.Accessibility.Navigation.traverseIn = function() {
 
     //check if block has children
     if(Blockly.selected.childBlocks_ != null && Blockly.selected.childBlocks_.length > 0){
+        Blockly.selected.getFirstStatementConnection().targetBlock().select();
+        Blockly.Accessibility.Speech.updateBlockReader(Blockly.selected.type, Blockly.selected);
 
-      for (var i = 0; i < Blockly.selected.childBlocks_.length; i++) {  
+      // for (var i = 0; i < Blockly.selected.childBlocks_.length; i++) {  
 
-        //select next child
-        //TODO: clean up this if statement if possible
-        if(Blockly.selected.childBlocks_[i].previousConnection != null && Blockly.selected.childBlocks_[i].previousConnection.type == 4){
-            Blockly.selected.childBlocks_[i].select();
-            Blockly.Accessibility.Speech.updateBlockReader(Blockly.selected.type, Blockly.selected);
-            return;
-        }
-        //select next child of PARENT ( [1] + 2 ) ->  (1 + [2])
-        else if(Blockly.selected.parentBlock_){
-            var parentBlock = Blockly.selected.parentBlock_;
-            var prevConnection;
+      //   //select next child
+      //   //TODO: clean up this if statement if possible
+      //   if(Blockly.selected.childBlocks_[i].previousConnection != null && Blockly.selected.childBlocks_[i].previousConnection.type == 4){
+      //       console.log(">>> Type 4")
+      //       Blockly.selected.childBlocks_[i].select();
+      //       Blockly.Accessibility.Speech.updateBlockReader(Blockly.selected.type, Blockly.selected);
+      //       return;
+      //   }
+      //   //select next child of PARENT ( [1] + 2 ) ->  (1 + [2])
+      //   else if(Blockly.selected.parentBlock_){
+      //       var parentBlock = Blockly.selected.parentBlock_;
+      //       var prevConnection;
 
-            if (!parentBlock){
-                return;
-            }
+      //       if (!parentBlock){
+      //           return;
+      //       }
 
-            for (var j = 0; j < parentBlock.childBlocks_.length; j++){
+      //       for (var j = 0; j < parentBlock.childBlocks_.length; j++){
 
-                //make sure its not the same block
-                if(Blockly.selected != parentBlock.childBlocks_[j] ){
-                    parentBlock.childBlocks_[j].select();
-                    Blockly.Accessibility.Speech.updateBlockReader(Blockly.selected.type, Blockly.selected);
-                }
+      //           //make sure its not the same block
+      //           if(Blockly.selected != parentBlock.childBlocks_[j] ){
+      //               parentBlock.childBlocks_[j].select();
+      //               Blockly.Accessibility.Speech.updateBlockReader(Blockly.selected.type, Blockly.selected);
+      //           }
 
-            }
-        }
-      }
+      //       }
+      //   }
+      // }
     }
     //select next child of parent
     else{
