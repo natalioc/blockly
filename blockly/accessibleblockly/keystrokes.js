@@ -409,6 +409,7 @@ document.onkeydown = document.onkeyup = function(e){
 			else if(document.activeElement.id[0] != ":"  && !Blockly.Accessibility.Keystrokes.prototype.isConnecting){
 				//Blockly.Accessibility.Navigation.traverseDown();
 				Blockly.Accessibility.CursorNavigation.goDown();
+				//Blockly.Accessibility.CursorNavigation.goDown();
 			}
 		
 		}

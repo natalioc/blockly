@@ -24,29 +24,41 @@ Blockly.Accessibility.CursorNavigation.blockInputList = [];
  */
 
 Blockly.Accessibility.CursorNavigation.goDown =  function(){
-	console.log('ABOU: goDown current Loc is ' + this.currentLocation); 
+	console.log('>>>: goDown current Loc is ' + this.currentLocation); 
 	if(this.currentLocation === 1){
-		console.log('ABOU connection type: '+ this.currentSelection.type);
+		console.log('>>>: connection type: '+ this.currentSelection.type);
 		this.currentSelection = this.currentSelection.sourceBlock_;
 		this.goToBlock();
-		console.log('ABOU: goDown location is 1'); 
+		console.log('>>>:: goDown location is 1'); 
 		
 	}
 	else if(this.currentLocation === 2 && Blockly.selected && Blockly.selected.outputConnection == null){
 		
 		if(Blockly.selected.nextConnection != null){
-			var str = ""
-			this.currentLocation = 3;
-			this.currentSelection = Blockly.selected.nextConnection;
-			this.currentHighlight = this.currentSelection.returnHighlight();
-			var selected = Blockly.selected;
-			Blockly.selected.unselect();
-			Blockly.selected = selected;
-			//console.log(Blockly.Accessibility.Speech.blockToString(this.currentSelection.sourceBlock_.type));
-			str = Blockly.Accessibility.Speech.blockToString(this.currentSelection.sourceBlock_.type);
-			console.log(str);
-			Blockly.Accessibility.Speech.Say(str + "Bottom Connection");
-		} 
+
+			if(Blockly.selected.nextConnection.targetConnection == null){
+				var str = ""
+				this.currentLocation = 3;
+				this.currentSelection = Blockly.selected.nextConnection;
+				this.currentHighlight = this.currentSelection.returnHighlight();
+				var selected = Blockly.selected;
+				Blockly.selected.unselect();
+				Blockly.selected = selected;
+				//console.log(Blockly.Accessibility.Speech.blockToString(this.currentSelection.sourceBlock_.type));
+				str = Blockly.Accessibility.Speech.blockToString(this.currentSelection.sourceBlock_.type);
+				console.log(str);
+				Blockly.Accessibility.Speech.Say(str + "Bottom Connection");
+			}
+			else{
+
+				//>> modify to go from block to block
+				this.currentSelection = Blockly.selected.nextConnection.targetConnection.sourceBlock_;
+				Blockly.selected.unselect();
+				this.goToBlock();
+			}
+
+		}
+		
 	}
 	else if(this.currentLocation === 3 && this.currentSelection != null && this.currentSelection.targetConnection !=null ){
 		//this.currentLocation = 2;
@@ -82,7 +94,7 @@ Blockly.Accessibility.CursorNavigation.goDown =  function(){
 		this.currentSelection = this.returnCurrentlySelectedInput();
 	}
 	
-	console.log('ABOU: go down');
+	console.log('>>>:: go down');
 	
 }; 
 
@@ -96,7 +108,7 @@ Blockly.Accessibility.CursorNavigation.goUp = function(){
 	
 	console.log('currentLocation goUP: ' + this.currentLocation);
 	if(this.currentLocation === 3){
-		console.log('ABOU connection type: '+ this.currentSelection.type);
+		console.log('>>>: connection type: '+ this.currentSelection.type);
 		this.currentSelection = this.currentSelection.sourceBlock_;
 		this.goToBlock();
 	}else if(this.currentLocation === 2 && Blockly.selected && this.currentSelection.previousConnection != null &&
@@ -104,15 +116,20 @@ Blockly.Accessibility.CursorNavigation.goUp = function(){
 			
 		//check whether currentLocation is not a first child block if it is not, go the nextConnection of previous block
 		if(this.currentSelection.getSurroundParent() != this.currentSelection.parentBlock_){
-			var str =""
-			this.currentLocation = 3;
-			this.currentSelection = Blockly.selected.previousConnection.targetConnection;
-			this.currentHighlight = this.currentSelection.returnHighlight();
-			var selected = Blockly.selected;
+			// var str =""
+			// this.currentLocation = 3;
+			// this.currentSelection = Blockly.selected.previousConnection.targetConnection;
+			// this.currentHighlight = this.currentSelection.returnHighlight();
+			// var selected = Blockly.selected;
+			// Blockly.selected.unselect();
+			// Blockly.selected = selected;
+			// str = Blockly.Accessibility.Speech.blockToString(this.currentSelection.sourceBlock_.type);
+			// Blockly.Accessibility.Speech.Say(str + "Bottom Connection");
+
+			//>> modify to go from block to block
+			this.currentSelection = Blockly.selected.previousConnection.targetConnection.sourceBlock_;
 			Blockly.selected.unselect();
-			Blockly.selected = selected;
-			str = Blockly.Accessibility.Speech.blockToString(this.currentSelection.sourceBlock_.type);
-			Blockly.Accessibility.Speech.Say(str + "Bottom Connection");
+			this.goToBlock();
 		} 
 		else{// if it is a first child block go to the previousConnection of the block
 			var str =""
@@ -166,7 +183,7 @@ Blockly.Accessibility.CursorNavigation.goUp = function(){
 		
 	}
 	
-	console.log('ABOU: goUp');
+	console.log('>>>:: goUp');
 	
 }
 
@@ -191,7 +208,7 @@ Blockly.Accessibility.CursorNavigation.goRight = function(){
 		
 		Blockly.Accessibility.InBlock.connectionsIndex = -1;
 		Blockly.Accessibility.InBlock.selectNext();
-		console.log('ABOU input selected ' + Blockly.Accessibility.InBlock.selectionList[Blockly.Accessibility.InBlock.connectionsIndex]);
+		console.log('>>>: input selected ' + Blockly.Accessibility.InBlock.selectionList[Blockly.Accessibility.InBlock.connectionsIndex]);
 		this.currentSelection = this.returnCurrentlySelectedInput();
 		var selected = Blockly.selected;
 		Blockly.selected.unselect();
@@ -212,15 +229,20 @@ Blockly.Accessibility.CursorNavigation.goRight = function(){
 					this.goToBlock();
 				}
 				else {
-					this.currentLocation = 1;
-					this.currentSelection = this.currentSelection.connection.targetConnection.sourceBlock_.previousConnection;
-					this.currentHighlight = this.currentSelection.returnHighlight();
+					// this.currentLocation = 1;
+					// this.currentSelection = this.currentSelection.connection.targetConnection.sourceBlock_.previousConnection;
+					// this.currentHighlight = this.currentSelection.returnHighlight();
 					
-					//var selected = Blockly.selected;
-					//Blockly.selected.unselect();
-					Blockly.selected = this.currentSelection.sourceBlock_;
-					str = Blockly.Accessibility.Speech.blockToString(this.currentSelection.sourceBlock_.type);
-					Blockly.Accessibility.Speech.Say(str + "top Connection");
+					// //var selected = Blockly.selected;
+					// //Blockly.selected.unselect();
+					// Blockly.selected = this.currentSelection.sourceBlock_;
+					// str = Blockly.Accessibility.Speech.blockToString(this.currentSelection.sourceBlock_.type);
+					// Blockly.Accessibility.Speech.Say(str + "top Connection");
+
+					//>> modify to match new update
+					this.currentLocation = 2;
+					this.currentSelection = this.currentSelection.connection.targetConnection.sourceBlock_;
+					this.goToBlock();
 
 
 				}
@@ -247,7 +269,7 @@ Blockly.Accessibility.CursorNavigation.goLeft = function(){
 		
 		this.currentSelection = this.currentSelection.sourceBlock_;
 		this.goToBlock();
-		console.log("ABOU: block type: " + this.currentSelection.type);
+		console.log(">>>: block type: " + this.currentSelection.type);
 	}
 	else if(this.currentLocation ===2 && Blockly.selected && Blockly.selected.outputConnection != null){ // from value block to targetConnection of input block
 		this.currentLocation = 4;
@@ -338,13 +360,13 @@ Blockly.Accessibility.CursorNavigation.goToBlock = function(){
 	this.initBlockInputList();
 	
 	
-	//ABOU debugging purpose only
-	console.log('ABOU: parentBlock ' + Blockly.selected.parentBlock_);
+	//>>> debugging purpose only
+	console.log('>>>: parentBlock ' + Blockly.selected.parentBlock_);
 	
-	console.log('ABOU: surroundParent ' + Blockly.selected.getSurroundParent());	
+	console.log('>>>: surroundParent ' + Blockly.selected.getSurroundParent());	
 	
-	//console.log('ABOU: surrondParent connection point type ' + Blockly.selected.getSurroundParent().getFirstStatementConnection().type);
-	//console.log('ABOU: surrondParent connection point Block ' + Blockly.selected.getSurroundParent().getFirstStatementConnection().sourceBlock_);
+	//console.log('>>>: surrondParent connection point type ' + Blockly.selected.getSurroundParent().getFirstStatementConnection().type);
+	//console.log('>>>: surrondParent connection point Block ' + Blockly.selected.getSurroundParent().getFirstStatementConnection().sourceBlock_);
 	
 }
 
@@ -359,7 +381,7 @@ Blockly.Accessibility.CursorNavigation.initialize = function(){
 	this.currentLocation = 2;
 	this.currentSelection = Blockly.selected;
 	
-	console.log('ABOU: init successful');
+	console.log('>>>: init successful');
 	this.initBlockInputList();
 	
 }
@@ -387,8 +409,8 @@ Blockly.Accessibility.CursorNavigation.initBlockInputList = function(){
 					if (!(Blockly.selected.inputList[i].fieldRow[j] instanceof Blockly.FieldLabel) &&
 						!(Blockly.selected.inputList[i].fieldRow[j] instanceof Blockly.FieldImage)) {
 						this.blockInputList.push(Blockly.selected.inputList[i].fieldRow[j]);
-						console.log('ABOU: field row has been put');
-						console.log('ABOU: field name of ' + i + ' ' + Blockly.selected.inputList[i].fieldRow[j].name);
+						console.log('>>>: field row has been put');
+						console.log('>>>: field name of ' + i + ' ' + Blockly.selected.inputList[i].fieldRow[j].name);
 
 					}
 				}
@@ -396,10 +418,10 @@ Blockly.Accessibility.CursorNavigation.initBlockInputList = function(){
 			// If the connection is null it means nothing can be connected there, so we don't need to remember the input
 			if (Blockly.selected.inputList[i].connection != null) {
 				this.blockInputList.push(Blockly.selected.inputList[i]);
-				console.log('ABOU enterCurrentBlock input i  i is : ' + i + ' ' + Blockly.selected.inputList[i].name);
+				console.log('>>> enterCurrentBlock input i  i is : ' + i + ' ' + Blockly.selected.inputList[i].name);
 			}
-			else{ //ABOU this else part added for debugging
-				console.log('ABOU enterCurrentBlock is connection null i is : ' + i);
+			else{ //>>> this else part added for debugging
+				console.log('>>> enterCurrentBlock is connection null i is : ' + i);
 			}
 		}
 
@@ -415,11 +437,11 @@ Blockly.Accessibility.CursorNavigation.initBlockInputList = function(){
 
 		this.currentInputIndex = 0;
 		
-		//console.log('ABOU block input list ' + this.blockInputList);
+		//console.log('>>> block input list ' + this.blockInputList);
 		Blockly.Accessibility.InBlock.selectionList = this.blockInputList;
 		Blockly.Accessibility.InBlock.connectionsIndex = 0;
 		
-		//console.log('ABOU InBlock inputlist ' + Blockly.Accessibility.InBlock.selectionList);
+		//console.log('>>> InBlock inputlist ' + Blockly.Accessibility.InBlock.selectionList);
 
 	}
 	
@@ -499,7 +521,7 @@ Blockly.Accessibility.CursorNavigation.goToInputConnectionOfSelectedConnection =
 	Blockly.Accessibility.InBlock.connectionsIndex = i; // 
 	Blockly.Accessibility.InBlock.selectCurrent();
 	this.currentSelection = this.returnCurrentlySelectedInput();
-	console.log('ABOU connection name of surroundParent: ' +  Blockly.Accessibility.InBlock.selectionList[Blockly.Accessibility.InBlock.connectionsIndex].name);
+	console.log('>>> connection name of surroundParent: ' +  Blockly.Accessibility.InBlock.selectionList[Blockly.Accessibility.InBlock.connectionsIndex].name);
 }
 
 
