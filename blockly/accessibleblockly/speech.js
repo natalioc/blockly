@@ -5,6 +5,11 @@ goog.provide('Blockly.Accessibility.Speech');
 goog.require('Blockly.Accessibility');
 goog.require('Blockly.Accessibility.InBlock');
 
+
+goog.require('Blockly.Msg');
+goog.require('Blockly.Blocks');
+goog.require('Blockly');
+
 /*
     Copyright 2015 RIT Center for Accessibility and Inclusion Research
 *   Licensed under the Apache License, Version 2.0 (the "License");
@@ -24,25 +29,26 @@ goog.require('Blockly.Accessibility.InBlock');
 Blockly.Accessibility.Speech.changedResult = undefined;
 Blockly.Accessibility.Speech.changedSelect = true;
 Blockly.Accessibility.Speech.result;
+Blockly.Accessibility.Speech.repeatStr = "";
 
 
 /*
-*   Read any string passed in immediately with the screen reader	
+*   Read any string passed in immediately with the screen reader    
 */
 Blockly.Accessibility.Speech.Say = function(string){
 
-	 var blockReader = document.getElementById("blockReader");
-	
+     var blockReader = document.getElementById("blockReader");
+    
 
-	 //for safari
-	 //blockReader.setAttribute("aria-live", "off");
-	 //blockReader.setAttribute("aria-label", string);
-	 //blockReader.setAttribute("role", "alert");
+     //for safari
+     //blockReader.setAttribute("aria-live", "off");
+     //blockReader.setAttribute("aria-label", string);
+     //blockReader.setAttribute("role", "alert");
 
-	 //for chrome
-	 blockReader.innerHTML = string;
+     //for chrome
+     blockReader.innerHTML = string;
 
-	 console.log(string);
+     console.log(string);
 }
 
 /*
@@ -52,30 +58,41 @@ Blockly.Accessibility.Speech.Say = function(string){
 
 /*
 * get selected block type and call function that updates the blockreader
-*	@param_block.....the block being read
-* 	@param_blockSvg..the svg of the block being read 
+*   @param_block.....the block being read
+*   @param_blockSvg..the svg of the block being read 
 */
 Blockly.Accessibility.Speech.updateBlockReader = function(type, blockSvg){
-	// get default string for the block based on type
-	var newStr;
-	var defaultStr;
+    // get default string for the block based on type
+    var newStr;
+    var defaultStr;
 
-	//only update the screen reader if something has changed
-	if(!this.changedResult){
-		defaultStr  = Blockly.Accessibility.Speech.blockToString(type); 	
-	}
+    //only update the screen reader if something has changed
+    if(!this.changedResult){
+        defaultStr  = Blockly.Accessibility.Speech.blockToString(type); 
+        //console.log(">>> not changedResult");
+        //console.log(">>> " + defaultStr);     
+    }
 
-	else{
-		defaultStr = this.changedResult;
-	}    
+    else{
+        defaultStr = this.changedResult;
+        console.log(">>> changedResult")    
+    }    
 
-   	//go through the blocks on the workspace and find the matching one based on type and id
-	newStr = this.changeString(blockSvg);
+    //go through the blocks on the workspace and find the matching one based on type and id
+    newStr = this.changeString(blockSvg);
     
-	//update the blockReader
+    //update the blockReader
+    //console.log(">>> type: " + type);
      Blockly.Accessibility.Speech.Say(newStr);
+     this.repeatStr = newStr;
+
 };
 
+Blockly.Accessibility.Speech.repeatBlockReader = function(){
+    
+    Blockly.Accessibility.Speech.Say(this.repeatStr);
+    Blockly.Accessibility.Speech.Say(" replayed");
+}
 
 
 /*
@@ -85,69 +102,69 @@ Blockly.Accessibility.Speech.updateBlockReader = function(type, blockSvg){
 */
 Blockly.Accessibility.Speech.readConnection = function(name, index){
 
-	var blockReader = document.getElementById("blockReader");	
-	var active 		= document.activeElement;
-	var say;
+    var blockReader = document.getElementById("blockReader");   
+    var active      = document.activeElement;
+    var say;
 
-	//top and bottom connections are named undefined
-	if(name == undefined)
-	{
-		switch(index){
-			case 0:
-				name = "bottom"
-				break;
-			case 1:
-				name = "top";
-				break;
-			case 2:
-				name = "input";
-				break;
-			case 3:
-				name = "previous";
-				break;
-			case 4:
-				name = "next connection";
-				break;
-			default:
-				name = "select a";
-				break;
-		}
-	}
-	//some names are not descriptive
-	switch(name){
-		case "VAR":
-			name = "variable";
-			break;
-		case "OP":
-			name = "drop down";
-			break;
-		default:
-			break;
+    //top and bottom connections are named undefined
+    if(name == undefined)
+    {
+        switch(index){
+            case 0:
+                name = "bottom"
+                break;
+            case 1:
+                name = "top";
+                break;
+            case 2:
+                name = "input";
+                break;
+            case 3:
+                name = "previous";
+                break;
+            case 4:
+                name = "next connection";
+                break;
+            default:
+                name = "select a";
+                break;
+        }
+    }
+    //some names are not descriptive
+    switch(name){
+        case "VAR":
+            name = "variable";
+            break;
+        case "OP":
+            name = "drop down";
+            break;
+        default:
+            break;
 
-	}
+    }
 
-	//blocks with multiple outputs like create list with are named add0 add1 etc. so put in a space to make it readable
-	for(var i = 0; i< name.length; i++){
+    //blocks with multiple outputs like create list with are named add0 add1 etc. so put in a space to make it readable
+    for(var i = 0; i< name.length; i++){
 
-		if(name.indexOf(i) > -1){
-			var iIndex = name.indexOf(i);
-		    name = name.substring(0,iIndex) + " ";
+        if(name.indexOf(i) > -1){
+            var iIndex = name.indexOf(i);
+            name = name.substring(0,iIndex) + " ";
 
-			if(name.indexOf('ADD') > -1){
-				name = name + i;
-			}
-		}
-	}
+            if(name.indexOf('ADD') > -1){
+                name = name + i;
+            }
+        }
+    }
 
-	//screenreaders sometimes read words in all uppercase as individual letters
-	name = name.toLowerCase();
+    //screenreaders sometimes read words in all uppercase as individual letters
+    name = name.toLowerCase();
 
     //a should be pronounced as the letter not "uh"
-	if(name == 'a'){
-		name = "A,";
-	}
+    if(name == 'a'){
+        name = "A,";
+    }
 
-	say = name + " connection."
+    say = name + " connection."
 
 
     Blockly.Accessibility.Speech.Say(say);
@@ -174,56 +191,55 @@ Blockly.Accessibility.Speech.changeString = function(blockSvg) {
     var input;
 
     for (var i = 0; i < inputList.length; i++){
-    	//inline child connection
-      	if(inputList[i].type == 1){
-      		input = inputList[i];
+        //inline child connection
+        if(inputList[i].type == 1){
+            input = inputList[i];
+            //get all the fields
+            for (var j = 0, field; field = input.fieldRow[j]; j++) {
+                  text.push(" " + this.convertSpecialCharaterToWord(field.getText()));
+            }
+            //get inner blocks
+            if (input.connection) {
+                var child = input.connection.targetBlock();
 
-      		//get all the fields
-	      	for (var j = 0, field; field = input.fieldRow[j]; j++) {
-	        	text.push(" " + field.getText());
-	        }
-	        //get inner blocks
-	        if (input.connection) {
+                if (child) {
+                    //TODO: make this part cleaner
+                    //replaces ? with a,b etc for screen reader ability
+                    var childStr = child.toString();
+                    var splitArr = childStr.split(' ');
+                    var newChildStr = " ";
 
-	        	var child = input.connection.targetBlock();
+                    for(var k = 0; k < splitArr.length; k++){
+                        console.log("splitArrK: " + "#" + splitArr[k] + "#");
 
-	        	if (child) {
-	        		//TODO: make this part cleaner
-	        		//replaces ? with a,b etc for screen reader ability
-	        		var childStr = child.toString();
-					var splitArr = childStr.split(' ');
-				    var newChildStr = " ";
-
-					for(var k = 0; k < splitArr.length; k++){
-
-						if(splitArr[k] == '?'){
-				    		splitArr[k] = alphabet[count];
-				        	count++;
-				    	}
-				        
-				        newChildStr += splitArr[k];
-					}
-	        		text.push(newChildStr);
-	        	} 
-	        	else {
-	          		text.push(alphabet[count]);
-	          		count++;
-	       		}
-	      	}
-	      	//shouldn't need more than 10 variables in a single block....
-      		if(count > alphabet.length-1){
-      			count = 0;
-      		}
+                        if(splitArr[k] == '?'){
+                            splitArr[k] = alphabet[count];
+                            count++;
+                        }
+                        splitArr[k] = " " + this.convertSpecialCharaterToWord(splitArr[k]);
+                        
+                        newChildStr += splitArr[k];
+                    }
+                    text.push(newChildStr);
+                } 
+                else {
+                    text.push(alphabet[count]);
+                    count++;
+                }
+            }
+            //shouldn't need more than 10 variables in a single block....
+            if(count > alphabet.length-1){
+                count = 0;
+            }
  
         }
         //type three blocks are inner statements that don't need to be read
-      	else if(inputList[i].type != 3){
-      		input = inputList[i];
-
-      		for (var j = 0, field; field = input.fieldRow[j]; j++) {
-	        	text.push(" " + field.getText());
-	        }
-      	}
+        else if(inputList[i].type != 3){
+            input = inputList[i];
+            for (var j = 0, field; field = input.fieldRow[j]; j++) {
+                text.push(" " + this.convertSpecialCharaterToWord(field.getText()));
+            }
+        }
 
         }
     }
@@ -245,132 +261,132 @@ Blockly.Accessibility.Speech.changeString = function(blockSvg) {
 *--- the new change string function makes this unnecessary--
 * For certain blocks, the order of the inputs must be switched to read correctly **note: read order arr starts at 1 to skip invisible mutations**
 * The default order of inputs is mutations, fields, then values.
-* 	@param_blockType...type of block
-* 	@param_inputsArr...the array of string inputs of the block that need to be rearranged.
+*   @param_blockType...type of block
+*   @param_inputsArr...the array of string inputs of the block that need to be rearranged.
 * EXAMPLE_ Original:"Add A B"    Switched "A Add B"
 * returns array with updated string order
 */
 Blockly.Accessibility.Speech.switchInputOrder = function(blockType, inputsArr){
-	var readOrderArr = []; //ordered array to return
+    var readOrderArr = []; //ordered array to return
 
-	switch(blockType){
-		case "text_indexOf":
-		case "lists_indexOf": 
-			readOrderArr[0] = inputsArr[1];
-			readOrderArr[1] = inputsArr[0];
-			readOrderArr[2] = inputsArr[2];
-			break;
-		case "text_getSubstring": 
-			readOrderArr[1] = inputsArr[1];
-			readOrderArr[2] = inputsArr[3];
-			readOrderArr[3] = inputsArr[0];
-			readOrderArr[4] = inputsArr[2];
-			readOrderArr[5] = inputsArr[4];
-			break;
-		case "lists_getSublist":
-			readOrderArr[1] = inputsArr[1];
-		    readOrderArr[2] = inputsArr[3];
-			readOrderArr[3] = inputsArr[0]; 
-		    readOrderArr[4] = inputsArr[2];
-		    readOrderArr[5] = inputsArr[4];
-		    break;
-		case "text_charAt":
-			readOrderArr[0] = inputsArr[2];
-			readOrderArr[1] = inputsArr[1];
-			readOrderArr[2] = inputsArr[0];
-			break;
-		case "lists_getIndex":
-		case "lists_setIndex":
-			readOrderArr[0] = inputsArr[4];
-			readOrderArr[1] = inputsArr[1];
-			readOrderArr[2] = inputsArr[2];
-			readOrderArr[3] = inputsArr[0];
-			readOrderArr[4] = inputsArr[4];
-			break;
-		case "logic_compare":
-		case "logic_operation":
-		case "math_arithmetic":
-		case "procedures_ifreturn":
-			//this case must be handled differently from the above or else it does not update the second block inner text
-			var saveZero = inputsArr[0];
-			inputsArr[0] = inputsArr[1];
-	   		inputsArr[1] = saveZero;
-	   		readOrderArr = inputsArr;
-			break;
-		default: 
-			readOrderArr = inputsArr;
-			break;
-	}
+    switch(blockType){
+        case "text_indexOf":
+        case "lists_indexOf": 
+            readOrderArr[0] = inputsArr[1];
+            readOrderArr[1] = inputsArr[0];
+            readOrderArr[2] = inputsArr[2];
+            break;
+        case "text_getSubstring": 
+            readOrderArr[1] = inputsArr[1];
+            readOrderArr[2] = inputsArr[3];
+            readOrderArr[3] = inputsArr[0];
+            readOrderArr[4] = inputsArr[2];
+            readOrderArr[5] = inputsArr[4];
+            break;
+        case "lists_getSublist":
+            readOrderArr[1] = inputsArr[1];
+            readOrderArr[2] = inputsArr[3];
+            readOrderArr[3] = inputsArr[0]; 
+            readOrderArr[4] = inputsArr[2];
+            readOrderArr[5] = inputsArr[4];
+            break;
+        case "text_charAt":
+            readOrderArr[0] = inputsArr[2];
+            readOrderArr[1] = inputsArr[1];
+            readOrderArr[2] = inputsArr[0];
+            break;
+        case "lists_getIndex":
+        case "lists_setIndex":
+            readOrderArr[0] = inputsArr[4];
+            readOrderArr[1] = inputsArr[1];
+            readOrderArr[2] = inputsArr[2];
+            readOrderArr[3] = inputsArr[0];
+            readOrderArr[4] = inputsArr[4];
+            break;
+        case "logic_compare":
+        case "logic_operation":
+        case "math_arithmetic":
+        case "procedures_ifreturn":
+            //this case must be handled differently from the above or else it does not update the second block inner text
+            var saveZero = inputsArr[0];
+            inputsArr[0] = inputsArr[1];
+            inputsArr[1] = saveZero;
+            readOrderArr = inputsArr;
+            break;
+        default: 
+            readOrderArr = inputsArr;
+            break;
+    }
 
-	return readOrderArr;
+    return readOrderArr;
 };
 
 
 /*
 *Change the default name of the drop down input
-*	@param_defaultNm the default string associated with a symbol or dropdown option
-*	@param_blockType the type of block used to determine special wording 
+*   @param_defaultNm the default string associated with a symbol or dropdown option
+*   @param_blockType the type of block used to determine special wording 
 */
 Blockly.Accessibility.Speech.fieldNameChange = function(defaultNm, blockType){
-	var newName;
+    var newName;
 
-	switch(defaultNm){
-		case "EQ":
-			newName = "equals";
-			break;
-		case "NEQ":
-			newName = "is not equal to";
-			break;
-		case "LT":
-			newName = "is less than";
-			break;
-		case "LTE":
-			newName = "is less than or equal to";
-			break;
-		case "GT":
-			newName = "is greater than";
-			break;
-		case "GTE":
-			newName = "is greater than or equal to";
-			break;
-		case "ROOT":
-			newName = "square root";
-			break;
-		case "ABS":
-			newName = "absolute value of";
-			break;
-		case "EXP":
-			newName = "e to the power of";
-			break;
-		case "POW10":
-			newName = "10 to the power of";
-			break;
-		case "FROM_START":
-			newName = "index";
+    switch(defaultNm){
+        case "EQ":
+            newName = "equals";
+            break;
+        case "NEQ":
+            newName = "is not equal to";
+            break;
+        case "LT":
+            newName = "is less than";
+            break;
+        case "LTE":
+            newName = "is less than or equal to";
+            break;
+        case "GT":
+            newName = "is greater than";
+            break;
+        case "GTE":
+            newName = "is greater than or equal to";
+            break;
+        case "ROOT":
+            newName = "square root";
+            break;
+        case "ABS":
+            newName = "absolute value of";
+            break;
+        case "EXP":
+            newName = "e to the power of";
+            break;
+        case "POW10":
+            newName = "10 to the power of";
+            break;
+        case "FROM_START":
+            newName = "index";
 
-			if(blockType == "text_charAt"){
-				newName = "character at index"
-			}
-			break;
-		case "FROM_END":
-			newName = "index from end";
-			break;
-		case "SPLIT":
-			newName = "list from text";
-			break;
-		case "JOIN":
-			newName = "text from list";
-			break;
-		default:
-		    try{
-			     newName = defaultNm.toLowerCase();
-		    }
-		    catch(e){
-		    	newName = defaultNm;
-		    }
-			break;
-	}
-	return newName;
+            if(blockType == "text_charAt"){
+                newName = "character at index"
+            }
+            break;
+        case "FROM_END":
+            newName = "index from end";
+            break;
+        case "SPLIT":
+            newName = "list from text";
+            break;
+        case "JOIN":
+            newName = "text from list";
+            break;
+        default:
+            try{
+                 newName = defaultNm.toLowerCase();
+            }
+            catch(e){
+                newName = defaultNm;
+            }
+            break;
+    }
+    return newName;
 };
 
 /*
@@ -390,11 +406,11 @@ Blockly.Accessibility.Speech.blockToString = function(type, disabled){
             this.result = "if (A), do";
             break;
         case "controls_elseif":
-        	this.result = "else if (A)";
-        	break;
+            this.result = "else if (A)";
+            break;
         case "controls_else":
-        	this.result = "else ";
-        	break;
+            this.result = "else ";
+            break;
         case "logic_compare"  :
             this.result = " (A) 'equals' (B)"; 
             break;
@@ -473,10 +489,10 @@ Blockly.Accessibility.Speech.blockToString = function(type, disabled){
         case "text_join":
             this.result = "Create text with '2 or more' items";
 
-        	//loop through blocks to add inputs dynamically
-        	for(var i = 0; i < Blockly.selected.itemCount_+1; i++){
-        		this.result += " ,() ";
-        	}
+            //loop through blocks to add inputs dynamically
+            for(var i = 0; i < Blockly.selected.itemCount_+1; i++){
+                this.result += " ,() ";
+            }
 
             break; 
         case "text_append":
@@ -516,9 +532,9 @@ Blockly.Accessibility.Speech.blockToString = function(type, disabled){
             this.result = "create list with '3' items";
 
             //loop through blocks to add parameters dynamically
-        	for(var i = 0; i < Blockly.selected.itemCount_+1; i++){
-        		this.result += " ,() ";
-        	}
+            for(var i = 0; i < Blockly.selected.itemCount_+1; i++){
+                this.result += " ,() ";
+            }
             break;  
         case "lists_repeat":
             this.result = "create list with item (A) repeated (5) times";
@@ -567,16 +583,16 @@ Blockly.Accessibility.Speech.blockToString = function(type, disabled){
             break;
         case "procedures_callreturn":
         case "procedures_callnoreturn":
-        	this.result = Blockly.selected.inputList[0].fieldRow[0].text_;
+            this.result = Blockly.selected.inputList[0].fieldRow[0].text_;
 
-        	//loop through blocks to add parameters dynamically
-        	for(var i = 0; i < Blockly.selected.arguments_.length; i++){
-        		if(i == 0){
-        			this.result += " with ";
-        		}
-        		this.result += Blockly.selected.arguments_[i] + " '' ";
-        	}
-        	break;
+            //loop through blocks to add parameters dynamically
+            for(var i = 0; i < Blockly.selected.arguments_.length; i++){
+                if(i == 0){
+                    this.result += " with ";
+                }
+                this.result += Blockly.selected.arguments_[i] + " '' ";
+            }
+            break;
         case "variables_set":
             this.result = "set 'variable' to (A)";
             break;
@@ -592,8 +608,65 @@ Blockly.Accessibility.Speech.blockToString = function(type, disabled){
         disabledText = "disabled ";
      }
      if(this.changedResult){
-     	this.result = this.changedResult;
+        this.result = this.changedResult;
      }
-     console.log("here");
-     return disabledText + this.result + " block ";
+     return disabledText + this.result + " block.";
+};
+
+
+/*
+* Converts special characters to their word equivalent.
+* e.g < to less than
+* @param specialCharacter string representation of special character
+*
+*/
+Blockly.Accessibility.Speech.convertSpecialCharaterToWord = function(specialCharacter){
+
+    /*
+    TO-DO: replace strings with their variables names from ../msg/ files for internationalization
+    e.g %{BKY_MATH_ADDITION_SYMBOL}"  should replace \u002B below
+    */
+    var wordEquivalent;
+    
+    switch(specialCharacter){
+        case "=":
+            wordEquivalent = "equals";
+            break;
+        case "\u2260":
+            wordEquivalent = "is not equal to";
+            break;
+        case "\u200F<":
+            wordEquivalent = "is less than";
+            break;
+        case "\u200F\u2264":
+            wordEquivalent = "is less than or equal to";
+            break;
+        case "\u200F>":
+            wordEquivalent = "is greater than";
+            break;
+        case "\u200F\u2265":
+            wordEquivalent = "is greater than or equal to";
+            break;
+        case '\u002B':
+            wordEquivalent = "plus";
+            break;
+        case '\u002D':
+            wordEquivalent = "minus";
+            break;
+        case "×":
+            wordEquivalent = "times";
+            break;
+        case '\u00F7':
+            wordEquivalent = "divided by";
+            break;
+        case "^" :
+            wordEquivalent = "to the power of";
+            break;
+        default:
+            wordEquivalent = specialCharacter;
+            break;
+    }
+
+    return wordEquivalent;
+
 };

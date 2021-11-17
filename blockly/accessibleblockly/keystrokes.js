@@ -362,7 +362,7 @@ document.onkeydown = document.onkeyup = function(e){
 		*/
 		else if (map[70]) { //F traverse inline blocks
 			console.log('hotkeyMode F key pressed');
-			Blockly.Accessibility.Navigation.inlineBlockTraverseIn();
+			//Blockly.Accessibility.Navigation.inlineBlockTraverseIn();
 		}
 
 
