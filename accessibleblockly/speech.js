@@ -5,6 +5,11 @@ goog.provide('Blockly.Accessibility.Speech');
 goog.require('Blockly.Accessibility');
 goog.require('Blockly.Accessibility.InBlock');
 
+
+goog.require('Blockly.Msg');
+goog.require('Blockly.Blocks');
+goog.require('Blockly');
+
 /*
     Copyright 2015 RIT Center for Accessibility and Inclusion Research
 *   Licensed under the Apache License, Version 2.0 (the "License");
@@ -63,17 +68,21 @@ Blockly.Accessibility.Speech.updateBlockReader = function(type, blockSvg){
 
 	//only update the screen reader if something has changed
 	if(!this.changedResult){
-		defaultStr  = Blockly.Accessibility.Speech.blockToString(type); 	
+		defaultStr  = Blockly.Accessibility.Speech.blockToString(type); 
+        //console.log(">>> not changedResult");
+        //console.log(">>> " + defaultStr);    	
 	}
 
 	else{
 		defaultStr = this.changedResult;
+        console.log(">>> changedResult")    
 	}    
 
    	//go through the blocks on the workspace and find the matching one based on type and id
 	newStr = this.changeString(blockSvg);
     
 	//update the blockReader
+    //console.log(">>> type: " + type);
      Blockly.Accessibility.Speech.Say(newStr);
      this.repeatStr = newStr;
 
@@ -185,14 +194,12 @@ Blockly.Accessibility.Speech.changeString = function(blockSvg) {
     	//inline child connection
       	if(inputList[i].type == 1){
       		input = inputList[i];
-
       		//get all the fields
 	      	for (var j = 0, field; field = input.fieldRow[j]; j++) {
-	        	text.push(" " + field.getText());
+	        	  text.push(" " + this.convertSpecialCharaterToWord(field.getText()));
 	        }
 	        //get inner blocks
 	        if (input.connection) {
-
 	        	var child = input.connection.targetBlock();
 
 	        	if (child) {
@@ -203,11 +210,13 @@ Blockly.Accessibility.Speech.changeString = function(blockSvg) {
 				    var newChildStr = " ";
 
 					for(var k = 0; k < splitArr.length; k++){
+                        console.log("splitArrK: " + "#" + splitArr[k] + "#");
 
 						if(splitArr[k] == '?'){
 				    		splitArr[k] = alphabet[count];
 				        	count++;
 				    	}
+                        splitArr[k] = " " + this.convertSpecialCharaterToWord(splitArr[k]);
 				        
 				        newChildStr += splitArr[k];
 					}
@@ -227,9 +236,8 @@ Blockly.Accessibility.Speech.changeString = function(blockSvg) {
         //type three blocks are inner statements that don't need to be read
       	else if(inputList[i].type != 3){
       		input = inputList[i];
-
       		for (var j = 0, field; field = input.fieldRow[j]; j++) {
-	        	text.push(" " + field.getText());
+	        	text.push(" " + this.convertSpecialCharaterToWord(field.getText()));
 	        }
       	}
 
@@ -603,4 +611,62 @@ Blockly.Accessibility.Speech.blockToString = function(type, disabled){
      	this.result = this.changedResult;
      }
      return disabledText + this.result + " block.";
+};
+
+
+/*
+* Converts special characters to their word equivalent.
+* e.g < to less than
+* @param specialCharacter string representation of special character
+*
+*/
+Blockly.Accessibility.Speech.convertSpecialCharaterToWord = function(specialCharacter){
+
+    /*
+    TO-DO: replace strings with their variables names from ../msg/ files for internationalization
+    e.g %{BKY_MATH_ADDITION_SYMBOL}"  should replace \u002B below
+    */
+    var wordEquivalent;
+    
+    switch(specialCharacter){
+        case "=":
+            wordEquivalent = "equals";
+            break;
+        case "\u2260":
+            wordEquivalent = "is not equal to";
+            break;
+        case "\u200F<":
+            wordEquivalent = "is less than";
+            break;
+        case "\u200F\u2264":
+            wordEquivalent = "is less than or equal to";
+            break;
+        case "\u200F>":
+            wordEquivalent = "is greater than";
+            break;
+        case "\u200F\u2265":
+            wordEquivalent = "is greater than or equal to";
+            break;
+        case '\u002B':
+            wordEquivalent = "plus";
+            break;
+        case '\u002D':
+            wordEquivalent = "minus";
+            break;
+        case "×":
+            wordEquivalent = "times";
+            break;
+        case '\u00F7':
+            wordEquivalent = "divided by";
+            break;
+        case "^" :
+            wordEquivalent = "to the power of";
+            break;
+        default:
+            wordEquivalent = specialCharacter;
+            break;
+    }
+
+    return wordEquivalent;
+
 };
