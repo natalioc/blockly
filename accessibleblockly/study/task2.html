@@ -105,71 +105,61 @@ function start() {
   //   enableRealtimeSpecificUi();
   // }
 
-  var qtn = `<xml xmlns="http://www.w3.org/1999/xhtml">
-  <block type="variables_set" x="4" y="8">
-    <field name="VAR">count</field>
-    <value name="VALUE">
-      <block type="math_number">
-        <field name="NUM">1</field>
+  var qtn = `<xml xmlns="https://developers.google.com/blockly/xml">
+  <variables>
+    <variable id="CWp_8uiznr6L;RD!jspG">count</variable>
+  </variables>
+  <block type="controls_repeat_ext" id="vq)g2gs9$e_@6(JT.?fz" x="38" y="37">
+    <value name="TIMES">
+      <block type="math_number" id="ZcD=U~0!c4m!xRim\`S0c">
+        <field name="NUM">3</field>
       </block>
     </value>
-    <next>
-      <block type="controls_whileUntil">
-        <field name="MODE">WHILE</field>
-        <value name="BOOL">
-          <block type="logic_compare">
-            <field name="OP">LT</field>
-            <value name="A">
-              <block type="variables_get">
-                <field name="VAR">count</field>
-              </block>
-            </value>
-            <value name="B">
-              <block type="math_number">
-                <field name="NUM">6</field>
-              </block>
-            </value>
+    <statement name="DO">
+      <block type="text_print" id="u%0IlWcXT7R/UAK~ugyy">
+        <value name="TEXT">
+          <block type="math_number" id="K;N5NYqut,3a0C-;Z*|b">
+            <field name="NUM">10</field>
           </block>
         </value>
-        <statement name="DO">
-          <block type="text_print">
-            <value name="TEXT">
-              <block type="math_arithmetic">
-                <field name="OP">MULTIPLY</field>
+      </block>
+    </statement>
+    <next>
+      <block type="variables_set" id="@W9pk_suca{](t]huQaL">
+        <field name="VAR" id="CWp_8uiznr6L;RD!jspG">count</field>
+        <value name="VALUE">
+          <block type="math_number" id="+JAznpf#N$R^{3Bg/e{_">
+            <field name="NUM">7</field>
+          </block>
+        </value>
+        <next>
+          <block type="controls_if" id="5M-SEd0+R(LypB{3,eGC">
+            <value name="IF0">
+              <block type="logic_compare" id="sPO*mYmKj^G;+-G^,!+4">
+                <field name="OP">GTE</field>
                 <value name="A">
-                  <block type="math_number">
-                    <field name="NUM">2</field>
+                  <block type="variables_get" id="$GXqFzj_~*(la18-no#K">
+                    <field name="VAR" id="CWp_8uiznr6L;RD!jspG">count</field>
                   </block>
                 </value>
                 <value name="B">
-                  <block type="variables_get">
-                    <field name="VAR">count</field>
+                  <block type="math_number" id="nB6d;E[d/6eu(^yV3J%I">
+                    <field name="NUM">5</field>
                   </block>
                 </value>
               </block>
             </value>
-            <next>
-              <block type="variables_set">
-                <field name="VAR">count</field>
-                <value name="VALUE">
-                  <block type="math_arithmetic">
-                    <field name="OP">ADD</field>
-                    <value name="A">
-                      <block type="variables_get">
-                        <field name="VAR">count</field>
-                      </block>
-                    </value>
-                    <value name="B">
-                      <block type="math_number">
-                        <field name="NUM">2</field>
-                      </block>
-                    </value>
+            <statement name="DO0">
+              <block type="text_print" id="|*}nIVmg8VqZWNf_Pi4S">
+                <value name="TEXT">
+                  <block type="variables_get" id="m0\`3T\`Ys-9yl)W3_C;4?">
+                    <field name="VAR" id="CWp_8uiznr6L;RD!jspG">count</field>
                   </block>
                 </value>
               </block>
-            </next>
+            </statement>
           </block>
-        </statement>
+        </next>
       </block>
     </next>
   </block>

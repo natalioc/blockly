@@ -105,62 +105,66 @@ function start() {
   //   enableRealtimeSpecificUi();
   // }
 
-  var qtn = `<xml xmlns="http://www.w3.org/1999/xhtml">
-  <block type="variables_set" x="4" y="4">
-    <field name="VAR">result</field>
+  var qtn = `<xml xmlns="https://developers.google.com/blockly/xml">
+  <variables>
+    <variable id="E;0dpTSuL~SDWday;ROT">result</variable>
+    <variable id="EHaE%7U__QH,\`gATg9ON">x</variable>
+  </variables>
+  <block type="variables_set" id="I,~H+8D64OYeR5boEJ^s" x="4" y="4">
+    <field name="VAR" id="E;0dpTSuL~SDWday;ROT">result</field>
     <value name="VALUE">
-      <block type="math_number">
+      <block type="math_number" id="/9MTBKvC7DP56UHFrFAc">
         <field name="NUM">0</field>
       </block>
     </value>
     <next>
-      <block type="variables_set">
-        <field name="VAR">x</field>
+      <block type="variables_set" id="Y#+])d#n\`Le2l:,]U=4A">
+        <field name="VAR" id="EHaE%7U__QH,\`gATg9ON">x</field>
         <value name="VALUE">
-          <block type="math_number">
-            <field name="NUM">4</field>
+          <block type="math_number" id="g}sx3p8oZF9vRz/t_j5S">
+            <field name="NUM">2</field>
           </block>
         </value>
         <next>
-          <block type="variables_set">
-            <field name="VAR">result</field>
+          <block type="variables_set" id="qk6zNu]DRZ6hx|DjxSW+">
+            <field name="VAR" id="E;0dpTSuL~SDWday;ROT">result</field>
             <value name="VALUE">
-              <block type="math_arithmetic">
-                <field name="OP">POWER</field>
+              <block type="math_arithmetic" id="[b0%oxr-u@(K/YN=ew?j">
+                <field name="OP">MULTIPLY</field>
                 <value name="A">
-                  <block type="variables_get">
-                    <field name="VAR">x</field>
+                  <block type="variables_get" id="tkW\`xA::0Rzl5kQL$0mZ">
+                    <field name="VAR" id="EHaE%7U__QH,\`gATg9ON">x</field>
                   </block>
                 </value>
                 <value name="B">
-                  <block type="math_number">
+                  <block type="math_number" id="Fl#kI/jppZ{vr%N/SC;$">
                     <field name="NUM">2</field>
                   </block>
                 </value>
               </block>
             </value>
             <next>
-              <block type="variables_set">
-                <field name="VAR">result</field>
+              <block type="variables_set" id="EE$Hza[a0/4A[vOSJqLC">
+                <field name="VAR" id="E;0dpTSuL~SDWday;ROT">result</field>
                 <value name="VALUE">
-                  <block type="math_arithmetic">
+                  <block type="math_arithmetic" id="[2K#DTIj6sEb-6WS0Mc.">
                     <field name="OP">ADD</field>
                     <value name="A">
-                      <block type="variables_get">
-                        <field name="VAR">result</field>
+                      <block type="variables_get" id=",Bj^.[rTysx7*:k3WM#5">
+                        <field name="VAR" id="E;0dpTSuL~SDWday;ROT">result</field>
                       </block>
                     </value>
                     <value name="B">
-                      <block type="math_arithmetic">
-                        <field name="OP">MULTIPLY</field>
+                      <block type="math_arithmetic" id="RGYl.vZ$E+daI;mrK}2[">
+                        <field name="OP">MINUS</field>
                         <value name="A">
-                          <block type="variables_get">
-                            <field name="VAR">x</field>
+                          <block type="variables_get" id="M!S1/iTel,eDDbG?;()u">
+                            <field name="VAR" id="EHaE%7U__QH,\`gATg9ON">x</field>
                           </block>
                         </value>
                         <value name="B">
-                          <block type="math_number">
-                            <field name="NUM">7</field>
+                          <block type="math_number" id="8}A15lJ2f-%aLwTO\`~.M">
+                            <field name="NUM">1</field>
                           </block>
                         </value>
                       </block>
