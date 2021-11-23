@@ -105,64 +105,61 @@ function start() {
   //   enableRealtimeSpecificUi();
   // }
 
-  var qtn = `<xml xmlns="https://developers.google.com/blockly/xml">
+  var qtn = `<xml xmlns="http://www.w3.org/1999/xhtml">
   <variables>
-    <variable id="kiD)#xsTRpM~VdbG9rOK">count</variable>
+    <variable type="" id="y5lggZd~^IE6zBO/|jPP">temp</variable>
   </variables>
-  <block type="variables_set" id="_JeI7W:?A+4h38Cn@eD-" x="13" y="13">
-    <field name="VAR" id="kiD)#xsTRpM~VdbG9rOK">count</field>
+  <block type="variables_set" id="!9I=uM$Mg2DqA}orP}a}" x="63" y="87">
+    <field name="VAR" id="y5lggZd~^IE6zBO/|jPP" variabletype="">temp</field>
     <value name="VALUE">
-      <block type="math_number" id="iQ_h^V,yD$Thy11vk1y=">
+      <block type="math_number" id="$0EU8X*$1c_b8^SNu(_?">
         <field name="NUM">4</field>
       </block>
     </value>
     <next>
-      <block type="controls_whileUntil" id="^98A6-}oIjI*f4)-~}Ov">
-        <field name="MODE">UNTIL</field>
-        <value name="BOOL">
-          <block type="logic_compare" id="-M45w;OgbNSn6?q%5h@I">
-            <field name="OP">LTE</field>
+      <block type="controls_if" id="2yeG5kfl5d.O3q2!{zT,">
+        <value name="IF0">
+          <block type="logic_compare" id=",^|9Id*?PhBoDFDwQVl/">
+            <field name="OP">LT</field>
             <value name="A">
-              <block type="variables_get" id="n9AOV$ye]o/5q3lgEjH^">
-                <field name="VAR" id="kiD)#xsTRpM~VdbG9rOK">count</field>
+              <block type="variables_get" id="iY)#q(~U:W~NaqYc~#J)">
+                <field name="VAR" id="y5lggZd~^IE6zBO/|jPP" variabletype="">temp</field>
               </block>
             </value>
             <value name="B">
-              <block type="math_number" id="0|KLgV8xHcr/n1HOC0W-">
-                <field name="NUM">0</field>
+              <block type="math_number" id="T.gKr6|-cW?[rYJ7{|G?">
+                <field name="NUM">10</field>
               </block>
             </value>
           </block>
         </value>
-        <statement name="DO">
-          <block type="variables_set" id="OlTb3+nfx1bb9iD9?G?K">
-            <field name="VAR" id="kiD)#xsTRpM~VdbG9rOK">count</field>
-            <value name="VALUE">
-              <block type="math_arithmetic" id="1Gk7~h@9b)id3#@GHf*;">
-                <field name="OP">MINUS</field>
-                <value name="A">
-                  <block type="variables_get" id="p+D6KLUI{HvQ8a(LBXru">
-                    <field name="VAR" id="kiD)#xsTRpM~VdbG9rOK">count</field>
-                  </block>
-                </value>
-                <value name="B">
-                  <block type="math_number" id="2(9.{}yJ7zn8!|fc5.!W">
-                    <field name="NUM">1</field>
-                  </block>
-                </value>
+        <statement name="DO0">
+          <block type="text_print" id="cWC3U/TKx9EKE0a]M[TA">
+            <value name="TEXT">
+              <block type="variables_get" id="o*n\`Y(3suF_SMS:IMsF]">
+                <field name="VAR" id="y5lggZd~^IE6zBO/|jPP" variabletype="">temp</field>
               </block>
             </value>
-            <next>
-              <block type="text_print" id=":L+9sWcDU_oqFMk|%81p">
+          </block>
+        </statement>
+        <next>
+          <block type="controls_repeat_ext" id="RF=.CYAB},VY/m}@vPWs">
+            <value name="TIMES">
+              <block type="math_number" id="H?Eat7UDC^++}!xIv}|;">
+                <field name="NUM">5</field>
+              </block>
+            </value>
+            <statement name="DO">
+              <block type="text_print" id="@)[HlDLA:D*#ErW7Q@Ds">
                 <value name="TEXT">
-                  <block type="variables_get" id="8Jg-gRWVm8]KON{ON5_,">
-                    <field name="VAR" id="kiD)#xsTRpM~VdbG9rOK">count</field>
+                  <block type="text" id="[*W7,LkT53dDb3fMFKSK">
+                    <field name="TEXT">Hello</field>
                   </block>
                 </value>
               </block>
-            </next>
+            </statement>
           </block>
-        </statement>
+        </next>
       </block>
     </next>
   </block>
@@ -171,7 +168,6 @@ function start() {
   Blockly.Xml.domToWorkspace(workspace, xmlqtn);
 
   toolbox.setAttribute("tabindex",0);
-  document.getElementById('fontDD').focus();
 }
 
 function toXml() {
