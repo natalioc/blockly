@@ -29,6 +29,7 @@ goog.require('Blockly');
 Blockly.Accessibility.Speech.changedResult = undefined;
 Blockly.Accessibility.Speech.changedSelect = true;
 Blockly.Accessibility.Speech.result;
+Blockly.Accessibility.Speech.toggleForRepeat = true;
 Blockly.Accessibility.Speech.repeatStr = "";
 
 
@@ -77,7 +78,6 @@ Blockly.Accessibility.Speech.updateBlockReader = function(type, blockSvg, prefix
 
 	else{
 		defaultStr = this.changedResult;
-        console.log(">>> changedResult")    
 	}    
 
    	//go through the blocks on the workspace and find the matching one based on type and id
@@ -88,14 +88,26 @@ Blockly.Accessibility.Speech.updateBlockReader = function(type, blockSvg, prefix
 	//update the blockReader
     //console.log(">>> type: " + type);
      Blockly.Accessibility.Speech.Say(outputStr);
-     this.repeatStr = outputStr;
+     this.repeatStr = newStr;
 
 };
 
+/**
+* a work around function to re-read currently focused block
+*/
 Blockly.Accessibility.Speech.repeatBlockReader = function(){
+	var repeatPrefix = "You are currently on ";
+
+	if(this.toggleForRepeat){
+		repeatPrefix = "You're currently on ";
+		this.toggleForRepeat = false;
+	}
+	else{
+		this.toggleForRepeat = true;
+	}
     
-    Blockly.Accessibility.Speech.Say(this.repeatStr);
-    Blockly.Accessibility.Speech.Say(" replayed");
+    Blockly.Accessibility.Speech.Say( repeatPrefix + this.repeatStr + " block");
+    //Blockly.Accessibility.Speech.Say(" replayed");
 }
 
 
