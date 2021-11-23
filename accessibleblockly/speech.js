@@ -60,8 +60,10 @@ Blockly.Accessibility.Speech.Say = function(string){
 * get selected block type and call function that updates the blockreader
 *	@param_block.....the block being read
 * 	@param_blockSvg..the svg of the block being read 
+*	@prefixText.. any text to be read before block being read
+*	@suffixText.. any text to be read after the block being read
 */
-Blockly.Accessibility.Speech.updateBlockReader = function(type, blockSvg){
+Blockly.Accessibility.Speech.updateBlockReader = function(type, blockSvg, prefixText="", suffixText=""){
 	// get default string for the block based on type
 	var newStr;
 	var defaultStr;
@@ -80,11 +82,13 @@ Blockly.Accessibility.Speech.updateBlockReader = function(type, blockSvg){
 
    	//go through the blocks on the workspace and find the matching one based on type and id
 	newStr = this.changeString(blockSvg);
+
+	var outputStr = prefixText + " " + newStr + " " + suffixText;
     
 	//update the blockReader
     //console.log(">>> type: " + type);
-     Blockly.Accessibility.Speech.Say(newStr);
-     this.repeatStr = newStr;
+     Blockly.Accessibility.Speech.Say(outputStr);
+     this.repeatStr = outputStr;
 
 };
 

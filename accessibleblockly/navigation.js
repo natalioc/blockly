@@ -286,6 +286,27 @@ Blockly.Accessibility.Navigation.jumpToID = function(id) {
     console.log('Block with id ' + id + ' not found.');
 };
 
+/**
+*Jump to the first or top block on workspace
+*/
+Blockly.Accessibility.Navigation.jumpToTopBlock = function(){
+    var topBlocks = Blockly.Accessibility.MenuNav.containersArr;
+    // Blockly.Accessibility.MenuNav.containersArr is populated only 
+    // when blocks are added to workspace using the keyboard
+            
+
+    if(topBlocks.length <= 0){//handle case when blocks at added using mouse or preloaded from file
+        topBlocks = Blockly.mainWorkspace.getTopBlocks(false);
+
+    }
+    topBlocks[0].select();
+    console.log(">> before back to top");
+    //Blockly.Accessibility.Speech.Say("Back to top block");
+    var prefixText = "Back to top block"
+    Blockly.Accessibility.Speech.updateBlockReader(Blockly.selected.type, Blockly.selected, prefixText);
+
+};
+
 //#endregion
 
 //#region TRAVERSAL_FUNCTIONS
