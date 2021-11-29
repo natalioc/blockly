@@ -111,14 +111,20 @@ Blockly.Accessibility.InBlock.enterCurrentBlock = function () {
  * Selects the next value or field within the current block
  */
 Blockly.Accessibility.InBlock.selectNext = function () {
+    var isAtEnd = false;
     this.unhighlightSelection();
 
     this.connectionsIndex++;
     if (this.connectionsIndex >= this.selectionList.length) {
         this.connectionsIndex = this.selectionList.length -1; // remain at the end no circularity
+        Blockly.Accessibility.Speech.Say("no more connection points from here");
+        isAtEnd = true;
     }
     
-    Blockly.Accessibility.Speech.readConnection(this.selectionList[this.connectionsIndex].name, this.connectionsIndex);
+    if(!isAtEnd){
+        Blockly.Accessibility.Speech.readConnection(this.selectionList[this.connectionsIndex].name, this.connectionsIndex);
+    }
+
 
     this.highlightSelection();
 
@@ -128,17 +134,19 @@ Blockly.Accessibility.InBlock.selectNext = function () {
  * Selects the previous value or field within the current block
  */
 Blockly.Accessibility.InBlock.selectPrev = function () {
-
+    var isAtHead = false;
     this.unhighlightSelection();
 
     this.connectionsIndex--;
     if (this.connectionsIndex < 0) {
         this.connectionsIndex = 0; //remain on start
+        isAtHead = true;
+        Blockly.Accessibility.Speech.Say("no more connection points from here");
     }
 
-
-    Blockly.Accessibility.Speech.readConnection(this.selectionList[this.connectionsIndex].name, this.connectionsIndex);
-
+    if(!isAtHead){
+        Blockly.Accessibility.Speech.readConnection(this.selectionList[this.connectionsIndex].name, this.connectionsIndex);
+    }
     this.highlightSelection();
 
 };

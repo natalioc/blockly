@@ -17,6 +17,29 @@ Blockly.Accessibility.CursorNavigation.blockInputList = [];
 
 
 
+
+/**
+*Jump to the first or top block on workspace
+*/
+Blockly.Accessibility.CursorNavigation.jumpToTopBlock = function(){
+    var topBlocks = Blockly.Accessibility.MenuNav.containersArr;
+    // Blockly.Accessibility.MenuNav.containersArr is populated only 
+    // when blocks are added to workspace using the keyboard
+
+
+    if(topBlocks.length <= 0){//handle case when blocks at added using mouse or preloaded from file
+        topBlocks = Blockly.mainWorkspace.getTopBlocks(false);
+
+    }
+    topBlocks[0].select();
+    console.log(">> before back to top");
+    //Blockly.Accessibility.Speech.Say("Back to top block");
+    var prefixText = "Back to top block"
+    Blockly.Accessibility.Speech.updateBlockReader(Blockly.selected.type, Blockly.selected, prefixText);
+
+};
+
+
 /**
  * For traversing down from previou-connection to block to next-connection etc
  * For traverses to down/to the left through the input connections of a block.
@@ -93,6 +116,9 @@ Blockly.Accessibility.CursorNavigation.goDown =  function(){
 		Blockly.Accessibility.InBlock.selectNext();
 		this.currentSelection = this.returnCurrentlySelectedInput();
 	}
+	else if(this.currentLocation == 3 && this.currentSelection != null && this.currentSelection.targetConnection == null){
+		Blockly.Accessibility.Speech.Say("Cannot move further down from here");
+	}
 	
 	console.log('>>>:: go down');
 	
@@ -111,7 +137,8 @@ Blockly.Accessibility.CursorNavigation.goUp = function(){
 		console.log('>>>: connection type: '+ this.currentSelection.type);
 		this.currentSelection = this.currentSelection.sourceBlock_;
 		this.goToBlock();
-	}else if(this.currentLocation === 2 && Blockly.selected && this.currentSelection.previousConnection != null &&
+	}
+	else if(this.currentLocation === 2 && Blockly.selected && this.currentSelection.previousConnection != null &&
 		this.currentSelection.previousConnection.targetConnection != null && Blockly.selected.outputConnection == null){
 			
 		//check whether currentLocation is not a first child block if it is not, go the nextConnection of previous block
@@ -181,6 +208,9 @@ Blockly.Accessibility.CursorNavigation.goUp = function(){
 		this.currentSelection = this.returnCurrentlySelectedInput();
 		//cycle through inputs 
 		
+	}
+	else if(this.currentLocation == 1 && this.currentSelection != null && this.currentSelection.targetConnection == null){
+		Blockly.Accessibility.Speech.Say("Cannot move further up from here");
 	}
 	
 	console.log('>>>:: goUp');
@@ -298,13 +328,14 @@ Blockly.Accessibility.CursorNavigation.goLeft = function(){
 				// this is a temporary solution because in Abby's work, the cursor is actually taken to a point on the workspace
 				// above the previous connection of the first block
 				
-			this.currentLocation = 1;
-			this.currentSelection = Blockly.selected.getRootBlock().previousConnection;
+			// this.currentLocation = 1;
+			// this.currentSelection = Blockly.selected.getRootBlock().previousConnection;
 			
-			this.currentHighlight = this.currentSelection.returnHighlight();
+			// this.currentHighlight = this.currentSelection.returnHighlight();
 			
-			Blockly.selected.unselect();
-			Blockly.selected = this.currentSelection.sourceBlock_;
+			// Blockly.selected.unselect();
+			// Blockly.selected = this.currentSelection.sourceBlock_;
+			Blockly.Accessibility.Speech.Say("Cannot move further out from here");
 			
 		}
 		

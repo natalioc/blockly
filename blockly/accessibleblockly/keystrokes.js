@@ -380,17 +380,7 @@ document.onkeydown = document.onkeyup = function(e){
 			// 	topBlocks[0].select();
 			// }
 			console.log(">>>: J key pressed")
-			var topBlocks = Blockly.Accessibility.MenuNav.containersArr;
-            // Blockly.Accessibility.MenuNav.containersArr is populated only 
-            // when blocks at added to workspace using the keyboard
-
-
-			if(topBlocks.length <= 0){//handle case when blocks at added using mouse or preloaded from file
-				topBlocks = Blockly.mainWorkspace.getTopBlocks(false);
-
-			}
-			topBlocks[0].select();
-			Blockly.Accessibility.Speech.updateBlockReader(Blockly.selected.type, Blockly.selected);
+			Blockly.Accessibility.CursorNavigation.jumpToTopBlock();
 
 		}
 
@@ -402,8 +392,9 @@ document.onkeydown = document.onkeyup = function(e){
 		else if(map[82]){ //R
 			//Jumps to the top of the currently selected container
 			//Blockly.Accessibility.Navigation.jumpToTopOfSection();
-			Blockly.Accessibility.Prefixes.formatTreeView();
-			Blockly.Accessibility.Prefixes.infoBoxFill(Blockly.selected);
+			//Blockly.Accessibility.Prefixes.formatTreeView();
+			//Blockly.Accessibility.Prefixes.infoBoxFill(Blockly.selected);
+			Blockly.Accessibility.Speech.repeatBlockReader();
 		}
 
 		else if(map[83]){ //S

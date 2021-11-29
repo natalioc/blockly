@@ -29,6 +29,7 @@ goog.require('Blockly');
 Blockly.Accessibility.Speech.changedResult = undefined;
 Blockly.Accessibility.Speech.changedSelect = true;
 Blockly.Accessibility.Speech.result;
+Blockly.Accessibility.Speech.toggleForRepeat = true;
 Blockly.Accessibility.Speech.repeatStr = "";
 
 
@@ -60,8 +61,10 @@ Blockly.Accessibility.Speech.Say = function(string){
 * get selected block type and call function that updates the blockreader
 *   @param_block.....the block being read
 *   @param_blockSvg..the svg of the block being read 
+*   @prefixText.. any text to be read before block being read
+*   @suffixText.. any text to be read after the block being read
 */
-Blockly.Accessibility.Speech.updateBlockReader = function(type, blockSvg){
+Blockly.Accessibility.Speech.updateBlockReader = function(type, blockSvg, prefixText="", suffixText=""){
     // get default string for the block based on type
     var newStr;
     var defaultStr;
@@ -75,23 +78,36 @@ Blockly.Accessibility.Speech.updateBlockReader = function(type, blockSvg){
 
     else{
         defaultStr = this.changedResult;
-        console.log(">>> changedResult")    
     }    
 
     //go through the blocks on the workspace and find the matching one based on type and id
     newStr = this.changeString(blockSvg);
+
+    var outputStr = prefixText + " " + newStr + " " + suffixText;
     
     //update the blockReader
     //console.log(">>> type: " + type);
-     Blockly.Accessibility.Speech.Say(newStr);
+     Blockly.Accessibility.Speech.Say(outputStr);
      this.repeatStr = newStr;
 
 };
 
+/**
+* a work around function to re-read currently focused block
+*/
 Blockly.Accessibility.Speech.repeatBlockReader = function(){
-    
-    Blockly.Accessibility.Speech.Say(this.repeatStr);
-    Blockly.Accessibility.Speech.Say(" replayed");
+    var repeatPrefix = "You are currently on ";
+
+    if(this.toggleForRepeat){
+        repeatPrefix = "You're currently on ";
+        this.toggleForRepeat = false;
+    }
+    else{
+        this.toggleForRepeat = true;
+    }
+
+    Blockly.Accessibility.Speech.Say( repeatPrefix + this.repeatStr + " block");
+    //Blockly.Accessibility.Speech.Say(" replayed");
 }
 
 
@@ -164,10 +180,11 @@ Blockly.Accessibility.Speech.readConnection = function(name, index){
         name = "A,";
     }
 
-    say = name + " connection."
+    say = name + " connection"
 
 
     Blockly.Accessibility.Speech.Say(say);
+    this.repeatStr = say + " of" ;
 };
 
 
