@@ -374,53 +374,60 @@ Blockly.Accessibility.Navigation.traverseIn = function() {
     }
 
     //check if block has children
-    if(Blockly.selected.childBlocks_ != null && Blockly.selected.childBlocks_.length > 0){
-        Blockly.selected.getFirstStatementConnection().targetBlock().select();
-        Blockly.Accessibility.Speech.updateBlockReader(Blockly.selected.type, Blockly.selected);
+    try{
+        if(Blockly.selected.childBlocks_ != null && Blockly.selected.childBlocks_.length > 0){
+            Blockly.selected.getFirstStatementConnection().targetBlock().select();
+            Blockly.Accessibility.Speech.updateBlockReader(Blockly.selected.type, Blockly.selected);
 
-      // for (var i = 0; i < Blockly.selected.childBlocks_.length; i++) {  
+          // for (var i = 0; i < Blockly.selected.childBlocks_.length; i++) {  
 
-      //   //select next child
-      //   //TODO: clean up this if statement if possible
-      //   if(Blockly.selected.childBlocks_[i].previousConnection != null && Blockly.selected.childBlocks_[i].previousConnection.type == 4){
-      //       console.log(">>> Type 4")
-      //       Blockly.selected.childBlocks_[i].select();
-      //       Blockly.Accessibility.Speech.updateBlockReader(Blockly.selected.type, Blockly.selected);
-      //       return;
-      //   }
-      //   //select next child of PARENT ( [1] + 2 ) ->  (1 + [2])
-      //   else if(Blockly.selected.parentBlock_){
-      //       var parentBlock = Blockly.selected.parentBlock_;
-      //       var prevConnection;
+          //   //select next child
+          //   //TODO: clean up this if statement if possible
+          //   if(Blockly.selected.childBlocks_[i].previousConnection != null && Blockly.selected.childBlocks_[i].previousConnection.type == 4){
+          //       console.log(">>> Type 4")
+          //       Blockly.selected.childBlocks_[i].select();
+          //       Blockly.Accessibility.Speech.updateBlockReader(Blockly.selected.type, Blockly.selected);
+          //       return;
+          //   }
+          //   //select next child of PARENT ( [1] + 2 ) ->  (1 + [2])
+          //   else if(Blockly.selected.parentBlock_){
+          //       var parentBlock = Blockly.selected.parentBlock_;
+          //       var prevConnection;
 
-      //       if (!parentBlock){
-      //           return;
-      //       }
+          //       if (!parentBlock){
+          //           return;
+          //       }
 
-      //       for (var j = 0; j < parentBlock.childBlocks_.length; j++){
+          //       for (var j = 0; j < parentBlock.childBlocks_.length; j++){
 
-      //           //make sure its not the same block
-      //           if(Blockly.selected != parentBlock.childBlocks_[j] ){
-      //               parentBlock.childBlocks_[j].select();
-      //               Blockly.Accessibility.Speech.updateBlockReader(Blockly.selected.type, Blockly.selected);
-      //           }
+          //           //make sure its not the same block
+          //           if(Blockly.selected != parentBlock.childBlocks_[j] ){
+          //               parentBlock.childBlocks_[j].select();
+          //               Blockly.Accessibility.Speech.updateBlockReader(Blockly.selected.type, Blockly.selected);
+          //           }
 
-      //       }
-      //   }
-      // }
-    }
-    //select next child of parent
-    else{
-        var parentBlock = Blockly.selected.parentBlock_;
-
-        for (var i = 0; i < parentBlock.childBlocks_.length; i++){
-            
-            if(Blockly.selected != parentBlock.childBlocks_[i]){
-                parentBlock.childBlocks_[i].select();
-                Blockly.Accessibility.Speech.updateBlockReader(Blockly.selected.type, Blockly.selected);
-            }
-
+          //       }
+          //   }
+          // }
         }
+        //select next child of parent
+        else{
+            //>>> commenting out the below code for now as it doesn't reflect expected nav model
+            console.log("else part")
+            // var parentBlock = Blockly.selected.parentBlock_;
+
+            // for (var i = 0; i < parentBlock.childBlocks_.length; i++){
+                
+            //     if(Blockly.selected != parentBlock.childBlocks_[i]){
+            //         parentBlock.childBlocks_[i].select();
+            //         Blockly.Accessibility.Speech.updateBlockReader(Blockly.selected.type, Blockly.selected);
+            //     }
+
+            // }
+            Blockly.Accessibility.Speech.Say('Cannot move inwards not a container block.');
+        }
+    }catch(e){
+        Blockly.Accessibility.Speech.Say('Cannot move inwards not a container block.');
     }
 
 };
@@ -439,32 +446,51 @@ Blockly.Accessibility.Navigation.traverseUp = function() {
 
     if (Blockly.selected.previousConnection != null &&
         Blockly.selected.previousConnection.targetConnection != null) {
-        Blockly.selected.previousConnection.targetConnection.sourceBlock_.select();
-        Blockly.Accessibility.Speech.updateBlockReader(Blockly.selected.type, Blockly.selected);
+        var firstStatementCon = Blockly.selected.previousConnection.targetConnection.sourceBlock_.getFirstStatementConnection();
+        if(firstStatementCon == null){
+            Blockly.selected.previousConnection.targetConnection.sourceBlock_.select();
+            Blockly.Accessibility.Speech.updateBlockReader(Blockly.selected.type, Blockly.selected);
+        }
+        else{
+            var firstChild = firstStatementCon.targetBlock();
+            if(firstChild != Blockly.selected){
+                Blockly.selected.previousConnection.targetConnection.sourceBlock_.select();
+                Blockly.Accessibility.Speech.updateBlockReader(Blockly.selected.type, Blockly.selected);
+            }
+            else{
+                Blockly.Accessibility.Speech.Say('Cannot move further up from here');
+            }
+        }
     }
     else {
         //Blockly.Accessibility.Speech.Say('Cannot move further up from here');
+        console.log(">>> else part up")
+        try{
 
-        if (this.currentNode == this.getOutermostNode(this.currentNode)) {
+            if (this.currentNode == this.getOutermostNode(this.currentNode)) {
 
-            var containers = Blockly.Accessibility.MenuNav.containersArr;
+                var containers = Blockly.Accessibility.MenuNav.containersArr;
 
-            for(var i = 0; i < containers.length; i++){
+                for(var i = 0; i < containers.length; i++){
 
-                if(containers[i] == Blockly.selected){
+                    if(containers[i] == Blockly.selected){
 
-                    if(containers[i-1]){
-                       var count = i-1;
-                       containers[count].select();
-                       Blockly.Accessibility.Speech.updateBlockReader(Blockly.selected.type, Blockly.selected);
+                        if(containers[i-1]){
+                           var count = i-1;
+                           containers[count].select();
+                           Blockly.Accessibility.Speech.updateBlockReader(Blockly.selected.type, Blockly.selected);
 
-                       return;
+                           return;
+                        }
                     }
                 }
-            }
-            containers[containers.length-1].select();
-            Blockly.Accessibility.Speech.updateBlockReader(Blockly.selected.type, Blockly.selected);
+                containers[containers.length-1].select();
+                Blockly.Accessibility.Speech.updateBlockReader(Blockly.selected.type, Blockly.selected);
 
+            }
+        }
+        catch(e){
+            Blockly.Accessibility.Speech.Say('Cannot move further up from here');
         }
     }
 
@@ -488,33 +514,39 @@ Blockly.Accessibility.Navigation.traverseDown = function() {
         Blockly.Accessibility.Speech.updateBlockReader(Blockly.selected.type, Blockly.selected);
     }
     else {
+        try{
         // if not connecting youve hit the bottom
-        if(!Blockly.Accessibility.InBlock.storedConnection){
-            //Blockly.Accessibility.Speech.Say('Cannot move further down from here.');
-        }
-        
-        // Check to make sure we're on the first layer before doing anything.
-        //if (this.currentNode == this.findBottom(this.getOutermostNode(this.currentNode))) {
-        if (this.currentNode == this.getOutermostNode(this.currentNode)) {
-
-            var containers = Blockly.Accessibility.MenuNav.containersArr;
-
-            for(var i = 0; i < containers.length; i++){
-
-                if(containers[i] == Blockly.selected){
-
-                    if(containers[i+1]){
-                       var count = i+1;
-                       containers[count].select();
-                       Blockly.Accessibility.Speech.updateBlockReader(Blockly.selected.type, Blockly.selected);
-
-                       return;
-                    }  
-                }
+            if(!Blockly.Accessibility.InBlock.storedConnection){
+                //Blockly.Accessibility.Speech.Say('Cannot move further down from here.');
             }
-            containers[0].select();
-            Blockly.Accessibility.Speech.updateBlockReader(Blockly.selected.type, Blockly.selected);
+            
+            // Check to make sure we're on the first layer before doing anything.
+            //if (this.currentNode == this.findBottom(this.getOutermostNode(this.currentNode))) {
+            if (this.currentNode == this.getOutermostNode(this.currentNode)) {
 
+                var containers = Blockly.Accessibility.MenuNav.containersArr;
+
+                for(var i = 0; i < containers.length; i++){
+
+                    if(containers[i] == Blockly.selected){
+
+                        if(containers[i+1]){
+                           var count = i+1;
+                           containers[count].select();
+                           Blockly.Accessibility.Speech.updateBlockReader(Blockly.selected.type, Blockly.selected);
+
+                           return;
+                        }  
+                    }
+                }
+                console.log(">>> in else section ")
+                containers[0].select();
+                Blockly.Accessibility.Speech.updateBlockReader(Blockly.selected.type, Blockly.selected);
+
+            }
+        }
+        catch(e){
+            Blockly.Accessibility.Speech.Say('Cannot move further down from here.');
         }
     }
 };
