@@ -351,11 +351,11 @@ document.onkeydown = document.onkeyup = function(e){
 			//Edit block of code or edit comment
 			console.log('E key pressed');
 			console.log('Edit mode activated!');
-			/** commenting for nav study. uncomment after study is complete
+			
 			if (Blockly.Accessibility.InBlock.enterCurrentBlock()) { // Returns false if nothing is selected
 			    keyboardState = 'editMode';
 			    Blockly.Accessibility.Speech.Say("Edit Mode entered now");
-			}**/
+			}
 		}
 
 		else if (map[70]) { //F traverse inline blocks

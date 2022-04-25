@@ -69,6 +69,8 @@ Blockly.Accessibility.Speech.updateBlockReader = function(type, blockSvg, prefix
 	var newStr;
 	var defaultStr;
 
+	console.log(">>updatereader: " + blockSvg.getFirstStatementConnection());
+
 	//only update the screen reader if something has changed
 	if(!this.changedResult){
 		defaultStr  = Blockly.Accessibility.Speech.blockToString(type); 
@@ -84,6 +86,10 @@ Blockly.Accessibility.Speech.updateBlockReader = function(type, blockSvg, prefix
 	newStr = this.changeString(blockSvg);
 
 	var outputStr = prefixText + " " + newStr + " " + suffixText;
+
+	if(blockSvg.getFirstStatementConnection() != null){
+		outputStr = "container block " + outputStr;
+	}
     
 	//update the blockReader
     //console.log(">>> type: " + type);
@@ -260,6 +266,7 @@ Blockly.Accessibility.Speech.changeString = function(blockSvg) {
         }
     }
   text = goog.string.trim(text.join(' ')) || alphabet[count];
+  console.log(">>>: string: " + text);
   return text;
 };
 
