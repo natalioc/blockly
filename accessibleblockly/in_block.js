@@ -622,9 +622,10 @@ Blockly.Accessibility.InBlock.hideDropDown = function(){
     	  console.log("Unselected!");
     	   this.clearHighlights();
     	  this.selectionList[this.connectionsIndex].sourceBlock_.select();
+          //Blockly.Accessibility.Speech.Say("Block added to workspace");
      }
      catch(e){
-
+        //Blockly.Accessibility.Speech.Say("Failure adding block to workspace");
      }
 }
 

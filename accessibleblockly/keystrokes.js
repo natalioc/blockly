@@ -276,10 +276,17 @@ document.onkeydown = document.onkeyup = function(e){
 			Blockly.Accessibility.Navigation.inlineBlockTraverseOut();
 		}
 
+		else if(map[16] && map[73]){//shift I
+			console.log('shift I keys pressed');
+			Blockly.Accessibility.Navigation.inlineBlockTraverseValueInputBlocksRightLeft();
+			
+		}
+
 		else if(map[13]){
 			console.log('hotkeyMode Enter key pressed');
 			Blockly.Accessibility.InBlock.hideDropDown();
 			console.log(">>> " + Blockly.selected.childBlocks_);
+			Blockly.Accessibility.Speech.Say("Block added to workspace");
 		}
 
 		else if(map[8]){
@@ -428,6 +435,10 @@ document.onkeydown = document.onkeyup = function(e){
 			}
 			console.log(">>>W " + Blockly.selected.childBlocks_);
 
+		}
+		else if(map[73]){ //I
+			console.log("hotkeyMode I key pressed");
+			Blockly.Accessibility.Navigation.inlineBlockTraverseValueInputBlocksRight();
 		}
 
 		//============Jumping to specific category using number keys===============

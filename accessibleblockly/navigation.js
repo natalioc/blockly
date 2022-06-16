@@ -63,6 +63,13 @@ Blockly.Accessibility.Navigation.statementChildren = [];
 //Count for traversing inline blocks
 Blockly.Accessibility.Navigation.inlineCount = 0;
 
+// input list of currently selected block
+Blockly.Accessibility.Navigation.blockInputList = null;
+
+// count for traversing value input block
+
+Blockly.Accessibility.Navigation.valueInputBlockCount = 0;
+
 // Default functions for our hooks.
 Blockly.BlockSvg.prototype.defaultSelect = Blockly.BlockSvg.prototype.select;
 Blockly.BlockSvg.prototype.defaultUnselect = Blockly.BlockSvg.prototype.unselect
@@ -80,6 +87,7 @@ Blockly.BlockSvg.prototype.select = function () {
         Blockly.Accessibility.Navigation.currentNode = Blockly.Accessibility.Navigation.getBlockNodeById(this.id);
     }
     
+    Blockly.Accessibility.Navigation.blockInputList = Blockly.selected.inputList;
     //if(prevSelect != Blockly.selected){
        // Blockly.Accessibility.Speech.updateBlockReader(this.type, this);
        // Blockly.Accessibility.Speech.changedResult = undefined;
@@ -97,6 +105,7 @@ Blockly.BlockSvg.prototype.unselect = function () {
 
     Blockly.Accessibility.Navigation.currentNode = null;
     Blockly.Accessibility.Speech.changedSelect = true;
+     Blockly.Accessibility.Navigation.blockInputList = null;
     // Handle if you're leaving edit mode.
 
     if (keyboardState == 'editMode') {
@@ -327,6 +336,7 @@ Blockly.Accessibility.Navigation.traverseOut = function () {
     var surroundParent = Blockly.selected.getSurroundParent();
     var selectedIndex = childBlocks.indexOf(Blockly.selected);
     console.log(surroundParent);
+    /** commenting out this logic as it does not provide the intended functionality
     //select the previous block at the same level if there is one
     if(childBlocks.length > 1 && !Blockly.selected.previousConnection){
 
@@ -335,12 +345,14 @@ Blockly.Accessibility.Navigation.traverseOut = function () {
             if(Blockly.selected != childBlocks[i]){
                 childBlocks[i].select();
                 Blockly.Accessibility.Speech.updateBlockReader(Blockly.selected.type, Blockly.selected);
+                console.log(">>> child block selected")
                 return;
             }
 
             else{
                 surroundParent.select(); 
                 Blockly.Accessibility.Speech.updateBlockReader(Blockly.selected.type, Blockly.selected); 
+                console.log(">>> surroundP select 1");
                 return;
             }
         }     
@@ -350,11 +362,26 @@ Blockly.Accessibility.Navigation.traverseOut = function () {
     else if (surroundParent){
         surroundParent.select();
          Blockly.Accessibility.Speech.updateBlockReader(Blockly.selected.type, Blockly.selected);
+         console.log("surround P select 2");
     }
     //inform the user they've reached the end
     else{
         Blockly.Accessibility.Speech.Say('Cannot move further outwards from here');
     }
+    */
+
+    //new logic
+    //select the surrounding block
+    if (surroundParent){
+        surroundParent.select();
+         Blockly.Accessibility.Speech.updateBlockReader(Blockly.selected.type, Blockly.selected);
+         console.log("surround P select 2");
+    }
+    //inform the user they've reached the end
+    else{
+        Blockly.Accessibility.Speech.Say('Cannot move further outwards from here');
+    }
+
 
    
 };
@@ -471,8 +498,10 @@ Blockly.Accessibility.Navigation.traverseUp = function() {
         }
     }
     else {
-        //Blockly.Accessibility.Speech.Say('Cannot move further up from here');
+        Blockly.Accessibility.Speech.Say('Cannot move further up from here');
         console.log(">>> else part up")
+        /**
+        Commenting out below code because it doesn't seem to provide the intended functionality
         try{
 
             if (this.currentNode == this.getOutermostNode(this.currentNode)) {
@@ -500,6 +529,7 @@ Blockly.Accessibility.Navigation.traverseUp = function() {
         catch(e){
             Blockly.Accessibility.Speech.Say('Cannot move further up from here');
         }
+        */
     }
 
 };
@@ -520,8 +550,13 @@ Blockly.Accessibility.Navigation.traverseDown = function() {
         Blockly.selected.nextConnection.targetConnection != null) {
         Blockly.selected.nextConnection.targetConnection.sourceBlock_.select();
         Blockly.Accessibility.Speech.updateBlockReader(Blockly.selected.type, Blockly.selected);
+        console.log(">>> down next conn")
     }
     else {
+
+
+        /**
+        commenting out this code. Does not provide the intented functionality. Please do not remove code
         try{
         // if not connecting youve hit the bottom
             if(!Blockly.Accessibility.InBlock.storedConnection){
@@ -542,7 +577,7 @@ Blockly.Accessibility.Navigation.traverseDown = function() {
                            var count = i+1;
                            containers[count].select();
                            Blockly.Accessibility.Speech.updateBlockReader(Blockly.selected.type, Blockly.selected);
-
+                           console.log(">>> loop select");
                            return;
                         }  
                     }
@@ -556,6 +591,9 @@ Blockly.Accessibility.Navigation.traverseDown = function() {
         catch(e){
             Blockly.Accessibility.Speech.Say('Cannot move further down from here.');
         }
+        */
+
+        Blockly.Accessibility.Speech.Say('Cannot move further down from here.');
     }
 };
 
@@ -566,23 +604,29 @@ Blockly.Accessibility.Navigation.inlineBlockTraverseIn = function(){
 
     var inputList = Blockly.selected.inputList;
     var sourceBlock;
-
+    console.log(">>> initialized input list legnt " + Blockly.Accessibility.Navigation.blockInputList.length);
+    console.log(">>> initial block type: " + Blockly.selected.type);
     for(var i = 0; i < inputList.length; i ++){
-
+        console.log(">>> input list length " + inputList.length);
         try{
-            if(inputList[i].connection.targetConnection!=null){
+            //add restric to inline input only (type 1)
+            if(inputList[i].connection.targetConnection!=null && inputList[i].type == 1){
 
                  sourceBlock = inputList[i].connection.targetConnection.sourceBlock_;
-
+                 console.log(">>>input type: " + inputList[i].type + "");
                  if(sourceBlock != Blockly.selected){
                     sourceBlock.select();
                     console.log(">>>: inside Nav.inlineBlockTraverseIn Block selected")
                     Blockly.Accessibility.Speech.updateBlockReader(Blockly.selected.type, Blockly.selected);
+
+                    Blockly.Accessibility.Navigation.valueInputBlockCount = 1
                     break;
                  }
             }
             else{
-                inputList = Blockly.selected.parentBlock_.inputList
+                console.log("in else of input check")
+                inputList = Blockly.selected.parentBlock_.inputList;
+                 Blockly.Accessibility.Speech.Say("Cannot move further inwards");
             }
         }
         catch(e){
@@ -590,6 +634,176 @@ Blockly.Accessibility.Navigation.inlineBlockTraverseIn = function(){
         }
     }
 	
+};
+
+/**
+* Traverse Right through the internal input blocks of a block such as [ (1) = (2)] or repeat (N) times
+*/
+Blockly.Accessibility.Navigation.inlineBlockTraverseValueInputBlocksRight = function(){
+
+    console.log(">>> funciton of I called");
+
+    var parent = Blockly.selected.getParent();
+    var parentInput;
+    var parentInputList;
+    var valueInputCount = 0;
+    var sourceBlock;
+    var i;
+    if(parent !=null){
+        //check type of parent connection
+        console.log(">>> I parent not null")
+        parentInput = parent.getInputWithBlock(Blockly.selected);
+
+        if(parentInput != null && parentInput.type == 1){
+            console.log(">>> found parent of value input");
+            parentInputList = parent.inputList;
+
+            //count available value inputs
+            for(i = 0; i < parentInputList.length; i++){
+                if(parentInputList[i].type == 1){
+                    valueInputCount++;
+                }
+            }
+
+            console.log("parent value input length: " + valueInputCount);
+            if(valueInputCount > 1){
+                console.log(">>> parent has other inputs");
+
+                //identify location of current input
+                var loc = 0;
+                for (loc = 0; loc < parentInputList.length; loc++){
+                    if(parentInputList[loc].connection.targetConnection!=null){
+                        console.log("type in loc: " + parentInputList[loc].type);
+                         sourceBlock = parentInputList[loc].connection.targetConnection.sourceBlock_;
+                         if(sourceBlock == Blockly.selected){
+                            break;
+                         }
+                    }
+
+                }
+                for(i = loc + 1; i < parentInputList.length; i++){
+                    try{
+                        //add restric to inline input only (type 1)
+                        if(parentInputList[i].connection.targetConnection!=null && parentInputList[i].type == 1){
+
+                             sourceBlock = parentInputList[i].connection.targetConnection.sourceBlock_;
+                             if(sourceBlock != Blockly.selected){
+                                sourceBlock.select();
+                                console.log(">>>: inside Nav.inlineBlockTraverseValueInputBlocks Block selected")
+                                Blockly.Accessibility.Speech.updateBlockReader(Blockly.selected.type, Blockly.selected);
+                                break;
+                             }
+                        }
+                        else{
+                            console.log("in else of input check")
+                             Blockly.Accessibility.Speech.Say("No more sibling input block to the right");
+                        }
+                    }
+                    catch(e){
+                        Blockly.Accessibility.Speech.Say("No more sibling input block to the right");
+                    }
+                }
+                if( i >= parentInputList.length){
+                    Blockly.Accessibility.Speech.Say("No more sibling input block to the right");
+                }
+            }
+            else{
+                console.log(">>> only 1 input on parent block");
+                Blockly.Accessibility.Speech.Say("No more sibling input block to the right");
+            }
+        }
+        else{
+            console.log(">>> not working as expected");
+            Blockly.Accessibility.Speech.Say("Not a value block");
+        }
+    }
+    
+    
+};
+
+/**
+* Traverse Left through the internal input blocks of a block such as [ (1) = (2)] or repeat (N) times
+*/
+Blockly.Accessibility.Navigation.inlineBlockTraverseValueInputBlocksRightLeft = function(){
+
+    console.log(">>> funciton of I called");
+
+    var parent = Blockly.selected.getParent();
+    var parentInput;
+    var parentInputList;
+    var valueInputCount = 0;
+    var sourceBlock;
+    var i;
+    if(parent !=null){
+        //check type of parent connection
+        console.log(">>> I parent not null")
+        parentInput = parent.getInputWithBlock(Blockly.selected);
+
+        if(parentInput != null && parentInput.type == 1){
+            console.log(">>> found parent of value input");
+            parentInputList = parent.inputList;
+
+            //count available value inputs
+            for(i = 0; i < parentInputList.length; i++){
+                if(parentInputList[i].type == 1){
+                    valueInputCount++;
+                }
+            }
+
+            console.log("parent value input length: " + valueInputCount);
+            if(valueInputCount > 1){
+                console.log(">>> parent has other inputs");
+
+                //identify location of current input
+                var loc = 0;
+                for (loc = 0; loc < parentInputList.length; loc++){
+                    if(parentInputList[loc].connection.targetConnection!=null){
+                        console.log("type in loc: " + parentInputList[loc].type);
+                         sourceBlock = parentInputList[loc].connection.targetConnection.sourceBlock_;
+                         if(sourceBlock == Blockly.selected){
+                            break;
+                         }
+                    }
+
+                }
+                for(i = loc -1 ; i >= 0; i--){
+                    try{
+                        //add restric to inline input only (type 1)
+                        if(parentInputList[i].connection.targetConnection!=null && parentInputList[i].type == 1){
+
+                             sourceBlock = parentInputList[i].connection.targetConnection.sourceBlock_;
+                             if(sourceBlock != Blockly.selected){
+                                sourceBlock.select();
+                                console.log(">>>: inside Nav.inlineBlockTraverseValueInputBlocks Block selected")
+                                Blockly.Accessibility.Speech.updateBlockReader(Blockly.selected.type, Blockly.selected);
+                                break;
+                             }
+                        }
+                        else{
+                            console.log("in else of input check")
+                             Blockly.Accessibility.Speech.Say("No more sibling input block to the left");
+                        }
+                    }
+                    catch(e){
+                        Blockly.Accessibility.Speech.Say("No more sibling input block to the left");
+                    }
+                }
+                if(i < 0){
+                    Blockly.Accessibility.Speech.Say("No more sibling input block to the left");
+                }
+            }
+            else{
+                console.log(">>> only 1 input on parent block");
+                Blockly.Accessibility.Speech.Say("No more sibling input block to the left");
+            }
+        }
+        else{
+            console.log(">>> not working as expected");
+            Blockly.Accessibility.Speech.Say("Not a value block");
+        }
+    }
+    
+    
 };
 
 /**
