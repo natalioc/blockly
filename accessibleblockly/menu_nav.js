@@ -199,9 +199,12 @@ Blockly.Toolbox.TreeNode.prototype.onKeyDown = function(e) {
     //ESCAPE
     //removes highlight if escape is pressed while navigating the menu
     case 27:
+        e.preventDefault();
         var highlight = Blockly.Accessibility.InBlock.storedHighlight;
         Blockly.Connection.removeHighlight(highlight);
         Blockly.Accessibility.Keystrokes.prototype.isConnecting = false;
+        keyboardState = 'hotkeyMode';
+        Blockly.Accessibility.InBlock.safeConnect();
         break;
 
     //W
@@ -258,6 +261,9 @@ Blockly.Toolbox.TreeNode.prototype.onKeyDown = function(e) {
           menuVars.flyoutArr[menuVars.prevIndex].removeSelect();
           menuVars.blockSelected = false;
       }
+
+      //added function to announce toolbox selection after returning from flyout
+      Blockly.Accessibility.MenuNav.toolboxFromFlyout();
     break;
 
     //move inside the flyout to select blocks
@@ -351,6 +357,7 @@ Blockly.Toolbox.TreeNode.prototype.onKeyDown = function(e) {
               document.getElementById("blockReader").focus(); 
             }
         }   
+        keyboardState = 'hotkeyMode';
     break;
 
     default:
@@ -1031,7 +1038,45 @@ Blockly.Accessibility.MenuNav.moveToBottom = function(){
     Blockly.selected.moveBy(0, totalHeight-3);
 }
 
+//=====================================HANDLES SPEECH WHEN RETURNING TO TOOLBOX FROM FLYOUT=============================
 
+/*
+*  Checks if returning to the toolbox (list) from the flyout.
+*  Announces the user's location in the toolbox upon return.
+*/
+Blockly.Accessibility.MenuNav.toolboxFromFlyout = function(){
+    if(document.getElementById(":1") == document.activeElement){
+        Blockly.Accessibility.Speech.Say("Logic 1 of 8 level 1")
+    }
+    
+    else if(document.getElementById(":2") == document.activeElement){
+        Blockly.Accessibility.Speech.Say("Loops 2 of 8 level 1")
+    }
+    
+    else if(document.getElementById(":3") == document.activeElement){
+        Blockly.Accessibility.Speech.Say("Math 3 of 8 level 1")
+    }
+    
+    else if(document.getElementById(":4") == document.activeElement){
+        Blockly.Accessibility.Speech.Say("Text 4 of 8 level 1")
+    }
+    
+    else if(document.getElementById(":5") == document.activeElement){
+        Blockly.Accessibility.Speech.Say("Lists 5 of 8 level 1")
+    }
+    
+    else if(document.getElementById(":6") == document.activeElement){
+        Blockly.Accessibility.Speech.Say("Colour 6 of 8 level 1")
+    }
+    
+    else if(document.getElementById(":7") == document.activeElement){
+        Blockly.Accessibility.Speech.Say("Variables 7 of 8 level 1")
+    }
+    
+    else if(document.getElementById(":8") == document.activeElement){
+        Blockly.Accessibility.Speech.Say("Functions 8 of 8 level 1")
+    }
+}
 
 
 

@@ -31,6 +31,7 @@ Blockly.Accessibility.Speech.changedSelect = true;
 Blockly.Accessibility.Speech.result;
 Blockly.Accessibility.Speech.toggleForRepeat = true;
 Blockly.Accessibility.Speech.repeatStr = "";
+Blockly.Accessibility.Speech.repeatCount = 2;
 
 
 /*
@@ -64,10 +65,12 @@ Blockly.Accessibility.Speech.Say = function(string){
 *	@prefixText.. any text to be read before block being read
 *	@suffixText.. any text to be read after the block being read
 */
-Blockly.Accessibility.Speech.updateBlockReader = function(type, blockSvg, prefixText="", suffixText=""){
+Blockly.Accessibility.Speech.updateBlockReader = function(disabled, type, blockSvg, prefixText="", suffixText=""){
 	// get default string for the block based on type
 	var newStr;
 	var defaultStr;
+    var outputStr;
+    var disabledText = ""; //ADDED
 
 	console.log(">>updatereader: " + blockSvg.getFirstStatementConnection());
 
@@ -85,12 +88,32 @@ Blockly.Accessibility.Speech.updateBlockReader = function(type, blockSvg, prefix
    	//go through the blocks on the workspace and find the matching one based on type and id
 	newStr = this.changeString(blockSvg);
 
-	var outputStr = prefixText + " " + newStr + " " + suffixText;
+    if(disabled){
+        disabledText = "disabled ";
+    }
 
-	if(blockSvg.getFirstStatementConnection() != null){
-		outputStr = "container block " + outputStr;
+    if(prefixText != "Back to workspace " && prefixText != "nesting out " && prefixText != "nesting in " && prefixText != "inline traverse in " && prefixText != "inline traverse out "){
+        outputStr = disabledText + prefixText + " " + newStr + " " + suffixText;
+    }else{
+        outputStr = disabledText + " " + newStr + " " + suffixText
+    }
+
+    if(blockSvg.getFirstStatementConnection() != null){
+		outputStr =  "container block " + outputStr;
 	}
+
+    if(prefixText == "Back to workspace " || prefixText == "nesting out " || prefixText == "nesting in " || prefixText == "inline traverse in " || prefixText == "inline traverse out "){
+        outputStr = prefixText + outputStr;
+    }
+	
+    if(this.repeatStr == newStr && prefixText != "Back to workspace "){
+        outputStr = outputStr + " repeat " + this.repeatCount;
+        this.repeatCount++;
+    }else{
+        this.repeatCount = 2;
+    }
     
+
 	//update the blockReader
     //console.log(">>> type: " + type);
      Blockly.Accessibility.Speech.Say(outputStr);
@@ -426,13 +449,13 @@ Blockly.Accessibility.Speech.blockToString = function(type, disabled){
             this.result = "beep frequency (A) duration (B) time until played (C)";
             break;
         case "controls_if"    : 
-            this.result = "if (A), do";
+            this.result = "if (A), do container"; //added container
             break;
         case "controls_elseif":
-        	this.result = "else if (A)";
+        	this.result = "else if (A) container"; //added container
         	break;
         case "controls_else":
-        	this.result = "else ";
+        	this.result = "else container"; //added container
         	break;
         case "logic_compare"  :
             this.result = " (A) 'equals' (B)"; 
@@ -453,16 +476,20 @@ Blockly.Accessibility.Speech.blockToString = function(type, disabled){
             this.result = "Test (A), if true do (B), if false do (C)";
             break;
         case "controls_repeat_ext":
-            this.result = "repeat (blank) times";
+            this.result = "repeat (blank) times container"; //added container
+            break;
+        //added custom block speech (interface.html:545)
+        case "controls_repeat":
+            this.result = "repeat (10) times container"; //added container
             break;
         case "controls_whileUntil":
-            this.result = "repeat 'while or until' ( )";
+            this.result = "repeat 'while or until' ( ) container"; //added container
             break;
         case "controls_for":
-            this.result = "count with 'i' from (1) to (10) by (1)";
+            this.result = "count with 'i' from (1) to (10) by (1) container"; //added container
             break;
         case "controls_forEach":
-            this.result = "for each item 'i' in list ( )";
+            this.result = "for each item 'i' in list ( ) container"; //added container
             break;
         case "controls_flow_statements":
             this.result = "'break out' of loop";
@@ -498,10 +525,12 @@ Blockly.Accessibility.Speech.blockToString = function(type, disabled){
             this.result = "remainder of (A) divided by (B)";
             break; 
         case "math_constrain":
-            this.result = "constrain (A) between low (1) and high (100)";
+            //this.result = "constrain (A) between low (1) and high (100)";
+            this.result = "constrain (A) between low (B) and high (C)";
             break; 
         case "math_random_int":
-            this.result = "random integer from (1) to (100)";
+            //this.result = "random integer from (1) to (100)";
+            this.result = "random integer from (A) to (B)";
             break; 
         case "math_random_float":
             this.result = "random fraction";
@@ -513,10 +542,12 @@ Blockly.Accessibility.Speech.blockToString = function(type, disabled){
             this.result = "Create text with '2 or more' items";
 
         	//loop through blocks to add inputs dynamically
-        	for(var i = 0; i < Blockly.selected.itemCount_+1; i++){
-        		this.result += " ,() ";
-        	}
-
+            //check if block is selected; prevents nav from getting stuck
+            if(Blockly.selected){
+                for(var i = 0; i < Blockly.selected.itemCount_+1; i++){
+                    this.result += " ,() ";
+                }
+            }
             break; 
         case "text_append":
             this.result = "to 'item' append text (  )";
@@ -555,12 +586,15 @@ Blockly.Accessibility.Speech.blockToString = function(type, disabled){
             this.result = "create list with '3' items";
 
             //loop through blocks to add parameters dynamically
-        	for(var i = 0; i < Blockly.selected.itemCount_+1; i++){
-        		this.result += " ,() ";
-        	}
+        	 //check if block is selected; prevents nav from getting stuck
+             if(Blockly.selected){
+                for(var i = 0; i < Blockly.selected.itemCount_+1; i++){
+                    this.result += " ,() ";
+                }
+            }
             break;  
         case "lists_repeat":
-            this.result = "create list with item (A) repeated (5) times";
+            this.result = "create list with item (A) repeated (B) times";
             break;
         case "lists_length":
             this.result = "length of ( ) list";
@@ -590,7 +624,7 @@ Blockly.Accessibility.Speech.blockToString = function(type, disabled){
             this.result = "random colour";
             break;
         case "colour_rgb":
-            this.result = "colour with: red 'Value', blue 'value,', green ',value' ";
+            this.result = "colour with: red 'Value', green 'value,', blue ',value' ";
             break;
         case "colour_blend":
             this.result = "blend colour 1 'colour' and colour 2 'colour' with ratio 'decimal'";

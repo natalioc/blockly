@@ -144,7 +144,7 @@ document.onkeydown = document.onkeyup = function(e){
 		    var firstCategory = document.getElementById(":1");
 		    firstCategory.focus();
 
-			//keyboardState = 'selectConnectionMode';
+			keyboardState = 'selectConnectionMode';
 		}
 
 		else if(map[13]){ //Enter
@@ -315,6 +315,8 @@ document.onkeydown = document.onkeyup = function(e){
 			document.activeElement.blur();
 
 			document.getElementById("colorOptions").style.display = "none";
+			var prefixText = "Back to workspace "
+			Blockly.Accessibility.Speech.updateBlockReader(Blockly.selected.disabled, Blockly.selected.type, Blockly.selected, prefixText);
 
 			//Get out of the current menu
 			e.preventDefault();
@@ -362,6 +364,16 @@ document.onkeydown = document.onkeyup = function(e){
 			if (Blockly.Accessibility.InBlock.enterCurrentBlock()) { // Returns false if nothing is selected
 			    keyboardState = 'editMode';
 			    Blockly.Accessibility.Speech.Say("Edit Mode entered now");
+			}
+			var selList = Blockly.Accessibility.InBlock.selectionList;
+			var cIndex  = Blockly.Accessibility.InBlock.connectionsIndex;
+			var conName = selList[cIndex].name;
+			console.log(conName);
+			if(conName == "OP" || conName == "NUM" || conName == "BOOL" || conName == "TEXT"){
+				Blockly.Accessibility.InBlock.enterSelected();
+				keyboardState = 'hotkeyMode';
+				Blockly.Accessibility.Speech.Say("Edit Selected");
+				e.preventDefault();
 			}
 		}
 

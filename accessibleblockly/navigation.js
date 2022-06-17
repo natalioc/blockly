@@ -312,7 +312,7 @@ Blockly.Accessibility.Navigation.jumpToTopBlock = function(){
     console.log(">> before back to top");
     //Blockly.Accessibility.Speech.Say("Back to top block");
     var prefixText = "Back to top block"
-    Blockly.Accessibility.Speech.updateBlockReader(Blockly.selected.type, Blockly.selected, prefixText);
+    Blockly.Accessibility.Speech.updateBlockReader(Blockly.selected.disabled, Blockly.selected.type, Blockly.selected, prefixText);
 
 };
 
@@ -374,8 +374,9 @@ Blockly.Accessibility.Navigation.traverseOut = function () {
     //select the surrounding block
     if (surroundParent){
         surroundParent.select();
-         Blockly.Accessibility.Speech.updateBlockReader(Blockly.selected.type, Blockly.selected);
-         console.log("surround P select 2");
+        var prefixText = "nesting out ";
+        Blockly.Accessibility.Speech.updateBlockReader(Blockly.selected.disabled, Blockly.selected.type, Blockly.selected, prefixText);
+        console.log("surround P select 2");
     }
     //inform the user they've reached the end
     else{
@@ -408,7 +409,8 @@ Blockly.Accessibility.Navigation.traverseIn = function() {
              //check if block has children
             if(Blockly.selected.getFirstStatementConnection().targetBlock() != null){
                 Blockly.selected.getFirstStatementConnection().targetBlock().select();
-                Blockly.Accessibility.Speech.updateBlockReader(Blockly.selected.type, Blockly.selected);
+                var prefixText = "nesting in ";
+                Blockly.Accessibility.Speech.updateBlockReader(Blockly.selected.disabled, Blockly.selected.type, Blockly.selected, prefixText);
 
               // for (var i = 0; i < Blockly.selected.childBlocks_.length; i++) {  
 
@@ -484,13 +486,13 @@ Blockly.Accessibility.Navigation.traverseUp = function() {
         var firstStatementCon = Blockly.selected.previousConnection.targetConnection.sourceBlock_.getFirstStatementConnection();
         if(firstStatementCon == null){
             Blockly.selected.previousConnection.targetConnection.sourceBlock_.select();
-            Blockly.Accessibility.Speech.updateBlockReader(Blockly.selected.type, Blockly.selected);
+            Blockly.Accessibility.Speech.updateBlockReader(Blockly.selected.disabled, Blockly.selected.type, Blockly.selected);
         }
         else{
             var firstChild = firstStatementCon.targetBlock();
             if(firstChild != Blockly.selected){
                 Blockly.selected.previousConnection.targetConnection.sourceBlock_.select();
-                Blockly.Accessibility.Speech.updateBlockReader(Blockly.selected.type, Blockly.selected);
+                Blockly.Accessibility.Speech.updateBlockReader(Blockly.selected.disabled, Blockly.selected.type, Blockly.selected);
             }
             else{
                 Blockly.Accessibility.Speech.Say('Cannot move further up from here');
@@ -549,7 +551,7 @@ Blockly.Accessibility.Navigation.traverseDown = function() {
     if (Blockly.selected.nextConnection != null &&
         Blockly.selected.nextConnection.targetConnection != null) {
         Blockly.selected.nextConnection.targetConnection.sourceBlock_.select();
-        Blockly.Accessibility.Speech.updateBlockReader(Blockly.selected.type, Blockly.selected);
+        Blockly.Accessibility.Speech.updateBlockReader(Blockly.selected.disabled, Blockly.selected.type, Blockly.selected);
         console.log(">>> down next conn")
     }
     else {
@@ -617,7 +619,8 @@ Blockly.Accessibility.Navigation.inlineBlockTraverseIn = function(){
                  if(sourceBlock != Blockly.selected){
                     sourceBlock.select();
                     console.log(">>>: inside Nav.inlineBlockTraverseIn Block selected")
-                    Blockly.Accessibility.Speech.updateBlockReader(Blockly.selected.type, Blockly.selected);
+                    var prefixText = "inline traverse in";
+                    Blockly.Accessibility.Speech.updateBlockReader(Blockly.selected.disabled, Blockly.selected.type, Blockly.selected, prefixText);
 
                     Blockly.Accessibility.Navigation.valueInputBlockCount = 1
                     break;
@@ -690,7 +693,8 @@ Blockly.Accessibility.Navigation.inlineBlockTraverseValueInputBlocksRight = func
                              if(sourceBlock != Blockly.selected){
                                 sourceBlock.select();
                                 console.log(">>>: inside Nav.inlineBlockTraverseValueInputBlocks Block selected")
-                                Blockly.Accessibility.Speech.updateBlockReader(Blockly.selected.type, Blockly.selected);
+                                var prefixText = "value ";
+                                Blockly.Accessibility.Speech.updateBlockReader(Blockly.selected.disabled, Blockly.selected.type, Blockly.selected, prefixText);
                                 break;
                              }
                         }
@@ -775,7 +779,8 @@ Blockly.Accessibility.Navigation.inlineBlockTraverseValueInputBlocksRightLeft = 
                              if(sourceBlock != Blockly.selected){
                                 sourceBlock.select();
                                 console.log(">>>: inside Nav.inlineBlockTraverseValueInputBlocks Block selected")
-                                Blockly.Accessibility.Speech.updateBlockReader(Blockly.selected.type, Blockly.selected);
+                                var prefixText = "value ";
+                                Blockly.Accessibility.Speech.updateBlockReader(Blockly.selected.disabled, Blockly.selected.type, Blockly.selected, prefixText);
                                 break;
                              }
                         }
@@ -812,6 +817,7 @@ Blockly.Accessibility.Navigation.inlineBlockTraverseValueInputBlocksRightLeft = 
 */
 Blockly.Accessibility.Navigation.inlineBlockTraverseOut = function(){
     console.log(">>>: Nav.inlineBlockTraverseOut")
+    /*
    //select childblocks of currently selected block
   if(Blockly.selected.childBlocks_.length < Blockly.Accessibility.Navigation.inlineCount){
         
@@ -848,7 +854,29 @@ Blockly.Accessibility.Navigation.inlineBlockTraverseOut = function(){
                 Blockly.selected.childBlocks_[Blockly.Accessibility.Navigation.inlineCount].select();
             }
         }
-  }
+  }*/
+      // Null check
+      if (!Blockly.selected) {
+        Blockly.Accessibility.Speech.Say('Cannot move further outwards from here.');
+
+        return;
+    }
+
+    var childBlocks = Blockly.selected.parentBlock_.childBlocks_;
+    var surroundParent = Blockly.selected.getSurroundParent();
+    var selectedIndex = childBlocks.indexOf(Blockly.selected);
+    console.log(surroundParent);
+
+    if (surroundParent){
+        surroundParent.select();
+        var prefixText = "inline traverse out ";
+        Blockly.Accessibility.Speech.updateBlockReader(Blockly.selected.disabled, Blockly.selected.type, Blockly.selected, prefixText);
+        console.log("surround P select 2");
+    }
+    //inform the user they've reached the end
+    else{
+        Blockly.Accessibility.Speech.Say('Cannot move further outwards from here');
+    }
 };
 
 /**
