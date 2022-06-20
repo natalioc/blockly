@@ -153,11 +153,11 @@ document.onkeydown = document.onkeyup = function(e){
 			var conName = selList[cIndex].name;
 
 			//dropdown menus
-			if(conName == "OP" || conName == "NUM" ){
+			if(conName == "OP" || conName == "NUM" || conName == "BOOL" || conName == "TEXT"){
 				Blockly.Accessibility.InBlock.enterSelected();
 				keyboardState = 'hotkeyMode';
 				Blockly.Accessibility.Speech.Say("Edit Selected");
-
+				//e.preventDefault();
 			}
 			//special case needed to blocks with text field followed by a child connection
 			else if(conName == "STACK"){ 
@@ -376,10 +376,10 @@ document.onkeydown = document.onkeyup = function(e){
 			var conName = selList[cIndex].name;
 			console.log(conName);
 			if(conName == "OP" || conName == "NUM" || conName == "BOOL" || conName == "TEXT"){
-				Blockly.Accessibility.InBlock.enterSelected();
-				keyboardState = 'hotkeyMode';
-				Blockly.Accessibility.Speech.Say("Edit Selected");
-				e.preventDefault();
+				//Blockly.Accessibility.InBlock.enterSelected();
+				//keyboardState = 'hotkeyMode';
+				//Blockly.Accessibility.Speech.Say("Edit Selected");
+				//e.preventDefault();
 			}
 		}
 
