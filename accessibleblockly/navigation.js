@@ -619,7 +619,7 @@ Blockly.Accessibility.Navigation.inlineBlockTraverseIn = function(){
                  if(sourceBlock != Blockly.selected){
                     sourceBlock.select();
                     console.log(">>>: inside Nav.inlineBlockTraverseIn Block selected")
-                    var prefixText = "inline traverse in";
+                    var prefixText = "traverse in ";
                     Blockly.Accessibility.Speech.updateBlockReader(Blockly.selected.disabled, Blockly.selected.type, Blockly.selected, prefixText);
 
                     Blockly.Accessibility.Navigation.valueInputBlockCount = 1
@@ -869,7 +869,7 @@ Blockly.Accessibility.Navigation.inlineBlockTraverseOut = function(){
 
     if (surroundParent){
         surroundParent.select();
-        var prefixText = "inline traverse out ";
+        var prefixText = "traverse out ";
         Blockly.Accessibility.Speech.updateBlockReader(Blockly.selected.disabled, Blockly.selected.type, Blockly.selected, prefixText);
         console.log("surround P select 2");
     }
