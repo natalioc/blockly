@@ -92,7 +92,7 @@ Blockly.Accessibility.Speech.updateBlockReader = function(disabled, type, blockS
         disabledText = "disabled ";
     }
 
-    if(prefixText != "Back to workspace " && prefixText != "nesting out " && prefixText != "nesting in " && prefixText != "inline traverse in " && prefixText != "inline traverse out "){
+    if(prefixText != "Back to workspace " && prefixText != "nesting out " && prefixText != "nesting in " && prefixText != "inline traverse in " && prefixText != "inline traverse out " && prefixText != "Back to top block "){
         outputStr = disabledText + prefixText + " " + newStr + " " + suffixText;
     }else{
         outputStr = disabledText + " " + newStr + " " + suffixText
@@ -102,7 +102,7 @@ Blockly.Accessibility.Speech.updateBlockReader = function(disabled, type, blockS
 		outputStr =  "container block " + outputStr;
 	}
 
-    if(prefixText == "Back to workspace " || prefixText == "nesting out " || prefixText == "nesting in " || prefixText == "inline traverse in " || prefixText == "inline traverse out "){
+    if(prefixText == "Back to workspace " || prefixText == "nesting out " || prefixText == "nesting in " || prefixText == "inline traverse in " || prefixText == "inline traverse out " || prefixText == "Back to top block "){
         outputStr = prefixText + outputStr;
     }
 	
