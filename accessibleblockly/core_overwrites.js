@@ -168,3 +168,68 @@ console.log("TYPING MODE ACTIVATED");
 //   }
 //   keyboardState = "hotkeyMode";
 // };
+
+/**
+ * Dispose of this block.
+ * @param {boolean} healStack If true, then try to heal any gap by connecting
+ *     the next statement with the previous statement.  Otherwise, dispose of
+ *     all children of this block.
+ */
+ Blockly.Block.prototype.dispose = function(healStack) {
+    console.log("delete1");
+    if (!this.workspace) {
+      // Already deleted.
+      return;
+    }
+    // Terminate onchange event calls.
+    if (this.onchangeWrapper_) {
+      this.workspace.removeChangeListener(this.onchangeWrapper_);
+    }
+    this.unplug(healStack);
+    if (Blockly.Events.isEnabled()) {
+      Blockly.Events.fire(new Blockly.Events.BlockDelete(this));
+    }
+    Blockly.Events.disable();
+  
+    try {
+      // This block is now at the top of the workspace.
+      // Remove this block from the workspace's list of top-most blocks.
+      if (this.workspace) {
+        this.workspace.removeTopBlock(this);
+        this.workspace.removeTypedBlock(this);
+        // Remove from block database.
+        delete this.workspace.blockDB_[this.id];
+        this.workspace = null;
+      }
+  
+      // Just deleting this block from the DOM would result in a memory leak as
+      // well as corruption of the connection database.  Therefore we must
+      // methodically step through the blocks and carefully disassemble them.
+  
+      if (Blockly.selected == this) {
+        Blockly.selected = null;
+      }
+  
+      // First, dispose of all my children.
+      for (var i = this.childBlocks_.length - 1; i >= 0; i--) {
+        this.childBlocks_[i].dispose(false);
+      }
+      // Then dispose of myself.
+      // Dispose of all inputs and their fields.
+      for (var i = 0, input; input = this.inputList[i]; i++) {
+        input.dispose();
+      }
+      this.inputList.length = 0;
+      // Dispose of any remaining connections (next/previous/output).
+      var connections = this.getConnections_(true);
+      for (var i = 0; i < connections.length; i++) {
+        var connection = connections[i];
+        if (connection.isConnected()) {
+          connection.disconnect();
+        }
+        connections[i].dispose();
+      }
+    } finally {
+      Blockly.Events.enable();
+    }
+  };

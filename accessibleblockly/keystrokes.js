@@ -144,7 +144,7 @@ document.onkeydown = document.onkeyup = function(e){
 		    var firstCategory = document.getElementById(":1");
 		    firstCategory.focus();
 
-			//keyboardState = 'selectConnectionMode';
+			keyboardState = 'selectConnectionMode';
 		}
 
 		else if(map[13]){ //Enter
@@ -153,11 +153,11 @@ document.onkeydown = document.onkeyup = function(e){
 			var conName = selList[cIndex].name;
 
 			//dropdown menus
-			if(conName == "OP" || conName == "NUM" ){
+			if(conName == "OP" || conName == "NUM" || conName == "BOOL" || conName == "TEXT"){
 				Blockly.Accessibility.InBlock.enterSelected();
 				keyboardState = 'hotkeyMode';
 				Blockly.Accessibility.Speech.Say("Edit Selected");
-
+				//e.preventDefault();
 			}
 			//special case needed to blocks with text field followed by a child connection
 			else if(conName == "STACK"){ 
@@ -289,12 +289,16 @@ document.onkeydown = document.onkeyup = function(e){
 			Blockly.Accessibility.Speech.Say("Block added to workspace");
 		}
 
-		else if(map[8]){
+		else if(map[8]){ //Backspace
+			console.log("backspace");
+			e.preventDefault();
 			var containers = Blockly.Accessibility.MenuNav.containersArr;
-
+			//Blockly.Accessibility.Navigation.traverseUp();
+			console.log(">>> Traverse-up called");
 		    for(var i = 0; i < containers.length; i++){
 		        if(containers[i] == Blockly.selected){
 		            containers.splice(i,1);
+					console.log("loop");
 		        }
 		    }
 		}
@@ -315,6 +319,8 @@ document.onkeydown = document.onkeyup = function(e){
 			document.activeElement.blur();
 
 			document.getElementById("colorOptions").style.display = "none";
+			var prefixText = "Back to workspace "
+			Blockly.Accessibility.Speech.updateBlockReader(Blockly.selected.disabled, Blockly.selected.type, Blockly.selected, prefixText);
 
 			//Get out of the current menu
 			e.preventDefault();
@@ -329,7 +335,9 @@ document.onkeydown = document.onkeyup = function(e){
 		else if(map[65]){ //A
 			console.log('hotkeyMode A key pressed');
 			if(!Blockly.selected) return;
-			if(Blockly.selected.id[0] != ":" && !Blockly.Accessibility.Keystrokes.prototype.isConnecting){
+			if(Blockly.selected.id[0] != ":" && !Blockly.Accessibility.Keystrokes.prototype.isConnecting && Blockly.selected.previousConnection == null){
+				Blockly.Accessibility.Navigation.inlineBlockTraverseOut();
+			}else if(Blockly.selected.id[0] != ":" && !Blockly.Accessibility.Keystrokes.prototype.isConnecting){
 				Blockly.Accessibility.Navigation.traverseOut();
 			}
 			console.log(">>>D " + Blockly.selected.childBlocks_);
@@ -362,6 +370,16 @@ document.onkeydown = document.onkeyup = function(e){
 			if (Blockly.Accessibility.InBlock.enterCurrentBlock()) { // Returns false if nothing is selected
 			    keyboardState = 'editMode';
 			    Blockly.Accessibility.Speech.Say("Edit Mode entered now");
+			}
+			var selList = Blockly.Accessibility.InBlock.selectionList;
+			var cIndex  = Blockly.Accessibility.InBlock.connectionsIndex;
+			var conName = selList[cIndex].name;
+			console.log(conName);
+			if(conName == "OP" || conName == "NUM" || conName == "BOOL" || conName == "TEXT"){
+				//Blockly.Accessibility.InBlock.enterSelected();
+				//keyboardState = 'hotkeyMode';
+				//Blockly.Accessibility.Speech.Say("Edit Selected");
+				//e.preventDefault();
 			}
 		}
 
