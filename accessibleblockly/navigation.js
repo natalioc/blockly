@@ -311,7 +311,7 @@ Blockly.Accessibility.Navigation.jumpToTopBlock = function(){
     topBlocks[0].select();
     console.log(">> before back to top");
     //Blockly.Accessibility.Speech.Say("Back to top block");
-    var prefixText = "Back to top block"
+    var prefixText = "Back to top block "
     Blockly.Accessibility.Speech.updateBlockReader(Blockly.selected.disabled, Blockly.selected.type, Blockly.selected, prefixText);
 
 };
