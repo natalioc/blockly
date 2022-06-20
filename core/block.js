@@ -271,8 +271,6 @@ Blockly.Block.prototype.styleName_ = null;
  *     all children of this block.
  */
 Blockly.Block.prototype.dispose = function(healStack) {
-  console.log("delete2");
-
   if (!this.workspace) {
     // Already deleted.
     return;
