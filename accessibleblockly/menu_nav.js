@@ -207,6 +207,17 @@ Blockly.Toolbox.TreeNode.prototype.onKeyDown = function(e) {
         Blockly.Accessibility.InBlock.safeConnect();
         break;
 
+    //Q
+    case 81:
+        e.preventDefault();
+        var highlight = Blockly.Accessibility.InBlock.storedHighlight;
+        Blockly.Connection.removeHighlight(highlight);
+        Blockly.Accessibility.Keystrokes.prototype.isConnecting = false;
+        keyboardState = 'hotkeyMode';
+        Blockly.Accessibility.InBlock.safeConnect();
+        Blockly.hideChaff(false);
+        break;
+
     //W
     case 87:
 
@@ -1054,6 +1065,7 @@ Blockly.Accessibility.MenuNav.moveToBottom = function(){
 Blockly.Accessibility.MenuNav.toolboxFromFlyout = function(){
     if(document.getElementById(":1") == document.activeElement){
         Blockly.Accessibility.Speech.Say("Logic 1 of 8 level 1")
+       // Blockly.Accessibility.Speech.Say(document.querySelector(":1"));
         //Blockly.Accessibility.Speech.Say("Logic")
     }
     

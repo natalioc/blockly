@@ -153,7 +153,7 @@ document.onkeydown = document.onkeyup = function(e){
 			var conName = selList[cIndex].name;
 
 			//dropdown menus
-			if(conName == "OP" || conName == "NUM" || conName == "BOOL" || conName == "TEXT"){
+			if(conName == "OP" || conName == "NUM" || conName == "BOOL" || conName == "TEXT" || conName == "VAR"){
 				Blockly.Accessibility.InBlock.enterSelected();
 				keyboardState = 'hotkeyMode';
 				Blockly.Accessibility.Speech.Say("Edit Selected");
@@ -310,7 +310,7 @@ document.onkeydown = document.onkeyup = function(e){
 			e.preventDefault();
 		}
 
-		else if(map[27]){ //Escape
+		else if(map[27] || map[81]){ //Escape
 			console.log('Escape key pressed.');
 			var highlight = Blockly.Accessibility.InBlock.storedHighlight;
             Blockly.Connection.removeHighlight(highlight);
@@ -376,10 +376,10 @@ document.onkeydown = document.onkeyup = function(e){
 			var conName = selList[cIndex].name;
 			console.log(conName);
 			if(conName == "OP" || conName == "NUM" || conName == "BOOL" || conName == "TEXT"){
-				//Blockly.Accessibility.InBlock.enterSelected();
-				//keyboardState = 'hotkeyMode';
-				//Blockly.Accessibility.Speech.Say("Edit Selected");
-				//e.preventDefault();
+				Blockly.Accessibility.InBlock.enterSelected();
+				keyboardState = 'hotkeyMode';
+				Blockly.Accessibility.Speech.Say("Edit Selected");
+				e.preventDefault();
 			}
 		}
 
