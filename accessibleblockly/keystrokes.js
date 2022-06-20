@@ -289,12 +289,16 @@ document.onkeydown = document.onkeyup = function(e){
 			Blockly.Accessibility.Speech.Say("Block added to workspace");
 		}
 
-		else if(map[8]){
+		else if(map[8]){ //Backspace
+			console.log("backspace");
+			e.preventDefault();
 			var containers = Blockly.Accessibility.MenuNav.containersArr;
-
+			//Blockly.Accessibility.Navigation.traverseUp();
+			console.log(">>> Traverse-up called");
 		    for(var i = 0; i < containers.length; i++){
 		        if(containers[i] == Blockly.selected){
 		            containers.splice(i,1);
+					console.log("loop");
 		        }
 		    }
 		}
@@ -331,7 +335,9 @@ document.onkeydown = document.onkeyup = function(e){
 		else if(map[65]){ //A
 			console.log('hotkeyMode A key pressed');
 			if(!Blockly.selected) return;
-			if(Blockly.selected.id[0] != ":" && !Blockly.Accessibility.Keystrokes.prototype.isConnecting){
+			if(Blockly.selected.id[0] != ":" && !Blockly.Accessibility.Keystrokes.prototype.isConnecting && Blockly.selected.previousConnection == null){
+				Blockly.Accessibility.Navigation.inlineBlockTraverseOut();
+			}else if(Blockly.selected.id[0] != ":" && !Blockly.Accessibility.Keystrokes.prototype.isConnecting){
 				Blockly.Accessibility.Navigation.traverseOut();
 			}
 			console.log(">>>D " + Blockly.selected.childBlocks_);

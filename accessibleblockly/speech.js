@@ -31,7 +31,7 @@ Blockly.Accessibility.Speech.changedSelect = true;
 Blockly.Accessibility.Speech.result;
 Blockly.Accessibility.Speech.toggleForRepeat = true;
 Blockly.Accessibility.Speech.repeatStr = "";
-Blockly.Accessibility.Speech.repeatCount = 2;
+//Blockly.Accessibility.Speech.repeatCount = 2;
 
 
 /*
@@ -106,18 +106,28 @@ Blockly.Accessibility.Speech.updateBlockReader = function(disabled, type, blockS
         outputStr = prefixText + outputStr;
     }
 	
-    if(this.repeatStr == newStr && prefixText != "Back to workspace "){
-        outputStr = outputStr + " repeat " + this.repeatCount;
-        this.repeatCount++;
-    }else{
-        this.repeatCount = 2;
+   /* if(this.repeatStr == newStr && prefixText != "Back to workspace "){
+        //uncomment below to add numerical repeat 
+        //outputStr = outputStr + " repeat " + this.repeatCount;
+        var repeated = true;
+        //this.repeatCount++;
     }
-    
 
 	//update the blockReader
     //console.log(">>> type: " + type);
-     Blockly.Accessibility.Speech.Say(outputStr);
-     this.repeatStr = newStr;
+    //if(repeated){
+        //setTimeout(() => {  Blockly.Accessibility.Speech.Say(""); }, 500);
+       // Blockly.Accessibility.Speech.Say(outputStr);
+    //}else{
+       // Blockly.Accessibility.Speech.Say(outputStr);
+    //}
+    if(!repeated){
+        //setTimeout(() => {  Blockly.Accessibility.Speech.Say(""); }, 500);
+        Blockly.Accessibility.Speech.Say(outputStr);
+    }*/
+    setTimeout(() => {  Blockly.Accessibility.Speech.Say(""); }, 175);
+    Blockly.Accessibility.Speech.Say(outputStr);
+    this.repeatStr = newStr;
 
 };
 

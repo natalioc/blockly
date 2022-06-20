@@ -1044,37 +1044,46 @@ Blockly.Accessibility.MenuNav.moveToBottom = function(){
 *  Checks if returning to the toolbox (list) from the flyout.
 *  Announces the user's location in the toolbox upon return.
 */
+
 Blockly.Accessibility.MenuNav.toolboxFromFlyout = function(){
     if(document.getElementById(":1") == document.activeElement){
         Blockly.Accessibility.Speech.Say("Logic 1 of 8 level 1")
+        //Blockly.Accessibility.Speech.Say("Logic")
     }
     
     else if(document.getElementById(":2") == document.activeElement){
         Blockly.Accessibility.Speech.Say("Loops 2 of 8 level 1")
+        //Blockly.Accessibility.Speech.Say("Loops")
     }
     
     else if(document.getElementById(":3") == document.activeElement){
         Blockly.Accessibility.Speech.Say("Math 3 of 8 level 1")
+        //Blockly.Accessibility.Speech.Say("Math")
     }
     
     else if(document.getElementById(":4") == document.activeElement){
         Blockly.Accessibility.Speech.Say("Text 4 of 8 level 1")
+        //Blockly.Accessibility.Speech.Say("Text")
     }
     
     else if(document.getElementById(":5") == document.activeElement){
         Blockly.Accessibility.Speech.Say("Lists 5 of 8 level 1")
+        //Blockly.Accessibility.Speech.Say("Lists")
     }
     
     else if(document.getElementById(":6") == document.activeElement){
         Blockly.Accessibility.Speech.Say("Colour 6 of 8 level 1")
+        //Blockly.Accessibility.Speech.Say("Colour")
     }
     
     else if(document.getElementById(":7") == document.activeElement){
         Blockly.Accessibility.Speech.Say("Variables 7 of 8 level 1")
+        //Blockly.Accessibility.Speech.Say("Variables")
     }
     
     else if(document.getElementById(":8") == document.activeElement){
         Blockly.Accessibility.Speech.Say("Functions 8 of 8 level 1")
+        //Blockly.Accessibility.Speech.Say("Functions")
     }
 }
 
