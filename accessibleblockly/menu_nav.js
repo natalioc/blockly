@@ -1065,7 +1065,6 @@ Blockly.Accessibility.MenuNav.moveToBottom = function(){
 Blockly.Accessibility.MenuNav.toolboxFromFlyout = function(){
     if(document.getElementById(":1") == document.activeElement){
         Blockly.Accessibility.Speech.Say("Logic 1 of 8 level 1")
-       // Blockly.Accessibility.Speech.Say(document.querySelector(":1"));
         //Blockly.Accessibility.Speech.Say("Logic")
     }
     
@@ -1104,6 +1103,7 @@ Blockly.Accessibility.MenuNav.toolboxFromFlyout = function(){
         //Blockly.Accessibility.Speech.Say("Functions")
     }
 }
+
 
 
 
