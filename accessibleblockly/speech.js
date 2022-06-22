@@ -486,7 +486,8 @@ Blockly.Accessibility.Speech.blockToString = function(type, disabled){
             this.result = "Test (A), if true do (B), if false do (C)";
             break;
         case "controls_repeat_ext":
-            this.result = "repeat (blank) times container"; //added container
+            //this.result = "repeat (blank) times container"; //added container
+            this.result = "repeat (A) times container"; //added container
             break;
         //added custom block speech (interface.html:545)
         case "controls_repeat":
@@ -496,7 +497,8 @@ Blockly.Accessibility.Speech.blockToString = function(type, disabled){
             this.result = "repeat 'while or until' ( ) container"; //added container
             break;
         case "controls_for":
-            this.result = "count with 'i' from (1) to (10) by (1) container"; //added container
+            //this.result = "count with 'i' from (1) to (10) by (1) container"; //added container
+            this.result = "count with 'i' from (A) to (B) by (C) container"; //added container
             break;
         case "controls_forEach":
             this.result = "for each item 'i' in list ( ) container"; //added container

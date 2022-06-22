@@ -295,7 +295,6 @@ Blockly.Toolbox.TreeNode.prototype.onKeyDown = function(e) {
 
     //ENTER
     case 13:
-
         //open the flyout
         if(!this.getExpanded()){
             this.select();
@@ -313,6 +312,7 @@ Blockly.Toolbox.TreeNode.prototype.onKeyDown = function(e) {
               this.getTree().setSelectedItem(null);
 
               Blockly.Accessibility.InBlock.addBlock();
+              Blockly.Accessibility.Speech.Say("Block added to workspace");
               document.getElementById("blockReader").focus();
             }
 
@@ -354,7 +354,7 @@ Blockly.Toolbox.TreeNode.prototype.onKeyDown = function(e) {
 
                 Blockly.Accessibility.MenuNav.flyoutToWorkspace();
                 Blockly.Accessibility.MenuNav.containersArr.push(Blockly.selected);
-
+                Blockly.Accessibility.Speech.Say("Block added to workspace");
               }
 
               else{
