@@ -156,10 +156,16 @@ Blockly.Accessibility.Speech.repeatBlockReader = function(){
 * Aparam_index..index of the connection selected
 */
 Blockly.Accessibility.Speech.readConnection = function(name, index){
-
+    console.log(name)
+    console.log(index)
 	var blockReader = document.getElementById("blockReader");	
 	var active 		= document.activeElement;
 	var say;
+
+    //fix else do connection
+    if(name == "elseifInput"){
+        name = "DO0";
+    }
 
 	//top and bottom connections are named undefined
 	if(name == undefined)

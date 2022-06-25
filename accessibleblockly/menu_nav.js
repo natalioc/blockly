@@ -824,6 +824,9 @@ Blockly.Flyout.prototype.show = function(xmlList) {
 
 
     var say = Blockly.Accessibility.Speech.blockToString(blockSvg.type, blockSvg.disabled);
+    if(blockSvg.type == "text"){
+        say = "empty value " + say;
+    }
     Blockly.Accessibility.Speech.Say(say);
 	console.log(">>> called once menu_nav");
 
