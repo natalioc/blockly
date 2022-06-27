@@ -62,11 +62,12 @@ document.onkeydown = document.onkeyup = function(e){
 		}
 		else if(map[17] && map[67]){ //CTRL C
 			console.log('Ctrl C keys pressed');
-			keyboardState = 'hotkeyMode';
+			//comment functions disabled for study
+			/*keyboardState = 'hotkeyMode';
 			Blockly.selected.comment.setVisible(false);
 			Blockly.Accessibility.Navigation.updateXmlSelection();
 			Blockly.Accessibility.Prefixes.generateTree();
-			e.preventDefault();
+			e.preventDefault();*/
 		
 		}
 		return;
@@ -153,7 +154,7 @@ document.onkeydown = document.onkeyup = function(e){
 			var conName = selList[cIndex].name;
 
 			//dropdown menus
-			if(conName == "OP" || conName == "NUM" || conName == "BOOL" || conName == "TEXT" || conName == "VAR"){
+			if(conName == "OP" || conName == "NUM" || conName == "BOOL" || conName == "TEXT" || conName == "VAR"|| conName == "PROPERTY" || conName == "MODE" || conName == "FLOW" || conName == "CONSTANT"){
 				Blockly.Accessibility.InBlock.enterSelected();
 				keyboardState = 'hotkeyMode';
 				Blockly.Accessibility.Speech.Say("Edit Selected");
@@ -286,7 +287,7 @@ document.onkeydown = document.onkeyup = function(e){
 			console.log('hotkeyMode Enter key pressed');
 			Blockly.Accessibility.InBlock.hideDropDown();
 			console.log(">>> " + Blockly.selected.childBlocks_);
-			Blockly.Accessibility.Speech.Say("Block added to workspace");
+			//Blockly.Accessibility.Speech.Say("Block added to workspace");
 		}
 
 		else if(map[8]){ //Backspace
@@ -301,6 +302,7 @@ document.onkeydown = document.onkeyup = function(e){
 					console.log("loop");
 		        }
 		    }
+			Blockly.Accessibility.Speech.Say("Block deleted");
 		}
 
 		else if(map[46]){ //Delete
@@ -308,6 +310,7 @@ document.onkeydown = document.onkeyup = function(e){
 			//Delete the currently selected item
 			Blockly.Accessibility.Navigation.updateXmlSelection();
 			e.preventDefault();
+			Blockly.Accessibility.Speech.Say("Block deleted");
 		}
 
 		else if(map[27] || map[81]){ //Escape
@@ -344,12 +347,13 @@ document.onkeydown = document.onkeyup = function(e){
 		}
 
 		else if(map[67]){ //C
-			//Add a comment
+			//comment functions disabled for study
+			/*//Add a comment
 			console.log('hotkeyMode C key pressed');
 			Blockly.Accessibility.addComment();
 			//Blockly.Accessibility.Prefixes.generateTree();
 			keyboardState = 'typingMode';
-			e.preventDefault();
+			e.preventDefault();*/
 		}
 
 		else if(map[68]){ //D
@@ -369,13 +373,14 @@ document.onkeydown = document.onkeyup = function(e){
 			
 			if (Blockly.Accessibility.InBlock.enterCurrentBlock()) { // Returns false if nothing is selected
 			    keyboardState = 'editMode';
-			    Blockly.Accessibility.Speech.Say("Edit Mode entered now");
+				Blockly.Accessibility.Speech.Say("Edit mode entered now");
 			}
 			var selList = Blockly.Accessibility.InBlock.selectionList;
 			var cIndex  = Blockly.Accessibility.InBlock.connectionsIndex;
 			var conName = selList[cIndex].name;
 			console.log(conName);
-			if(conName == "OP" || conName == "NUM" || conName == "BOOL" || conName == "TEXT"){
+			setTimeout(() => { Blockly.Accessibility.Speech.readConnection(conName, cIndex);  }, 800);
+			if(conName == "OP" || conName == "NUM" || conName == "BOOL" || conName == "TEXT" || conName == "PROPERTY" || conName == "MODE" || conName == "FLOW" || conName == "CONSTANT"){
 				Blockly.Accessibility.InBlock.enterSelected();
 				keyboardState = 'hotkeyMode';
 				Blockly.Accessibility.Speech.Say("Edit Selected");
@@ -411,8 +416,9 @@ document.onkeydown = document.onkeyup = function(e){
 			//>> commented below lines
 			//Blockly.Accessibility.Prefixes.formatTreeView();
 			//Blockly.Accessibility.Prefixes.infoBoxFill(Blockly.selected);
+			Blockly.Accessibility.Speech.updateBlockReader(Blockly.selected.disabled, Blockly.selected.type, Blockly.selected, prefixText);
 
-			Blockly.Accessibility.Speech.repeatBlockReader();
+			//Blockly.Accessibility.Speech.repeatBlockReader();
 		}
 
 		else if(map[83]){ //S
