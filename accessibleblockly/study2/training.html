@@ -105,66 +105,12 @@ function start() {
   //   enableRealtimeSpecificUi();
   // }
 
-  var qtn = `<xml xmlns="http://www.w3.org/1999/xhtml">
+  var qtn = `<xml xmlns="https://developers.google.com/blockly/xml">
   <variables>
-    <variable type="" id="YF@U*M#*yT!GO3q_x[AI">count</variable>
+    <variable id="]Q.+e!ZN5Yqhhc]{goKL">count</variable>
   </variables>
-  <block type="variables_set" id="bC)ze/;18[~O0K\`A{T]7" x="4" y="8">
-    <field name="VAR" id="YF@U*M#*yT!GO3q_x[AI" variabletype="">count</field>
-    <value name="VALUE">
-      <block type="math_number" id="R(Ay%7RRRZexE_tlA!:f">
-        <field name="NUM">1</field>
-      </block>
-    </value>
-    <next>
-      <block type="controls_whileUntil" id="ZsvFX.xruPqmwN5:G,4f">
-        <field name="MODE">WHILE</field>
-        <value name="BOOL">
-          <block type="logic_compare" id="ZgBV%3GCTe4!BUN@j%1,">
-            <field name="OP">LTE</field>
-            <value name="A">
-              <block type="variables_get" id="|q*JS3(MSX;M~x{Z4@fi">
-                <field name="VAR" id="YF@U*M#*yT!GO3q_x[AI" variabletype="">count</field>
-              </block>
-            </value>
-            <value name="B">
-              <block type="math_number" id="At08~d,SgEms$M{OV@-^">
-                <field name="NUM">3</field>
-              </block>
-            </value>
-          </block>
-        </value>
-        <statement name="DO">
-          <block type="text_print" id="=ftvWz9f(P~C.HiNxm]\`">
-            <value name="TEXT">
-              <block type="text" id="6-o/jLo#?^IK\`4YCC3%:">
-                <field name="TEXT">Hello</field>
-              </block>
-            </value>
-            <next>
-              <block type="variables_set" id="(8*gMmNxD!g2si}t:JoN">
-                <field name="VAR" id="YF@U*M#*yT!GO3q_x[AI" variabletype="">count</field>
-                <value name="VALUE">
-                  <block type="math_arithmetic" id="j^o?MuqG)CLyeahbo=@K">
-                    <field name="OP">ADD</field>
-                    <value name="A">
-                      <block type="variables_get" id="-/5;yIP!g5}[+#ia|tpp">
-                        <field name="VAR" id="YF@U*M#*yT!GO3q_x[AI" variabletype="">count</field>
-                      </block>
-                    </value>
-                    <value name="B">
-                      <block type="math_number" id="V]Z)45Ogw)BZ_(K+*R|k">
-                        <field name="NUM">1</field>
-                      </block>
-                    </value>
-                  </block>
-                </value>
-              </block>
-            </next>
-          </block>
-        </statement>
-      </block>
-    </next>
+  <block type="variables_set" id="St-6gxWACkqKQxjJ~]iP" x="37" y="37">
+    <field name="VAR" id="]Q.+e!ZN5Yqhhc]{goKL">count</field>
   </block>
 </xml>`
   var xmlqtn = Blockly.Xml.textToDom(qtn);
