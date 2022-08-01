@@ -92,17 +92,20 @@ Blockly.Accessibility.Speech.updateBlockReader = function(disabled, type, blockS
         disabledText = "disabled ";
     }
 
-    if(prefixText != "Back to workspace " && prefixText != "nesting out " && prefixText != "nesting in " && prefixText != "traverse in " && prefixText != "traverse out " && prefixText != "Back to top block "){
+    if(prefixText != "Back to workspace, navigation mode entered now " && prefixText != "nesting out " && prefixText != "nesting in " && prefixText != "traverse in " && prefixText != "traverse out " && prefixText != "Back to top block "){
+        
         outputStr = disabledText + prefixText + " " + newStr + " " + suffixText;
     }else{
-        outputStr = disabledText + " " + newStr + " " + suffixText
+        //console.log("NS" + newStr);
+        outputStr = disabledText + " " + newStr + " " + suffixText; // + " empty value" (this causes every value block to have empty feedback)
     }
 
     if(blockSvg.getFirstStatementConnection() != null){
 		outputStr =  "container block " + outputStr;
 	}
 
-    if(prefixText == "Back to workspace " || prefixText == "nesting out " || prefixText == "nesting in " || prefixText == "traverse in " || prefixText == "traverse out " || prefixText == "Back to top block "){
+    if(prefixText == "Back to workspace, navigation mode entered now " || prefixText == "nesting out " || prefixText == "nesting in " || prefixText == "traverse in " || prefixText == "traverse out " || prefixText == "Back to top block "){
+        
         outputStr = prefixText + outputStr;
     }
 	
@@ -220,7 +223,10 @@ Blockly.Accessibility.Speech.readConnection = function(name, index){
 	}
 
 	say = name + " connection."
+    if(name == 'drop down' || name == "variable"){
 
+        say = name + " selector."
+    }
 
     Blockly.Accessibility.Speech.Say(say);
 };
@@ -246,6 +252,7 @@ Blockly.Accessibility.Speech.changeString = function(blockSvg) {
     var input;
 
     for (var i = 0; i < inputList.length; i++){
+        console.log("TYPE:" + inputList[i].type);
     	//inline child connection
       	if(inputList[i].type == 1){
       		input = inputList[i];
@@ -267,9 +274,10 @@ Blockly.Accessibility.Speech.changeString = function(blockSvg) {
 					for(var k = 0; k < splitArr.length; k++){
                         console.log("splitArrK: " + "#" + splitArr[k] + "#");
 
-						if(splitArr[k] == '?'){
-				    		splitArr[k] = alphabet[count];
-				        	count++;
+						if(splitArr[k] == '?' || splitArr[k] == '???' || splitArr[k] == ''){
+				    		//splitArr[k] = alphabet[count];
+				        	//count++;
+                            splitArr[k] = 'empty value';
 				    	}
                         splitArr[k] = " " + this.convertSpecialCharaterToWord(splitArr[k]);
 				        
@@ -287,7 +295,17 @@ Blockly.Accessibility.Speech.changeString = function(blockSvg) {
       			count = 0;
       		}
  
-        }
+        }/*else if(inputList[i].type == 5){
+            input = inputList[i];
+            for (var j = 0, field; field = input.fieldRow[j]; j++) {
+                text = inputList[i].fieldRow[1].getText()
+                console.log("FR" + text);
+                if(!text){
+                    console.log("EMPTY");
+                    text.push(" " + "L");
+                }
+            }
+        }*/
         //type three blocks are inner statements that don't need to be read
       	else if(inputList[i].type != 3){
       		input = inputList[i];
@@ -298,7 +316,13 @@ Blockly.Accessibility.Speech.changeString = function(blockSvg) {
 
         }
     }
+
   text = goog.string.trim(text.join(' ')) || alphabet[count];
+  if(text == "“    ”"){
+    text = "“ empty string ”";
+  }/*else if(text == "A,   equals  B,"){
+    text = "“ empty value ”";
+  }*/
   console.log(">>>: string: " + text);
   return text;
 };
@@ -548,7 +572,7 @@ Blockly.Accessibility.Speech.blockToString = function(type, disabled){
             this.result = "random fraction";
             break; 
         case "text":
-            this.result = "'text'";
+            this.result = "empty 'text' value";
             break; 
         case "text_join":
             this.result = "Create text with '2 or more' items";

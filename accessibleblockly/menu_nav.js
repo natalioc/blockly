@@ -235,7 +235,7 @@ Blockly.Toolbox.TreeNode.prototype.onKeyDown = function(e) {
            previousSibling.select();
            Blockly.Accessibility.InBlock.disableIncompatibleBlocks();
            document.getElementById(previousSibling.id_).focus();
-           Blockly.Accessibility.MenuNav.toolboxFromFlyout();
+           //Blockly.Accessibility.MenuNav.toolboxFromFlyout();
         }else{
             Blockly.Accessibility.Speech.Say("Cannot move further up from here");
         }
@@ -261,7 +261,7 @@ Blockly.Toolbox.TreeNode.prototype.onKeyDown = function(e) {
              nextSibling.select();
              Blockly.Accessibility.InBlock.disableIncompatibleBlocks();
              document.getElementById(nextSibling.id_).focus();
-             Blockly.Accessibility.MenuNav.toolboxFromFlyout();
+             //Blockly.Accessibility.MenuNav.toolboxFromFlyout();
         }else{
             Blockly.Accessibility.Speech.Say("Cannot move further down from here");
         }
