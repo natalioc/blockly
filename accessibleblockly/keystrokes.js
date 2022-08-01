@@ -62,11 +62,12 @@ document.onkeydown = document.onkeyup = function(e){
 		}
 		else if(map[17] && map[67]){ //CTRL C
 			console.log('Ctrl C keys pressed');
-			keyboardState = 'hotkeyMode';
+			//comment functions disabled for study
+			/*keyboardState = 'hotkeyMode';
 			Blockly.selected.comment.setVisible(false);
 			Blockly.Accessibility.Navigation.updateXmlSelection();
 			Blockly.Accessibility.Prefixes.generateTree();
-			e.preventDefault();
+			e.preventDefault();*/
 		
 		}
 		return;
@@ -368,12 +369,13 @@ document.onkeydown = document.onkeyup = function(e){
 		}
 
 		else if(map[67]){ //C
-			//Add a comment
+			//comment functions disabled for study
+			/*//Add a comment
 			console.log('hotkeyMode C key pressed');
 			Blockly.Accessibility.addComment();
 			//Blockly.Accessibility.Prefixes.generateTree();
 			keyboardState = 'typingMode';
-			e.preventDefault();
+			e.preventDefault();*/
 		}
 
 		else if(map[68]){ //D
@@ -436,8 +438,9 @@ document.onkeydown = document.onkeyup = function(e){
 			//>> commented below lines
 			//Blockly.Accessibility.Prefixes.formatTreeView();
 			//Blockly.Accessibility.Prefixes.infoBoxFill(Blockly.selected);
+			Blockly.Accessibility.Speech.updateBlockReader(Blockly.selected.disabled, Blockly.selected.type, Blockly.selected, prefixText);
 
-			Blockly.Accessibility.Speech.repeatBlockReader();
+			//Blockly.Accessibility.Speech.repeatBlockReader();
 		}
 
 		else if(map[83]){ //S
