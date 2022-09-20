@@ -366,10 +366,18 @@ Blockly.Accessibility.InBlock.addBlock = function () {
 */
 Blockly.Accessibility.InBlock.disableIncompatibleBlocks = function(){
     if(this.storedConnection){
+        console.log(Blockly.selected.type);
+        /*if(Blockly.selected.type != "controls_if" || "controls_elseif"){
+            console.log("yes!");
+            var toolboxChoices = Blockly.Accessibility.MenuNav.getToolboxChoices(); 
+            toolboxChoices[1].disabled = true;
+            toolboxChoices[1].updateDisabled();
+            toolboxChoices[2].disabled = true;
+            toolboxChoices[2].updateDisabled();
+        }*/
         if(this.storedConnection.check_ != null){
             var toolboxChoices = Blockly.Accessibility.MenuNav.getToolboxChoices();  
             for(var i = 0; i < toolboxChoices.length; i++) {
-
                 if(this.storedConnection.type == 1){
                     if(toolboxChoices[i].outputConnection != null){
                         if(toolboxChoices[i].outputConnection.check_ != null){
@@ -434,6 +442,7 @@ Blockly.Accessibility.InBlock.disableIncompatibleBlocks = function(){
                 }
 
                 else if(this.storedConnection.type == 2){
+                    
                     if(toolboxChoices[i].inputList[0].connection != null){
                         if(toolboxChoices[i].inputList[0].connection.check_ != null){
                             //if their compatibilites don't match up
@@ -518,6 +527,14 @@ Blockly.Accessibility.InBlock.disableIncompatibleBlocks = function(){
                     //console.log(this.storedConnection);
                     console.log("Not handled yet");
                 }
+            }
+        }
+    }else{
+        var toolboxChoices = Blockly.Accessibility.MenuNav.getToolboxChoices();  
+        for(var i = 0; i < toolboxChoices.length; i++) {
+            if(toolboxChoices[i].previousConnection == null){
+                toolboxChoices[i].disabled = true;
+                toolboxChoices[i].updateDisabled();
             }
         }
     }
@@ -620,8 +637,8 @@ Blockly.Accessibility.InBlock.hideDropDown = function(){
      try{
   
     	  console.log("Unselected!");
-    	   this.clearHighlights();
-    	  this.selectionList[this.connectionsIndex].sourceBlock_.select();
+    	   //this.clearHighlights();
+    	  //this.selectionList[this.connectionsIndex].sourceBlock_.select();
           //Blockly.Accessibility.Speech.Say("Block added to workspace");
      }
      catch(e){

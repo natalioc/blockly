@@ -70,6 +70,9 @@ Blockly.Accessibility.Navigation.blockInputList = null;
 
 Blockly.Accessibility.Navigation.valueInputBlockCount = 0;
 
+//storage for previous block for deletion function
+Blockly.Accessibility.Navigation.prevBlock = null;
+
 // Default functions for our hooks.
 Blockly.BlockSvg.prototype.defaultSelect = Blockly.BlockSvg.prototype.select;
 Blockly.BlockSvg.prototype.defaultUnselect = Blockly.BlockSvg.prototype.unselect
@@ -81,10 +84,12 @@ Blockly.BlockSvg.prototype.defaultDispose = Blockly.BlockSvg.prototype.dispose;
 Blockly.BlockSvg.prototype.select = function () {
 
     var prevSelect = Blockly.selected;
+    Blockly.Accessibility.Navigation.prevBlock = prevSelect;
     this.defaultSelect();
 
     if (Blockly.Accessibility.Navigation.getBlockNodeById(this.id)) {
         Blockly.Accessibility.Navigation.currentNode = Blockly.Accessibility.Navigation.getBlockNodeById(this.id);
+        console.log("Here!!" + parseInt(this.currentNode.getAttribute('id')));
     }
     
     Blockly.Accessibility.Navigation.blockInputList = Blockly.selected.inputList;
@@ -201,7 +206,8 @@ Blockly.Accessibility.Navigation.undo = function() {
     // Go back to the previous, keep track of stuff in case you want to redo, and update the scene.
     this.redoStack.push(Blockly.Xml.domToPrettyText(xmlDoc));
     xmlDoc = Blockly.Xml.textToDom(this.undoStack.pop());
-    Blockly.Accessibility.Navigation.updateBlockSelection();
+    //Blockly.Accessibility.Navigation.updateBlockSelection();
+    Blockly.Accessibility.Navigation.jumpToTopBlock();
 };
 
 /**
@@ -215,7 +221,7 @@ Blockly.Accessibility.Navigation.redo = function () {
     // Go back to the previous, keep track of stuff in case you want to redo, and update the scene.
     this.undoStack.push(Blockly.Xml.domToPrettyText(xmlDoc));
     xmlDoc = Blockly.Xml.textToDom(this.redoStack.pop());
-    Blockly.Accessibility.Navigation.updateBlockSelection();
+    //Blockly.Accessibility.Navigation.updateBlockSelection();
 };
 
 
@@ -224,7 +230,7 @@ Blockly.Accessibility.Navigation.redo = function () {
  */
 Blockly.Accessibility.Navigation.updateBlockSelection = function () {
     this.disableUpdate = true;
-    workspace.clear();
+    //workspace.clear();
     Blockly.Xml.domToWorkspace(Blockly.mainWorkspace, xmlDoc);
     console.log(xmlDoc);
     this.disableUpdate = false;
@@ -1115,5 +1121,9 @@ Blockly.Accessibility.Navigation.getAllChildrenOfStatement = function(currentNod
         }
     }
 };
+
+Blockly.Accessibility.Navigation.goToPrev() = function() {
+
+}
 
 //#endregion

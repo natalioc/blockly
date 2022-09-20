@@ -83,6 +83,7 @@ document.onkeydown = document.onkeyup = function(e){
     		Blockly.Accessibility.InBlock.clearHighlights();
 			Blockly.Accessibility.Keystrokes.prototype.isConnecting = false;
 			Blockly.Accessibility.Navigation.updateXmlSelection();
+			Blockly.Accessibility.Speech.Say("Edit Mode exited now");
 		}
 
 		else if(map[65]){ //A
@@ -126,8 +127,8 @@ document.onkeydown = document.onkeyup = function(e){
 		    }
 		}
 
-		else if(map[67]){ //C
-			console.log('editMode C key pressed');
+		else if(map[84]){ //T
+			console.log('editMode T key pressed');
 			Blockly.Accessibility.InBlock.selectConnection();
 			Blockly.Accessibility.InBlock.enterCurrentBlock();
 
@@ -170,13 +171,13 @@ document.onkeydown = document.onkeyup = function(e){
 			}
 			//everything else
 			else{
-				Blockly.Accessibility.InBlock.selectConnection();
+				/*Blockly.Accessibility.InBlock.selectConnection();
 				Blockly.Accessibility.InBlock.enterCurrentBlock();
 				Blockly.Accessibility.InBlock.enterSelected();
 				Blockly.Accessibility.Keystrokes.prototype.isConnecting = true;
-		    	keyboardState ='hotkeyMode';//prevent getting stuck on same block
+		    	keyboardState ='editMode';//prevent getting stuck on same block
 
-		    	Blockly.Accessibility.Speech.Say("Connection Selected");
+		    	Blockly.Accessibility.Speech.Say("Connection Selected");*/
 			}
 
 		    //default select the first category in the menu **debating keeping this or not**
@@ -305,6 +306,27 @@ document.onkeydown = document.onkeyup = function(e){
 			Blockly.Accessibility.Speech.Say("Block deleted");
 		}
 
+		else if(map[88]){ //Alternate Backspace/Delete Key, X
+			console.log("X");
+			Blockly.selected.dispose(/* heal */ true, true);
+
+			//Blockly.Accessibility.Navigation.goToPrev();
+
+			Blockly.Accessibility.Navigation.jumpToTopBlock();
+/*
+			e.preventDefault();
+			var containers = Blockly.Accessibility.MenuNav.containersArr;
+			Blockly.Accessibility.Navigation.traverseUp();
+			console.log(">>> Traverse-up called");
+		    for(var i = 0; i < containers.length; i++){
+		        if(containers[i] == Blockly.selected){
+		            containers.splice(i,1);
+					console.log("loop");
+		        }
+		    }*/
+			Blockly.Accessibility.Speech.Say("Block deleted");
+		}
+
 		else if(map[46]){ //Delete
 			console.log('Delete key pressed.');
 			//Delete the currently selected item
@@ -322,7 +344,7 @@ document.onkeydown = document.onkeyup = function(e){
 			document.activeElement.blur();
 
 			document.getElementById("colorOptions").style.display = "none";
-			var prefixText = "Back to workspace "
+			var prefixText = "Back to workspace, navigation mode entered now "
 			Blockly.Accessibility.Speech.updateBlockReader(Blockly.selected.disabled, Blockly.selected.type, Blockly.selected, prefixText);
 
 			//Get out of the current menu
